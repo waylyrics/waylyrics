@@ -9,3 +9,9 @@ license-file = "LICENSE"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+toml = "0.7.3"
+serde = { version = "1.0", features = ["derive"] }
+
+[dependencies.fltk]
+version = "^1.4"
+features = ["use-wayland"]

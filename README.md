@@ -15,7 +15,7 @@ And for now, [YesPlayMusicOSD]
 and [FeelUOwn]
 are both of great lyrics support, latter [doesn't support translation yet though].
 
-BruceZhang1993's [lyricsSeeker](https://github.com/BruceZhang1993/LyricsSeeker) is still WIP, but it may have better-looking and better integration with DE/WM than this.
+BruceZhang1993's [lyricsSeeker](https://github.com/BruceZhang1993/LyricsSeeker) is still WIP, but it may have better-looking and better integration with KDE.
 
 ## Credit
 
