@@ -1,7 +1,15 @@
-[window.position]
-top_off = 0.0
-left_off = 0.0
+[window.left]
+offset_type = "scale"
+value = 0.0
 
-[window.text_position]
-top_off = 0.0
-left_off = 0.0
+[window.top]
+offset_type = "scale"
+value = 0.0
+
+[text]
+color = [0, 0, 0, 0]
+background = [0, 0, 0, 0]
+
+[text.top]
+offset_type = "scale"
+value = 0.0

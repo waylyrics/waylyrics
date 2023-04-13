@@ -1,5 +1,3 @@
-use waylyrics::config;
-
 use fltk::{app, prelude::*, window::Window};
 
 fn main() {
