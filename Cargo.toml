@@ -11,6 +11,9 @@ license-file = "LICENSE"
 [dependencies]
 toml = "0.7.3"
 serde = { version = "1.0", features = ["derive"] }
+lrc = "0.1.7"
+lrc-nom = "0.1.1"
+reqwest = { version = "0.11.16", features = ["blocking"] }
 
 [dependencies.fltk]
 version = "^1.4"
