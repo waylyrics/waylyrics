@@ -19,6 +19,7 @@ pub struct SongInfo<Id> {
 
 pub trait LyricProvider<L> where L: LyricStore {
     type Id;
+    const NAME: &'static str;
     fn query_lyric(&self, id: Self::Id) -> L;
     fn search_song(&self, singer: &str, title: &str) -> Vec<SongInfo<Self::Id>>;
 }

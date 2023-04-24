@@ -1,7 +1,5 @@
 use reqwest::blocking::Client;
 
-const NAME: &str = "网易云音乐";
-
 pub struct NeteaseLyricProvider {
     client: Client,
 }
@@ -12,6 +10,7 @@ pub struct NeteaseLyric {
 
 impl super::LyricProvider<NeteaseLyric> for NeteaseLyricProvider {
     type Id = u64;
+    const NAME: &'static str = "网易云音乐";
 
     fn search_song(&self, singer: &str, title: &str) -> Vec<super::SongInfo<Self::Id>> {
         todo!()

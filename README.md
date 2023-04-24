@@ -19,8 +19,6 @@ BruceZhang1993's [lyricsSeeker](https://github.com/BruceZhang1993/LyricsSeeker) 
 
 ## Credit
 
-[fltk-rs]: https://github.com/fltk-rs/fltk-rs
-[FLTK]: https://github.com/fltk/fltk
+[gtk4-rs]: https://github.com/gtk-rs/gtk4-rs
 
-- [FLTK], lightweight easy-to-use GUI Tookit which supports wayland
-- [fltk-rs], Rust bind to FLTK.
+- [gtk4-rs], Rust bind to GTK-4.

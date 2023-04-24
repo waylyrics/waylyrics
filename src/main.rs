@@ -1,10 +1,26 @@
-use fltk::{app, prelude::*, window::Window};
+use gtk::cairo::{RectangleInt, Region};
+use gtk::prelude::*;
+use gtk::{glib, Application, ApplicationWindow};
 
-fn main() {
-    let app = app::App::default();
-    let mut wind = Window::new(100, 100, 400, 300, "Hello from rust");
-    wind.make_modal(true);
-    wind.end();
-    wind.show();
-    app.run().unwrap();
+const APP_ID: &str = "io.poly000.waylyrics";
+
+fn main() -> glib::ExitCode {
+    let app = Application::builder().application_id(APP_ID).build();
+    app.connect_activate(build_ui);
+    app.run()
+}
+
+fn build_ui(app: &Application) {
+    // Create a window and set the title
+    let window = ApplicationWindow::builder()
+        .application(app)
+        .title("Waylyrics")
+        .build();
+
+    // Present window
+    window.present();
+
+    let native = window.native().unwrap();
+    let surface = native.surface();
+    surface.set_input_region(&Region::create_rectangle(&RectangleInt::new(0, 0, 0, 0)));
 }
