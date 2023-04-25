@@ -8,7 +8,7 @@ pub enum Lyric<'a> {
     None,
     NoTimestamp,
     LineTimestamp(Vec<(&'a str, Duration)>),
-    // word timestamp is not supported due to lack of support from online music sites
+    WordTimestamp(Vec<(Option<&'a str>, Duration)>),
 }
 
 pub struct SongInfo<Id> {
