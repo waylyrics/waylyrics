@@ -1,0 +1,3679 @@
+{
+  "result": {
+    "searchQcReminder": null,
+    "songs": [
+      {
+        "name": "Magic",
+        "id": 28545541,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 15077,
+            "name": "Nhato",
+            "tns": [],
+            "alias": [
+              "なはと",
+              "kyu",
+              "Fukumuro Tatsuya",
+              "福室達也"
+            ],
+            "alia": [
+              "なはと",
+              "kyu",
+              "Fukumuro Tatsuya",
+              "福室達也"
+            ]
+          }
+        ],
+        "alia": [],
+        "pop": 25,
+        "st": 0,
+        "rt": "",
+        "fee": 0,
+        "v": 8,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 2822774,
+          "name": "Voodooism",
+          "picUrl": "http://p3.music.126.net/1__6Nx2aDyTILofcak4mhQ==/6005532511292515.jpg",
+          "tns": [],
+          "pic": 6005532511292515
+        },
+        "dt": 338000,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 13550415,
+          "vd": -68322,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 8130321,
+          "vd": -66182,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 5420273,
+          "vd": -65166,
+          "sr": 44100
+        },
+        "sq": {
+          "br": 1052453,
+          "fid": 0,
+          "size": 44558659,
+          "vd": -68297,
+          "sr": 44100
+        },
+        "hr": null,
+        "a": null,
+        "cd": "1",
+        "no": 4,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 2,
+        "s_id": 0,
+        "mark": 131072,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 8,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 0,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 1398441600007,
+        "privilege": {
+          "id": 28545541,
+          "fee": 0,
+          "payed": 0,
+          "st": 0,
+          "pl": 320000,
+          "dl": 999000,
+          "sp": 7,
+          "cp": 1,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 320000,
+          "toast": false,
+          "flag": 128,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "exhigh",
+          "dlLevel": "lossless",
+          "flLevel": "exhigh",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Magic (Original Mix)",
+        "id": 504856919,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 15077,
+            "name": "Nhato",
+            "tns": [],
+            "alias": [
+              "なはと",
+              "kyu",
+              "Fukumuro Tatsuya",
+              "福室達也"
+            ],
+            "alia": [
+              "なはと",
+              "kyu",
+              "Fukumuro Tatsuya",
+              "福室達也"
+            ]
+          }
+        ],
+        "alia": [],
+        "pop": 10,
+        "st": 0,
+        "rt": null,
+        "fee": 8,
+        "v": 9,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 36173713,
+          "name": "Voodooism",
+          "picUrl": "http://p4.music.126.net/gnpTogd6dqzit9Bv2xs7gw==/109951165438889508.jpg",
+          "tns": [],
+          "pic_str": "109951165438889508",
+          "pic": 109951165438889500
+        },
+        "dt": 338703,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 13550280,
+          "vd": -24000,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 8130186,
+          "vd": -21700,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 5420138,
+          "vd": -20800,
+          "sr": 44100
+        },
+        "sq": {
+          "br": 1052450,
+          "fid": 0,
+          "size": 44558533,
+          "vd": -23900,
+          "sr": 44100
+        },
+        "hr": null,
+        "a": null,
+        "cd": "1",
+        "no": 4,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 1,
+        "s_id": 0,
+        "mark": 131072,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 9,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 526012,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 1398528000007,
+        "privilege": {
+          "id": 504856919,
+          "fee": 8,
+          "payed": 0,
+          "st": 0,
+          "pl": 128000,
+          "dl": 0,
+          "sp": 7,
+          "cp": 1,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 128000,
+          "toast": false,
+          "flag": 0,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "standard",
+          "dlLevel": "none",
+          "flLevel": "standard",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Magic (cYsmix Remix)",
+        "id": 504856922,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 15077,
+            "name": "Nhato",
+            "tns": [],
+            "alias": [
+              "なはと",
+              "kyu",
+              "Fukumuro Tatsuya",
+              "福室達也"
+            ],
+            "alia": [
+              "なはと",
+              "kyu",
+              "Fukumuro Tatsuya",
+              "福室達也"
+            ]
+          }
+        ],
+        "alia": [],
+        "pop": 5,
+        "st": 0,
+        "rt": null,
+        "fee": 8,
+        "v": 8,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 36173713,
+          "name": "Voodooism",
+          "picUrl": "http://p4.music.126.net/gnpTogd6dqzit9Bv2xs7gw==/109951165438889508.jpg",
+          "tns": [],
+          "pic_str": "109951165438889508",
+          "pic": 109951165438889500
+        },
+        "dt": 270942,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 10840860,
+          "vd": -34000,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 6504533,
+          "vd": -31400,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 4336370,
+          "vd": -30200,
+          "sr": 44100
+        },
+        "sq": {
+          "br": 992150,
+          "fid": 0,
+          "size": 33601940,
+          "vd": -34100,
+          "sr": 44100
+        },
+        "hr": null,
+        "a": null,
+        "cd": "1",
+        "no": 7,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 1,
+        "s_id": 0,
+        "mark": 262144,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 8,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 526012,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 1398528000007,
+        "privilege": {
+          "id": 504856922,
+          "fee": 8,
+          "payed": 0,
+          "st": 0,
+          "pl": 128000,
+          "dl": 0,
+          "sp": 7,
+          "cp": 1,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 128000,
+          "toast": false,
+          "flag": 0,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "standard",
+          "dlLevel": "none",
+          "flLevel": "standard",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Magic (cYsmix Remix)",
+        "id": 28545544,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 15077,
+            "name": "Nhato",
+            "tns": [],
+            "alias": [
+              "なはと",
+              "kyu",
+              "Fukumuro Tatsuya",
+              "福室達也"
+            ],
+            "alia": [
+              "なはと",
+              "kyu",
+              "Fukumuro Tatsuya",
+              "福室達也"
+            ]
+          }
+        ],
+        "alia": [],
+        "pop": 10,
+        "st": 0,
+        "rt": "",
+        "fee": 0,
+        "v": 5,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 2822774,
+          "name": "Voodooism",
+          "picUrl": "http://p4.music.126.net/1__6Nx2aDyTILofcak4mhQ==/6005532511292515.jpg",
+          "tns": [],
+          "pic": 6005532511292515
+        },
+        "dt": 270000,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 10841010,
+          "vd": -33900,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 6504683,
+          "vd": -31500,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 4336520,
+          "vd": -30300,
+          "sr": 44100
+        },
+        "sq": {
+          "br": 992154,
+          "fid": 0,
+          "size": 33602081,
+          "vd": -34100,
+          "sr": 44100
+        },
+        "hr": null,
+        "a": null,
+        "cd": "1",
+        "no": 7,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 2,
+        "s_id": 0,
+        "mark": 262144,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 5,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 0,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 1398441600007,
+        "privilege": {
+          "id": 28545544,
+          "fee": 0,
+          "payed": 0,
+          "st": 0,
+          "pl": 320000,
+          "dl": 999000,
+          "sp": 7,
+          "cp": 1,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 320000,
+          "toast": false,
+          "flag": 128,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "exhigh",
+          "dlLevel": "lossless",
+          "flLevel": "exhigh",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Magic",
+        "id": 1982572485,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 34479976,
+            "name": "Foyon",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 47860493,
+            "name": "Rumusen",
+            "tns": [],
+            "alias": []
+          }
+        ],
+        "alia": [],
+        "pop": 100,
+        "st": 0,
+        "rt": "",
+        "fee": 8,
+        "v": 3,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 151817230,
+          "name": "Magic",
+          "picUrl": "http://p3.music.126.net/RalO-AssvsN3eKqaNt3bXw==/109951167889864636.jpg",
+          "tns": [],
+          "pic_str": "109951167889864636",
+          "pic": 109951167889864640
+        },
+        "dt": 145568,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 5825350,
+          "vd": -79595,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 3495227,
+          "vd": -76998,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 2330166,
+          "vd": -75380,
+          "sr": 44100
+        },
+        "sq": {
+          "br": 1537315,
+          "fid": 0,
+          "size": 27973021,
+          "vd": -79589,
+          "sr": 44100
+        },
+        "hr": null,
+        "a": null,
+        "cd": "01",
+        "no": 1,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 1,
+        "s_id": 0,
+        "mark": 270336,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 3,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 1416729,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 1663862400000,
+        "privilege": {
+          "id": 1982572485,
+          "fee": 8,
+          "payed": 0,
+          "st": 0,
+          "pl": 128000,
+          "dl": 0,
+          "sp": 7,
+          "cp": 1,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 128000,
+          "toast": false,
+          "flag": 4,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "standard",
+          "dlLevel": "none",
+          "flLevel": "standard",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Magic",
+        "id": 1893693682,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 31154262,
+            "name": "TOMORROW X TOGETHER",
+            "tns": [],
+            "alias": [
+              "투모로우바이투게더"
+            ],
+            "alia": [
+              "투모로우바이투게더"
+            ]
+          }
+        ],
+        "alia": [],
+        "pop": 95,
+        "st": 0,
+        "rt": "",
+        "fee": 8,
+        "v": 6,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 135901193,
+          "name": "Chaotic Wonderland",
+          "picUrl": "http://p3.music.126.net/v8902w_vQ4Rwuk2n-b3zqQ==/109951166604737364.jpg",
+          "tns": [],
+          "pic_str": "109951166604737364",
+          "pic": 109951166604737360
+        },
+        "dt": 159760,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 6392729,
+          "vd": -60869,
+          "sr": 44100
+        },
+        "m": null,
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 2557118,
+          "vd": -56766,
+          "sr": 44100
+        },
+        "sq": {
+          "br": 1077298,
+          "fid": 0,
+          "size": 21513656,
+          "vd": -61245,
+          "sr": 44100
+        },
+        "hr": null,
+        "a": null,
+        "cd": "01",
+        "no": 4,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 1,
+        "s_id": 0,
+        "mark": 270336,
+        "originCoverType": 1,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 6,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 7003,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 1636473600000,
+        "privilege": {
+          "id": 1893693682,
+          "fee": 8,
+          "payed": 0,
+          "st": 0,
+          "pl": 128000,
+          "dl": 0,
+          "sp": 7,
+          "cp": 1,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 128000,
+          "toast": false,
+          "flag": 260,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "standard",
+          "dlLevel": "none",
+          "flLevel": "standard",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Magic",
+        "id": 28285776,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 89365,
+            "name": "Coldplay",
+            "tns": [
+              "酷玩乐队"
+            ],
+            "alias": []
+          }
+        ],
+        "alia": [],
+        "pop": 90,
+        "st": 0,
+        "rt": "",
+        "fee": 1,
+        "v": 49,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 2767188,
+          "name": "Ghost Stories",
+          "picUrl": "http://p4.music.126.net/z8bRRuF8Gx5RvHJHwpKKkQ==/109951163620484193.jpg",
+          "tns": [],
+          "pic_str": "109951163620484193",
+          "pic": 109951163620484200
+        },
+        "dt": 285014,
+        "h": {
+          "br": 320001,
+          "fid": 0,
+          "size": 11403015,
+          "vd": -55475,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192001,
+          "fid": 0,
+          "size": 6841826,
+          "vd": -52852,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128001,
+          "fid": 0,
+          "size": 4561232,
+          "vd": -51144,
+          "sr": 44100
+        },
+        "sq": {
+          "br": 751107,
+          "fid": 0,
+          "size": 26759530,
+          "vd": -55498,
+          "sr": 44100
+        },
+        "hr": null,
+        "a": null,
+        "cd": "01",
+        "no": 2,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 2,
+        "s_id": 0,
+        "mark": 270336,
+        "originCoverType": 1,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 49,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 7002,
+        "mv": 243012,
+        "mst": 9,
+        "publishTime": 1400169600007,
+        "privilege": {
+          "id": 28285776,
+          "fee": 1,
+          "payed": 0,
+          "st": 0,
+          "pl": 0,
+          "dl": 0,
+          "sp": 0,
+          "cp": 0,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 0,
+          "toast": false,
+          "flag": 4,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "none",
+          "dlLevel": "none",
+          "flLevel": "none",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": true,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Manu forever",
+        "id": 1853933782,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 48527867,
+            "name": "Stephane Manga",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 48527009,
+            "name": "CHECK TIDIANE SECK",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 0,
+            "name": "CHARLOTTE DIPANDA",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 55166,
+            "name": "Daphné",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 651440,
+            "name": "Georges Séba",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 202165,
+            "name": "Tony Chasseur",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 48527010,
+            "name": "STEPHANE DAYAS (DAYAS)",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 13862860,
+            "name": "Etienne Mbappe",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 14382376,
+            "name": "André Marie Tala",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 34968471,
+            "name": "Sango Ndedi Ndolo",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 31286116,
+            "name": "Magic Boy",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 12709013,
+            "name": "Armand Biyag",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 12561099,
+            "name": "Queen Etémé",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 12771830,
+            "name": "Nestor Azerot",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 48527011,
+            "name": "GUY MICHEL KINGUE",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 0,
+            "name": "SAM FAN THOMAS",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 48527012,
+            "name": "EPEE ET KOUM",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 34968895,
+            "name": "Eva hakapoka",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 34656489,
+            "name": "Guillaume Eyango",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 12723875,
+            "name": "Victor Martinel",
+            "tns": [],
+            "alias": []
+          }
+        ],
+        "alia": [],
+        "pop": 5,
+        "st": 0,
+        "rt": "",
+        "fee": 8,
+        "v": 2,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 129136025,
+          "name": "Tribute to Manu Dibango",
+          "picUrl": "http://p4.music.126.net/g82LhuqdWRbhue3wEOYD4A==/109951166093828186.jpg",
+          "tns": [],
+          "pic_str": "109951166093828186",
+          "pic": 109951166093828200
+        },
+        "dt": 494235,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 19771603,
+          "vd": -52697,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 11862979,
+          "vd": -50097,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 7908667,
+          "vd": -48349,
+          "sr": 44100
+        },
+        "sq": null,
+        "hr": null,
+        "a": null,
+        "cd": "01",
+        "no": 1,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 1,
+        "s_id": 0,
+        "mark": 1318912,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 2,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 1416729,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 1623340800000,
+        "privilege": {
+          "id": 1853933782,
+          "fee": 8,
+          "payed": 0,
+          "st": 0,
+          "pl": 128000,
+          "dl": 0,
+          "sp": 7,
+          "cp": 1,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 128000,
+          "toast": false,
+          "flag": 260,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "standard",
+          "dlLevel": "none",
+          "flLevel": "standard",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Manu Forever (Edit)",
+        "id": 1853933786,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 48527867,
+            "name": "Stephane Manga",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 201033,
+            "name": "Cheick Tidiane Seck",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 49327561,
+            "name": "Charlotte DIPANDA",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 55166,
+            "name": "Daphné",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 651440,
+            "name": "Georges Séba",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 202165,
+            "name": "Tony Chasseur",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 48527010,
+            "name": "STEPHANE DAYAS (DAYAS)",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 13862860,
+            "name": "Etienne Mbappe",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 34968471,
+            "name": "Sango Ndedi Ndolo",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 31286116,
+            "name": "Magic Boy",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 12709013,
+            "name": "Armand Biyag",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 12561099,
+            "name": "Queen Etémé",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 12771830,
+            "name": "Nestor Azerot",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 48527011,
+            "name": "GUY MICHEL KINGUE",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 34968895,
+            "name": "Eva hakapoka",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 34656489,
+            "name": "Guillaume Eyango",
+            "tns": [],
+            "alias": []
+          }
+        ],
+        "alia": [],
+        "pop": 5,
+        "st": 0,
+        "rt": "",
+        "fee": 8,
+        "v": 3,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 129136025,
+          "name": "Tribute to Manu Dibango",
+          "picUrl": "http://p3.music.126.net/g82LhuqdWRbhue3wEOYD4A==/109951166093828186.jpg",
+          "tns": [],
+          "pic_str": "109951166093828186",
+          "pic": 109951166093828200
+        },
+        "dt": 285959,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 11440631,
+          "vd": -51535,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 6864396,
+          "vd": -48898,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 4576279,
+          "vd": -47111,
+          "sr": 44100
+        },
+        "sq": {
+          "br": 1330533,
+          "fid": 0,
+          "size": 47559828,
+          "vd": -51536,
+          "sr": 44100
+        },
+        "hr": null,
+        "a": null,
+        "cd": "01",
+        "no": 5,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 1,
+        "s_id": 0,
+        "mark": 1318912,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 3,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 1416729,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 1623340800000,
+        "privilege": {
+          "id": 1853933786,
+          "fee": 8,
+          "payed": 0,
+          "st": 0,
+          "pl": 128000,
+          "dl": 0,
+          "sp": 7,
+          "cp": 1,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 128000,
+          "toast": false,
+          "flag": 260,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "standard",
+          "dlLevel": "none",
+          "flLevel": "standard",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Este Cuento Se Ha Terminado",
+        "id": 543087808,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 55346021,
+            "name": "Josep Roig Boada",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 13241622,
+            "name": "D'OCON Singers",
+            "tns": [],
+            "alias": []
+          }
+        ],
+        "alia": [],
+        "pop": 5,
+        "st": 0,
+        "rt": null,
+        "fee": 1,
+        "v": 11,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 37848728,
+          "name": "El Mágico Mundo de Bruffi",
+          "picUrl": "http://p4.music.126.net/u2mdak4ifIrImFpA50s7uw==/109951164907456769.jpg",
+          "tns": [],
+          "pic_str": "109951164907456769",
+          "pic": 109951164907456770
+        },
+        "dt": 119876,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 4798215,
+          "vd": -73037,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 2878946,
+          "vd": -70396,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 1919312,
+          "vd": -68653,
+          "sr": 44100
+        },
+        "sq": {
+          "br": 1411000,
+          "fid": 0,
+          "size": 12428883,
+          "vd": -73036,
+          "sr": 44100
+        },
+        "hr": null,
+        "a": null,
+        "cd": "1",
+        "no": 2,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 1,
+        "s_id": 0,
+        "mark": 270336,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 11,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 1416336,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 1408896000000,
+        "privilege": {
+          "id": 543087808,
+          "fee": 1,
+          "payed": 0,
+          "st": 0,
+          "pl": 0,
+          "dl": 0,
+          "sp": 0,
+          "cp": 0,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 0,
+          "toast": false,
+          "flag": 4,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "none",
+          "dlLevel": "none",
+          "flLevel": "none",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": true,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Magic",
+        "id": 1454502013,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 334251,
+            "name": "Vigel",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 1141029,
+            "name": "Matilda",
+            "tns": [],
+            "alias": []
+          }
+        ],
+        "alia": [],
+        "pop": 80,
+        "st": 0,
+        "rt": "",
+        "fee": 8,
+        "v": 3,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 90676782,
+          "name": "Magic",
+          "picUrl": "http://p3.music.126.net/PICwD_07C9USASghEEdZUQ==/109951165053341862.jpg",
+          "tns": [],
+          "pic_str": "109951165053341862",
+          "pic": 109951165053341860
+        },
+        "dt": 186363,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 7457480,
+          "vd": -78257,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 4474506,
+          "vd": -75794,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 2983018,
+          "vd": -74385,
+          "sr": 44100
+        },
+        "sq": null,
+        "hr": null,
+        "a": null,
+        "cd": "01",
+        "no": 1,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 1,
+        "s_id": 0,
+        "mark": 270464,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 3,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 1416520,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 1593705600000,
+        "privilege": {
+          "id": 1454502013,
+          "fee": 8,
+          "payed": 0,
+          "st": 0,
+          "pl": 128000,
+          "dl": 0,
+          "sp": 7,
+          "cp": 1,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 128000,
+          "toast": false,
+          "flag": 5,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "standard",
+          "dlLevel": "none",
+          "flLevel": "standard",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Magic",
+        "id": 1493108473,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 62896,
+            "name": "Kylie Minogue",
+            "tns": [],
+            "alias": []
+          }
+        ],
+        "alia": [],
+        "pop": 95,
+        "st": 0,
+        "rt": "",
+        "fee": 8,
+        "v": 11,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 97934609,
+          "name": "DISCO (Deluxe)",
+          "picUrl": "http://p3.music.126.net/NQs1MR16080Y37q-GAQCpw==/109951166370450561.jpg",
+          "tns": [],
+          "pic_str": "109951166370450561",
+          "pic": 109951166370450560
+        },
+        "dt": 250680,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 10030019,
+          "vd": -62306,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 6018029,
+          "vd": -59802,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 4012034,
+          "vd": -58382,
+          "sr": 44100
+        },
+        "sq": {
+          "br": 1680009,
+          "fid": 0,
+          "size": 52643096,
+          "vd": -62286,
+          "sr": 44100
+        },
+        "hr": null,
+        "a": null,
+        "cd": "01",
+        "no": 1,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 1,
+        "s_id": 0,
+        "mark": 270336,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 11,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 1416763,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 1604592000000,
+        "privilege": {
+          "id": 1493108473,
+          "fee": 8,
+          "payed": 0,
+          "st": 0,
+          "pl": 128000,
+          "dl": 0,
+          "sp": 7,
+          "cp": 1,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 128000,
+          "toast": false,
+          "flag": 4,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "standard",
+          "dlLevel": "none",
+          "flLevel": "standard",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Magic",
+        "id": 26608507,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 98351,
+            "name": "One Direction",
+            "tns": [
+              "单向组合"
+            ],
+            "alias": []
+          }
+        ],
+        "alia": [],
+        "pop": 100,
+        "st": 0,
+        "rt": "",
+        "fee": 0,
+        "v": 30,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 2532168,
+          "name": "Take Me Home (Special Deluxe Edition)",
+          "picUrl": "http://p4.music.126.net/S3oxolo9xyPL_APfyJ0wEQ==/6650945837331786.jpg",
+          "tns": [],
+          "pic": 6650945837331786
+        },
+        "dt": 184000,
+        "h": {
+          "br": 320002,
+          "fid": 0,
+          "size": 7362395,
+          "vd": -60983,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192002,
+          "fid": 0,
+          "size": 4417454,
+          "vd": -58605,
+          "sr": 44100
+        },
+        "l": null,
+        "sq": {
+          "br": 1042724,
+          "fid": 0,
+          "size": 23982655,
+          "vd": -61034,
+          "sr": 44100
+        },
+        "hr": null,
+        "a": null,
+        "cd": "1",
+        "no": 19,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 1,
+        "s_id": 0,
+        "mark": 262144,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 30,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 5003,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 1369152000007,
+        "privilege": {
+          "id": 26608507,
+          "fee": 0,
+          "payed": 0,
+          "st": 0,
+          "pl": 320000,
+          "dl": 999000,
+          "sp": 7,
+          "cp": 1,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 320000,
+          "toast": false,
+          "flag": 256,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "exhigh",
+          "dlLevel": "lossless",
+          "flLevel": "exhigh",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Magic",
+        "id": 1834324494,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 45336,
+            "name": "Thomas Bergersen",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 29212664,
+            "name": "Kimera Morrell",
+            "tns": [],
+            "alias": []
+          }
+        ],
+        "alia": [],
+        "pop": 95,
+        "st": 0,
+        "rt": "",
+        "fee": 8,
+        "v": 3,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 125501859,
+          "name": "Humanity - Chapter III",
+          "picUrl": "http://p3.music.126.net/fu0E_hcWuibJl98B3IkVTw==/109951165854802311.jpg",
+          "tns": [],
+          "pic_str": "109951165854802311",
+          "pic": 109951165854802300
+        },
+        "dt": 207630,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 8308027,
+          "vd": -63614,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 4984834,
+          "vd": -61107,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 3323237,
+          "vd": -59572,
+          "sr": 44100
+        },
+        "sq": null,
+        "hr": null,
+        "a": null,
+        "cd": "01",
+        "no": 6,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 1,
+        "s_id": 0,
+        "mark": 270464,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 3,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 743010,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 1620230400000,
+        "privilege": {
+          "id": 1834324494,
+          "fee": 8,
+          "payed": 0,
+          "st": 0,
+          "pl": 128000,
+          "dl": 0,
+          "sp": 7,
+          "cp": 1,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 128000,
+          "toast": false,
+          "flag": 5,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "standard",
+          "dlLevel": "none",
+          "flLevel": "standard",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Um Toque de Mágica",
+        "id": 1910841421,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 30190207,
+            "name": "Fernando Luna",
+            "tns": [],
+            "alias": []
+          }
+        ],
+        "alia": [],
+        "pop": 5,
+        "st": 0,
+        "rt": "",
+        "fee": 8,
+        "v": 2,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 138645682,
+          "name": "Á Sua Peçonha",
+          "picUrl": "http://p3.music.126.net/qCTbH2IuQZyk8Eeelc_tPA==/109951166917848406.jpg",
+          "tns": [],
+          "pic_str": "109951166917848406",
+          "pic": 109951166917848400
+        },
+        "dt": 234187,
+        "h": null,
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 5621804,
+          "vd": -74806,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 3747884,
+          "vd": -73398,
+          "sr": 44100
+        },
+        "sq": null,
+        "hr": null,
+        "a": null,
+        "cd": "01",
+        "no": 9,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 1,
+        "s_id": 0,
+        "mark": 270336,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 2,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 1416336,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 1641312000000,
+        "privilege": {
+          "id": 1910841421,
+          "fee": 8,
+          "payed": 0,
+          "st": 0,
+          "pl": 128000,
+          "dl": 0,
+          "sp": 7,
+          "cp": 1,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 128000,
+          "toast": false,
+          "flag": 4,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "standard",
+          "dlLevel": "none",
+          "flLevel": "standard",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Magic",
+        "id": 1379270748,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 12870177,
+            "name": "Lil Skies",
+            "tns": [],
+            "alias": []
+          }
+        ],
+        "alia": [],
+        "pop": 65,
+        "st": 0,
+        "rt": "",
+        "fee": 1,
+        "v": 7,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 80524400,
+          "name": "Magic",
+          "picUrl": "http://p3.music.126.net/6VTInsyOj2PC-NP8CSOfdg==/109951164229046319.jpg",
+          "tns": [],
+          "pic_str": "109951164229046319",
+          "pic": 109951164229046320
+        },
+        "dt": 182337,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 7296566,
+          "vd": -53977,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 4377957,
+          "vd": -51370,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 2918653,
+          "vd": -49727,
+          "sr": 44100
+        },
+        "sq": {
+          "br": 1521474,
+          "fid": 0,
+          "size": 34677763,
+          "vd": -53972,
+          "sr": 44100
+        },
+        "hr": null,
+        "a": null,
+        "cd": "01",
+        "no": 1,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 1,
+        "s_id": 0,
+        "mark": 1318912,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 7,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 7002,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 1563897600000,
+        "privilege": {
+          "id": 1379270748,
+          "fee": 1,
+          "payed": 0,
+          "st": 0,
+          "pl": 0,
+          "dl": 0,
+          "sp": 0,
+          "cp": 0,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 0,
+          "toast": false,
+          "flag": 4,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "none",
+          "dlLevel": "none",
+          "flLevel": "none",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": true,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Magic",
+        "id": 1387392286,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 1046016,
+            "name": "ThimLife",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 33118901,
+            "name": "Tomsis",
+            "tns": [],
+            "alias": []
+          }
+        ],
+        "alia": [],
+        "pop": 85,
+        "st": 0,
+        "rt": "",
+        "fee": 0,
+        "v": 5,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 81228507,
+          "name": "Magic",
+          "picUrl": "http://p3.music.126.net/XKjlep-2X9QOVhdq9nG-MA==/109951164330950048.jpg",
+          "tns": [],
+          "pic_str": "109951164330950048",
+          "pic": 109951164330950050
+        },
+        "dt": 232960,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 9320533,
+          "vd": 5079,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 5592337,
+          "vd": 7772,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 3728239,
+          "vd": 9499,
+          "sr": 44100
+        },
+        "sq": null,
+        "hr": null,
+        "a": null,
+        "cd": "01",
+        "no": 0,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 0,
+        "s_id": 0,
+        "mark": 262144,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 5,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 0,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 0,
+        "privilege": {
+          "id": 1387392286,
+          "fee": 0,
+          "payed": 0,
+          "st": 0,
+          "pl": 320000,
+          "dl": 320000,
+          "sp": 7,
+          "cp": 1,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 320000,
+          "fl": 320000,
+          "toast": false,
+          "flag": 128,
+          "preSell": false,
+          "playMaxbr": 320000,
+          "downloadMaxbr": 320000,
+          "maxBrLevel": "exhigh",
+          "playMaxBrLevel": "exhigh",
+          "downloadMaxBrLevel": "exhigh",
+          "plLevel": "exhigh",
+          "dlLevel": "exhigh",
+          "flLevel": "exhigh",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Magic",
+        "id": 28292627,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 89365,
+            "name": "Coldplay",
+            "tns": [
+              "酷玩乐队"
+            ],
+            "alias": []
+          }
+        ],
+        "alia": [],
+        "pop": 45,
+        "st": 0,
+        "rt": "",
+        "fee": 1,
+        "v": 36,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 2769287,
+          "name": "Magic",
+          "picUrl": "http://p3.music.126.net/bHht9jRTYtPRcJ8azx0dHA==/109951164164895277.jpg",
+          "tns": [],
+          "pic_str": "109951164164895277",
+          "pic": 109951164164895280
+        },
+        "dt": 285014,
+        "h": {
+          "br": 320001,
+          "fid": 0,
+          "size": 11403015,
+          "vd": -55475,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192001,
+          "fid": 0,
+          "size": 6841826,
+          "vd": -52852,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128001,
+          "fid": 0,
+          "size": 4561232,
+          "vd": -51144,
+          "sr": 44100
+        },
+        "sq": {
+          "br": 751107,
+          "fid": 0,
+          "size": 26759530,
+          "vd": -55564,
+          "sr": 44100
+        },
+        "hr": null,
+        "a": null,
+        "cd": "1",
+        "no": 1,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 0,
+        "s_id": 0,
+        "mark": 270336,
+        "originCoverType": 1,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 36,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 7002,
+        "mv": 366101,
+        "mst": 9,
+        "publishTime": 1393776000007,
+        "privilege": {
+          "id": 28292627,
+          "fee": 1,
+          "payed": 0,
+          "st": 0,
+          "pl": 0,
+          "dl": 0,
+          "sp": 0,
+          "cp": 0,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 0,
+          "toast": false,
+          "flag": 4,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "none",
+          "dlLevel": "none",
+          "flLevel": "none",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": true,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Magic",
+        "id": 1898146986,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 45839,
+            "name": "Westlife",
+            "tns": [
+              "西城男孩"
+            ],
+            "alias": []
+          }
+        ],
+        "alia": [],
+        "pop": 90,
+        "st": 0,
+        "rt": "",
+        "fee": 8,
+        "v": 13,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 134792126,
+          "name": "Wild Dreams (Deluxe Edition)",
+          "picUrl": "http://p4.music.126.net/8S_o0xF2OMmyGdIvb_nqAQ==/109951167402764495.jpg",
+          "tns": [],
+          "pic_str": "109951167402764495",
+          "pic": 109951167402764500
+        },
+        "dt": 200293,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 8014411,
+          "vd": -72815,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 4808664,
+          "vd": -70293,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 3205791,
+          "vd": -68849,
+          "sr": 44100
+        },
+        "sq": {
+          "br": 1007085,
+          "fid": 0,
+          "size": 25214066,
+          "vd": -72806,
+          "sr": 44100
+        },
+        "hr": null,
+        "a": null,
+        "cd": "01",
+        "no": 10,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 0,
+        "s_id": 0,
+        "mark": 270336,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 13,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 2710702,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 0,
+        "privilege": {
+          "id": 1898146986,
+          "fee": 8,
+          "payed": 0,
+          "st": 0,
+          "pl": 128000,
+          "dl": 0,
+          "sp": 7,
+          "cp": 1,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 128000,
+          "toast": false,
+          "flag": 4,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "standard",
+          "dlLevel": "none",
+          "flLevel": "standard",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Magic",
+        "id": 574919277,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 12053225,
+            "name": "Moe Shop",
+            "tns": [],
+            "alias": []
+          },
+          {
+            "id": 1074092,
+            "name": "Hyper Potions",
+            "tns": [],
+            "alias": []
+          }
+        ],
+        "alia": [],
+        "pop": 30,
+        "st": 0,
+        "rt": null,
+        "fee": 8,
+        "v": 12,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 39723464,
+          "name": "Moe Moe",
+          "picUrl": "http://p4.music.126.net/Q6UxLH6NdTVne9YQMl33rA==/109951163680624115.jpg",
+          "tns": [],
+          "pic_str": "109951163680624115",
+          "pic": 109951163680624110
+        },
+        "dt": 209228,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 8371766,
+          "vd": -36866,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 5023077,
+          "vd": -34379,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 3348733,
+          "vd": -33097,
+          "sr": 44100
+        },
+        "sq": null,
+        "hr": null,
+        "a": null,
+        "cd": "1",
+        "no": 1,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 0,
+        "s_id": 0,
+        "mark": 270464,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 12,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 743010,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 1521043200000,
+        "privilege": {
+          "id": 574919277,
+          "fee": 8,
+          "payed": 0,
+          "st": 0,
+          "pl": 128000,
+          "dl": 0,
+          "sp": 7,
+          "cp": 1,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 128000,
+          "toast": false,
+          "flag": 5,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "standard",
+          "dlLevel": "none",
+          "flLevel": "standard",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Magic",
+        "id": 2041922214,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 56569190,
+            "name": "Dystopian Nightmare",
+            "tns": [],
+            "alias": []
+          }
+        ],
+        "alia": [],
+        "pop": 5,
+        "st": 0,
+        "rt": "",
+        "fee": 8,
+        "v": 3,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 164290833,
+          "name": "Magic",
+          "picUrl": "http://p4.music.126.net/LlcEoPXTbPxWPpbJG26Aig==/109951168566652175.jpg",
+          "tns": [],
+          "pic_str": "109951168566652175",
+          "pic": 109951168566652180
+        },
+        "dt": 320000,
+        "h": {
+          "br": 320001,
+          "fid": 0,
+          "size": 12803178,
+          "vd": 7712,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192001,
+          "fid": 0,
+          "size": 7681924,
+          "vd": 10140,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128001,
+          "fid": 0,
+          "size": 5121297,
+          "vd": 11548,
+          "sr": 44100
+        },
+        "sq": {
+          "br": 876887,
+          "fid": 0,
+          "size": 35075542,
+          "vd": 6777,
+          "sr": 44100
+        },
+        "hr": null,
+        "a": null,
+        "cd": "01",
+        "no": 1,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 1,
+        "s_id": 0,
+        "mark": 270336,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 3,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": null,
+        "rtype": 0,
+        "rurl": null,
+        "cp": 1416692,
+        "mv": 0,
+        "mst": 9,
+        "publishTime": 1682092800000,
+        "privilege": {
+          "id": 2041922214,
+          "fee": 8,
+          "payed": 0,
+          "st": 0,
+          "pl": 128000,
+          "dl": 0,
+          "sp": 7,
+          "cp": 1,
+          "subp": 1,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 128000,
+          "toast": false,
+          "flag": 4,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "standard",
+          "dlLevel": "none",
+          "flLevel": "standard",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "MAGIC",
+        "id": 551870,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 15996,
+            "name": "愛内里菜",
+            "tns": [],
+            "alias": [
+              "あいうち りな",
+              "Aiuchi Rina"
+            ],
+            "alia": [
+              "あいうち りな",
+              "Aiuchi Rina"
+            ]
+          }
+        ],
+        "alia": [
+          "TV动画《名侦探柯南》OP27"
+        ],
+        "pop": 85,
+        "st": 0,
+        "rt": "",
+        "fee": 0,
+        "v": 38,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 51490,
+          "name": "MAGIC",
+          "picUrl": "http://p4.music.126.net/WbHHZEDbed1eToAown6Twg==/580542139477787.jpg",
+          "tns": [],
+          "pic": 580542139477787
+        },
+        "dt": 238000,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 9548444,
+          "vd": -72877,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 5729133,
+          "vd": -72877,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 3819478,
+          "vd": -72877,
+          "sr": 44100
+        },
+        "sq": null,
+        "hr": null,
+        "a": null,
+        "cd": "1",
+        "no": 1,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 0,
+        "s_id": 0,
+        "mark": 9007199255003136,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 38,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": {
+          "type": 2,
+          "typeDesc": "其它版本可播",
+          "songId": null
+        },
+        "rtype": 0,
+        "rurl": null,
+        "cp": 663018,
+        "mv": 314043,
+        "mst": 9,
+        "publishTime": 1256054400000,
+        "privilege": {
+          "id": 551870,
+          "fee": 0,
+          "payed": 0,
+          "st": -200,
+          "pl": 0,
+          "dl": 0,
+          "sp": 0,
+          "cp": 0,
+          "subp": 0,
+          "cs": false,
+          "maxbr": 320000,
+          "fl": 0,
+          "toast": false,
+          "flag": 128,
+          "preSell": false,
+          "playMaxbr": 320000,
+          "downloadMaxbr": 320000,
+          "maxBrLevel": "exhigh",
+          "playMaxBrLevel": "exhigh",
+          "downloadMaxBrLevel": "exhigh",
+          "plLevel": "none",
+          "dlLevel": "none",
+          "flLevel": "none",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "Magic",
+        "id": 1868795711,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 31154262,
+            "name": "TOMORROW X TOGETHER",
+            "tns": [],
+            "alias": [
+              "투모로우바이투게더"
+            ],
+            "alia": [
+              "투모로우바이투게더"
+            ]
+          }
+        ],
+        "alia": [],
+        "pop": 55,
+        "st": 0,
+        "rt": "",
+        "fee": 0,
+        "v": 16,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 131613628,
+          "name": "The Chaos Chapter: FIGHT OR ESCAPE",
+          "picUrl": "http://p3.music.126.net/KFKZs30oantveSMBueckFQ==/109951166278141542.jpg",
+          "tns": [],
+          "pic_str": "109951166278141542",
+          "pic": 109951166278141540
+        },
+        "dt": 159749,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 6392729,
+          "vd": -68850,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 3835655,
+          "vd": -66298,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 2557118,
+          "vd": -64993,
+          "sr": 44100
+        },
+        "sq": {
+          "br": 1805053,
+          "fid": 0,
+          "size": 36044606,
+          "vd": -69205,
+          "sr": 44100
+        },
+        "hr": null,
+        "a": null,
+        "cd": "01",
+        "no": 4,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 0,
+        "s_id": 0,
+        "mark": 262144,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 16,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": {
+          "type": 1,
+          "typeDesc": "其它版本可播",
+          "songId": "1893693682"
+        },
+        "rtype": 0,
+        "rurl": null,
+        "cp": 723010,
+        "mv": 14294170,
+        "mst": 9,
+        "publishTime": 1629129600000,
+        "privilege": {
+          "id": 1868795711,
+          "fee": 0,
+          "payed": 0,
+          "st": -200,
+          "pl": 0,
+          "dl": 0,
+          "sp": 0,
+          "cp": 0,
+          "subp": 0,
+          "cs": false,
+          "maxbr": 999000,
+          "fl": 0,
+          "toast": false,
+          "flag": 256,
+          "preSell": false,
+          "playMaxbr": 999000,
+          "downloadMaxbr": 999000,
+          "maxBrLevel": "lossless",
+          "playMaxBrLevel": "lossless",
+          "downloadMaxBrLevel": "lossless",
+          "plLevel": "none",
+          "dlLevel": "none",
+          "flLevel": "none",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      },
+      {
+        "name": "MAGIC",
+        "id": 4920919,
+        "pst": 0,
+        "t": 0,
+        "ar": [
+          {
+            "id": 15996,
+            "name": "愛内里菜",
+            "tns": [],
+            "alias": [
+              "あいうち りな",
+              "Aiuchi Rina"
+            ],
+            "alia": [
+              "あいうち りな",
+              "Aiuchi Rina"
+            ]
+          }
+        ],
+        "alia": [
+          "TV动画《名侦探柯南》OP27 ",
+          " TVアニメ「名探偵コナン」OP27"
+        ],
+        "pop": 35,
+        "st": 0,
+        "rt": "",
+        "fee": 0,
+        "v": 636,
+        "crbt": null,
+        "cf": "",
+        "al": {
+          "id": 492691,
+          "name": "名探侦コナン テーマ曲集 4 ~THE BEST OF DETECTIVE CONAN 4~",
+          "picUrl": "http://p4.music.126.net/xWPgM0JzZxKgKV2SpZvxkw==/5839506255275238.jpg",
+          "tns": [],
+          "pic": 5839506255275238
+        },
+        "dt": 238000,
+        "h": {
+          "br": 320000,
+          "fid": 0,
+          "size": 9548444,
+          "vd": -51100,
+          "sr": 44100
+        },
+        "m": {
+          "br": 192000,
+          "fid": 0,
+          "size": 5729133,
+          "vd": -48900,
+          "sr": 44100
+        },
+        "l": {
+          "br": 128000,
+          "fid": 0,
+          "size": 3819478,
+          "vd": -47600,
+          "sr": 44100
+        },
+        "sq": null,
+        "hr": null,
+        "a": null,
+        "cd": "1",
+        "no": 8,
+        "rtUrl": null,
+        "ftype": 0,
+        "rtUrls": [],
+        "djId": 0,
+        "copyright": 0,
+        "s_id": 0,
+        "mark": 9007199255003136,
+        "originCoverType": 0,
+        "originSongSimpleData": null,
+        "tagPicList": null,
+        "resourceState": true,
+        "version": 636,
+        "songJumpInfo": null,
+        "entertainmentTags": null,
+        "single": 0,
+        "noCopyrightRcmd": {
+          "type": 2,
+          "typeDesc": "其它版本可播",
+          "songId": null
+        },
+        "rtype": 0,
+        "rurl": null,
+        "cp": 663018,
+        "mv": 314043,
+        "mst": 9,
+        "publishTime": 1324396800000,
+        "privilege": {
+          "id": 4920919,
+          "fee": 0,
+          "payed": 0,
+          "st": -200,
+          "pl": 0,
+          "dl": 0,
+          "sp": 0,
+          "cp": 0,
+          "subp": 0,
+          "cs": false,
+          "maxbr": 320000,
+          "fl": 0,
+          "toast": false,
+          "flag": 128,
+          "preSell": false,
+          "playMaxbr": 320000,
+          "downloadMaxbr": 320000,
+          "maxBrLevel": "exhigh",
+          "playMaxBrLevel": "exhigh",
+          "downloadMaxBrLevel": "exhigh",
+          "plLevel": "none",
+          "dlLevel": "none",
+          "flLevel": "none",
+          "rscl": null,
+          "freeTrialPrivilege": {
+            "resConsumable": false,
+            "userConsumable": false,
+            "listenType": null
+          },
+          "chargeInfoList": [
+            {
+              "rate": 128000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 192000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 320000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 0
+            },
+            {
+              "rate": 999000,
+              "chargeUrl": null,
+              "chargeMessage": null,
+              "chargeType": 1
+            }
+          ]
+        }
+      }
+    ],
+    "songCount": 24
+  },
+  "code": 200
+}

@@ -16,8 +16,7 @@ serde = { version = "1.0", features = ["derive"] }
 # lyric parse
 lrc-nom = "0.1.1"
 
-# lyric get
-reqwest = { version = "0.11.16", features = ["blocking"] }
-
 # ui
 gtk = { version = "0.6.6", package = "gtk4", features = ["v4_8", "v4_10"] }
+ncmapi = {git = "https://github.com/poly000/ncmapi-rs", branch = "into_raw_data"}
+tokio = { version = "1", features = ["rt-multi-thread"] }
