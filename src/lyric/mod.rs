@@ -28,7 +28,7 @@ where
     type LResult<T>;
 
     const NAME: &'static str;
-    fn query_lyric(&self, handle: Handle, id: Self::Id, translate: bool) -> Self::LResult<L>;
+    fn query_lyric(&self, handle: Handle, id: Self::Id) -> Self::LResult<L>;
     fn search_song(
         &self,
         handle: Handle,
@@ -39,4 +39,5 @@ where
 
 pub trait LyricStore {
     fn get_lyric<'a>(&'a self) -> Lyric<'a>;
+    fn get_translated_lyric<'a>(&'a self) -> Lyric<'a>;
 }

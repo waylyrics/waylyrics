@@ -30,12 +30,8 @@ async fn main() {
 
     let ncmlyric = lyric::netease::NeteaseLyricProvider::new().unwrap();
 
-
     let handle = Handle::current();
-    println!(
-        "{:?}",
-        ncmlyric.search_song(handle, "Nhato", "Magic").unwrap()
-    );
+    ncmlyric.query_lyric(handle, 1968702735).unwrap();
 
     app.run();
 }
