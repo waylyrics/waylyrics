@@ -4,7 +4,6 @@ use gtk::subclass::prelude::*;
 use gtk::{gio, glib, ApplicationWindow};
 use glib::once_cell::sync::OnceCell;
 
-// ANCHOR: imp
 #[derive(Default)]
 pub struct Window {
     pub settings: OnceCell<Settings>,
@@ -39,4 +38,3 @@ impl WindowImpl for Window {
     }
 }
 impl ApplicationWindowImpl for Window {}
-// ANCHOR_END: imp

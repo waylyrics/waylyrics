@@ -2,6 +2,12 @@
 
 Simple wayland native universal on screen lyrics.
 
+Current approach my seems dirty:
+
+1. get the likely actived player when waylyrics starts
+2. keep track with half intertal of lyric update's
+3. use the first result of `search_song` and sync lyric until pause/next happens.
+
 ## Alternatives
 
 [YesPlayMusicOSD]: https://github.com/shih-liang/YesPlayMusicOSD

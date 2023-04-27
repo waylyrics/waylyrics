@@ -1,20 +1,19 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize, Default)]
-pub struct Config {
-    pub text: Text,
-}
-
 #[derive(Deserialize, Serialize)]
-pub struct Text {
-    /// RGBA
-    pub color: (u8, u8, u8, u8),
+#[serde(rename_all = "kebab-case")]
+pub struct Config {
+    pub text_color: Rgba,
+    pub background_color: Rgba,
 }
 
-impl Default for Text {
+type Rgba = (u8, u8, u8, u8);
+
+impl Default for Config {
     fn default() -> Self {
         Self {
-            color: (255, 255, 255, 255),
+            text_color: (255, 255, 255, 255),
+            background_color: (0, 0, 0, 0),
         }
     }
 }

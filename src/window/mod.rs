@@ -8,7 +8,6 @@ use gtk::{gio, glib, Application};
 
 use crate::APP_ID;
 
-// ANCHOR: mod
 glib::wrapper! {
     pub struct Window(ObjectSubclass<imp::Window>)
         @extends gtk::ApplicationWindow, gtk::Window, gtk::Widget,
@@ -50,4 +49,3 @@ impl Window {
         self.set_default_width(width);
     }
 }
-// ANCHOR_END: mod
