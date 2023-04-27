@@ -6,6 +6,8 @@ description = "Simple On Screen lyrics Display for wayland"
 authors = ["poly000"]
 license-file = "LICENSE"
 
+default-run = "waylyrics"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]

@@ -5,24 +5,16 @@ pub struct Config {
     pub text: Text,
 }
 
-#[derive(Deserialize, Serialize, Default)]
+#[derive(Deserialize, Serialize)]
 pub struct Text {
-    pub top: Offset,
     /// RGBA
     pub color: (u8, u8, u8, u8),
-    /// RGBA
-    pub background: (u8, u8, u8, u8),
 }
 
-#[derive(Deserialize, Serialize)]
-pub struct Offset {
-    pub scale: f64,
-}
-
-impl Default for Offset {
+impl Default for Text {
     fn default() -> Self {
         Self {
-            scale: 0.1,
+            color: (255, 255, 255, 255),
         }
     }
 }
