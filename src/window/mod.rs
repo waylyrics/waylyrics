@@ -39,13 +39,15 @@ impl Window {
         let size = self.default_size();
 
         self.settings().set_int("window-width", size.0)?;
+        self.settings().set_int("window-height", size.1)?;
 
         Ok(())
     }
 
     fn load_window_size(&self) {
+        let height = self.settings().int("window-height");
         let width = self.settings().int("window-width");
 
-        self.set_default_width(width);
+        self.set_default_size(width, height);
     }
 }

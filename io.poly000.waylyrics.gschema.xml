@@ -2,8 +2,12 @@
 <schemalist>
   <schema id="io.poly000.waylyrics" path="/io/poly000/waylyrics/">
     <key name="window-width" type="i">
-      <default>500</default>
+      <default>1200</default>
       <summary>Default window width</summary>
+    </key>
+    <key name="window-width" type="i">
+      <default>300</default>
+      <summary>Default window height</summary>
     </key>
   </schema>
 </schemalist>
