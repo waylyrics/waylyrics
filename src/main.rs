@@ -134,6 +134,7 @@ fn build_ui(app: &Application) {
         text_color,
         background_color,
         font_size,
+        font_family,
     } = read_config("config.toml").unwrap();
 
     merge_css(&format!(
@@ -147,6 +148,13 @@ fn build_ui(app: &Application) {
         }}
         "#,
     ));
+    if let Some(font_family) = font_family {
+        merge_css(&format!(r#"
+            label {{
+                font-family: {font_family};
+            }} 
+        "#))
+    }
 
     let window = build_main_window(app);
     allow_click_through(&window);
