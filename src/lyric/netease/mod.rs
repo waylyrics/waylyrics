@@ -31,10 +31,11 @@ impl super::LyricProvider<NeteaseLyric> for NeteaseLyricProvider {
 
     fn search_song(
         &self,
-        handle: Handle,
+        handle: &Handle,
         singer: &str,
         title: &str,
     ) -> Self::LResult<Vec<super::SongInfo<Self::Id>>> {
+        let handle = handle.clone();
         let keyword = format!("{title} {singer}");
         let search_result = thread::spawn(move || {
             let api = NcmApi::new(
@@ -75,7 +76,8 @@ impl super::LyricProvider<NeteaseLyric> for NeteaseLyricProvider {
             .collect())
     }
 
-    fn query_lyric(&self, handle: Handle, id: Self::Id) -> Self::LResult<NeteaseLyric> {
+    fn query_lyric(&self, handle: &Handle, id: Self::Id) -> Self::LResult<NeteaseLyric> {
+        let handle = handle.clone();
         let query_result = thread::spawn(move || {
             let api = NcmApi::new(
                 true,

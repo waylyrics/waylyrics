@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 pub struct Config {
     pub text_color: Rgba,
     pub background_color: Rgba,
+    pub font_size: u16,
 }
 
 type Rgba = (u8, u8, u8, u8);
@@ -14,6 +15,7 @@ impl Default for Config {
         Self {
             text_color: (255, 255, 255, 255),
             background_color: (0, 0, 0, 0),
+            font_size: 40,
         }
     }
 }
