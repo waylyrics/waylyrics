@@ -5,8 +5,8 @@ Simple wayland native universal on screen lyrics.
 Current approach my seems dirty:
 
 1. get the likely actived player when waylyrics starts
-2. keep track with half intertal of lyric update's
-3. use the first result of `search_song` and sync lyric until pause/next happens.
+2. keep track with 10s interval and 100ms refresh for lyrics
+3. use the first result of `search_song` and sync lyric on track switch, pause following the track
 
 ## Alternatives
 
