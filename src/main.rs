@@ -85,15 +85,25 @@ fn register_mpris_sync(app: WeakRef<Application>) {
                             .get_metadata()
                             .expect("cannot get metadata of track playing");
                         let need_update_lyric =
-                            TRACK_PLAYING_PAUSED.with_borrow(|(track_id_playing, paused)| {
-                                track_meta.track_id().is_some_and(|track_id| {
-                                    track_id_playing.is_none()
-                                        || track_id_playing.as_ref().is_some_and(|p| p != &track_id)
+                            TRACK_PLAYING_PAUSED.with_borrow_mut(|(track_id_playing, paused)| {
+                                if let Some(track_id) = track_meta.track_id() {
+                                    let need = track_id_playing.is_none()
+                                        || track_id_playing
+                                            .as_ref()
+                                            .is_some_and(|p| p != &track_id)
                                             && !(*paused
                                                 && track_id_playing
                                                     .as_ref()
-                                                    .is_some_and(|p| p == &track_id))
-                                })
+                                                    .is_some_and(|p| p == &track_id));
+
+                                    *track_id_playing = Some(track_id);
+                                    *paused = false;
+                                    need
+                                } else {
+                                    *track_id_playing = None;
+                                    *paused = false;
+                                    false
+                                }
                             });
 
                         if need_update_lyric {
