@@ -25,6 +25,7 @@ pub struct SongInfo<Id> {
     pub id: Id,
     pub title: String,
     pub singer: String,
+    pub length: Duration,
 }
 
 pub trait LyricProvider<L>

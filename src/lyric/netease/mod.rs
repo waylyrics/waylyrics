@@ -57,7 +57,7 @@ impl super::LyricProvider<NeteaseLyric> for NeteaseLyricProvider {
             .iter()
             .map(
                 |Song {
-                     name, id, artists, ..
+                     name, id, artists, duration, ..
                  }| super::SongInfo {
                     id: *id as _,
                     title: name.into(),
@@ -71,6 +71,7 @@ impl super::LyricProvider<NeteaseLyric> for NeteaseLyricProvider {
                             s += op;
                             s
                         }),
+                    length: Duration::from_millis(*duration as _),
                 },
             )
             .collect())
