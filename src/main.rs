@@ -111,39 +111,7 @@ fn register_mpris_sync(app: WeakRef<Application>) {
                             let artist = track_meta.artists().map(|arts| arts.join(","));
 
                             let length = track_meta.length();
-
-                            let provider = NeteaseLyricProvider::new().unwrap();
-                            let search_result = TOKIO_RUNTIME_HANDLE.with_borrow(|handle| {
-                                provider
-                                    .search_song(
-                                        handle,
-                                        artist.as_ref().map(|s| &**s).unwrap_or(""),
-                                        title,
-                                    )
-                                    .expect("search error")
-                            });
-
-                            if let Some(song_id) = length
-                                .map(|leng| {
-                                    search_result
-                                        .iter()
-                                        .find(|SongInfo { length, .. }| length == &leng)
-                                })
-                                .flatten()
-                                .or(search_result.get(0))
-                                .map(|song| song.id)
-                            {
-                                let lyric = TOKIO_RUNTIME_HANDLE.with_borrow(|handle| {
-                                    provider
-                                        .query_lyric(handle, song_id)
-                                        .expect("fetch lyric error")
-                                });
-                                let olyric = lyric.get_lyric().into_owned();
-                                let tlyric = lyric.get_translated_lyric().into_owned();
-                                let lyric = merge_lyric(&olyric, &tlyric).unwrap_or(olyric);
-                                LYRIC.set(lyric);
-                            } else {
-                                LYRIC.set(LyricOwned::None);
+                            if fetch_lyric(title, artist, length).is_err() {
                                 let label: Label = windows[0].child().unwrap().downcast().unwrap();
                                 label.set_label(DEFAULT_TEXT);
                             }
@@ -180,6 +148,39 @@ fn register_mpris_sync(app: WeakRef<Application>) {
             Continue(true)
         },
     );
+}
+
+fn fetch_lyric(
+    title: &str,
+    artist: Option<String>,
+    length: Option<Duration>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let provider = NeteaseLyricProvider::new().unwrap();
+    let search_result = TOKIO_RUNTIME_HANDLE.with_borrow(|handle| {
+        provider.search_song(handle, artist.as_ref().map(|s| &**s).unwrap_or(""), title)
+    })?;
+
+    if let Some(song_id) = length
+        .map(|leng| {
+            search_result
+                .iter()
+                .find(|SongInfo { length, .. }| length == &leng)
+        })
+        .flatten()
+        .or(search_result.get(0))
+        .map(|song| song.id)
+    {
+        let lyric =
+            TOKIO_RUNTIME_HANDLE.with_borrow(|handle| provider.query_lyric(handle, song_id))?;
+        let olyric = lyric.get_lyric().into_owned();
+        let tlyric = lyric.get_translated_lyric().into_owned();
+        let lyric = merge_lyric(&olyric, &tlyric).unwrap_or(olyric);
+        LYRIC.set(lyric);
+        Ok(())
+    } else {
+        LYRIC.set(LyricOwned::None);
+        Err("No lyric found".into())
+    }
 }
 
 fn register_lyric_display(app: WeakRef<Application>) {
