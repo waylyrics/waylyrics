@@ -117,6 +117,7 @@ fn register_mpris_sync(app: WeakRef<Application>) {
                             }
                         }
 
+                        // sync play position
                         let position = player.get_position().expect("cannot get playback position");
                         let start = SystemTime::now()
                             .checked_sub(position)
@@ -127,12 +128,12 @@ fn register_mpris_sync(app: WeakRef<Application>) {
                         PlayerStatus::Missing
                     }
                 }) {
-                    PlayerStatus::Missing => {
+                    PlayerStatus::Missing => { // 之前的似了，找新欢
                         PLAYER_FINDER.with_borrow(|player_finder| {
                             if let Ok(player) = player_finder.find_active() {
                                 PLAYER.set(Some(player));
                             } else {
-                                PLAYER.set(None);
+                                PLAYER.set(None); // 还没新欢可找…… 再等等8
                             }
                         });
                         let label: Label = windows[0].child().unwrap().downcast().unwrap();
@@ -304,7 +305,7 @@ fn build_main_window(app: &Application) -> Window {
 
     let label = Label::builder()
         .label("Waylyrics")
-        .justify(gtk::Justification::Center)
+        .justify(gtk::Justification::Center) // 居中显示每一行
         .build();
 
     window.set_child(Some(&label));

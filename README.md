@@ -1,12 +1,13 @@
 # Waylyrics
 
 Simple wayland native universal on screen lyrics.
+Main logic runs single-thread, but tokio runs multi-threaded.
 
 Current approach my seems dirty:
 
-1. get the likely actived player when waylyrics starts
-2. keep track with 10s interval and 100ms refresh for lyrics
-3. use the first result of `search_song` and sync lyric on track switch, pause following the track
+1. get the likely actived player in each sync
+2. keep sync with 3s interval and 100ms refresh for lyrics
+3. use the length-matched result (or first result if former is not found) of `search_song` and sync START in each run, fetch lyric only when needed
 
 ## Alternatives
 
