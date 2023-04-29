@@ -24,9 +24,12 @@ const WINDOW_HEIGHT: i32 = 120;
 const TRACK_PLAT_SYNC_INTERVAL_SEC: u64 = 10;
 const LYRIC_UPDATE_INTERVAL_MS: u64 = 100;
 
+const DEFAULT_TEXT: &str = "Waylyrics";
+
 thread_local! {
     static PLAYER: RefCell<Option<Player>> = RefCell::new(None);
     static LYRIC: RefCell<LyricOwned> = RefCell::new(LyricOwned::None);
+    static LYRIC_PLAY: RefCell<bool> = RefCell::new(false);
     static LYRIC_START: RefCell<SystemTime> = RefCell::new(SystemTime::now());
 }
 
@@ -37,6 +40,7 @@ async fn main() -> Result<glib::ExitCode, Box<dyn std::error::Error>> {
     app.connect_activate(build_ui);
 
     init_player()?;
+    register_mpris_sync();
     register_lyric_updater(ObjectExt::downgrade(&app));
 
     let ncmlyric = lyric::netease::NeteaseLyricProvider::new()?;
@@ -52,6 +56,7 @@ async fn main() -> Result<glib::ExitCode, Box<dyn std::error::Error>> {
     LYRIC.set(merged);
 
     LYRIC_START.set(SystemTime::now());
+    LYRIC_PLAY.set(true);
 
     Ok(app.run())
 }
@@ -63,27 +68,39 @@ fn init_player() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
+fn register_mpris_sync() {
+    glib::timeout_add_local(Duration::from_secs(TRACK_PLAT_SYNC_INTERVAL_SEC), || {
+        Continue(true)
+    });
+}
+
 fn register_lyric_updater(app: WeakRef<Application>) {
     glib::timeout_add_local(Duration::from_millis(LYRIC_UPDATE_INTERVAL_MS), move || {
         if let Some(app) = app.upgrade() {
-            if let Some(window) = app.windows().get(0) {
-                let label: Label = window.first_child().unwrap().downcast().unwrap();
-
-                LYRIC.with_borrow(|lyric| {
-                    if let LyricOwned::LineTimestamp(lyric) = lyric {
-                        let elapsed = LYRIC_START.with_borrow(|start| start.elapsed().ok());
-                        if let Some(elapsed) = elapsed {
-                            if let Some((text, _)) =
-                                lyric.iter().take_while(|(_, off)| off < &elapsed).last()
-                            {
-                                label.set_label(text);
-                            }
-                        }
-                    }
-                });
-
+            let windows = app.windows();
+            if windows.len() < 1 {
                 return Continue(true);
             }
+            if LYRIC_PLAY.with_borrow(|play| *play) {
+                let label: Label = windows[0].child().unwrap().downcast().unwrap();
+                label.set_label(DEFAULT_TEXT);
+                return Continue(true); // skip lyric scrolling
+            }
+
+            LYRIC.with_borrow(|lyric| {
+                if let LyricOwned::LineTimestamp(lyric) = lyric {
+                    let elapsed = LYRIC_START.with_borrow(|start| start.elapsed().ok());
+                    if let Some(elapsed) = elapsed {
+                        let new_text = lyric.iter().take_while(|(_, off)| off < &elapsed).last();
+                        if let Some((text, _time)) = new_text {
+                            let label: Label = windows[0].child().unwrap().downcast().unwrap();
+                            label.set_label(text);
+                        }
+                    }
+                }
+            });
+
+            return Continue(true);
         }
 
         Continue(false)
@@ -149,11 +166,13 @@ fn build_ui(app: &Application) {
         "#,
     ));
     if let Some(font_family) = font_family {
-        merge_css(&format!(r#"
+        merge_css(&format!(
+            r#"
             label {{
                 font-family: {font_family};
             }} 
-        "#))
+        "#
+        ))
     }
 
     let window = build_main_window(app);
@@ -176,7 +195,7 @@ fn build_main_window(app: &Application) -> Window {
     window.present();
 
     let label = Label::builder()
-        .label("Waylyrics")
+        .label(DEFAULT_TEXT)
         .justify(gtk::Justification::Center)
         .build();
 
