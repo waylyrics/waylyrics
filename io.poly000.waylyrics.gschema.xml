@@ -5,7 +5,7 @@
       <default>1200</default>
       <summary>Default window width</summary>
     </key>
-    <key name="window-width" type="i">
+    <key name="window-height" type="i">
       <default>300</default>
       <summary>Default window height</summary>
     </key>
