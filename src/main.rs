@@ -224,39 +224,57 @@ fn merge_css(css: &str) {
 
 fn build_ui(app: &Application) {
     let Config {
-        text_color,
         background_color,
-        font_size,
-        font_family,
         mpris_sync_interval,
         lyric_update_interval,
+        origin,
+        translated,
     } = read_config("config.toml").unwrap();
 
     merge_css(&format!(
         r#"
-        label {{
-            font-size: {font_size}px;
-            color: Rgba{text_color:?};
-        }}
         window {{
             background-color: Rgba{background_color:?};
         }}
-        "#,
+    "#
     ));
-    if let Some(font_family) = font_family {
-        merge_css(&format!(
-            r#"
-            label {{
-                font-family: {font_family};
-            }} 
-        "#
-        ))
+    set_font("", origin);
+    if let Some(font) = translated {
+        set_font("#translated", font);
     }
+
     register_mpris_sync(ObjectExt::downgrade(&app), mpris_sync_interval);
     register_lyric_display(ObjectExt::downgrade(&app), lyric_update_interval);
 
     let window = build_main_window(app);
     allow_click_through(&window);
+
+    fn set_font(
+        attr: &str,
+        waylyrics::config::Font {
+            text_color,
+            font_size,
+            font_family,
+        }: waylyrics::config::Font,
+    ) {
+        merge_css(&format!(
+            r#"
+        label{attr} {{
+            font-size: {font_size}px;
+            color: Rgba{text_color:?};
+        }}
+        "#,
+        ));
+        if let Some(font_family) = font_family {
+            merge_css(&format!(
+                r#"
+            label{attr} {{
+                font-family: {font_family};
+            }} 
+        "#
+            ))
+        }
+    }
 }
 
 fn allow_click_through(window: &Window) {
@@ -275,12 +293,17 @@ fn build_main_window(app: &Application) -> Window {
     window.present();
 
     let olabel = Label::builder().label("Waylyrics").build();
-    let tlabel = Label::builder().label("").build();
+    let tlabel = Label::builder().label("").name("translated").build();
+    olabel.set_vexpand(true);
+    tlabel.set_vexpand(true);
 
     let verical_box = gtk::Box::builder()
         .baseline_position(gtk::BaselinePosition::Center)
         .orientation(gtk::Orientation::Vertical)
         .build();
+    verical_box.set_vexpand(true);
+    verical_box.set_valign(gtk::Align::Center);
+
     let slibing: Option<&gtk::Box> = None;
     verical_box.insert_child_after(&olabel, slibing);
     verical_box.insert_child_after(&tlabel, Some(&olabel));
