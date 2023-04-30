@@ -2392,6 +2392,8 @@ dependencies = [
  "lrc-nom",
  "mpris",
  "ncmapi",
+ "rust_decimal",
+ "rust_decimal_macros",
  "serde",
  "tokio",
  "toml 0.7.3",

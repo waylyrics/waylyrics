@@ -1,13 +1,12 @@
-use std::time::Duration;
-
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct Config {
-    pub background_color: Rgba,
-    pub mpris_sync_interval: Duration,
-    pub lyric_update_interval: Duration,
+    /// should be valid Css Color
+    pub background_color: String,
+    pub mpris_sync_interval: String,
+    pub lyric_update_interval: String,
 
     pub origin: Font,
     pub translated: Option<Font>,
@@ -16,21 +15,20 @@ pub struct Config {
 #[derive(Deserialize, Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct Font {
-    pub text_color: Rgba,
+    /// should be valid Css Color
+    pub text_color: String,
     pub font_size: u16,
     pub font_family: Option<String>,
 }
 
-type Rgba = (u8, u8, u8, u8);
-
 impl Default for Config {
     fn default() -> Self {
         Self {
-            background_color: (0, 0, 0, 0),
-            mpris_sync_interval: Duration::from_secs(3),
-            lyric_update_interval: Duration::from_millis(80),
+            background_color: "rgba (0, 0, 0, 0)".to_owned(),
+            mpris_sync_interval: "3s".to_owned(),
+            lyric_update_interval: "80ms".to_owned(),
             origin: Font {
-                text_color: (255, 255, 255, 255),
+                text_color: "rgba (255, 255, 255, 255)".to_owned(),
                 font_size: 40,
                 font_family: None,
             },

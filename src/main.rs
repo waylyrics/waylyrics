@@ -223,18 +223,43 @@ fn merge_css(css: &str) {
 }
 
 fn build_ui(app: &Application) {
+    fn parse_time(time: &str) -> Duration {
+        use rust_decimal::prelude::*;
+        use rust_decimal_macros::dec;
+
+        let time_ms = if time.ends_with("s") {
+            let sec = time.trim_end_matches("s");
+            Decimal::from_str_exact(sec).unwrap() * dec!(1000)
+        } else if time.ends_with("ms") {
+            let milli_sec = time.trim_end_matches("ms");
+            Decimal::from_str_exact(milli_sec).unwrap()
+        } else {
+            panic!("unsupported time format! should be ended with 's' or 'ms'.")
+        };
+        Duration::from_millis(
+            time_ms
+                .to_u64()
+                .expect("could not represent duration more accurate than ms"),
+        )
+    }
+
+    let config = String::from_utf8(std::fs::read("config.toml").unwrap()).unwrap();
     let Config {
         background_color,
         mpris_sync_interval,
         lyric_update_interval,
         origin,
         translated,
-    } = read_config("config.toml").unwrap();
+    } = 
+        toml::from_str(&config).unwrap();
+
+    let mpris_sync_interval = parse_time(&mpris_sync_interval);
+    let lyric_update_interval = parse_time(&lyric_update_interval);
 
     merge_css(&format!(
         r#"
         window {{
-            background-color: Rgba{background_color:?};
+            background-color: {background_color:?};
         }}
     "#
     ));
@@ -261,7 +286,7 @@ fn build_ui(app: &Application) {
             r#"
         label{attr} {{
             font-size: {font_size}px;
-            color: Rgba{text_color:?};
+            color: {text_color:?};
         }}
         "#,
         ));
@@ -320,10 +345,4 @@ fn get_label(window: &gtk::Window, translated: bool) -> Label {
     } else {
         vbox.last_child().unwrap().downcast().unwrap()
     }
-}
-
-fn read_config(path: &str) -> Result<Config, Box<dyn std::error::Error>> {
-    let conf = std::fs::read(path)?;
-    let conf = String::from_utf8(conf)?;
-    Ok(toml::from_str(&conf)?)
 }
