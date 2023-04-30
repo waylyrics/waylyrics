@@ -1,3 +1,11 @@
 text-color = [255, 255, 255, 255]
 background-color = [0, 0, 0, 0]
 font-size = 40
+
+[mpris-sync-interval]
+secs = 3
+nanos = 0
+
+[lyric-update-interval]
+secs = 0
+nanos = 80000000

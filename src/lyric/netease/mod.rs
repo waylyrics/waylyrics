@@ -116,6 +116,12 @@ impl super::LyricStore for NeteaseLyric {
 fn match_lyric<'a>(lyric: Option<&'a str>) -> Lyric<'a> {
     match lyric {
         Some("") | None => super::Lyric::None,
-        Some(lyric) => super::Lyric::LineTimestamp(super::utils::lrc_iter(lyric, "\n").unwrap()),
+        Some(lyric) => {
+            if let Ok(parsed) = super::utils::lrc_iter(lyric, "\n") {
+                Lyric::LineTimestamp(parsed)
+            } else {
+                Lyric::NoTimestamp
+            }
+        },
     }
 }

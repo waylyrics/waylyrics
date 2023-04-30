@@ -3,6 +3,12 @@
 Simple wayland native universal on screen lyrics.
 Main logic runs single-thread, but tokio runs multi-threaded.
 
+## Requirement
+
+- A player supports MPRIS well. For example NCM-gtk-rs always gives 0 position, then it's not supported by waylyrics
+
+## Approach
+
 Current approach my seems dirty:
 
 1. get the likely actived player in each sync

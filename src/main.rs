@@ -21,10 +21,7 @@ mod window;
 
 pub const APP_ID: &str = "io.poly000.waylyrics";
 
-const WINDOW_HEIGHT: i32 = 120;
-
-const TRACK_PLAT_SYNC_INTERVAL_SEC: u64 = 3;
-const LYRIC_UPDATE_INTERVAL_MS: u64 = 100;
+const WINDOW_MIN_HEIGHT: i32 = 120;
 
 const DEFAULT_TEXT: &str = "Waylyrics";
 
@@ -32,7 +29,7 @@ thread_local! {
     static PLAYER: RefCell<Option<Player>> = RefCell::new(None);
     static PLAYER_FINDER: RefCell<PlayerFinder> = RefCell::new(PlayerFinder::new().unwrap());
 
-    static LYRIC: RefCell<LyricOwned> = RefCell::new(LyricOwned::None);
+    static LYRIC: RefCell<(LyricOwned, LyricOwned)> = RefCell::new((LyricOwned::None, LyricOwned::None));
     static LYRIC_START: RefCell<SystemTime> = RefCell::new(SystemTime::now());
 
     static TRACK_PLAYING_PAUSED: RefCell<(Option<TrackID>, bool)> = RefCell::new((None, false));
@@ -46,9 +43,6 @@ async fn main() -> Result<glib::ExitCode, Box<dyn std::error::Error>> {
 
     app.connect_activate(build_ui);
 
-    register_mpris_sync(ObjectExt::downgrade(&app));
-    register_lyric_display(ObjectExt::downgrade(&app));
-
     Ok(app.run())
 }
 
@@ -58,97 +52,93 @@ enum PlayerStatus {
     Playing,
 }
 
-fn register_mpris_sync(app: WeakRef<Application>) {
-    glib::timeout_add_local(
-        Duration::from_secs(TRACK_PLAT_SYNC_INTERVAL_SEC),
-        move || {
-            if let Some(app) = app.upgrade() {
-                let windows = app.windows();
-                if windows.len() < 1 {
-                    return Continue(true);
-                }
-                match PLAYER.with_borrow(|player| {
-                    let player = player.as_ref();
-                    if let Some(player) = player {
-                        if !player.is_running() {
-                            return PlayerStatus::Missing;
-                        }
-
-                        let mut progress_tracker =
-                            ProgressTracker::new(player, 0).expect("cannot fetch progress");
-
-                        let progress_tick = progress_tracker.tick();
-                        if progress_tick.progress.playback_status() != PlaybackStatus::Playing {
-                            return PlayerStatus::Paused;
-                        }
-                        let track_meta = player
-                            .get_metadata()
-                            .expect("cannot get metadata of track playing");
-                        let need_update_lyric =
-                            TRACK_PLAYING_PAUSED.with_borrow_mut(|(track_id_playing, paused)| {
-                                if let Some(track_id) = track_meta.track_id() {
-                                    let need = track_id_playing.is_none()
-                                        || track_id_playing
-                                            .as_ref()
-                                            .is_some_and(|p| p != &track_id)
-                                            && !(*paused
-                                                && track_id_playing
-                                                    .as_ref()
-                                                    .is_some_and(|p| p == &track_id));
-
-                                    *track_id_playing = Some(track_id);
-                                    *paused = false;
-                                    need
-                                } else {
-                                    *track_id_playing = None;
-                                    *paused = false;
-                                    false
-                                }
-                            });
-
-                        if need_update_lyric {
-                            let title = track_meta.title().expect("cannot get song title");
-                            let artist = track_meta.artists().map(|arts| arts.join(","));
-
-                            let length = track_meta.length();
-                            if fetch_lyric(title, artist, length).is_err() {
-                                let label: Label = windows[0].child().unwrap().downcast().unwrap();
-                                label.set_label(DEFAULT_TEXT);
-                            }
-                        }
-
-                        // sync play position
-                        let position = player.get_position().expect("cannot get playback position");
-                        let start = SystemTime::now()
-                            .checked_sub(position)
-                            .expect("Position is greater than SystemTime");
-                        LYRIC_START.set(start);
-                        PlayerStatus::Playing
-                    } else {
-                        PlayerStatus::Missing
+fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
+    glib::timeout_add_local(interval, move || {
+        if let Some(app) = app.upgrade() {
+            let windows = app.windows();
+            if windows.len() < 1 {
+                return Continue(true);
+            }
+            match PLAYER.with_borrow(|player| {
+                let player = player.as_ref();
+                if let Some(player) = player {
+                    if !player.is_running() {
+                        return PlayerStatus::Missing;
                     }
-                }) {
-                    PlayerStatus::Missing => { // 之前的似了，找新欢
-                        PLAYER_FINDER.with_borrow(|player_finder| {
-                            if let Ok(player) = player_finder.find_active() {
-                                PLAYER.set(Some(player));
+
+                    let mut progress_tracker =
+                        ProgressTracker::new(player, 0).expect("cannot fetch progress");
+
+                    let progress_tick = progress_tracker.tick();
+                    if progress_tick.progress.playback_status() != PlaybackStatus::Playing {
+                        return PlayerStatus::Paused;
+                    }
+                    let track_meta = player
+                        .get_metadata()
+                        .expect("cannot get metadata of track playing");
+                    let need_update_lyric =
+                        TRACK_PLAYING_PAUSED.with_borrow_mut(|(track_id_playing, paused)| {
+                            if let Some(track_id) = track_meta.track_id() {
+                                let need = track_id_playing.is_none()
+                                    || track_id_playing.as_ref().is_some_and(|p| p != &track_id)
+                                        && !(*paused
+                                            && track_id_playing
+                                                .as_ref()
+                                                .is_some_and(|p| p == &track_id));
+
+                                *track_id_playing = Some(track_id);
+                                *paused = false;
+                                need
                             } else {
-                                PLAYER.set(None); // 还没新欢可找…… 再等等8
+                                *track_id_playing = None;
+                                *paused = false;
+                                false
                             }
                         });
-                        let label: Label = windows[0].child().unwrap().downcast().unwrap();
-                        label.set_label(DEFAULT_TEXT);
-                        TRACK_PLAYING_PAUSED.set((None, false));
+
+                    if need_update_lyric {
+                        let title = track_meta.title().expect("cannot get song title");
+                        let artist = track_meta.artists().map(|arts| arts.join(","));
+
+                        let length = track_meta.length();
+                        if fetch_lyric(title, artist, length).is_err() {
+                            get_label(&windows[0], false).set_label(DEFAULT_TEXT);
+                            get_label(&windows[0], true).set_label("");
+                        }
                     }
-                    PlayerStatus::Paused => {
-                        TRACK_PLAYING_PAUSED.with_borrow_mut(|(_, paused)| *paused = true)
-                    }
-                    PlayerStatus::Playing => (),
+
+                    // sync play position
+                    let position = player.get_position().expect("cannot get playback position");
+                    let start = SystemTime::now()
+                        .checked_sub(position)
+                        .expect("Position is greater than SystemTime");
+                    LYRIC_START.set(start);
+                    PlayerStatus::Playing
+                } else {
+                    PlayerStatus::Missing
                 }
+            }) {
+                PlayerStatus::Missing => {
+                    // 之前的似了，找新欢
+                    PLAYER_FINDER.with_borrow(|player_finder| {
+                        if let Ok(player) = player_finder.find_active() {
+                            PLAYER.set(Some(player));
+                        } else {
+                            PLAYER.set(None); // 还没新欢可找…… 再等等8
+                        }
+                    });
+                    get_label(&windows[0], true).set_label(DEFAULT_TEXT);
+                    get_label(&windows[0], false).set_label("");
+                    TRACK_PLAYING_PAUSED.set((None, false));
+                }
+                PlayerStatus::Paused => {
+                    TRACK_PLAYING_PAUSED.with_borrow_mut(|(_, paused)| *paused = true)
+                }
+                PlayerStatus::Playing => (),
             }
-            Continue(true)
-        },
-    );
+        }
+        Continue(true)
+    });
 }
 
 fn fetch_lyric(
@@ -175,17 +165,16 @@ fn fetch_lyric(
             TOKIO_RUNTIME_HANDLE.with_borrow(|handle| provider.query_lyric(handle, song_id))?;
         let olyric = lyric.get_lyric().into_owned();
         let tlyric = lyric.get_translated_lyric().into_owned();
-        let lyric = merge_lyric(&olyric, &tlyric).unwrap_or(olyric);
-        LYRIC.set(lyric);
+        LYRIC.set((olyric, tlyric));
         Ok(())
     } else {
-        LYRIC.set(LyricOwned::None);
+        LYRIC.set((LyricOwned::None, LyricOwned::None));
         Err("No lyric found".into())
     }
 }
 
-fn register_lyric_display(app: WeakRef<Application>) {
-    glib::timeout_add_local(Duration::from_millis(LYRIC_UPDATE_INTERVAL_MS), move || {
+fn register_lyric_display(app: WeakRef<Application>, interval: Duration) {
+    glib::timeout_add_local(interval, move || {
         if let Some(app) = app.upgrade() {
             let windows = app.windows();
             if windows.len() < 1 {
@@ -196,14 +185,19 @@ fn register_lyric_display(app: WeakRef<Application>) {
                 return Continue(true); // skip lyric scrolling
             }
 
-            LYRIC.with_borrow(|lyric| {
-                if let LyricOwned::LineTimestamp(lyric) = lyric {
-                    let elapsed = LYRIC_START.with_borrow(|start| start.elapsed().ok());
-                    if let Some(elapsed) = elapsed {
+            LYRIC.with_borrow(|(origin, translation)| {
+                let elapsed = LYRIC_START.with_borrow(|start| start.elapsed().ok());
+                if let Some(elapsed) = elapsed {
+                    if let LyricOwned::LineTimestamp(lyric) = origin {
                         let new_text = lyric.iter().take_while(|(_, off)| off < &elapsed).last();
                         if let Some((text, _time)) = new_text {
-                            let label: Label = windows[0].child().unwrap().downcast().unwrap();
-                            label.set_label(text);
+                            get_label(&windows[0], false).set_label(text);
+                        }
+                    }
+                    if let LyricOwned::LineTimestamp(lyric) = translation {
+                        let new_text = lyric.iter().take_while(|(_, off)| off < &elapsed).last();
+                        if let Some((text, _time)) = new_text {
+                            get_label(&windows[0], true).set_label(text);
                         }
                     }
                 }
@@ -214,33 +208,6 @@ fn register_lyric_display(app: WeakRef<Application>) {
 
         Continue(false)
     });
-}
-
-fn merge_lyric(lyric1: &LyricOwned, lyric2: &LyricOwned) -> Option<LyricOwned> {
-    let left = match lyric1 {
-        LyricOwned::LineTimestamp(v) => v,
-        _ => return None,
-    };
-    let right = match lyric2 {
-        LyricOwned::LineTimestamp(v) => v,
-        _ => return None,
-    };
-
-    // 翻译歌词可能会少作曲信息，因此不能直接成对。为了避免为此存储两份歌词...
-    let right_start = (&right[0].1).clone();
-
-    Some(LyricOwned::LineTimestamp(
-        left.iter()
-            .skip_while(|(_, off)| off != &right_start)
-            .zip(right.iter())
-            .map(|((text, off), (text_, _))| {
-                let mut text = text.clone();
-                text.push('\n');
-                text += &text_;
-                (text, *off)
-            })
-            .collect(),
-    ))
 }
 
 fn merge_css(css: &str) {
@@ -261,6 +228,8 @@ fn build_ui(app: &Application) {
         background_color,
         font_size,
         font_family,
+        mpris_sync_interval,
+        lyric_update_interval,
     } = read_config("config.toml").unwrap();
 
     merge_css(&format!(
@@ -283,6 +252,8 @@ fn build_ui(app: &Application) {
         "#
         ))
     }
+    register_mpris_sync(ObjectExt::downgrade(&app), mpris_sync_interval);
+    register_lyric_display(ObjectExt::downgrade(&app), lyric_update_interval);
 
     let window = build_main_window(app);
     allow_click_through(&window);
@@ -298,19 +269,34 @@ fn allow_click_through(window: &Window) {
 fn build_main_window(app: &Application) -> Window {
     let window = Window::new(app);
 
-    window.set_size_request(500, WINDOW_HEIGHT);
+    window.set_size_request(500, WINDOW_MIN_HEIGHT);
     window.set_title(Some("Waylyrics"));
     window.set_decorated(false);
     window.present();
 
-    let label = Label::builder()
-        .label("Waylyrics")
-        .justify(gtk::Justification::Center) // 居中显示每一行
-        .build();
+    let olabel = Label::builder().label("Waylyrics").build();
+    let tlabel = Label::builder().label("").build();
 
-    window.set_child(Some(&label));
+    let verical_box = gtk::Box::builder()
+        .baseline_position(gtk::BaselinePosition::Center)
+        .orientation(gtk::Orientation::Vertical)
+        .build();
+    let slibing: Option<&gtk::Box> = None;
+    verical_box.insert_child_after(&olabel, slibing);
+    verical_box.insert_child_after(&tlabel, Some(&olabel));
+
+    window.set_child(Some(&verical_box));
 
     window
+}
+
+fn get_label(window: &gtk::Window, translated: bool) -> Label {
+    let vbox: gtk::Box = window.child().unwrap().downcast().unwrap();
+    if !translated {
+        vbox.first_child().unwrap().downcast().unwrap()
+    } else {
+        vbox.last_child().unwrap().downcast().unwrap()
+    }
 }
 
 fn read_config(path: &str) -> Result<Config, Box<dyn std::error::Error>> {
