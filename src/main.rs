@@ -56,7 +56,7 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
     glib::timeout_add_local(interval, move || {
         if let Some(app) = app.upgrade() {
             let windows = app.windows();
-            if windows.len() < 1 {
+            if windows.is_empty() {
                 return Continue(true);
             }
             match PLAYER.with_borrow(|player| {
@@ -149,16 +149,15 @@ fn fetch_lyric(
 ) -> Result<(), Box<dyn std::error::Error>> {
     let provider = NeteaseLyricProvider::new().unwrap();
     let search_result = TOKIO_RUNTIME_HANDLE.with_borrow(|handle| {
-        provider.search_song(handle, artist.as_ref().map(|s| &**s).unwrap_or(""), title)
+        provider.search_song(handle, artist.as_deref().unwrap_or(""), title)
     })?;
 
     if let Some(song_id) = length
-        .map(|leng| {
+        .and_then(|leng| {
             search_result
                 .iter()
                 .find(|SongInfo { length, .. }| length == &leng)
         })
-        .flatten()
         .or(search_result.get(0))
         .map(|song| song.id)
     {
@@ -183,7 +182,7 @@ fn register_lyric_display(app: WeakRef<Application>, interval: Duration) {
     glib::timeout_add_local(interval, move || {
         if let Some(app) = app.upgrade() {
             let windows = app.windows();
-            if windows.len() < 1 {
+            if windows.is_empty() {
                 return Continue(true);
             }
             if TRACK_PLAYING_PAUSED.with_borrow(|(play, paused)| *paused || play.is_none()) {
@@ -236,8 +235,8 @@ fn build_ui(app: &Application) {
         let time_ms = if time.ends_with("ms") {
             let sec = time.trim_end_matches("ms");
             Decimal::from_str_exact(sec).unwrap()
-        } else if time.ends_with("s") {
-            let milli_sec = time.trim_end_matches("s");
+        } else if time.ends_with('s') {
+            let milli_sec = time.trim_end_matches('s');
             Decimal::from_str_exact(milli_sec).unwrap() * dec!(1000)
         } else {
             panic!("unsupported time format! should be ended with 's' or 'ms'.")
@@ -262,8 +261,8 @@ fn build_ui(app: &Application) {
 
     merge_css(&css_style);
 
-    register_mpris_sync(ObjectExt::downgrade(&app), mpris_sync_interval);
-    register_lyric_display(ObjectExt::downgrade(&app), lyric_update_interval);
+    register_mpris_sync(ObjectExt::downgrade(app), mpris_sync_interval);
+    register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
 
     let window = build_main_window(app, full_width_lyric_bg);
     if allow_click_through_me {

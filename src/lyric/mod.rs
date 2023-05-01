@@ -46,8 +46,8 @@ where
 }
 
 pub trait LyricStore {
-    fn get_lyric<'a>(&'a self) -> Lyric<'a>;
-    fn get_translated_lyric<'a>(&'a self) -> Lyric<'a>;
+    fn get_lyric(&self) -> Lyric<'_>;
+    fn get_translated_lyric(&self) -> Lyric<'_>;
 }
 
 impl<'a> Lyric<'a> {

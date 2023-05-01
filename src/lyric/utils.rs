@@ -7,7 +7,7 @@ pub fn lrc_iter<'a>(lyric: &'a str, lf: &str) -> Result<Vec<(&'a str, Duration)>
         .filter_map(|lrc_item| match lrc_item {
             lrc_nom::LrcItem::Metadata(_) => None,
             lrc_nom::LrcItem::Lyric(lyric, timestamp) => {
-                Some((lyric.into(), Duration::from_millis(timestamp as u64)))
+                Some((lyric, Duration::from_millis(timestamp as u64)))
             }
         })
         .collect())

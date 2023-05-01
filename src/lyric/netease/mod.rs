@@ -97,25 +97,25 @@ impl super::LyricProvider<NeteaseLyric> for NeteaseLyricProvider {
         let lyric_resp: LyricResp = query_result.deserialize()?;
 
         Ok(NeteaseLyric {
-            lyric: lyric_resp.lrc.and_then(|l| Some(l.lyric)),
-            tlyric: lyric_resp.tlyric.and_then(|l| Some(l.lyric)),
+            lyric: lyric_resp.lrc.map(|l| l.lyric),
+            tlyric: lyric_resp.tlyric.map(|l| l.lyric),
         })
     }
 }
 
 impl super::LyricStore for NeteaseLyric {
-    fn get_lyric<'a>(&'a self) -> Lyric<'a> {
-        let lyric = self.lyric.as_ref().map(|s| s.as_str());
+    fn get_lyric(&self) -> Lyric<'_> {
+        let lyric = self.lyric.as_deref();
         match_lyric(lyric)
     }
 
-    fn get_translated_lyric<'a>(&'a self) -> Lyric<'a> {
-        let lyric = self.tlyric.as_ref().map(|s| s.as_str());
+    fn get_translated_lyric(&self) -> Lyric<'_> {
+        let lyric = self.tlyric.as_deref();
         match_lyric(lyric)
     }
 }
 
-fn match_lyric<'a>(lyric: Option<&'a str>) -> Lyric<'a> {
+fn match_lyric(lyric: Option<&str>) -> Lyric<'_> {
     match lyric {
         Some("") | None => super::Lyric::None,
         Some(lyric) => {
