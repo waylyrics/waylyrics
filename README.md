@@ -1,5 +1,7 @@
 # Waylyrics
 
+[![tg-group](https://img.shields.io/badge/tg%20group-open-blue)](https://t.me/waylyrics)
+
 Simple wayland native universal on screen lyrics.
 Main logic runs single-thread, but tokio runs multi-threaded.
 
