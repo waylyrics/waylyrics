@@ -101,7 +101,7 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                         let artist = track_meta.artists().map(|arts| arts.join(","));
 
                         let length = track_meta.length();
-                        let _ = fetch_lyric(title, artist, length);
+                        let _ = fetch_lyric(title, artist, length, &windows[0]);
 
                         get_label(&windows[0], false).set_label(DEFAULT_TEXT);
                         get_label(&windows[0], true).set_label("");
@@ -145,6 +145,7 @@ fn fetch_lyric(
     title: &str,
     artist: Option<String>,
     length: Option<Duration>,
+    window: &gtk::Window,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let provider = NeteaseLyricProvider::new().unwrap();
     let search_result = TOKIO_RUNTIME_HANDLE.with_borrow(|handle| {
@@ -165,6 +166,11 @@ fn fetch_lyric(
             TOKIO_RUNTIME_HANDLE.with_borrow(|handle| provider.query_lyric(handle, song_id))?;
         let olyric = lyric.get_lyric().into_owned();
         let tlyric = lyric.get_translated_lyric().into_owned();
+        if let LyricOwned::LineTimestamp(_) = &tlyric {
+            get_label(window, true).set_visible(true);
+        } else {
+            get_label(window, true).set_visible(false);
+        }
         LYRIC.set((olyric, tlyric));
         Ok(())
     } else {
@@ -281,7 +287,11 @@ fn build_main_window(app: &Application, full_width_label_bg: bool) -> Window {
     window.present();
 
     let olabel = Label::builder().label("Waylyrics").build();
-    let tlabel = Label::builder().label("").name("translated").build();
+    let tlabel = Label::builder()
+        .label("")
+        .name("translated")
+        .visible(false)
+        .build();
 
     olabel.set_vexpand(true);
     tlabel.set_vexpand(true);
