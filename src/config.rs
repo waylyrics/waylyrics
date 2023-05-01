@@ -8,8 +8,16 @@ pub struct Config {
     pub mpris_sync_interval: String,
     pub lyric_update_interval: String,
 
-    pub origin: Font,
-    pub translated: Option<Font>,
+    pub origin: LabelSettings,
+    pub translated: Option<LabelSettings>,
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub struct LabelSettings {
+    pub font: Font,
+    /// should be valid Css Color
+    pub bg_color: String,
 }
 
 #[derive(Deserialize, Serialize)]
@@ -24,13 +32,16 @@ pub struct Font {
 impl Default for Config {
     fn default() -> Self {
         Self {
-            background_color: "rgba (0, 0, 0, 0)".to_owned(),
+            background_color: "rgba(0, 0, 0, 0)".to_owned(),
             mpris_sync_interval: "3s".to_owned(),
             lyric_update_interval: "80ms".to_owned(),
-            origin: Font {
-                text_color: "rgba (255, 255, 255, 255)".to_owned(),
-                font_size: 40,
-                font_family: None,
+            origin: LabelSettings {
+                font: Font {
+                    text_color: "rgba(255, 255, 255, 255)".to_owned(),
+                    font_size: 40,
+                    font_family: None,
+                },
+                bg_color: "rgba(0, 0, 0, 0)".to_owned(),
             },
             translated: None,
         }

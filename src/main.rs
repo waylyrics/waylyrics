@@ -223,16 +223,17 @@ fn merge_css(css: &str) {
 }
 
 fn build_ui(app: &Application) {
+    use waylyrics::config::{Font, LabelSettings};
     fn parse_time(time: &str) -> Duration {
         use rust_decimal::prelude::*;
         use rust_decimal_macros::dec;
 
-        let time_ms = if time.ends_with("s") {
-            let sec = time.trim_end_matches("s");
-            Decimal::from_str_exact(sec).unwrap() * dec!(1000)
-        } else if time.ends_with("ms") {
-            let milli_sec = time.trim_end_matches("ms");
-            Decimal::from_str_exact(milli_sec).unwrap()
+        let time_ms = if time.ends_with("ms") {
+            let sec = time.trim_end_matches("ms");
+            Decimal::from_str_exact(sec).unwrap()
+        } else if time.ends_with("s") {
+            let milli_sec = time.trim_end_matches("s");
+            Decimal::from_str_exact(milli_sec).unwrap() * dec!(1000)
         } else {
             panic!("unsupported time format! should be ended with 's' or 'ms'.")
         };
@@ -242,51 +243,24 @@ fn build_ui(app: &Application) {
                 .expect("could not represent duration more accurate than ms"),
         )
     }
-
-    let config = String::from_utf8(std::fs::read("config.toml").unwrap()).unwrap();
-    let Config {
-        background_color,
-        mpris_sync_interval,
-        lyric_update_interval,
-        origin,
-        translated,
-    } = 
-        toml::from_str(&config).unwrap();
-
-    let mpris_sync_interval = parse_time(&mpris_sync_interval);
-    let lyric_update_interval = parse_time(&lyric_update_interval);
-
-    merge_css(&format!(
-        r#"
-        window {{
-            background-color: {background_color:?};
-        }}
-    "#
-    ));
-    set_font("", origin);
-    if let Some(font) = translated {
-        set_font("#translated", font);
-    }
-
-    register_mpris_sync(ObjectExt::downgrade(&app), mpris_sync_interval);
-    register_lyric_display(ObjectExt::downgrade(&app), lyric_update_interval);
-
-    let window = build_main_window(app);
-    allow_click_through(&window);
-
-    fn set_font(
+    fn set_label_style(
         attr: &str,
-        waylyrics::config::Font {
-            text_color,
-            font_size,
-            font_family,
-        }: waylyrics::config::Font,
+        LabelSettings {
+            font:
+                Font {
+                    text_color,
+                    font_size,
+                    font_family,
+                },
+            bg_color,
+        }: LabelSettings,
     ) {
         merge_css(&format!(
             r#"
         label{attr} {{
             font-size: {font_size}px;
-            color: {text_color:?};
+            color: {text_color};
+            background-color: {bg_color};
         }}
         "#,
         ));
@@ -300,6 +274,36 @@ fn build_ui(app: &Application) {
             ))
         }
     }
+
+    let config = String::from_utf8(std::fs::read("config.toml").unwrap()).unwrap();
+    let Config {
+        background_color,
+        mpris_sync_interval,
+        lyric_update_interval,
+        origin,
+        translated,
+    } = toml::from_str(&config).unwrap();
+
+    let mpris_sync_interval = parse_time(&mpris_sync_interval);
+    let lyric_update_interval = parse_time(&lyric_update_interval);
+
+    merge_css(&format!(
+        r#"
+        window {{
+            background-color: {background_color};
+        }}
+    "#
+    ));
+    set_label_style("", origin);
+    if let Some(font) = translated {
+        set_label_style("#translated", font);
+    }
+
+    register_mpris_sync(ObjectExt::downgrade(&app), mpris_sync_interval);
+    register_lyric_display(ObjectExt::downgrade(&app), lyric_update_interval);
+
+    let window = build_main_window(app);
+    allow_click_through(&window);
 }
 
 fn allow_click_through(window: &Window) {
