@@ -43,7 +43,7 @@ impl super::LyricProvider<NeteaseLyric> for NeteaseLyricProvider {
                 Duration::from_secs(60 * 60),
                 Duration::from_secs(5 * 60),
                 true,
-                "ncmcookie",
+                "cache/ncm-cookie",
             );
             handle.block_on(async { api.search(&keyword, None).await })
         })

@@ -1,19 +1,4 @@
 mpris-sync-interval = "3s"
 lyric-update-interval = "80ms"
 allow-click-through-me = true
-css-style = """
-window {
-    background-color: rgba(0, 0, 0, 0.0);
-}
-
-label {
-    font-size: 40px;
-    color: rgba(255, 255, 255, 1.0);
-    background-color: rgba(0, 0, 0, 0.3);
-}
-
-label#translated {
-    font-size: 30px;
-    color: rgba(255, 255, 255, 1.0);
-    background-color: rgba(0, 0, 0, 0.3);
-}"""
+full-width-lyric-bg = false

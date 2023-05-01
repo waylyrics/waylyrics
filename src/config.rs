@@ -6,8 +6,9 @@ pub struct Config {
     pub mpris_sync_interval: String,
     pub lyric_update_interval: String,
     pub allow_click_through_me: bool,
-    pub css_style: String,
+    pub full_width_lyric_bg: bool,
 }
+
 
 impl Default for Config {
     fn default() -> Self {
@@ -15,7 +16,7 @@ impl Default for Config {
             mpris_sync_interval: "3s".to_owned(),
             lyric_update_interval: "80ms".to_owned(),
             allow_click_through_me: true,
-            css_style: include_str!("default-style.css").into(),
+            full_width_lyric_bg: false,
         }
     }
 }

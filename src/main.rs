@@ -12,7 +12,7 @@ use mpris::{Player, PlayerFinder};
 
 use tokio::runtime::Handle;
 
-use waylyrics::config::Config;
+use waylyrics::config::{Config};
 use waylyrics::lyric::netease::NeteaseLyricProvider;
 use waylyrics::lyric::{LyricOwned, LyricProvider, LyricStore, SongInfo};
 
@@ -242,23 +242,24 @@ fn build_ui(app: &Application) {
                 .expect("could not represent duration more accurate than ms"),
         )
     }
-    let config = String::from_utf8(std::fs::read("config.toml").unwrap()).unwrap();
+    let config = std::fs::read_to_string("config.toml").unwrap();
     let Config {
         mpris_sync_interval,
         lyric_update_interval,
         allow_click_through_me,
-        css_style,
+        full_width_lyric_bg,
     } = toml::from_str(&config).unwrap();
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval);
     let lyric_update_interval = parse_time(&lyric_update_interval);
+    let css_style = std::fs::read_to_string("style.css").unwrap();
 
     merge_css(&css_style);
 
     register_mpris_sync(ObjectExt::downgrade(&app), mpris_sync_interval);
     register_lyric_display(ObjectExt::downgrade(&app), lyric_update_interval);
 
-    let window = build_main_window(app);
+    let window = build_main_window(app, full_width_lyric_bg);
     if allow_click_through_me {
         allow_click_through(&window);
     }
@@ -271,7 +272,10 @@ fn allow_click_through(window: &Window) {
     surface.set_input_region(&Region::create_rectangle(&RectangleInt::new(0, 0, 0, 0)));
 }
 
-fn build_main_window(app: &Application) -> Window {
+fn build_main_window(
+    app: &Application,
+    full_width_label_bg: bool,
+) -> Window {
     let window = Window::new(app);
 
     window.set_size_request(500, WINDOW_MIN_HEIGHT);
@@ -279,10 +283,21 @@ fn build_main_window(app: &Application) -> Window {
     window.set_decorated(false);
     window.present();
 
-    let olabel = Label::builder().label("Waylyrics").build();
-    let tlabel = Label::builder().label("").name("translated").build();
+    let olabel = Label::builder()
+        .label("Waylyrics")
+        .build();
+    let tlabel = Label::builder()
+        .label("")
+        .name("translated")
+        .build();
+
     olabel.set_vexpand(true);
     tlabel.set_vexpand(true);
+
+    if !full_width_label_bg {
+        olabel.set_halign(gtk::Align::Center);
+        tlabel.set_halign(gtk::Align::Center);
+    }
 
     let verical_box = gtk::Box::builder()
         .baseline_position(gtk::BaselinePosition::Center)
