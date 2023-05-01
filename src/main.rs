@@ -282,6 +282,7 @@ fn build_ui(app: &Application) {
         lyric_update_interval,
         origin,
         translated,
+        allow_click_through_me,
     } = toml::from_str(&config).unwrap();
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval);
@@ -303,7 +304,9 @@ fn build_ui(app: &Application) {
     register_lyric_display(ObjectExt::downgrade(&app), lyric_update_interval);
 
     let window = build_main_window(app);
-    allow_click_through(&window);
+    if allow_click_through_me {
+        allow_click_through(&window);
+    }
 }
 
 fn allow_click_through(window: &Window) {

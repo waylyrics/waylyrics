@@ -10,6 +10,7 @@ pub struct Config {
 
     pub origin: LabelSettings,
     pub translated: Option<LabelSettings>,
+    pub allow_click_through_me: bool,
 }
 
 #[derive(Deserialize, Serialize)]
@@ -32,18 +33,19 @@ pub struct Font {
 impl Default for Config {
     fn default() -> Self {
         Self {
-            background_color: "rgba(0, 0, 0, 0)".to_owned(),
+            background_color: "rgba(0, 0, 0, 0.0)".to_owned(),
             mpris_sync_interval: "3s".to_owned(),
             lyric_update_interval: "80ms".to_owned(),
             origin: LabelSettings {
                 font: Font {
-                    text_color: "rgba(255, 255, 255, 255)".to_owned(),
+                    text_color: "rgba(255, 255, 255, 1.0)".to_owned(),
                     font_size: 40,
                     font_family: None,
                 },
-                bg_color: "rgba(0, 0, 0, 0)".to_owned(),
+                bg_color: "rgba(0, 0, 0, 0.3)".to_owned(),
             },
             translated: None,
+            allow_click_through_me: true,
         }
     }
 }

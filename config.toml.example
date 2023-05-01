@@ -1,10 +1,11 @@
-background-color = "Rgba(0, 0, 0, 0)"
+background-color = "rgba(0, 0, 0, 0.0)"
 mpris-sync-interval = "3s"
 lyric-update-interval = "80ms"
+allow-click-through-me = true
 
 [origin]
-bg-color = "Rgba(0, 0, 0, 0)"
+bg-color = "rgba(0, 0, 0, 0.3)"
 
 [origin.font]
-text-color = "Rgba(255, 255, 255, 255)"
+text-color = "rgba(255, 255, 255, 1.0)"
 font-size = 40
