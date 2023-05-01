@@ -17,6 +17,8 @@ pub struct NeteaseLyric {
     tlyric: Option<String>,
 }
 
+const COOKIE_PATH: &str = "cache/ncm-cookie";
+
 impl NeteaseLyricProvider {
     pub fn new() -> Result<Self, std::io::Error> {
         Ok(Self {})
@@ -43,7 +45,7 @@ impl super::LyricProvider<NeteaseLyric> for NeteaseLyricProvider {
                 Duration::from_secs(60 * 60),
                 Duration::from_secs(5 * 60),
                 true,
-                "cache/ncm-cookie",
+                COOKIE_PATH,
             );
             handle.block_on(async { api.search(&keyword, None).await })
         })
@@ -85,7 +87,7 @@ impl super::LyricProvider<NeteaseLyric> for NeteaseLyricProvider {
                 Duration::from_secs(60 * 60),
                 Duration::from_secs(5 * 60),
                 true,
-                "ncmcookie",
+                COOKIE_PATH,
             );
             handle.block_on(async { api.lyric(id).await })
         })

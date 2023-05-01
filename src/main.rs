@@ -12,7 +12,7 @@ use mpris::{Player, PlayerFinder};
 
 use tokio::runtime::Handle;
 
-use waylyrics::config::{Config};
+use waylyrics::config::Config;
 use waylyrics::lyric::netease::NeteaseLyricProvider;
 use waylyrics::lyric::{LyricOwned, LyricProvider, LyricStore, SongInfo};
 
@@ -101,10 +101,10 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                         let artist = track_meta.artists().map(|arts| arts.join(","));
 
                         let length = track_meta.length();
-                        if fetch_lyric(title, artist, length).is_err() {
-                            get_label(&windows[0], false).set_label(DEFAULT_TEXT);
-                            get_label(&windows[0], true).set_label("");
-                        }
+                        let _ = fetch_lyric(title, artist, length);
+
+                        get_label(&windows[0], false).set_label(DEFAULT_TEXT);
+                        get_label(&windows[0], true).set_label("");
                     }
 
                     // sync play position
@@ -272,10 +272,7 @@ fn allow_click_through(window: &Window) {
     surface.set_input_region(&Region::create_rectangle(&RectangleInt::new(0, 0, 0, 0)));
 }
 
-fn build_main_window(
-    app: &Application,
-    full_width_label_bg: bool,
-) -> Window {
+fn build_main_window(app: &Application, full_width_label_bg: bool) -> Window {
     let window = Window::new(app);
 
     window.set_size_request(500, WINDOW_MIN_HEIGHT);
@@ -283,13 +280,8 @@ fn build_main_window(
     window.set_decorated(false);
     window.present();
 
-    let olabel = Label::builder()
-        .label("Waylyrics")
-        .build();
-    let tlabel = Label::builder()
-        .label("")
-        .name("translated")
-        .build();
+    let olabel = Label::builder().label("Waylyrics").build();
+    let tlabel = Label::builder().label("").name("translated").build();
 
     olabel.set_vexpand(true);
     tlabel.set_vexpand(true);

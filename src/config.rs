@@ -14,7 +14,7 @@ impl Default for Config {
     fn default() -> Self {
         Self {
             mpris_sync_interval: "3s".to_owned(),
-            lyric_update_interval: "80ms".to_owned(),
+            lyric_update_interval: "20ms".to_owned(),
             allow_click_through_me: true,
             full_width_lyric_bg: false,
         }
