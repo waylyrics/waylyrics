@@ -38,7 +38,9 @@ thread_local! {
 async fn main() -> Result<glib::ExitCode, Box<dyn std::error::Error>> {
     tracing_subscriber::fmt::init();
 
-    let app = Application::builder().application_id(waylyrics::APP_ID).build();
+    let app = Application::builder()
+        .application_id(waylyrics::APP_ID)
+        .build();
 
     app.connect_activate(build_ui);
 
@@ -48,7 +50,7 @@ async fn main() -> Result<glib::ExitCode, Box<dyn std::error::Error>> {
 enum PlayerStatus {
     Missing,
     Paused,
-    Playing,
+    Unsupported(&'static str),
 }
 
 fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
@@ -62,7 +64,7 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                 let player = player.as_ref();
                 if let Some(player) = player {
                     if !player.is_running() {
-                        return PlayerStatus::Missing;
+                        return Err(PlayerStatus::Missing);
                     }
 
                     let mut progress_tracker =
@@ -70,11 +72,11 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
 
                     let progress_tick = progress_tracker.tick();
                     if progress_tick.progress.playback_status() != PlaybackStatus::Playing {
-                        return PlayerStatus::Paused;
+                        return Err(PlayerStatus::Paused);
                     }
-                    let track_meta = player
-                        .get_metadata()
-                        .expect("cannot get metadata of track playing");
+                    let track_meta = player.get_metadata().map_err(|_| {
+                        PlayerStatus::Unsupported("cannot get metadata of track playing")
+                    })?;
                     let need_update_lyric =
                         TRACK_PLAYING_PAUSED.with_borrow_mut(|(track_id_playing, paused)| {
                             if let Some(track_id) = track_meta.track_id() {
@@ -96,7 +98,9 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                         });
 
                     if need_update_lyric {
-                        let title = track_meta.title().expect("cannot get song title");
+                        let title = track_meta
+                            .title()
+                            .ok_or(PlayerStatus::Unsupported("cannot get song title"))?;
                         let artist = track_meta.artists().map(|arts| arts.join(","));
 
                         let length = track_meta.length();
@@ -107,33 +111,41 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                     }
 
                     // sync play position
-                    let position = player.get_position().expect("cannot get playback position");
-                    let start = SystemTime::now()
-                        .checked_sub(position)
-                        .expect("Position is greater than SystemTime");
+                    let position = player
+                        .get_position()
+                        .map_err(|_| PlayerStatus::Unsupported("cannot get playback position"))?;
+                    let start = SystemTime::now().checked_sub(position).ok_or(
+                        PlayerStatus::Unsupported("Position is greater than SystemTime"),
+                    )?;
                     LYRIC_START.set(start);
-                    PlayerStatus::Playing
+                    Ok(())
                 } else {
-                    PlayerStatus::Missing
+                    Err(PlayerStatus::Missing)
                 }
             }) {
-                PlayerStatus::Missing => {
-                    // 之前的似了，找新欢
+                Err(PlayerStatus::Missing) => {
                     PLAYER_FINDER.with_borrow(|player_finder| {
                         if let Ok(player) = player_finder.find_active() {
+                            info!("connected to player: {}", player.identity());
                             PLAYER.set(Some(player));
                         } else {
-                            PLAYER.set(None); // 还没新欢可找…… 再等等8
+                            PLAYER.set(None);
                         }
                     });
                     get_label(&windows[0], true).set_label(DEFAULT_TEXT);
                     get_label(&windows[0], false).set_label("");
                     TRACK_PLAYING_PAUSED.set((None, false));
                 }
-                PlayerStatus::Paused => {
+                Err(PlayerStatus::Unsupported(kind)) => {
+                    get_label(&windows[0], true).set_label("Unsupported Player");
+                    get_label(&windows[0], false).set_label("");
+
+                    info!(kind);
+                }
+                Err(PlayerStatus::Paused) => {
                     TRACK_PLAYING_PAUSED.with_borrow_mut(|(_, paused)| *paused = true)
                 }
-                PlayerStatus::Playing => (),
+                _ => (),
             }
         }
         Continue(true)
@@ -164,16 +176,15 @@ fn fetch_lyric(
             TOKIO_RUNTIME_HANDLE.with_borrow(|handle| provider.query_lyric(handle, song_id))?;
         let olyric = lyric.get_lyric().into_owned();
         let tlyric = lyric.get_translated_lyric().into_owned();
-        debug!("original lyric: {:?}", olyric);
-        debug!("translated lyric: {:?}", tlyric);
+        debug!("original lyric: {olyric:?}");
+        debug!("translated lyric: {tlyric:?}");
         // show info to user if original lyric is empty or no timestamp
         match &olyric {
             LyricOwned::LineTimestamp(_) => (),
             _ => {
                 info!(
-                    "No lyric for {} - {}",
-                    artist.clone().unwrap_or_default(),
-                    title
+                    "No lyric for {} - {title}",
+                    artist.as_ref().map(|s| &**s).unwrap_or("Unknown"),
                 );
             }
         }
@@ -182,9 +193,8 @@ fn fetch_lyric(
             get_label(window, true).set_visible(true);
         } else {
             info!(
-                "No translated lyric for {} - {}",
-                artist.unwrap_or_default(),
-                title
+                "No translated lyric for {} - {title}",
+                artist.as_ref().map(|s| &**s).unwrap_or("Unknown"),
             );
             get_label(window, true).set_visible(false);
         }
@@ -192,9 +202,8 @@ fn fetch_lyric(
         Ok(())
     } else {
         info!(
-            "Failed searching for {} - {}",
-            artist.unwrap_or_default(),
-            title
+            "Failed searching for {} - {title}",
+            artist.as_ref().map(|s| &**s).unwrap_or("Unknown"),
         );
         LYRIC.set((LyricOwned::None, LyricOwned::None));
         Err("No lyric found".into())
@@ -259,5 +268,10 @@ fn build_ui(app: &Application) {
     register_mpris_sync(ObjectExt::downgrade(app), mpris_sync_interval);
     register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
 
-    build_main_window(app, full_width_lyric_bg, hide_label_on_empty_text, allow_click_through_me);
+    build_main_window(
+        app,
+        full_width_lyric_bg,
+        hide_label_on_empty_text,
+        allow_click_through_me,
+    );
 }
