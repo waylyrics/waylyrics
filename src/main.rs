@@ -13,7 +13,7 @@ use mpris::{Player, PlayerFinder};
 
 use tokio::runtime::Handle;
 
-use tracing::{debug, info};
+use tracing::{debug, info, error};
 use waylyrics::app::{build_main_window, get_label};
 use waylyrics::config::Config;
 use waylyrics::lyric::netease::NeteaseLyricProvider;
@@ -64,6 +64,7 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                 let player = player.as_ref();
                 if let Some(player) = player {
                     if !player.is_running() {
+                        info!("disconnected from player: {}", player.identity());
                         return Err(PlayerStatus::Missing);
                     }
 
@@ -140,7 +141,8 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                     get_label(&windows[0], true).set_label("Unsupported Player");
                     get_label(&windows[0], false).set_label("");
 
-                    info!(kind);
+                    LYRIC.set((LyricOwned::None, LyricOwned::None));
+                    error!(kind);
                 }
                 Err(PlayerStatus::Paused) => {
                     TRACK_PLAYING_PAUSED.with_borrow_mut(|(_, paused)| *paused = true)

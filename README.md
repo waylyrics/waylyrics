@@ -11,11 +11,15 @@ Main logic runs single-thread, but tokio runs multi-threaded.
 
 ### Recommended Players
 
+online:
 - [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
 - [Qcm](https://github.com/hypengw/Qcm)
 - [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
-- [Music163bot](https://t.me/Music163Bot)
-- Chrome/Chromium (-based ones)
+- [Telegram](https://t.me/Music163Bot)
+
+local:
+- [mpv-mpris](https://github.com/hoyon/mpv-mpris)
+- [VLC](https://www.videolan.org)
 
 ### MPRIS-unfriendly Players
 
@@ -28,13 +32,14 @@ Player | OSD | issue
 [netease-cloud-music-gtk] | X | gives 0 position
 [FeelUOwn] | O | gives 0 position and 0 length
 Firefox | X | do not provide position call
-qqmusic | O | no info other than title avaliable, but it's own OSD is pretty good
+Chrom* | X | break the "unique" gurantee for TrackID
+qqmusic | O | no info other than title/artist avaliable
 
 ## Approach
 
 Current approach my seems dirty:
 
-1. get the likely actived player in each sync
+1. get the likely actived player when none is connnected, and disconnect from one only if it's not avaliable more
 2. keep sync with 3s interval and 100ms refresh for lyrics
 3. use the length-matched result (or first result if former is not found) of `search_song` and sync START in each run, fetch lyric only when needed
 
