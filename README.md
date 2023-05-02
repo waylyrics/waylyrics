@@ -7,7 +7,25 @@ Main logic runs single-thread, but tokio runs multi-threaded.
 
 ## Requirement
 
-- A player supports MPRIS well. For example NCM-gtk-rs always gives 0 position, then it's not supported by waylyrics
+- A player supports MPRIS well.
+
+### Recommended Players
+
+- [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
+- [Qcm](https://github.com/hypengw/Qcm)
+- [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
+
+### MPRIS-unfriendly Players
+
+[netease-cloud-music-gtk]: https://github.com/gmg137/netease-cloud-music-gtk
+[FeelUOwn]: https://github.com/feeluown/FeelUOwn
+
+
+Player | OSD | issue
+------|-----|------
+[netease-cloud-music-gtk] | X | gives 0 position
+[FeelUOwn] | O | gives 0 position and 0 length
+Firefox | X | do not provide position call
 
 ## Approach
 
@@ -20,17 +38,15 @@ Current approach my seems dirty:
 ## Alternatives
 
 [YesPlayMusicOSD]: https://github.com/shih-liang/YesPlayMusicOSD
-[FeelUOwn]: https://github.com/feeluown/FeelUOwn
-[doesn't support translation yet though]: https://github.com/feeluown/FeelUOwn/issues/643 
 [waybar-netease-music-lyrics]: https://github.com/kangxiaoju/waybar-netease-music-lyrics
 
 For Sway users, you may want use [waybar-netease-music-lyrics].
 
-And for now, [YesPlayMusicOSD]
-and [FeelUOwn]
-are both of great lyrics support, latter [doesn't support translation yet though].
+[YesPlayMusicOSD] have great lyrics support
 
 BruceZhang1993's [lyricsSeeker](https://github.com/BruceZhang1993/LyricsSeeker) is still WIP, but it may have better-looking and better integration with KDE.
+
+Copay's [caraoke-plasmoid](https://github.com/Copay/caraoke-plasmoid) is currently Plasma-only, though it is easy to remove plasmoid components
 
 ## Credit
 
