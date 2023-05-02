@@ -57,7 +57,7 @@ impl<'a> Lyric<'a> {
             Lyric::NoTimestamp => LyricOwned::NoTimestamp,
             Lyric::LineTimestamp(line) => LyricOwned::LineTimestamp(
                 line.into_iter()
-                    .map(|(text, off)| (text.trim().to_owned(), off))
+                    .map(|(text, off)| (text.to_owned(), off))
                     .collect(),
             ),
         }
