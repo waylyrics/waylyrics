@@ -26,6 +26,7 @@ Player | OSD | issue
 [netease-cloud-music-gtk] | X | gives 0 position
 [FeelUOwn] | O | gives 0 position and 0 length
 Firefox | X | do not provide position call
+qqmusic | O | no info other than title avaliable, but it's own OSD is pretty good
 
 ## Approach
 
