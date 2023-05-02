@@ -14,6 +14,7 @@ Main logic runs single-thread, but tokio runs multi-threaded.
 - [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
 - [Qcm](https://github.com/hypengw/Qcm)
 - [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
+- [Music163bot](https://t.me/Music163Bot)
 - Chrome/Chromium (-based ones)
 
 ### MPRIS-unfriendly Players
