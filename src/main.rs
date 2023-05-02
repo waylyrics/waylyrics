@@ -5,8 +5,8 @@ use std::cell::RefCell;
 use std::time::{Duration, SystemTime};
 
 use gtk::glib::WeakRef;
-use gtk::{glib, Application, Label};
-use gtk::{prelude::*, CssProvider};
+use gtk::prelude::*;
+use gtk::{glib, Application};
 
 use mpris::{PlaybackStatus, ProgressTracker, TrackID};
 use mpris::{Player, PlayerFinder};
@@ -16,13 +16,8 @@ use tokio::runtime::Handle;
 use waylyrics::config::Config;
 use waylyrics::lyric::netease::NeteaseLyricProvider;
 use waylyrics::lyric::{LyricOwned, LyricProvider, LyricStore, SongInfo};
-
-use window::Window;
-mod window;
-
-pub const APP_ID: &str = "io.poly000.waylyrics";
-
-const WINDOW_MIN_HEIGHT: i32 = 120;
+use waylyrics::utils;
+use waylyrics::app::{build_main_window, get_label};
 
 const DEFAULT_TEXT: &str = "Waylyrics";
 
@@ -40,7 +35,7 @@ thread_local! {
 
 #[tokio::main]
 async fn main() -> Result<glib::ExitCode, Box<dyn std::error::Error>> {
-    let app = Application::builder().application_id(APP_ID).build();
+    let app = Application::builder().application_id(waylyrics::APP_ID).build();
 
     app.connect_activate(build_ui);
 
@@ -216,112 +211,26 @@ fn register_lyric_display(app: WeakRef<Application>, interval: Duration) {
     });
 }
 
-fn merge_css(css: &str) {
-    use gtk::gdk::Display as GdkDisplay;
-
-    let css_provider = CssProvider::new();
-    css_provider.load_from_data(css);
-    gtk::style_context_add_provider_for_display(
-        &GdkDisplay::default().expect("Could not connect to a display."),
-        &css_provider,
-        gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
-    );
-}
-
 fn build_ui(app: &Application) {
-    fn parse_time(time: &str) -> Duration {
-        use rust_decimal::prelude::*;
-        use rust_decimal_macros::dec;
+    use utils::parse_time;
 
-        let time_ms = if time.ends_with("ms") {
-            let sec = time.trim_end_matches("ms");
-            Decimal::from_str_exact(sec).unwrap()
-        } else if time.ends_with('s') {
-            let milli_sec = time.trim_end_matches('s');
-            Decimal::from_str_exact(milli_sec).unwrap() * dec!(1000)
-        } else {
-            panic!("unsupported time format! should be ended with 's' or 'ms'.")
-        };
-        Duration::from_millis(
-            time_ms
-                .to_u64()
-                .expect("could not represent duration more accurate than ms"),
-        )
-    }
     let config = std::fs::read_to_string("config.toml").unwrap();
     let Config {
         mpris_sync_interval,
         lyric_update_interval,
         allow_click_through_me,
         full_width_lyric_bg,
+        hide_label_on_empty_text,
     } = toml::from_str(&config).unwrap();
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval);
     let lyric_update_interval = parse_time(&lyric_update_interval);
     let css_style = std::fs::read_to_string("style.css").unwrap();
 
-    merge_css(&css_style);
+    utils::merge_css(&css_style);
 
     register_mpris_sync(ObjectExt::downgrade(app), mpris_sync_interval);
     register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
 
-    let window = build_main_window(app, full_width_lyric_bg);
-    if allow_click_through_me {
-        allow_click_through(&window);
-    }
-}
-
-fn allow_click_through(window: &Window) {
-    use gtk::cairo::{RectangleInt, Region};
-    let native = window.native().unwrap();
-    let surface = native.surface();
-    surface.set_input_region(&Region::create_rectangle(&RectangleInt::new(0, 0, 0, 0)));
-}
-
-fn build_main_window(app: &Application, full_width_label_bg: bool) -> Window {
-    let window = Window::new(app);
-
-    window.set_size_request(500, WINDOW_MIN_HEIGHT);
-    window.set_title(Some("Waylyrics"));
-    window.set_decorated(false);
-    window.present();
-
-    let olabel = Label::builder().label("Waylyrics").build();
-    let tlabel = Label::builder()
-        .label("")
-        .name("translated")
-        .visible(false)
-        .build();
-
-    olabel.set_vexpand(true);
-    tlabel.set_vexpand(true);
-
-    if !full_width_label_bg {
-        olabel.set_halign(gtk::Align::Center);
-        tlabel.set_halign(gtk::Align::Center);
-    }
-
-    let verical_box = gtk::Box::builder()
-        .baseline_position(gtk::BaselinePosition::Center)
-        .orientation(gtk::Orientation::Vertical)
-        .build();
-    verical_box.set_vexpand(true);
-    verical_box.set_valign(gtk::Align::Center);
-
-    let slibing: Option<&gtk::Box> = None;
-    verical_box.insert_child_after(&olabel, slibing);
-    verical_box.insert_child_after(&tlabel, Some(&olabel));
-
-    window.set_child(Some(&verical_box));
-
-    window
-}
-
-fn get_label(window: &gtk::Window, translated: bool) -> Label {
-    let vbox: gtk::Box = window.child().unwrap().downcast().unwrap();
-    if !translated {
-        vbox.first_child().unwrap().downcast().unwrap()
-    } else {
-        vbox.last_child().unwrap().downcast().unwrap()
-    }
+    build_main_window(app, full_width_lyric_bg, hide_label_on_empty_text, allow_click_through_me);
 }

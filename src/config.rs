@@ -7,6 +7,7 @@ pub struct Config {
     pub lyric_update_interval: String,
     pub allow_click_through_me: bool,
     pub full_width_lyric_bg: bool,
+    pub hide_label_on_empty_text: bool,
 }
 
 
@@ -17,6 +18,7 @@ impl Default for Config {
             lyric_update_interval: "20ms".to_owned(),
             allow_click_through_me: true,
             full_width_lyric_bg: false,
+            hide_label_on_empty_text: true,
         }
     }
 }
