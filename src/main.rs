@@ -13,11 +13,12 @@ use mpris::{Player, PlayerFinder};
 
 use tokio::runtime::Handle;
 
+use tracing::{debug, info};
+use waylyrics::app::{build_main_window, get_label};
 use waylyrics::config::Config;
 use waylyrics::lyric::netease::NeteaseLyricProvider;
 use waylyrics::lyric::{LyricOwned, LyricProvider, LyricStore, SongInfo};
 use waylyrics::utils;
-use waylyrics::app::{build_main_window, get_label};
 
 const DEFAULT_TEXT: &str = "Waylyrics";
 
@@ -35,6 +36,8 @@ thread_local! {
 
 #[tokio::main]
 async fn main() -> Result<glib::ExitCode, Box<dyn std::error::Error>> {
+    tracing_subscriber::fmt::init();
+
     let app = Application::builder().application_id(waylyrics::APP_ID).build();
 
     app.connect_activate(build_ui);
@@ -161,14 +164,38 @@ fn fetch_lyric(
             TOKIO_RUNTIME_HANDLE.with_borrow(|handle| provider.query_lyric(handle, song_id))?;
         let olyric = lyric.get_lyric().into_owned();
         let tlyric = lyric.get_translated_lyric().into_owned();
+        debug!("original lyric: {:?}", olyric);
+        debug!("translated lyric: {:?}", tlyric);
+        // show info to user if original lyric is empty or no timestamp
+        match &olyric {
+            LyricOwned::LineTimestamp(_) => (),
+            _ => {
+                info!(
+                    "No lyric for {} - {}",
+                    artist.clone().unwrap_or_default(),
+                    title
+                );
+            }
+        }
+
         if let LyricOwned::LineTimestamp(_) = &tlyric {
             get_label(window, true).set_visible(true);
         } else {
+            info!(
+                "No translated lyric for {} - {}",
+                artist.unwrap_or_default(),
+                title
+            );
             get_label(window, true).set_visible(false);
         }
         LYRIC.set((olyric, tlyric));
         Ok(())
     } else {
+        info!(
+            "Failed searching for {} - {}",
+            artist.unwrap_or_default(),
+            title
+        );
         LYRIC.set((LyricOwned::None, LyricOwned::None));
         Err("No lyric found".into())
     }
