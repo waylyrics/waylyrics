@@ -10,6 +10,7 @@ pub fn build_main_window(
     full_width_label_bg: bool,
     hide_label_on_empty_text: bool,
     allow_click_through_me: bool,
+    origin_lyric_in_above: bool,
 ) -> Window {
     let window = Window::new(app);
 
@@ -18,7 +19,7 @@ pub fn build_main_window(
     window.set_decorated(false);
     window.present();
 
-    let olabel = Label::builder().label("Waylyrics").build();
+    let olabel = Label::builder().label("Waylyrics").name("origin").build();
     let tlabel = Label::builder()
         .label("")
         .name("translated")
@@ -49,6 +50,10 @@ pub fn build_main_window(
     verical_box.insert_child_after(&olabel, slibing);
     verical_box.insert_child_after(&tlabel, Some(&olabel));
 
+    if !origin_lyric_in_above {
+        verical_box.reorder_child_after(&olabel, Some(&tlabel));
+    }
+
     window.set_child(Some(&verical_box));
 
     if allow_click_through_me {
@@ -60,9 +65,13 @@ pub fn build_main_window(
 
 pub fn get_label(window: &gtk::Window, translated: bool) -> Label {
     let vbox: gtk::Box = window.child().unwrap().downcast().unwrap();
-    if !translated {
-        vbox.first_child().unwrap().downcast().unwrap()
-    } else {
-        vbox.last_child().unwrap().downcast().unwrap()
-    }
+    let first: Label = vbox.first_child().unwrap().downcast().unwrap();
+    let last: Label = vbox.last_child().unwrap().downcast().unwrap();
+
+    let name = if translated { "translated" } else { "origin" };
+
+    [first, last]
+        .into_iter()
+        .find(|label| label.widget_name() == name)
+        .unwrap()
 }

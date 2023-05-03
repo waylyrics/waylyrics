@@ -3,4 +3,5 @@ lyric-update-interval = "20ms"
 allow-click-through-me = true
 full-width-lyric-bg = false
 hide-label-on-empty-text = true
+origin-lyric-in-above = true
 theme = "default"

@@ -259,6 +259,7 @@ fn build_ui(app: &Application) {
         allow_click_through_me,
         full_width_lyric_bg,
         hide_label_on_empty_text,
+        origin_lyric_in_above,
         theme,
     } = toml::from_str(&config).unwrap();
 
@@ -276,5 +277,6 @@ fn build_ui(app: &Application) {
         full_width_lyric_bg,
         hide_label_on_empty_text,
         allow_click_through_me,
+        origin_lyric_in_above
     );
 }
