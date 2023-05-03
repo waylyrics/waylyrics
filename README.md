@@ -5,6 +5,9 @@
 Simple wayland native universal on screen lyrics.
 Main logic runs single-thread, but tokio runs multi-threaded.
 
+![图片](https://user-images.githubusercontent.com/34085039/235869618-1f0fe78d-2637-4898-b8a1-53eb015d6731.png)
+
+
 ## Requirement
 
 - A player supports MPRIS well.
