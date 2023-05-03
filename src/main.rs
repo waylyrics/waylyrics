@@ -13,7 +13,7 @@ use mpris::{Player, PlayerFinder};
 
 use tokio::runtime::Handle;
 
-use tracing::{debug, info, error};
+use tracing::{debug, error, info};
 use waylyrics::app::{build_main_window, get_label};
 use waylyrics::config::Config;
 use waylyrics::lyric::netease::NeteaseLyricProvider;
@@ -68,8 +68,8 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                         return Err(PlayerStatus::Missing);
                     }
 
-                    let mut progress_tracker =
-                        ProgressTracker::new(player, 0).expect("cannot fetch progress");
+                    let mut progress_tracker = ProgressTracker::new(player, 0)
+                        .map_err(|_| PlayerStatus::Unsupported("cannot fetch progress"))?;
 
                     let progress_tick = progress_tracker.tick();
                     if progress_tick.progress.playback_status() != PlaybackStatus::Playing {
