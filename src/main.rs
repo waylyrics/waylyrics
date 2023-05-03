@@ -259,11 +259,12 @@ fn build_ui(app: &Application) {
         allow_click_through_me,
         full_width_lyric_bg,
         hide_label_on_empty_text,
+        theme,
     } = toml::from_str(&config).unwrap();
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval);
     let lyric_update_interval = parse_time(&lyric_update_interval);
-    let css_style = std::fs::read_to_string("style.css").unwrap();
+    let css_style = std::fs::read_to_string(std::path::PathBuf::from("themes").join(&format!("{theme}.css"))).unwrap();
 
     utils::merge_css(&css_style);
 

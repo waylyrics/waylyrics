@@ -3,15 +3,19 @@ window {
 }
 
 label {
-    border-radius: 16px; /* 圆角 */
-    font-size: 40px; 
+    /* 圆角 */
+    border-radius: 16px;
+
+    font-size: 40px;
     color: rgba(255, 255, 255, 1.0);
     background-color: rgba(0, 0, 0, 0.3);
     padding: 10px;
 }
 
-label#translated { /* 相比于label的变更 */
+/* 相比于label的变更 */
+label#translated {
     border-radius: 12px;
+    margin-top: 3px;
     font-size: 30px;
     padding: 7px;
 }

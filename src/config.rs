@@ -8,6 +8,7 @@ pub struct Config {
     pub allow_click_through_me: bool,
     pub full_width_lyric_bg: bool,
     pub hide_label_on_empty_text: bool,
+    pub theme: String,
 }
 
 
@@ -19,6 +20,7 @@ impl Default for Config {
             allow_click_through_me: true,
             full_width_lyric_bg: false,
             hide_label_on_empty_text: true,
+            theme: "default".into(),
         }
     }
 }
