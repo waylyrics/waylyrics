@@ -99,13 +99,17 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                         });
 
                     if need_update_lyric {
+                        LYRIC.set((LyricOwned::None, LyricOwned::None));
+
                         let title = track_meta
                             .title()
                             .ok_or(PlayerStatus::Unsupported("cannot get song title"))?;
                         let artist = track_meta.artists().map(|arts| arts.join(","));
 
                         let length = track_meta.length();
-                        let _ = fetch_lyric(title, artist, length, &windows[0]);
+                        if let Err(e) = fetch_lyric(title, artist, length, &windows[0]) {
+                            error!("lyric fetch error: {e}");
+                        }
 
                         get_label(&windows[0], false).set_label(DEFAULT_TEXT);
                         get_label(&windows[0], true).set_label("");
@@ -265,7 +269,9 @@ fn build_ui(app: &Application) {
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval);
     let lyric_update_interval = parse_time(&lyric_update_interval);
-    let css_style = std::fs::read_to_string(std::path::PathBuf::from("themes").join(&format!("{theme}.css"))).unwrap();
+    let css_style =
+        std::fs::read_to_string(std::path::PathBuf::from("themes").join(&format!("{theme}.css")))
+            .unwrap();
 
     utils::merge_css(&css_style);
 
@@ -277,6 +283,6 @@ fn build_ui(app: &Application) {
         full_width_lyric_bg,
         hide_label_on_empty_text,
         allow_click_through_me,
-        origin_lyric_in_above
+        origin_lyric_in_above,
     );
 }
