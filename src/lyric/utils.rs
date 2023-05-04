@@ -1,11 +1,7 @@
 use lrc_nom::{parse, LrcParseError};
 use std::time::Duration;
 
-use super::{LyricLine, LyricLineOwned, LyricProvider, LyricStore};
-
-pub const fn get_provider_name<U: LyricStore, T: LyricProvider<U>>(_: &T) -> &'static str {
-    T::NAME
-}
+use super::{LyricLine, LyricLineOwned};
 
 pub fn lrc_iter<'a>(lyric: &'a str, lf: &str) -> Result<Vec<LyricLine<'a>>, LrcParseError> {
     let mut lrc_vec: Vec<_> = parse(lyric, lf)?

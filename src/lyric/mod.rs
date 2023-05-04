@@ -4,6 +4,7 @@ pub mod netease;
 
 use std::time::Duration;
 
+use serde::{Deserialize, Serialize};
 use tokio::runtime::Handle;
 
 #[derive(Debug)]
@@ -19,14 +20,15 @@ pub struct LyricLine<'a> {
     pub start_time: Duration,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(tag = "type", content = "content")]
 pub enum LyricOwned {
     None,
     NoTimestamp,
     LineTimestamp(Vec<LyricLineOwned>),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct LyricLineOwned {
     pub text: String,
     pub start_time: Duration,
@@ -69,10 +71,15 @@ impl<'a> Lyric<'a> {
             Lyric::NoTimestamp => LyricOwned::NoTimestamp,
             Lyric::LineTimestamp(line) => LyricOwned::LineTimestamp(
                 line.into_iter()
-                    .map(|LyricLine { text, start_time: time }| LyricLineOwned {
-                        text: text.into(),
-                        start_time: time,
-                    })
+                    .map(
+                        |LyricLine {
+                             text,
+                             start_time: time,
+                         }| LyricLineOwned {
+                            text: text.into(),
+                            start_time: time,
+                        },
+                    )
                     .collect(),
             ),
         }

@@ -5,7 +5,6 @@ use ncmapi::{
     NcmApi,
 };
 use tokio::runtime::Handle;
-use serde::{Deserialize, Serialize};
 
 use ncmapi::types::{LyricResp, SearchSongResp};
 
@@ -13,7 +12,6 @@ use super::Lyric;
 
 pub struct NeteaseLyricProvider {}
 
-#[derive(Deserialize, Serialize)]
 pub struct NeteaseLyric {
     lyric: Option<String>,
     tlyric: Option<String>,

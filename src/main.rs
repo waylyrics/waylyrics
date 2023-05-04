@@ -2,6 +2,7 @@
 #![feature(is_some_and)]
 
 use std::cell::RefCell;
+use std::path::PathBuf;
 use std::time::{Duration, SystemTime};
 
 use gtk::glib::WeakRef;
@@ -32,6 +33,8 @@ thread_local! {
     static TRACK_PLAYING_PAUSED: RefCell<(Option<TrackID>, bool)> = RefCell::new((None, false));
 
     static TOKIO_RUNTIME_HANDLE: RefCell<Handle> = RefCell::new(Handle::current());
+
+    static CACHE_LYRICS: RefCell<bool> = RefCell::new(false);
 }
 
 #[tokio::main]
@@ -107,7 +110,17 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                         let artist = track_meta.artists().map(|arts| arts.join(","));
 
                         let length = track_meta.length();
-                        if let Err(e) = fetch_lyric(title, artist, length, &windows[0]) {
+
+                        let fetch_result;
+
+                        let cache = CACHE_LYRICS.with_borrow(|cache| *cache);
+                        if cache {
+                            fetch_result = fetch_lyric_cached(title, artist, length, &windows[0]);
+                        } else {
+                            fetch_result = fetch_lyric(title, artist, length, &windows[0]);
+                        }
+
+                        if let Err(e) = fetch_result {
                             error!("lyric fetch error: {e}");
                         }
 
@@ -156,6 +169,61 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
         }
         Continue(true)
     });
+}
+
+fn fetch_lyric_cached(
+    title: &str,
+    artist: Option<String>,
+    length: Option<Duration>,
+    window: &gtk::Window,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let digest = md5::compute(format!("{title}-{artist:?}-{length:?}"));
+    let cache_dir = md5_cache_dir(digest);
+    let cache_path = cache_dir.join(format!("{digest:x}.json"));
+    debug!(
+        "cache_path for {} - {title} - {length:?}: {cache_path:?}",
+        artist.as_ref().map(|s| &**s).unwrap_or("Unknown")
+    );
+
+    if let Err(e) = std::fs::create_dir_all(&cache_dir) {
+        error!("cannot create cache dir {cache_dir:?}: {e}");
+    }
+
+    match std::fs::read_to_string(&cache_path) {
+        Ok(lyric) => {
+            let cached_lyric: Result<(LyricOwned, LyricOwned), _> = serde_json::from_str(&lyric);
+            match cached_lyric {
+                Ok(lyrics) => {
+                    LYRIC.set(lyrics);
+                    return Ok(());
+                }
+                Err(e) => error!("cache parse error: {e} from {cache_path:?}"),
+            }
+        }
+        Err(e) => info!("cache missed: {e}"),
+    }
+    let result = fetch_lyric(title, artist, length, window);
+    if result.is_ok() {
+        LYRIC.with_borrow(|lyric| {
+            if let Err(e) = std::fs::write(
+                &cache_path,
+                &serde_json::to_string(lyric).expect("cannot serialize lyrics!"),
+            ) {
+                error!("cannot write cache {cache_path:?}: {e}");
+            } else {
+                info!("cached to {cache_path:?}");
+            }
+        });
+    }
+    result
+}
+
+fn md5_cache_dir(digest: md5::Digest) -> PathBuf {
+    let mut cache_path = PathBuf::from("cache");
+    for i in 0..3 {
+        cache_path.push(format!("{:02x}", digest[i]));
+    }
+    cache_path
 }
 
 fn fetch_lyric(
@@ -266,6 +334,7 @@ fn build_ui(app: &Application) {
         hide_label_on_empty_text,
         origin_lyric_in_above,
         theme,
+        cache_lyrics,
     } = toml::from_str(&config).unwrap();
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval);
@@ -286,4 +355,6 @@ fn build_ui(app: &Application) {
         allow_click_through_me,
         origin_lyric_in_above,
     );
+
+    CACHE_LYRICS.set(cache_lyrics);
 }

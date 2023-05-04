@@ -1,5 +1,6 @@
 mpris-sync-interval = "3s"
 lyric-update-interval = "20ms"
+cache-lyrics = true
 allow-click-through-me = true
 full-width-lyric-bg = false
 hide-label-on-empty-text = true
