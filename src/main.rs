@@ -17,7 +17,7 @@ use tracing::{debug, error, info};
 use waylyrics::app::{build_main_window, get_label};
 use waylyrics::config::Config;
 use waylyrics::lyric::netease::NeteaseLyricProvider;
-use waylyrics::lyric::{LyricOwned, LyricProvider, LyricStore, SongInfo};
+use waylyrics::lyric::{LyricLineOwned, LyricOwned, LyricProvider, LyricStore, SongInfo};
 use waylyrics::utils;
 
 const DEFAULT_TEXT: &str = "Waylyrics";
@@ -184,6 +184,7 @@ fn fetch_lyric(
         let tlyric = lyric.get_translated_lyric().into_owned();
         debug!("original lyric: {olyric:?}");
         debug!("translated lyric: {tlyric:?}");
+
         // show info to user if original lyric is empty or no timestamp
         match &olyric {
             LyricOwned::LineTimestamp(_) => (),
@@ -232,14 +233,14 @@ fn register_lyric_display(app: WeakRef<Application>, interval: Duration) {
                 let elapsed = LYRIC_START.with_borrow(|start| start.elapsed().ok());
                 if let Some(elapsed) = elapsed {
                     if let LyricOwned::LineTimestamp(lyric) = origin {
-                        let new_text = lyric.iter().take_while(|(_, off)| off < &elapsed).last();
-                        if let Some((text, _time)) = new_text {
+                        let new_text = waylyrics::lyric::utils::find_next_lyric(&elapsed, &lyric);
+                        if let Some(LyricLineOwned { text, .. }) = new_text {
                             get_label(&windows[0], false).set_label(text);
                         }
                     }
                     if let LyricOwned::LineTimestamp(lyric) = translation {
-                        let new_text = lyric.iter().take_while(|(_, off)| off < &elapsed).last();
-                        if let Some((text, _time)) = new_text {
+                        let new_text = waylyrics::lyric::utils::find_next_lyric(&elapsed, &lyric);
+                        if let Some(LyricLineOwned { text, .. }) = new_text {
                             get_label(&windows[0], true).set_label(text);
                         }
                     }

@@ -10,14 +10,26 @@ use tokio::runtime::Handle;
 pub enum Lyric<'a> {
     None,
     NoTimestamp,
-    LineTimestamp(Vec<(&'a str, Duration)>),
+    LineTimestamp(Vec<LyricLine<'a>>),
+}
+
+#[derive(Debug)]
+pub struct LyricLine<'a> {
+    pub text: &'a str,
+    pub start_time: Duration,
 }
 
 #[derive(Debug)]
 pub enum LyricOwned {
     None,
     NoTimestamp,
-    LineTimestamp(Vec<(String, Duration)>),
+    LineTimestamp(Vec<LyricLineOwned>),
+}
+
+#[derive(Debug)]
+pub struct LyricLineOwned {
+    pub text: String,
+    pub start_time: Duration,
 }
 
 #[derive(Debug)]
@@ -57,7 +69,10 @@ impl<'a> Lyric<'a> {
             Lyric::NoTimestamp => LyricOwned::NoTimestamp,
             Lyric::LineTimestamp(line) => LyricOwned::LineTimestamp(
                 line.into_iter()
-                    .map(|(text, off)| (text.to_owned(), off))
+                    .map(|LyricLine { text, start_time: time }| LyricLineOwned {
+                        text: text.into(),
+                        start_time: time,
+                    })
                     .collect(),
             ),
         }
