@@ -111,14 +111,12 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
 
                         let length = track_meta.length();
 
-                        let fetch_result;
-
                         let cache = CACHE_LYRICS.with_borrow(|cache| *cache);
-                        if cache {
-                            fetch_result = fetch_lyric_cached(title, artist, length, &windows[0]);
+                        let fetch_result = if cache {
+                            fetch_lyric_cached(title, artist, length, &windows[0])
                         } else {
-                            fetch_result = fetch_lyric(title, artist, length, &windows[0]);
-                        }
+                            fetch_lyric(title, artist, length, &windows[0])
+                        };
 
                         if let Err(e) = fetch_result {
                             error!("lyric fetch error: {e}");
@@ -135,7 +133,9 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                     let start = SystemTime::now().checked_sub(position).ok_or(
                         PlayerStatus::Unsupported("Position is greater than SystemTime"),
                     )?;
+
                     LYRIC_START.set(start);
+
                     Ok(())
                 } else {
                     Err(PlayerStatus::Missing)
@@ -182,7 +182,7 @@ fn fetch_lyric_cached(
     let cache_path = cache_dir.join(format!("{digest:x}.json"));
     debug!(
         "cache_path for {} - {title} - {length:?}: {cache_path:?}",
-        artist.as_ref().map(|s| &**s).unwrap_or("Unknown")
+        artist.as_deref().unwrap_or("Unknown")
     );
 
     if let Err(e) = std::fs::create_dir_all(&cache_dir) {
@@ -207,7 +207,7 @@ fn fetch_lyric_cached(
         LYRIC.with_borrow(|lyric| {
             if let Err(e) = std::fs::write(
                 &cache_path,
-                &serde_json::to_string(lyric).expect("cannot serialize lyrics!"),
+                serde_json::to_string(lyric).expect("cannot serialize lyrics!"),
             ) {
                 error!("cannot write cache {cache_path:?}: {e}");
             } else {
@@ -259,17 +259,16 @@ fn fetch_lyric(
             _ => {
                 info!(
                     "No lyric for {} - {title}",
-                    artist.as_ref().map(|s| &**s).unwrap_or("Unknown"),
+                    artist.as_deref().unwrap_or("Unknown"),
                 );
             }
         }
 
         if let LyricOwned::LineTimestamp(_) = &tlyric {
-            get_label(window, true).set_visible(true);
         } else {
             info!(
                 "No translated lyric for {} - {title}",
-                artist.as_ref().map(|s| &**s).unwrap_or("Unknown"),
+                artist.as_deref().unwrap_or("Unknown"),
             );
             get_label(window, true).set_visible(false);
         }
@@ -278,7 +277,7 @@ fn fetch_lyric(
     } else {
         info!(
             "Failed searching for {} - {title}",
-            artist.as_ref().map(|s| &**s).unwrap_or("Unknown"),
+            artist.as_deref().unwrap_or("Unknown"),
         );
         LYRIC.set((LyricOwned::None, LyricOwned::None));
         Err("No lyric found".into())
@@ -301,15 +300,19 @@ fn register_lyric_display(app: WeakRef<Application>, interval: Duration) {
                 let elapsed = LYRIC_START.with_borrow(|start| start.elapsed().ok());
                 if let Some(elapsed) = elapsed {
                     if let LyricOwned::LineTimestamp(lyric) = origin {
-                        let new_text = waylyrics::lyric::utils::find_next_lyric(&elapsed, &lyric);
+                        let new_text = waylyrics::lyric::utils::find_next_lyric(&elapsed, lyric);
                         if let Some(LyricLineOwned { text, .. }) = new_text {
                             get_label(&windows[0], false).set_label(text);
+                        } else {
+                            get_label(&windows[0], false).set_label("");
                         }
                     }
                     if let LyricOwned::LineTimestamp(lyric) = translation {
-                        let new_text = waylyrics::lyric::utils::find_next_lyric(&elapsed, &lyric);
+                        let new_text = waylyrics::lyric::utils::find_next_lyric(&elapsed, lyric);
                         if let Some(LyricLineOwned { text, .. }) = new_text {
                             get_label(&windows[0], true).set_label(text);
+                        } else {
+                            get_label(&windows[0], true).set_label("");
                         }
                     }
                 }
@@ -340,7 +343,7 @@ fn build_ui(app: &Application) {
     let mpris_sync_interval = parse_time(&mpris_sync_interval);
     let lyric_update_interval = parse_time(&lyric_update_interval);
     let css_style =
-        std::fs::read_to_string(std::path::PathBuf::from("themes").join(&format!("{theme}.css")))
+        std::fs::read_to_string(std::path::PathBuf::from("themes").join(format!("{theme}.css")))
             .unwrap();
 
     utils::merge_css(&css_style);
