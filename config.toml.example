@@ -1,4 +1,4 @@
-mpris-sync-interval = "3s"
+mpris-sync-interval = "500ms"
 lyric-update-interval = "20ms"
 cache-lyrics = true
 allow-click-through-me = true
