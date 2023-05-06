@@ -60,6 +60,8 @@ pub fn build_main_window(
         utils::allow_click_through(&window);
     }
 
+    window.set_icon_name(Some("waylyrics"));
+
     window
 }
 
