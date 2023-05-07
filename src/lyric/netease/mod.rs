@@ -96,6 +96,8 @@ impl super::LyricProvider<NeteaseLyric> for NeteaseLyricProvider {
 
         let lyric_resp: LyricResp = query_result.deserialize()?;
 
+        tracing::debug!("lyric query result: {lyric_resp:?}");
+
         Ok(NeteaseLyric {
             lyric: lyric_resp.lrc.map(|l| l.lyric),
             tlyric: lyric_resp.tlyric.map(|l| l.lyric),

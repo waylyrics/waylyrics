@@ -22,6 +22,6 @@ pub fn lrc_iter<'a>(lyric: &'a str, lf: &str) -> Result<Vec<LyricLine<'a>>, LrcP
 pub fn find_next_lyric<'a>(elapsed: &Duration, lyric: &'a [LyricLineOwned]) -> Option<&'a LyricLineOwned> {
     lyric
         .iter()
-        .take_while(|LyricLineOwned { start_time: off, .. }| off < elapsed)
+        .take_while(|LyricLineOwned { start_time: off, .. }| off <= elapsed)
         .last()
 }
