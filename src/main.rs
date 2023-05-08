@@ -56,6 +56,87 @@ enum PlayerStatus {
     Unsupported(&'static str),
 }
 
+fn try_sync_player(window: &gtk::Window) -> Result<(), PlayerStatus> {
+    PLAYER.with_borrow(|player| {
+        if player.is_none() {
+            return Err(PlayerStatus::Missing);
+        }
+        let player = player.as_ref().unwrap();
+
+        if !player.is_running() {
+            info!("disconnected from player: {}", player.identity());
+            return Err(PlayerStatus::Missing);
+        }
+
+        let mut progress_tracker = ProgressTracker::new(player, 0)
+            .map_err(|_| PlayerStatus::Unsupported("cannot fetch progress"))?;
+
+        let progress_tick = progress_tracker.tick();
+        if progress_tick.progress.playback_status() != PlaybackStatus::Playing {
+            return Err(PlayerStatus::Paused);
+        }
+        let track_meta = player
+            .get_metadata()
+            .map_err(|_| PlayerStatus::Unsupported("cannot get metadata of track playing"))?;
+        let need_update_lyric =
+            TRACK_PLAYING_PAUSED.with_borrow_mut(|(track_id_playing, paused)| {
+                if let Some(track_id) = track_meta.track_id() {
+                    let need = track_id_playing.is_none()
+                        || track_id_playing.as_ref().is_some_and(|p| p != &track_id)
+                            && !(*paused
+                                && track_id_playing.as_ref().is_some_and(|p| p == &track_id));
+
+                    *track_id_playing = Some(track_id);
+                    *paused = false;
+                    need
+                } else {
+                    *track_id_playing = None;
+                    *paused = false;
+                    false
+                }
+            });
+
+        if need_update_lyric {
+            LYRIC.set((LyricOwned::None, LyricOwned::None));
+
+            let title = track_meta
+                .title()
+                .ok_or(PlayerStatus::Unsupported("cannot get song title"))?;
+            let artist = track_meta.artists().map(|arts| arts.join(","));
+
+            let length = track_meta.length();
+
+            let cache = CACHE_LYRICS.with_borrow(|cache| *cache);
+            let fetch_result = if cache {
+                fetch_lyric_cached(title, artist, length, window)
+            } else {
+                fetch_lyric(title, artist, length, window)
+            };
+
+            if let Err(e) = fetch_result {
+                error!("lyric fetch error: {e}");
+            }
+
+            get_label(window, false).set_label(DEFAULT_TEXT);
+            get_label(window, true).set_label("");
+        }
+
+        // sync play position
+        let position = player
+            .get_position()
+            .map_err(|_| PlayerStatus::Unsupported("cannot get playback position"))?;
+        let start = SystemTime::now()
+            .checked_sub(position)
+            .ok_or(PlayerStatus::Unsupported(
+                "Position is greater than SystemTime",
+            ))?;
+
+        LYRIC_START.set(start);
+
+        Ok(())
+    })
+}
+
 fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
     glib::timeout_add_local(interval, move || {
         if let Some(app) = app.upgrade() {
@@ -63,84 +144,10 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
             if windows.is_empty() {
                 return Continue(true);
             }
-            match PLAYER.with_borrow(|player| {
-                let player = player.as_ref();
-                if let Some(player) = player {
-                    if !player.is_running() {
-                        info!("disconnected from player: {}", player.identity());
-                        return Err(PlayerStatus::Missing);
-                    }
 
-                    let mut progress_tracker = ProgressTracker::new(player, 0)
-                        .map_err(|_| PlayerStatus::Unsupported("cannot fetch progress"))?;
+            let sync_result = try_sync_player(&windows[0]);
 
-                    let progress_tick = progress_tracker.tick();
-                    if progress_tick.progress.playback_status() != PlaybackStatus::Playing {
-                        return Err(PlayerStatus::Paused);
-                    }
-                    let track_meta = player.get_metadata().map_err(|_| {
-                        PlayerStatus::Unsupported("cannot get metadata of track playing")
-                    })?;
-                    let need_update_lyric =
-                        TRACK_PLAYING_PAUSED.with_borrow_mut(|(track_id_playing, paused)| {
-                            if let Some(track_id) = track_meta.track_id() {
-                                let need = track_id_playing.is_none()
-                                    || track_id_playing.as_ref().is_some_and(|p| p != &track_id)
-                                        && !(*paused
-                                            && track_id_playing
-                                                .as_ref()
-                                                .is_some_and(|p| p == &track_id));
-
-                                *track_id_playing = Some(track_id);
-                                *paused = false;
-                                need
-                            } else {
-                                *track_id_playing = None;
-                                *paused = false;
-                                false
-                            }
-                        });
-
-                    if need_update_lyric {
-                        LYRIC.set((LyricOwned::None, LyricOwned::None));
-
-                        let title = track_meta
-                            .title()
-                            .ok_or(PlayerStatus::Unsupported("cannot get song title"))?;
-                        let artist = track_meta.artists().map(|arts| arts.join(","));
-
-                        let length = track_meta.length();
-
-                        let cache = CACHE_LYRICS.with_borrow(|cache| *cache);
-                        let fetch_result = if cache {
-                            fetch_lyric_cached(title, artist, length, &windows[0])
-                        } else {
-                            fetch_lyric(title, artist, length, &windows[0])
-                        };
-
-                        if let Err(e) = fetch_result {
-                            error!("lyric fetch error: {e}");
-                        }
-
-                        get_label(&windows[0], false).set_label(DEFAULT_TEXT);
-                        get_label(&windows[0], true).set_label("");
-                    }
-
-                    // sync play position
-                    let position = player
-                        .get_position()
-                        .map_err(|_| PlayerStatus::Unsupported("cannot get playback position"))?;
-                    let start = SystemTime::now().checked_sub(position).ok_or(
-                        PlayerStatus::Unsupported("Position is greater than SystemTime"),
-                    )?;
-
-                    LYRIC_START.set(start);
-
-                    Ok(())
-                } else {
-                    Err(PlayerStatus::Missing)
-                }
-            }) {
+            match sync_result {
                 Err(PlayerStatus::Missing) => {
                     PLAYER_FINDER.with_borrow(|player_finder| {
                         if let Ok(player) = player_finder.find_active() {
