@@ -58,10 +58,7 @@ enum PlayerStatus {
 
 fn try_sync_player(window: &gtk::Window) -> Result<(), PlayerStatus> {
     PLAYER.with_borrow(|player| {
-        if player.is_none() {
-            return Err(PlayerStatus::Missing);
-        }
-        let player = player.as_ref().unwrap();
+        let player = player.as_ref().ok_or(PlayerStatus::Missing)?;
 
         if !player.is_running() {
             info!("disconnected from player: {}", player.identity());
