@@ -1,4 +1,5 @@
-use crate::window::Window;
+mod window;
+use window::Window;
 use gtk::{prelude::*, Application, Label};
 
 const WINDOW_MIN_HEIGHT: i32 = 120;

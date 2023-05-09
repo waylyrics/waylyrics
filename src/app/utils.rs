@@ -1,4 +1,4 @@
-use crate::window::Window;
+use super::window::Window;
 use gtk::prelude::*;
 
 pub fn allow_click_through(window: &Window) {

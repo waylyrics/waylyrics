@@ -1,6 +1,5 @@
 pub mod config;
 pub mod lyric;
-pub mod window;
 pub mod utils;
 pub mod app;
 
