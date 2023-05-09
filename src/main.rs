@@ -29,6 +29,8 @@ thread_local! {
 
     static LYRIC: RefCell<(LyricOwned, LyricOwned)> = RefCell::new((LyricOwned::None, LyricOwned::None));
     static LYRIC_START: RefCell<SystemTime> = RefCell::new(SystemTime::now());
+    static LYRIC_CURRENT: RefCell<Option<Duration>> = RefCell::new(None);
+    static LYRIC_TRANSLATION_CURRENT: RefCell<Option<Duration>> = RefCell::new(None);
 
     static TRACK_PLAYING_PAUSED: RefCell<(Option<TrackID>, bool)> = RefCell::new((None, false));
 
@@ -94,7 +96,7 @@ fn try_sync_player(window: &gtk::Window) -> Result<(), PlayerStatus> {
             });
 
         if need_update_lyric {
-            LYRIC.set((LyricOwned::None, LyricOwned::None));
+            clear_lyric();
 
             let title = track_meta
                 .title()
@@ -142,9 +144,9 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                 return Continue(true);
             }
 
-            let sync_result = try_sync_player(&windows[0]);
+            let sync_status = try_sync_player(&windows[0]);
 
-            match sync_result {
+            match sync_status {
                 Err(PlayerStatus::Missing) => {
                     PLAYER_FINDER.with_borrow(|player_finder| {
                         if let Ok(player) = player_finder.find_active() {
@@ -162,7 +164,7 @@ fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                     get_label(&windows[0], true).set_label("Unsupported Player");
                     get_label(&windows[0], false).set_label("");
 
-                    LYRIC.set((LyricOwned::None, LyricOwned::None));
+                    clear_lyric();
                     error!(kind);
                 }
                 Err(PlayerStatus::Paused) => {
@@ -283,7 +285,7 @@ fn fetch_lyric(
             "Failed searching for {} - {title}",
             artist.as_deref().unwrap_or("Unknown"),
         );
-        LYRIC.set((LyricOwned::None, LyricOwned::None));
+        clear_lyric();
         Err("No lyric found".into())
     }
 }
@@ -305,19 +307,11 @@ fn register_lyric_display(app: WeakRef<Application>, interval: Duration) {
                 if let Some(elapsed) = elapsed {
                     if let LyricOwned::LineTimestamp(lyric) = origin {
                         let new_text = waylyrics::lyric::utils::find_next_lyric(&elapsed, lyric);
-                        if let Some(LyricLineOwned { text, .. }) = new_text {
-                            get_label(&windows[0], false).set_label(text);
-                        } else {
-                            get_label(&windows[0], false).set_label("");
-                        }
+                        update_lyric(&windows[0], new_text);
                     }
                     if let LyricOwned::LineTimestamp(lyric) = translation {
                         let new_text = waylyrics::lyric::utils::find_next_lyric(&elapsed, lyric);
-                        if let Some(LyricLineOwned { text, .. }) = new_text {
-                            get_label(&windows[0], true).set_label(text);
-                        } else {
-                            get_label(&windows[0], true).set_label("");
-                        }
+                        update_translation_lyric(&windows[0], new_text);
                     }
                 }
             });
@@ -365,3 +359,42 @@ fn build_ui(app: &Application) {
 
     CACHE_LYRICS.set(cache_lyrics);
 }
+
+fn clear_lyric() {
+    LYRIC.set((LyricOwned::None, LyricOwned::None));
+    LYRIC_CURRENT.set(None);
+    LYRIC_TRANSLATION_CURRENT.set(None);
+}
+
+fn update_lyric(window: &gtk::Window, new_text: Option<&LyricLineOwned>) {
+    if let Some(LyricLineOwned { text, start_time }) = new_text {
+        if let Some(timestamp) = LYRIC_CURRENT.with_borrow(|status| *status) {
+            if &timestamp == start_time {
+                return;
+            }
+        }
+
+        LYRIC_CURRENT.set(Some(*start_time));
+        get_label(window, false).set_label(text);
+    } else {
+        LYRIC_CURRENT.set(None);
+        get_label(window, false).set_label("");
+    }
+}
+
+fn update_translation_lyric(window: &gtk::Window, new_text: Option<&LyricLineOwned>) {
+    if let Some(LyricLineOwned { text, start_time }) = new_text {
+        if let Some(timestamp) = LYRIC_TRANSLATION_CURRENT.with_borrow(|status| *status) {
+            if &timestamp == start_time {
+                return;
+            }
+        }
+
+        LYRIC_TRANSLATION_CURRENT.set(Some(*start_time));
+        get_label(window, true).set_label(text);
+    } else {
+        LYRIC_TRANSLATION_CURRENT.set(None);
+        get_label(window, true).set_label("");
+    }
+}
+

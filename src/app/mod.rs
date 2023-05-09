@@ -65,12 +65,12 @@ pub fn build_main_window(
     window
 }
 
-pub fn get_label(window: &gtk::Window, translated: bool) -> Label {
+pub fn get_label(window: &gtk::Window, translation: bool) -> Label {
     let vbox: gtk::Box = window.child().unwrap().downcast().unwrap();
     let first: Label = vbox.first_child().unwrap().downcast().unwrap();
     let last: Label = vbox.last_child().unwrap().downcast().unwrap();
 
-    let name = if translated { "translated" } else { "origin" };
+    let name = if translation { "translated" } else { "origin" };
 
     [first, last]
         .into_iter()

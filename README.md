@@ -22,6 +22,7 @@ online:
 - [Qcm](https://github.com/hypengw/Qcm)
 - [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
 - [Telegram](https://t.me/Music163Bot)
+- [FeelUOwn](https://github.com/feeluown/FeelUOwn/)，在[该pr](https://github.com/feeluown/FeelUOwn/pull/690)合并后修复。
 
 local:
 - [mpv-mpris](https://github.com/hoyon/mpv-mpris)
@@ -30,13 +31,11 @@ local:
 ### MPRIS-unfriendly Players
 
 [netease-cloud-music-gtk]: https://github.com/gmg137/netease-cloud-music-gtk
-[FeelUOwn]: https://github.com/feeluown/FeelUOwn
 
 
 Player | OSD | issue
 ------|-----|------
 [netease-cloud-music-gtk] | X | gives 0 position
-[FeelUOwn] | O | gives 0 position and 0 length
 Firefox | X | do not provide position call
 Chrom* | X | break the "unique" gurantee for TrackID
 qqmusic | O | no info other than title/artist avaliable
