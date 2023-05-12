@@ -9,7 +9,7 @@ use gtk::{glib, Application};
 
 use waylyrics::app::{self, build_main_window};
 use waylyrics::config::Config;
-use waylyrics::utils::{self};
+use waylyrics::utils;
 
 use waylyrics::sync::*;
 
