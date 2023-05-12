@@ -1,3 +1,5 @@
+use crate::EXLUDED_REGEXIES;
+
 use super::window::Window;
 use gtk::prelude::*;
 
@@ -10,6 +12,17 @@ pub fn allow_click_through(window: &Window) {
 
 pub fn hide_on_empty(label: &gtk::Label) {
     if label.label().is_empty() {
+        label.set_visible(false);
+    } else {
+        label.set_visible(true);
+    }
+}
+
+pub fn hide_exluded_words(label: &gtk::Label) {
+    let label_text = label.label();
+    let label_text = label_text.as_str();
+
+    if EXLUDED_REGEXIES.with_borrow(|regex_set| regex_set.is_match(label_text)) {
         label.set_visible(false);
     } else {
         label.set_visible(true);

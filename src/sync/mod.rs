@@ -29,4 +29,5 @@ thread_local! {
     static TOKIO_RUNTIME_HANDLE: RefCell<Handle> = RefCell::new(Handle::current());
 
     pub static CACHE_LYRICS: RefCell<bool> = RefCell::new(false);
+    pub static LYRIC_OFFSET_MILLISEC: RefCell<i64> = RefCell::new(0);
 }

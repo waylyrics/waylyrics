@@ -2487,6 +2487,7 @@ dependencies = [
  "md5",
  "mpris",
  "ncmapi",
+ "regex",
  "rust_decimal",
  "rust_decimal_macros",
  "serde",

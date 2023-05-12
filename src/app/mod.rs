@@ -12,6 +12,7 @@ pub fn build_main_window(
     hide_label_on_empty_text: bool,
     allow_click_through_me: bool,
     origin_lyric_in_above: bool,
+    enable_filter_regex: bool,
 ) -> Window {
     let window = Window::new(app);
 
@@ -30,6 +31,10 @@ pub fn build_main_window(
     if hide_label_on_empty_text {
         olabel.connect_label_notify(utils::hide_on_empty);
         tlabel.connect_label_notify(utils::hide_on_empty);
+    }
+    if enable_filter_regex {
+        olabel.connect_label_notify(utils::hide_exluded_words);
+        tlabel.connect_label_notify(utils::hide_exluded_words);
     }
 
     olabel.set_vexpand(true);
