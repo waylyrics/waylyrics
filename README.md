@@ -2,10 +2,9 @@
 
 [![tg-group](https://img.shields.io/badge/tg%20group-open-blue)](https://t.me/waylyrics)
 
-Simple wayland native universal on screen lyrics.
-Main logic runs single-thread, but tokio runs multi-threaded.
+Simple universal on screen lyrics made with GTK4 and ❤️.
 
-![图片](https://user-images.githubusercontent.com/34085039/235869618-1f0fe78d-2637-4898-b8a1-53eb015d6731.png)
+![](https://user-images.githubusercontent.com/34085039/235869618-1f0fe78d-2637-4898-b8a1-53eb015d6731.png)
 
 ## Build/Install
 
@@ -14,6 +13,7 @@ Check [INSTALLATION.md](INSTALLATION.md)
 ## Requirement
 
 - A player supports MPRIS well.
+- In particular, a wm allows you set windows as top-level one's.
 
 ### Recommended Players
 
@@ -45,7 +45,7 @@ qqmusic | O | no info other than title/artist avaliable
 Current approach my seems dirty:
 
 1. get the likely actived player when none is connnected, and disconnect from one only if it's not avaliable more
-2. keep sync with 500ms interval and 20ms refresh for lyrics
+2. keep sync with 2s interval and 20ms refresh for lyrics
 3. use the length-matched result (or first result if former is not found) of `search_song` and sync START in each run, fetch lyric only when needed
 
 ## Alternatives
