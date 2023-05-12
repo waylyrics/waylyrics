@@ -5,11 +5,13 @@ use gtk::glib::WeakRef;
 use gtk::prelude::*;
 use gtk::{glib, Application};
 use mpris::{PlaybackStatus, ProgressTracker};
+use serde::{Deserialize, Serialize};
 use tracing::{debug, error, info};
 
 use crate::app::get_label;
 use crate::lyric::netease::NeteaseLyricProvider;
 use crate::lyric::{LyricOwned, LyricProvider, LyricStore, SongInfo};
+use crate::sync::LYRIC_OFFSET_MILLISEC;
 use crate::CACHE_DIR;
 
 use super::{
@@ -89,11 +91,23 @@ fn try_sync_player(window: &gtk::Window) -> Result<(), PlayerStatus> {
         let position = player
             .get_position()
             .map_err(|_| PlayerStatus::Unsupported("cannot get playback position"))?;
-        let start = SystemTime::now()
-            .checked_sub(position)
-            .ok_or(PlayerStatus::Unsupported(
-                "Position is greater than SystemTime",
-            ))?;
+        let mut start =
+            SystemTime::now()
+                .checked_sub(position)
+                .ok_or(PlayerStatus::Unsupported(
+                    "Position is greater than SystemTime",
+                ))?;
+
+        let offset = LYRIC_OFFSET_MILLISEC.with_borrow(|offset| *offset);
+        if offset.is_negative() {
+            start = start
+                .checked_sub(Duration::from_millis(offset.abs() as _))
+                .expect("infinite offset time");
+        } else {
+            start = start
+                .checked_add(Duration::from_millis(offset as _))
+                .expect("infinite offset time");
+        }
 
         LYRIC_START.set(start);
 
@@ -163,10 +177,16 @@ fn fetch_lyric_cached(
 
     match std::fs::read_to_string(&cache_path) {
         Ok(lyric) => {
-            let cached_lyric: Result<(LyricOwned, LyricOwned), _> = serde_json::from_str(&lyric);
+            let cached_lyric: Result<LyricCache, _> = serde_json::from_str(&lyric);
             match cached_lyric {
-                Ok(lyrics) => {
-                    LYRIC.set(lyrics);
+                Ok(LyricCache {
+                    olyric,
+                    tlyric,
+                    offset,
+                }) => {
+                    LYRIC.set((olyric, tlyric));
+                    LYRIC_OFFSET_MILLISEC.set(offset);
+                    info!("set offset: {offset}ms");
                     return Ok(());
                 }
                 Err(e) => error!("cache parse error: {e} from {cache_path:?}"),
@@ -179,7 +199,12 @@ fn fetch_lyric_cached(
         LYRIC.with_borrow(|lyric| {
             if let Err(e) = std::fs::write(
                 &cache_path,
-                serde_json::to_string(lyric).expect("cannot serialize lyrics!"),
+                serde_json::to_string(&LyricCache {
+                    olyric: lyric.0.clone(),
+                    tlyric: lyric.1.clone(),
+                    offset: 0,
+                })
+                .expect("cannot serialize lyrics!"),
             ) {
                 error!("cannot write cache {cache_path:?}: {e}");
             } else {
@@ -188,6 +213,13 @@ fn fetch_lyric_cached(
         });
     }
     result
+}
+
+#[derive(Deserialize, Serialize)]
+struct LyricCache {
+    olyric: LyricOwned,
+    tlyric: LyricOwned,
+    offset: i64,
 }
 
 fn fetch_lyric(
