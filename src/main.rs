@@ -7,9 +7,10 @@ use std::path::PathBuf;
 use gtk::prelude::*;
 use gtk::{glib, Application};
 
+use regex::RegexSet;
 use waylyrics::app::{self, build_main_window};
 use waylyrics::config::Config;
-use waylyrics::utils::{self};
+use waylyrics::{utils, EXLUDED_REGEXIES};
 
 use waylyrics::sync::*;
 
@@ -36,8 +37,18 @@ fn build_ui(app: &Application) -> Result<(), Box<dyn Error>> {
     let xdg_dirs = xdg::BaseDirectories::with_prefix("waylyrics")?;
     let config_home = xdg_dirs.get_config_home();
     let cache_dir = xdg_dirs.get_cache_home();
-    waylyrics::CONFIG_HOME.set(config_home.to_str().ok_or("xdg config home is not valid UTF-8")?.into());
-    waylyrics::CACHE_DIR.set(cache_dir.to_str().ok_or("xdg config home is not valid UTF-8")?.into());
+    waylyrics::CONFIG_HOME.set(
+        config_home
+            .to_str()
+            .ok_or("xdg config home is not valid UTF-8")?
+            .into(),
+    );
+    waylyrics::CACHE_DIR.set(
+        cache_dir
+            .to_str()
+            .ok_or("xdg config home is not valid UTF-8")?
+            .into(),
+    );
 
     std::fs::create_dir_all(&config_home)?;
     std::fs::create_dir_all(&cache_dir)?;
@@ -72,6 +83,8 @@ fn build_ui(app: &Application) -> Result<(), Box<dyn Error>> {
         origin_lyric_in_above,
         theme,
         cache_lyrics,
+        enable_filter_regex,
+        filter_regexies,
     } = toml::from_str(&config).unwrap();
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval)?;
@@ -90,7 +103,12 @@ fn build_ui(app: &Application) -> Result<(), Box<dyn Error>> {
         hide_label_on_empty_text,
         allow_click_through_me,
         origin_lyric_in_above,
+        enable_filter_regex && !filter_regexies.is_empty(),
     );
+
+    if enable_filter_regex {
+        EXLUDED_REGEXIES.set(RegexSet::new(&filter_regexies)?);
+    }
 
     CACHE_LYRICS.set(cache_lyrics);
 
