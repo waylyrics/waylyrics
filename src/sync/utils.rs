@@ -5,7 +5,7 @@ use crate::lyric::LyricOwned;
 use super::{LYRIC, LYRIC_CURRENT, LYRIC_TRANSLATION_CURRENT};
 
 pub fn md5_cache_dir(digest: md5::Digest) -> PathBuf {
-    let mut cache_path = PathBuf::from("cache");
+    let mut cache_path = PathBuf::new();
     for i in 0..3 {
         cache_path.push(format!("{:02x}", digest[i]));
     }

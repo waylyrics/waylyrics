@@ -1,3 +1,4 @@
+use std::path::PathBuf;
 use std::time::{Duration, SystemTime};
 
 use gtk::glib::WeakRef;
@@ -9,6 +10,7 @@ use tracing::{debug, error, info};
 use crate::app::get_label;
 use crate::lyric::netease::NeteaseLyricProvider;
 use crate::lyric::{LyricOwned, LyricProvider, LyricStore, SongInfo};
+use crate::CACHE_DIR;
 
 use super::{
     utils, CACHE_LYRICS, DEFAULT_TEXT, LYRIC, LYRIC_START, PLAYER, PLAYER_FINDER,
@@ -147,7 +149,8 @@ fn fetch_lyric_cached(
     window: &gtk::Window,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let digest = md5::compute(format!("{title}-{artist:?}-{length:?}"));
-    let cache_dir = utils::md5_cache_dir(digest);
+    let cache_dir = CACHE_DIR
+        .with_borrow(|cache_home| PathBuf::from(cache_home).join(utils::md5_cache_dir(digest)));
     let cache_path = cache_dir.join(format!("{digest:x}.json"));
     debug!(
         "cache_path for {} - {title} - {length:?}: {cache_path:?}",

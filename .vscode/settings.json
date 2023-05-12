@@ -1,0 +1,6 @@
+{
+    "rust-analyzer.cargo.extraEnv": {
+        "WAYLYRICS_DEFAULT_CONFIG": "/usr/share/waylyrics/themes",
+        "WAYLYRICS_THEME_PRESETS_DIR": "/usr/share/waylyrics/config.toml",
+    }
+}

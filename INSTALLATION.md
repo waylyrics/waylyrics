@@ -12,6 +12,20 @@ paru -S aur/waylyrics-git
 
 First, you should have `gtk4(-dev)` installed. Meanwhile, `dbus` is required for MPRIS.
 
+An example packaging script:
+
+```bash
+cargo run --bin gen_config_example
+sudo install -m644 config.toml /usr/share/waylyrics/config.toml
+sudo install -Dm755 /usr/share/waylyrics/themes
+sudo cp -r themes/* /usr/share/waylyrics/themes/
+```
+
+```bash
+export WAYLYRICS_DEFAULT_CONFIG=/usr/share/waylyrics/config.toml
+export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
+```
+
 ### With stable toolchain
 
 * note: your rustc should be 1.52+

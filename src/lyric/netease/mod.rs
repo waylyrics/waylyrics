@@ -17,8 +17,6 @@ pub struct NeteaseLyric {
     tlyric: Option<String>,
 }
 
-const COOKIE_PATH: &str = "cache/ncm-cookie";
-
 impl NeteaseLyricProvider {
     pub fn new() -> Result<Self, std::io::Error> {
         Ok(Self {})
@@ -39,13 +37,14 @@ impl super::LyricProvider<NeteaseLyric> for NeteaseLyricProvider {
     ) -> Self::LResult<Vec<super::SongInfo<Self::Id>>> {
         let handle = handle.clone();
         let keyword = format!("{title} {singer}");
+        let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
         let search_result = thread::spawn(move || {
             let api = NcmApi::new(
-                true,
+                false,
                 Duration::from_secs(60 * 60),
                 Duration::from_secs(5 * 60),
                 true,
-                COOKIE_PATH,
+                &cookie_path,
             );
             handle.block_on(async { api.search(&keyword, None).await })
         })
@@ -59,7 +58,11 @@ impl super::LyricProvider<NeteaseLyric> for NeteaseLyricProvider {
             .iter()
             .map(
                 |Song {
-                     name, id, artists, duration, ..
+                     name,
+                     id,
+                     artists,
+                     duration,
+                     ..
                  }| super::SongInfo {
                     id: *id as _,
                     title: name.into(),
@@ -81,13 +84,14 @@ impl super::LyricProvider<NeteaseLyric> for NeteaseLyricProvider {
 
     fn query_lyric(&self, handle: &Handle, id: Self::Id) -> Self::LResult<NeteaseLyric> {
         let handle = handle.clone();
+        let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
         let query_result = thread::spawn(move || {
             let api = NcmApi::new(
-                true,
+                false,
                 Duration::from_secs(60 * 60),
                 Duration::from_secs(5 * 60),
                 true,
-                COOKIE_PATH,
+                &cookie_path,
             );
             handle.block_on(async { api.lyric(id).await })
         })
@@ -126,6 +130,6 @@ fn match_lyric(lyric: Option<&str>) -> Lyric<'_> {
             } else {
                 Lyric::NoTimestamp
             }
-        },
+        }
     }
 }
