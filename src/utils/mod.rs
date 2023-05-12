@@ -19,15 +19,3 @@ pub fn parse_time(time: &str) -> Duration {
             .expect("could not represent duration more accurate than ms"),
     )
 }
-
-pub fn merge_css(css: &str) {
-    use gtk::gdk::Display as GdkDisplay;
-
-    let css_provider = gtk::CssProvider::new();
-    css_provider.load_from_data(css);
-    gtk::style_context_add_provider_for_display(
-        &GdkDisplay::default().expect("Could not connect to a display."),
-        &css_provider,
-        gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
-    );
-}
