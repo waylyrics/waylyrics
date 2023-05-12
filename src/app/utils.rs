@@ -1,32 +1,13 @@
 use crate::EXLUDED_REGEXIES;
 
 use super::window::Window;
-use gtk::prelude::*;
+use gtk::{prelude::*, Label};
 
 pub fn allow_click_through(window: &Window) {
     use gtk::cairo::{RectangleInt, Region};
     let native = window.native().unwrap();
     let surface = native.surface();
     surface.set_input_region(&Region::create_rectangle(&RectangleInt::new(0, 0, 0, 0)));
-}
-
-pub fn hide_on_empty(label: &gtk::Label) {
-    if label.label().is_empty() {
-        label.set_visible(false);
-    } else {
-        label.set_visible(true);
-    }
-}
-
-pub fn hide_exluded_words(label: &gtk::Label) {
-    let label_text = label.label();
-    let label_text = label_text.as_str();
-
-    if EXLUDED_REGEXIES.with_borrow(|regex_set| regex_set.is_match(label_text)) {
-        label.set_visible(false);
-    } else {
-        label.set_visible(true);
-    }
 }
 
 pub fn merge_css(css: &str) {
@@ -40,4 +21,35 @@ pub fn merge_css(css: &str) {
         &css_provider,
         gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
     );
+}
+
+pub fn has_filtered_word(text: &str) -> bool {
+    EXLUDED_REGEXIES.with_borrow(|regex_set| regex_set.is_match(text))
+}
+
+pub fn setup_label(label: &Label, hide_empty_label: bool, hide_filtered_words: bool) {
+    match (hide_empty_label, hide_filtered_words) {
+        (true, false) => {
+            label.connect_label_notify(|label| {
+                label.set_visible(!label.label().is_empty());
+            });
+        }
+        (false, true) => {
+            label.connect_label_notify(|label| {
+                let label_text = label.label();
+                let label_text = label_text.as_str();
+
+                label.set_visible(!has_filtered_word(label_text));
+            });
+        }
+        (true, true) => {
+            label.connect_label_notify(|label| {
+                let label_text = label.label();
+                let label_text = label_text.as_str();
+
+                label.set_visible(!has_filtered_word(label_text) && !label.label().is_empty());
+            });
+        }
+        (false, false) => (),
+    };
 }

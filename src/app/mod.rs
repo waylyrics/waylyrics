@@ -1,6 +1,6 @@
 mod window;
-use window::Window;
 use gtk::{prelude::*, Application, Label};
+use window::Window;
 
 const WINDOW_MIN_HEIGHT: i32 = 120;
 
@@ -28,15 +28,9 @@ pub fn build_main_window(
         .visible(false)
         .build();
 
-    if hide_label_on_empty_text {
-        olabel.connect_label_notify(utils::hide_on_empty);
-        tlabel.connect_label_notify(utils::hide_on_empty);
+    for label in [&olabel, &tlabel] {
+        utils::setup_label(label, hide_label_on_empty_text, enable_filter_regex);
     }
-    if enable_filter_regex {
-        olabel.connect_label_notify(utils::hide_exluded_words);
-        tlabel.connect_label_notify(utils::hide_exluded_words);
-    }
-
     olabel.set_vexpand(true);
     tlabel.set_vexpand(true);
 
