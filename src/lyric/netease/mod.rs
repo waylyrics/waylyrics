@@ -19,7 +19,6 @@ pub struct NeteaseLyric {
 
 impl super::LyricProvider for NeteaseLyricProvider {
     type Id = usize;
-    type LResult<T> = Result<T, Box<dyn std::error::Error>>;
     type LStore = NeteaseLyric;
 
     const NAME: &'static str = "网易云音乐";
@@ -29,7 +28,7 @@ impl super::LyricProvider for NeteaseLyricProvider {
         handle: &Handle,
         singer: &str,
         title: &str,
-    ) -> Self::LResult<Vec<super::SongInfo<Self::Id>>> {
+    ) -> Result<Vec<super::SongInfo<Self::Id>>, Box<dyn std::error::Error>> {
         let handle = handle.clone();
         let keyword = format!("{title} {singer}");
         let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
@@ -77,7 +76,7 @@ impl super::LyricProvider for NeteaseLyricProvider {
             .collect())
     }
 
-    fn query_lyric(&self, handle: &Handle, id: Self::Id) -> Self::LResult<NeteaseLyric> {
+    fn query_lyric(&self, handle: &Handle, id: Self::Id) -> Result<NeteaseLyric, Box<dyn std::error::Error>> {
         let handle = handle.clone();
         let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
         let query_result = thread::spawn(move || {
@@ -103,10 +102,9 @@ impl super::LyricProvider for NeteaseLyricProvider {
         })
     }
 
-    fn new() -> Self::LResult<Box<Self>> {
+    fn new() -> Result<Box<Self>, Box<dyn std::error::Error>> {
         Ok(Box::new(Self {}))
     }
-
 }
 
 impl super::LyricStore for NeteaseLyric {

@@ -44,18 +44,17 @@ pub struct SongInfo<Id> {
 
 pub trait LyricProvider {
     type Id;
-    type LResult<T>;
     type LStore: LyricStore;
 
     const NAME: &'static str;
-    fn new() -> Self::LResult<Box<Self>>;
-    fn query_lyric(&self, handle: &Handle, id: Self::Id) -> Self::LResult<Self::LStore>;
+    fn new() -> Result<Box<Self>, Box<dyn std::error::Error>>;
+    fn query_lyric(&self, handle: &Handle, id: Self::Id) -> Result<Self::LStore, Box<dyn std::error::Error>>;
     fn search_song(
         &self,
         handle: &Handle,
         singer: &str,
         title: &str,
-    ) -> Self::LResult<Vec<SongInfo<Self::Id>>>;
+    ) -> Result<Vec<SongInfo<Self::Id>>, Box<dyn std::error::Error>>;
 }
 
 pub trait LyricStore {

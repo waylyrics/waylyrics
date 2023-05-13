@@ -229,6 +229,45 @@ fn fetch_lyric(
     window: &gtk::Window,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let provider = NeteaseLyricProvider::new().unwrap();
+
+    let get_id = PLAYER.with_borrow(|player| {
+        if let Some(player) = player {
+            let player_name = player.identity();
+            match player_name {
+                "feeluown" => {
+                    if let Ok(metadata) = player.get_metadata() {
+                        let url = metadata.url().unwrap();
+                        if url.starts_with("fuo://netease/songs/") {
+                            let song_id: usize = url
+                                .split_once("fuo://netease/songs/")
+                                .unwrap()
+                                .0
+                                .parse()
+                                .unwrap();
+                            return Some(set_lyric_with_id(
+                                provider.as_ref(),
+                                song_id,
+                                title,
+                                artist.as_deref().unwrap_or("Unknown"),
+                                window,
+                            ));
+                        }
+                        None
+                    } else {
+                        None
+                    }
+                }
+                _ => None,
+            }
+        } else {
+            panic!("player not exists when fetching lyric");
+        }
+    });
+    if let Some(result) = get_id {
+        info!("fetched lyric directly");
+        return result;
+    }
+
     let search_result = search_song(
         provider.as_ref(),
         artist.as_deref().unwrap_or_default(),
@@ -236,32 +275,13 @@ fn fetch_lyric(
     )?;
 
     if let Some(&song_id) = match_likely_lyric(length, &search_result) {
-        let lyric = fetch_lyric_by_id(provider.as_ref(), song_id)?;
-        let olyric = lyric.get_lyric().into_owned();
-        let tlyric = lyric.get_translated_lyric().into_owned();
-        debug!("original lyric: {olyric:?}");
-        debug!("translated lyric: {tlyric:?}");
-
-        // show info to user if original lyric is empty or no timestamp
-        match &olyric {
-            LyricOwned::LineTimestamp(_) => (),
-            _ => {
-                info!(
-                    "No lyric for {} - {title}",
-                    artist.as_deref().unwrap_or("Unknown"),
-                );
-            }
-        }
-
-        if let LyricOwned::LineTimestamp(_) = &tlyric {
-        } else {
-            info!(
-                "No translated lyric for {} - {title}",
-                artist.as_deref().unwrap_or("Unknown"),
-            );
-            get_label(window, true).set_visible(false);
-        }
-        LYRIC.set((olyric, tlyric));
+        set_lyric_with_id(
+            provider.as_ref(),
+            song_id,
+            title,
+            artist.as_deref().unwrap_or("Unknown"),
+            window,
+        )?;
         Ok(())
     } else {
         info!(
@@ -273,7 +293,10 @@ fn fetch_lyric(
     }
 }
 
-fn fetch_lyric_by_id<P: LyricProvider>(provider: &P, id: P::Id) -> P::LResult<P::LStore> {
+fn fetch_lyric_by_id<P: LyricProvider>(
+    provider: &P,
+    id: P::Id,
+) -> Result<P::LStore, Box<dyn std::error::Error>> {
     TOKIO_RUNTIME_HANDLE.with_borrow(|handle| provider.query_lyric(handle, id))
 }
 
@@ -281,7 +304,7 @@ fn search_song<P: LyricProvider>(
     provider: &P,
     artist: &str,
     title: &str,
-) -> P::LResult<Vec<SongInfo<P::Id>>> {
+) -> Result<Vec<SongInfo<P::Id>>, Box<dyn std::error::Error>> {
     TOKIO_RUNTIME_HANDLE.with_borrow(|handle| provider.search_song(handle, artist, title))
 }
 
@@ -294,4 +317,35 @@ fn match_likely_lyric<Id>(length: Option<Duration>, search_result: &[SongInfo<Id
         })
         .or(search_result.get(0))
         .map(|song| &song.id)
+}
+
+fn set_lyric_with_id<P: LyricProvider>(
+    provider: &P,
+    song_id: P::Id,
+    title: &str,
+    artist: &str,
+    window: &gtk::Window,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let lyric = fetch_lyric_by_id(provider, song_id).unwrap();
+    let olyric = lyric.get_lyric().into_owned();
+    let tlyric = lyric.get_translated_lyric().into_owned();
+    debug!("original lyric: {olyric:?}");
+    debug!("translated lyric: {tlyric:?}");
+
+    // show info to user if original lyric is empty or no timestamp
+    match &olyric {
+        LyricOwned::LineTimestamp(_) => (),
+        _ => {
+            info!("No lyric for {} - {title}", artist,);
+        }
+    }
+
+    if let LyricOwned::LineTimestamp(_) = &tlyric {
+    } else {
+        info!("No translated lyric for {} - {title}", artist,);
+        get_label(window, true).set_visible(false);
+    }
+    LYRIC.set((olyric, tlyric));
+
+    Ok(())
 }
