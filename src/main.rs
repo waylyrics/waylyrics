@@ -53,7 +53,7 @@ fn build_ui(app: &Application) -> Result<(), Box<dyn Error>> {
     std::fs::create_dir_all(&config_home)?;
     std::fs::create_dir_all(&cache_dir)?;
     let config_path = config_home.join("config.toml");
-    let theme_dir = config_home.join("themes");
+    let theme_dir = xdg_dirs.get_data_home().join("themes");
 
     if !config_path.exists() {
         std::fs::copy(DEFAULT_CONFIG_PATH, &config_path)?;
