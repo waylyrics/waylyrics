@@ -275,6 +275,7 @@ fn fetch_lyric(
     )?;
 
     if let Some(&song_id) = match_likely_lyric(length, &search_result) {
+        info!("matched songid: {song_id}");
         set_lyric_with_id(
             provider.as_ref(),
             song_id,
