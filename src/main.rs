@@ -1,5 +1,4 @@
 #![feature(local_key_cell_methods)]
-#![feature(is_some_and)]
 
 use std::error::Error;
 use std::path::PathBuf;
