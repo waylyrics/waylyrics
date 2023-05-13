@@ -6,6 +6,16 @@ Simple universal on screen lyrics made with GTK4 and ❤️.
 
 ![](https://user-images.githubusercontent.com/34085039/235869618-1f0fe78d-2637-4898-b8a1-53eb015d6731.png)
 
+- [Waylyrics](#waylyrics)
+  - [Build/Install](#buildinstall)
+  - [Requirement](#requirement)
+    - [Recommended Players](#recommended-players)
+    - [MPRIS-unfriendly Players](#mpris-unfriendly-players)
+  - [Directories](#directories)
+  - [Approach](#approach)
+  - [Alternatives](#alternatives)
+  - [Credit](#credit)
+
 ## Build/Install
 
 Check [INSTALLATION.md](INSTALLATION.md)
@@ -34,13 +44,23 @@ local:
 [flutter-netease-music]: https://github.com/boyan01/flutter-netease-music
 
 
-Player | OSD | issue
-------|-----|------
-[netease-cloud-music-gtk] | X | gives 0 position
-Firefox | X | do not provide position call
-Chrom* | X | break the "unique" gurantee for TrackID
-qqmusic | O | no info other than title/artist avaliable
-[flutter-netease-music] | X | no mpris support
+| Player                    | OSD | issue                                     |
+| ------------------------- | --- | ----------------------------------------- |
+| [netease-cloud-music-gtk] | X   | gives 0 position                          |
+| Firefox                   | X   | do not provide position call              |
+| Chrom*                    | X   | break the "unique" gurantee for TrackID   |
+| qqmusic                   | O   | no info other than title/artist avaliable |
+| [flutter-netease-music]   | X   | no mpris support                          |
+
+## Directories
+
+Typically,
+
+```
+~/.cache/waylyrics/XX/...
+~/.config/waylyrics/...
+~/.local/share/waylyrics/themes/...
+```
 
 ## Approach
 
