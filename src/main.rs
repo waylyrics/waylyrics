@@ -89,7 +89,7 @@ fn build_ui(app: &Application) -> Result<(), Box<dyn Error>> {
     let mpris_sync_interval = parse_time(&mpris_sync_interval)?;
     let lyric_update_interval = parse_time(&lyric_update_interval)?;
     let css_style =
-        std::fs::read_to_string(std::path::PathBuf::from("themes").join(format!("{theme}.css")))?;
+        std::fs::read_to_string(theme_dir.join(format!("{theme}.css")))?;
 
     app::utils::merge_css(&css_style);
 
