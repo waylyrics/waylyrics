@@ -101,7 +101,7 @@ fn try_sync_player(window: &gtk::Window) -> Result<(), PlayerStatus> {
         let offset = LYRIC_OFFSET_MILLISEC.with_borrow(|offset| *offset);
         if offset.is_negative() {
             start = start
-                .checked_sub(Duration::from_millis(offset.abs() as _))
+                .checked_sub(Duration::from_millis(offset.unsigned_abs()))
                 .expect("infinite offset time");
         } else {
             start = start
@@ -229,21 +229,14 @@ fn fetch_lyric(
     window: &gtk::Window,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let provider = NeteaseLyricProvider::new().unwrap();
-    let search_result = TOKIO_RUNTIME_HANDLE.with_borrow(|handle| {
-        provider.search_song(handle, artist.as_deref().unwrap_or(""), title)
-    })?;
+    let search_result = search_song(
+        provider.as_ref(),
+        artist.as_deref().unwrap_or_default(),
+        title,
+    )?;
 
-    if let Some(song_id) = length
-        .and_then(|leng| {
-            search_result
-                .iter()
-                .find(|SongInfo { length, .. }| length == &leng)
-        })
-        .or(search_result.get(0))
-        .map(|song| song.id)
-    {
-        let lyric =
-            TOKIO_RUNTIME_HANDLE.with_borrow(|handle| provider.query_lyric(handle, song_id))?;
+    if let Some(&song_id) = match_likely_lyric(length, &search_result) {
+        let lyric = fetch_lyric_by_id(provider.as_ref(), song_id)?;
         let olyric = lyric.get_lyric().into_owned();
         let tlyric = lyric.get_translated_lyric().into_owned();
         debug!("original lyric: {olyric:?}");
@@ -278,4 +271,27 @@ fn fetch_lyric(
         utils::clear_lyric();
         Err("No lyric found".into())
     }
+}
+
+fn fetch_lyric_by_id<P: LyricProvider>(provider: &P, id: P::Id) -> P::LResult<P::LStore> {
+    TOKIO_RUNTIME_HANDLE.with_borrow(|handle| provider.query_lyric(handle, id))
+}
+
+fn search_song<P: LyricProvider>(
+    provider: &P,
+    artist: &str,
+    title: &str,
+) -> P::LResult<Vec<SongInfo<P::Id>>> {
+    TOKIO_RUNTIME_HANDLE.with_borrow(|handle| provider.search_song(handle, artist, title))
+}
+
+fn match_likely_lyric<Id>(length: Option<Duration>, search_result: &[SongInfo<Id>]) -> Option<&Id> {
+    length
+        .and_then(|leng| {
+            search_result
+                .iter()
+                .find(|SongInfo { length, .. }| length == &leng)
+        })
+        .or(search_result.get(0))
+        .map(|song| &song.id)
 }

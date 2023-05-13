@@ -42,15 +42,14 @@ pub struct SongInfo<Id> {
     pub length: Duration,
 }
 
-pub trait LyricProvider<L>
-where
-    L: LyricStore,
-{
+pub trait LyricProvider {
     type Id;
     type LResult<T>;
+    type LStore: LyricStore;
 
     const NAME: &'static str;
-    fn query_lyric(&self, handle: &Handle, id: Self::Id) -> Self::LResult<L>;
+    fn new() -> Self::LResult<Box<Self>>;
+    fn query_lyric(&self, handle: &Handle, id: Self::Id) -> Self::LResult<Self::LStore>;
     fn search_song(
         &self,
         handle: &Handle,

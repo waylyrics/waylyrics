@@ -17,15 +17,10 @@ pub struct NeteaseLyric {
     tlyric: Option<String>,
 }
 
-impl NeteaseLyricProvider {
-    pub fn new() -> Result<Self, std::io::Error> {
-        Ok(Self {})
-    }
-}
-
-impl super::LyricProvider<NeteaseLyric> for NeteaseLyricProvider {
+impl super::LyricProvider for NeteaseLyricProvider {
     type Id = usize;
     type LResult<T> = Result<T, Box<dyn std::error::Error>>;
+    type LStore = NeteaseLyric;
 
     const NAME: &'static str = "网易云音乐";
 
@@ -107,6 +102,11 @@ impl super::LyricProvider<NeteaseLyric> for NeteaseLyricProvider {
             tlyric: lyric_resp.tlyric.map(|l| l.lyric),
         })
     }
+
+    fn new() -> Self::LResult<Box<Self>> {
+        Ok(Box::new(Self {}))
+    }
+
 }
 
 impl super::LyricStore for NeteaseLyric {
