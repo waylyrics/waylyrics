@@ -1,3 +1,4 @@
+#![allow(stable_features)]
 #![feature(local_key_cell_methods)]
 #![feature(is_some_and)]
 
