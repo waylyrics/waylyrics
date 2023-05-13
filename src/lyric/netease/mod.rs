@@ -31,6 +31,9 @@ impl super::LyricProvider for NeteaseLyricProvider {
     ) -> Result<Vec<super::SongInfo<Self::Id>>, Box<dyn std::error::Error>> {
         let handle = handle.clone();
         let keyword = format!("{title} {singer}");
+
+        tracing::debug!("search keyword: {keyword}");
+
         let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
         let search_result = thread::spawn(move || {
             let api = NcmApi::new(
@@ -45,6 +48,8 @@ impl super::LyricProvider for NeteaseLyricProvider {
         .join()
         .unwrap()?;
         let resp: SearchSongResp = search_result.deserialize()?;
+        tracing::debug!("search result: {resp:?}");
+
         Ok(resp
             .result
             .ok_or("no search result")?

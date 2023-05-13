@@ -30,4 +30,5 @@ thread_local! {
 
     pub static CACHE_LYRICS: RefCell<bool> = RefCell::new(false);
     pub static LYRIC_OFFSET_MILLISEC: RefCell<i64> = RefCell::new(0);
+    pub static LENGTH_TOLERATION_MILLISEC: RefCell<u64> = RefCell::new(0);
 }

@@ -15,8 +15,8 @@ use crate::sync::LYRIC_OFFSET_MILLISEC;
 use crate::CACHE_DIR;
 
 use super::{
-    utils, CACHE_LYRICS, DEFAULT_TEXT, LYRIC, LYRIC_START, PLAYER, PLAYER_FINDER,
-    TOKIO_RUNTIME_HANDLE, TRACK_PLAYING_PAUSED,
+    utils, CACHE_LYRICS, DEFAULT_TEXT, LENGTH_TOLERATION_MILLISEC, LYRIC, LYRIC_START, PLAYER,
+    PLAYER_FINDER, TOKIO_RUNTIME_HANDLE, TRACK_PLAYING_PAUSED,
 };
 
 enum PlayerStatus {
@@ -68,7 +68,7 @@ fn try_sync_player(window: &gtk::Window) -> Result<(), PlayerStatus> {
             let title = track_meta
                 .title()
                 .ok_or(PlayerStatus::Unsupported("cannot get song title"))?;
-            let artist = track_meta.artists().map(|arts| arts.join(","));
+            let artist = track_meta.album_name();
 
             let length = track_meta.length();
 
@@ -158,17 +158,17 @@ pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
 
 fn fetch_lyric_cached(
     title: &str,
-    artist: Option<String>,
+    album: Option<&str>,
     length: Option<Duration>,
     window: &gtk::Window,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let digest = md5::compute(format!("{title}-{artist:?}-{length:?}"));
+    let digest = md5::compute(format!("{title}-{album:?}-{length:?}"));
     let cache_dir = CACHE_DIR
         .with_borrow(|cache_home| PathBuf::from(cache_home).join(utils::md5_cache_dir(digest)));
     let cache_path = cache_dir.join(format!("{digest:x}.json"));
     debug!(
         "cache_path for {} - {title} - {length:?}: {cache_path:?}",
-        artist.as_deref().unwrap_or("Unknown")
+        album.unwrap_or("Unknown")
     );
 
     if let Err(e) = std::fs::create_dir_all(&cache_dir) {
@@ -194,7 +194,7 @@ fn fetch_lyric_cached(
         }
         Err(e) => info!("cache missed: {e}"),
     }
-    let result = fetch_lyric(title, artist, length, window);
+    let result = fetch_lyric(title, album, length, window);
     if result.is_ok() {
         LYRIC.with_borrow(|lyric| {
             if let Err(e) = std::fs::write(
@@ -224,7 +224,7 @@ struct LyricCache {
 
 fn fetch_lyric(
     title: &str,
-    artist: Option<String>,
+    album: Option<&str>,
     length: Option<Duration>,
     window: &gtk::Window,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -248,7 +248,7 @@ fn fetch_lyric(
                                 provider.as_ref(),
                                 song_id,
                                 title,
-                                artist.as_deref().unwrap_or("Unknown"),
+                                album.unwrap_or("Unknown"),
                                 window,
                             ));
                         }
@@ -270,7 +270,7 @@ fn fetch_lyric(
 
     let search_result = search_song(
         provider.as_ref(),
-        artist.as_deref().unwrap_or_default(),
+        album.as_deref().unwrap_or_default(),
         title,
     )?;
 
@@ -280,14 +280,14 @@ fn fetch_lyric(
             provider.as_ref(),
             song_id,
             title,
-            artist.as_deref().unwrap_or("Unknown"),
+            album.as_deref().unwrap_or("Unknown"),
             window,
         )?;
         Ok(())
     } else {
         info!(
             "Failed searching for {} - {title}",
-            artist.as_deref().unwrap_or("Unknown"),
+            album.as_deref().unwrap_or("Unknown"),
         );
         utils::clear_lyric();
         Err("No lyric found".into())
@@ -312,9 +312,10 @@ fn search_song<P: LyricProvider>(
 fn match_likely_lyric<Id>(length: Option<Duration>, search_result: &[SongInfo<Id>]) -> Option<&Id> {
     length
         .and_then(|leng| {
-            search_result
-                .iter()
-                .find(|SongInfo { length, .. }| length == &leng)
+            search_result.iter().find(|SongInfo { length, .. }| {
+                length.as_millis().abs_diff(leng.as_millis())
+                    <= LENGTH_TOLERATION_MILLISEC.with_borrow(|toleration| *toleration as _)
+            })
         })
         .or(search_result.get(0))
         .map(|song| &song.id)

@@ -84,12 +84,12 @@ fn build_ui(app: &Application) -> Result<(), Box<dyn Error>> {
         cache_lyrics,
         enable_filter_regex,
         filter_regexies,
+        length_toleration,
     } = toml::from_str(&config).unwrap();
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval)?;
     let lyric_update_interval = parse_time(&lyric_update_interval)?;
-    let css_style =
-        std::fs::read_to_string(theme_dir.join(format!("{theme}.css")))?;
+    let css_style = std::fs::read_to_string(theme_dir.join(format!("{theme}.css")))?;
 
     app::utils::merge_css(&css_style);
 
@@ -110,6 +110,7 @@ fn build_ui(app: &Application) -> Result<(), Box<dyn Error>> {
     }
 
     CACHE_LYRICS.set(cache_lyrics);
+    LENGTH_TOLERATION_MILLISEC.set(parse_time(&length_toleration)?.as_millis() as _);
 
     Ok(())
 }

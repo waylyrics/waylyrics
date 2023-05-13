@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 pub struct Config {
     pub mpris_sync_interval: String,
     pub lyric_update_interval: String,
+    pub length_toleration: String,
     pub cache_lyrics: bool,
     pub allow_click_through_me: bool,
     pub full_width_lyric_bg: bool,
@@ -20,6 +21,7 @@ impl Default for Config {
         Self {
             mpris_sync_interval: "2s".to_owned(),
             lyric_update_interval: "20ms".to_owned(),
+            length_toleration: "2s".to_owned(),
             allow_click_through_me: true,
             full_width_lyric_bg: false,
             hide_label_on_empty_text: true,
