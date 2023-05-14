@@ -164,7 +164,7 @@ fn fetch_lyric_cached(
     length: Option<Duration>,
     window: &gtk::Window,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let digest = md5::compute(format!("{title}-{album:?}-{length:?}"));
+    let digest = md5::compute(format!("{title}-{artists:?}-{album:?}-{length:?}"));
     let cache_dir = CACHE_DIR
         .with_borrow(|cache_home| PathBuf::from(cache_home).join(utils::md5_cache_dir(digest)));
     let cache_path = cache_dir.join(format!("{digest:x}.json"));
