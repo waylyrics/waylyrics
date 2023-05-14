@@ -68,15 +68,16 @@ fn try_sync_player(window: &gtk::Window) -> Result<(), PlayerStatus> {
             let title = track_meta
                 .title()
                 .ok_or(PlayerStatus::Unsupported("cannot get song title"))?;
-            let artist = track_meta.album_name();
+            let album = track_meta.album_name();
+            let artists = track_meta.artists();
 
             let length = track_meta.length();
 
             let cache = CACHE_LYRICS.with_borrow(|cache| *cache);
             let fetch_result = if cache {
-                fetch_lyric_cached(title, artist, length, window)
+                fetch_lyric_cached(title, album, artists.as_deref(), length, window)
             } else {
-                fetch_lyric(title, artist, length, window)
+                fetch_lyric(title, album, artists.as_deref(), length, window)
             };
 
             if let Err(e) = fetch_result {
@@ -159,6 +160,7 @@ pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
 fn fetch_lyric_cached(
     title: &str,
     album: Option<&str>,
+    artists: Option<&[&str]>,
     length: Option<Duration>,
     window: &gtk::Window,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -194,7 +196,7 @@ fn fetch_lyric_cached(
         }
         Err(e) => info!("cache missed: {e}"),
     }
-    let result = fetch_lyric(title, album, length, window);
+    let result = fetch_lyric(title, album, artists, length, window);
     if result.is_ok() {
         LYRIC.with_borrow(|lyric| {
             if let Err(e) = std::fs::write(
@@ -225,6 +227,7 @@ struct LyricCache {
 fn fetch_lyric(
     title: &str,
     album: Option<&str>,
+    artists: Option<&[&str]>,
     length: Option<Duration>,
     window: &gtk::Window,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -271,10 +274,11 @@ fn fetch_lyric(
     let search_result = search_song(
         provider.as_ref(),
         album.as_deref().unwrap_or_default(),
+        artists.unwrap_or_default(),
         title,
     )?;
 
-    if let Some(&song_id) = match_likely_lyric(length, &search_result) {
+    if let Some(&song_id) = match_likely_lyric(album.zip(Some(title)), length, &search_result) {
         info!("matched songid: {song_id}");
         set_lyric_with_id(
             provider.as_ref(),
@@ -303,18 +307,30 @@ fn fetch_lyric_by_id<P: LyricProvider>(
 
 fn search_song<P: LyricProvider>(
     provider: &P,
-    artist: &str,
+    album: &str,
+    artists: &[&str],
     title: &str,
 ) -> Result<Vec<SongInfo<P::Id>>, Box<dyn std::error::Error>> {
-    TOKIO_RUNTIME_HANDLE.with_borrow(|handle| provider.search_song(handle, artist, title))
+    TOKIO_RUNTIME_HANDLE.with_borrow(|handle| provider.search_song(handle, album, artists, title))
 }
 
-fn match_likely_lyric<Id>(length: Option<Duration>, search_result: &[SongInfo<Id>]) -> Option<&Id> {
+fn match_likely_lyric<'a, Id>(
+    album_title: Option<(&str, &str)>,
+    length: Option<Duration>,
+    search_result: &'a [SongInfo<Id>],
+) -> Option<&'a Id> {
     length
         .and_then(|leng| {
             search_result.iter().find(|SongInfo { length, .. }| {
                 length.as_millis().abs_diff(leng.as_millis())
                     <= LENGTH_TOLERATION_MILLISEC.with_borrow(|toleration| *toleration as _)
+            })
+        })
+        .or_else(|| {
+            album_title.and_then(|(_album, _title)| {
+                search_result.iter().find(|SongInfo { title, album, .. }| {
+                    title == _title && album.as_ref().is_some_and(|album| album == _album)
+                })
             })
         })
         .or(search_result.get(0))

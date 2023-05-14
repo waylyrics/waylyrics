@@ -39,6 +39,7 @@ pub struct SongInfo<Id> {
     pub id: Id,
     pub title: String,
     pub singer: String,
+    pub album: Option<String>,
     pub length: Duration,
 }
 
@@ -52,7 +53,8 @@ pub trait LyricProvider {
     fn search_song(
         &self,
         handle: &Handle,
-        singer: &str,
+        album: &str,
+        artists: &[&str],
         title: &str,
     ) -> Result<Vec<SongInfo<Self::Id>>, Box<dyn std::error::Error>>;
 }

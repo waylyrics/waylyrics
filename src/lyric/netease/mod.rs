@@ -1,7 +1,7 @@
 use std::{thread, time::Duration};
 
 use ncmapi::{
-    types::{Artist, Song},
+    types::{Album, Artist, Song},
     NcmApi,
 };
 use tokio::runtime::Handle;
@@ -26,11 +26,12 @@ impl super::LyricProvider for NeteaseLyricProvider {
     fn search_song(
         &self,
         handle: &Handle,
-        singer: &str,
+        album: &str,
+        artists: &[&str],
         title: &str,
     ) -> Result<Vec<super::SongInfo<Self::Id>>, Box<dyn std::error::Error>> {
         let handle = handle.clone();
-        let keyword = format!("{title} {singer}");
+        let keyword = format!("{title} {album} {}", artists.join("/"));
 
         tracing::debug!("search keyword: {keyword}");
 
@@ -61,10 +62,12 @@ impl super::LyricProvider for NeteaseLyricProvider {
                      id,
                      artists,
                      duration,
+                     album: Album { name: album, .. },
                      ..
                  }| super::SongInfo {
                     id: *id as _,
                     title: name.into(),
+                    album: album.clone(),
                     singer: artists
                         .iter()
                         .filter_map(|Artist { name, .. }| name.as_ref())
@@ -81,7 +84,11 @@ impl super::LyricProvider for NeteaseLyricProvider {
             .collect())
     }
 
-    fn query_lyric(&self, handle: &Handle, id: Self::Id) -> Result<NeteaseLyric, Box<dyn std::error::Error>> {
+    fn query_lyric(
+        &self,
+        handle: &Handle,
+        id: Self::Id,
+    ) -> Result<NeteaseLyric, Box<dyn std::error::Error>> {
         let handle = handle.clone();
         let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
         let query_result = thread::spawn(move || {
