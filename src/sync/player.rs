@@ -239,8 +239,9 @@ fn fetch_lyric(
         let player_name = player.identity();
         match player_name {
             "Qcm" => {
-                const QCM_PREFIX: &str = "/trackid/";
                 let provider = NeteaseLyricProvider::new().unwrap();
+                const PREFIX: &str = "/trackid/";
+
                 get_id_with_metadata(
                     provider.as_ref(),
                     player,
@@ -251,14 +252,15 @@ fn fetch_lyric(
                         meta.track_id()
                             .unwrap()
                             .as_str()
-                            .strip_prefix(QCM_PREFIX)
+                            .strip_prefix(PREFIX)
                             .map(|id| id.parse().unwrap())
                     },
                 )
             }
             "feeluown" => {
-                const FUO_PREFIX: &str = "fuo://netease/songs/";
                 let provider = NeteaseLyricProvider::new().unwrap();
+                const PREFIX: &str = "fuo://netease/songs/";
+
                 get_id_with_metadata(
                     provider.as_ref(),
                     player,
@@ -268,11 +270,31 @@ fn fetch_lyric(
                     |meta| {
                         meta.url()
                             .unwrap()
-                            .strip_prefix(FUO_PREFIX)
+                            .strip_prefix(PREFIX)
                             .map(|id| id.parse().unwrap())
                     },
                 )
             }
+            "ElectronNCM" => {
+                let provider = NeteaseLyricProvider::new().unwrap();
+                const PREFIX: &str = "/org/mpris/MediaPlayer2/";
+
+                get_id_with_metadata(
+                    provider.as_ref(),
+                    player,
+                    title,
+                    album.unwrap_or("Unknown"),
+                    window,
+                    |meta| {
+                        meta.track_id()
+                            .unwrap()
+                            .as_str()
+                            .strip_prefix(PREFIX)
+                            .map(|id| id.parse().unwrap())
+                    },
+                )
+            }
+
             _ => None,
         }
     });
