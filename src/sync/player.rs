@@ -199,6 +199,10 @@ fn fetch_lyric_cached(
     let result = fetch_lyric(title, album, artists, length, window);
     if result.is_ok() {
         LYRIC.with_borrow(|lyric| {
+            if &(LyricOwned::None, LyricOwned::None) == lyric {
+                return;
+            }
+
             if let Err(e) = std::fs::write(
                 &cache_path,
                 serde_json::to_string(&LyricCache {

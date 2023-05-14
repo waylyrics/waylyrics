@@ -20,7 +20,7 @@ pub struct LyricLine<'a> {
     pub start_time: Duration,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 #[serde(tag = "type", content = "content")]
 pub enum LyricOwned {
     None,
@@ -28,7 +28,7 @@ pub enum LyricOwned {
     LineTimestamp(Vec<LyricLineOwned>),
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub struct LyricLineOwned {
     pub text: String,
     pub start_time: Duration,
@@ -49,7 +49,11 @@ pub trait LyricProvider {
 
     const NAME: &'static str;
     fn new() -> Result<Box<Self>, Box<dyn std::error::Error>>;
-    fn query_lyric(&self, handle: &Handle, id: Self::Id) -> Result<Self::LStore, Box<dyn std::error::Error>>;
+    fn query_lyric(
+        &self,
+        handle: &Handle,
+        id: Self::Id,
+    ) -> Result<Self::LStore, Box<dyn std::error::Error>>;
     fn search_song(
         &self,
         handle: &Handle,
