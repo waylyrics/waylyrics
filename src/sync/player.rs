@@ -2,9 +2,9 @@ use std::path::PathBuf;
 use std::time::{Duration, SystemTime};
 
 use gtk::glib::WeakRef;
-use gtk::prelude::*;
 use gtk::{glib, Application};
-use mpris::{PlaybackStatus, ProgressTracker};
+use gtk::{prelude::*, Window};
+use mpris::{Metadata, PlaybackStatus, Player, ProgressTracker};
 use serde::{Deserialize, Serialize};
 use tracing::{debug, error, info};
 
@@ -242,41 +242,27 @@ fn fetch_lyric(
         match player_name {
             "Qcm" => {
                 const QCM_PREFIX: &str = "/trackid/";
-                if let Ok(metadata) = player.get_metadata() {
-                    let path = metadata.track_id().unwrap();
-                    let path = path.as_str();
-                    if !path.starts_with(QCM_PREFIX) {
-                        error!("Qcm's trackid prefix may changed");
-                        return None;
-                    }
-                    let song_id: usize = path.strip_prefix(QCM_PREFIX).unwrap().parse().unwrap();
-                    return Some(set_lyric_with_id(
-                        provider.as_ref(),
-                        song_id,
-                        title,
-                        album.unwrap_or("Unknown"),
-                        window,
-                    ));
-                }
-                None
+                get_id_with_metadata(
+                    provider.as_ref(),
+                    player,
+                    title,
+                    album.unwrap_or("Unknown"),
+                    window,
+                    |meta| meta.track_id().unwrap().as_str().to_owned(),
+                    |url| url.strip_prefix(QCM_PREFIX).map(|id| id.parse().unwrap()),
+                )
             }
             "feeluown" => {
                 const FUO_PREFIX: &str = "fuo://netease/songs/";
-                if let Ok(metadata) = player.get_metadata() {
-                    let url = metadata.url().unwrap();
-                    if !url.starts_with(FUO_PREFIX) {
-                        return None;
-                    }
-                    let song_id: usize = url.strip_prefix(FUO_PREFIX).unwrap().parse().unwrap();
-                    return Some(set_lyric_with_id(
-                        provider.as_ref(),
-                        song_id,
-                        title,
-                        album.unwrap_or("Unknown"),
-                        window,
-                    ));
-                }
-                None
+                get_id_with_metadata(
+                    provider.as_ref(),
+                    player,
+                    title,
+                    album.unwrap_or("Unknown"),
+                    window,
+                    |meta| meta.url().unwrap().to_owned(),
+                    |url| url.strip_prefix(FUO_PREFIX).map(|id| id.parse().unwrap()),
+                )
             }
             _ => None,
         }
@@ -381,4 +367,21 @@ fn set_lyric_with_id<P: LyricProvider>(
     LYRIC.set((olyric, tlyric));
 
     Ok(())
+}
+
+fn get_id_with_metadata<P: LyricProvider>(
+    provider: &P,
+    player: &Player,
+    title: &str,
+    album: &str,
+    window: &Window,
+    get_field: impl Fn(&Metadata) -> String,
+    process: impl Fn(&str) -> Option<P::Id>,
+) -> Option<Result<(), Box<dyn std::error::Error>>> {
+    if let Ok(metadata) = player.get_metadata() {
+        let field = get_field(&metadata);
+        return process(field.as_ref())
+            .map(|id| set_lyric_with_id(provider, id, title, album, window));
+    }
+    None
 }

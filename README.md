@@ -28,8 +28,8 @@ Check [INSTALLATION.md](INSTALLATION.md)
 ### Recommended Players
 
 online:
-- [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
 - [Qcm](https://github.com/hypengw/Qcm)
+- [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
 - [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
 - [Telegram](https://t.me/Music163Bot)
 - [FeelUOwn](https://github.com/feeluown/FeelUOwn/), after the [Pull Request](https://github.com/feeluown/FeelUOwn/pull/690) merged.
