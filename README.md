@@ -1,6 +1,7 @@
 # Waylyrics
 
 [![tg-group](https://img.shields.io/badge/tg%20group-open-blue)](https://t.me/waylyrics)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fpoly000%2Fwaylyrics.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fpoly000%2Fwaylyrics?ref=badge_shield)
 
 Simple universal on screen lyrics made with GTK4 and ❤️.
 
@@ -88,3 +89,7 @@ Copay's [caraoke-plasmoid](https://github.com/Copay/caraoke-plasmoid) is current
 [gtk4-rs]: https://github.com/gtk-rs/gtk4-rs
 
 - [gtk4-rs], Rust bind to GTK-4.
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fpoly000%2Fwaylyrics.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fpoly000%2Fwaylyrics?ref=badge_large)
