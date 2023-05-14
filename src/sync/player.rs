@@ -231,8 +231,6 @@ fn fetch_lyric(
     length: Option<Duration>,
     window: &gtk::Window,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let provider = NeteaseLyricProvider::new().unwrap();
-
     // TODO: specify a provider? use "abosolute" result weight?
     let get_id = PLAYER.with_borrow(|player| {
         let player = player
@@ -242,26 +240,37 @@ fn fetch_lyric(
         match player_name {
             "Qcm" => {
                 const QCM_PREFIX: &str = "/trackid/";
+                let provider = NeteaseLyricProvider::new().unwrap();
                 get_id_with_metadata(
                     provider.as_ref(),
                     player,
                     title,
                     album.unwrap_or("Unknown"),
                     window,
-                    |meta| meta.track_id().unwrap().as_str().to_owned(),
-                    |url| url.strip_prefix(QCM_PREFIX).map(|id| id.parse().unwrap()),
+                    |meta| {
+                        meta.track_id()
+                            .unwrap()
+                            .as_str()
+                            .strip_prefix(QCM_PREFIX)
+                            .map(|id| id.parse().unwrap())
+                    },
                 )
             }
             "feeluown" => {
                 const FUO_PREFIX: &str = "fuo://netease/songs/";
+                let provider = NeteaseLyricProvider::new().unwrap();
                 get_id_with_metadata(
                     provider.as_ref(),
                     player,
                     title,
                     album.unwrap_or("Unknown"),
                     window,
-                    |meta| meta.url().unwrap().to_owned(),
-                    |url| url.strip_prefix(FUO_PREFIX).map(|id| id.parse().unwrap()),
+                    |meta| {
+                        meta.url()
+                            .unwrap()
+                            .strip_prefix(FUO_PREFIX)
+                            .map(|id| id.parse().unwrap())
+                    },
                 )
             }
             _ => None,
@@ -271,6 +280,8 @@ fn fetch_lyric(
         info!("fetched lyric directly");
         return result;
     }
+
+    let provider = NeteaseLyricProvider::new().unwrap();
 
     let search_result = search_song(
         provider.as_ref(),
@@ -375,13 +386,10 @@ fn get_id_with_metadata<P: LyricProvider>(
     title: &str,
     album: &str,
     window: &Window,
-    get_field: impl Fn(&Metadata) -> String,
-    process: impl Fn(&str) -> Option<P::Id>,
+    parse_id: impl Fn(&Metadata) -> Option<P::Id>,
 ) -> Option<Result<(), Box<dyn std::error::Error>>> {
     if let Ok(metadata) = player.get_metadata() {
-        let field = get_field(&metadata);
-        return process(field.as_ref())
-            .map(|id| set_lyric_with_id(provider, id, title, album, window));
+        return parse_id(&metadata).map(|id| set_lyric_with_id(provider, id, title, album, window));
     }
     None
 }
