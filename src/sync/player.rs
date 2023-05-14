@@ -233,37 +233,52 @@ fn fetch_lyric(
 ) -> Result<(), Box<dyn std::error::Error>> {
     let provider = NeteaseLyricProvider::new().unwrap();
 
+    // TODO: specify a provider? use "abosolute" result weight?
     let get_id = PLAYER.with_borrow(|player| {
-        if let Some(player) = player {
-            let player_name = player.identity();
-            match player_name {
-                "feeluown" => {
-                    if let Ok(metadata) = player.get_metadata() {
-                        let url = metadata.url().unwrap();
-                        if url.starts_with("fuo://netease/songs/") {
-                            let song_id: usize = url
-                                .split_once("fuo://netease/songs/")
-                                .unwrap()
-                                .0
-                                .parse()
-                                .unwrap();
-                            return Some(set_lyric_with_id(
-                                provider.as_ref(),
-                                song_id,
-                                title,
-                                album.unwrap_or("Unknown"),
-                                window,
-                            ));
-                        }
-                        None
-                    } else {
-                        None
+        let player = player
+            .as_ref()
+            .expect("player not exists in lyric fetching");
+        let player_name = player.identity();
+        match player_name {
+            "Qcm" => {
+                const QCM_PREFIX: &str = "/trackid/";
+                if let Ok(metadata) = player.get_metadata() {
+                    let path = metadata.track_id().unwrap();
+                    let path = path.as_str();
+                    if !path.starts_with(QCM_PREFIX) {
+                        error!("Qcm's trackid prefix may changed");
+                        return None;
                     }
+                    let song_id: usize = path.strip_prefix(QCM_PREFIX).unwrap().parse().unwrap();
+                    return Some(set_lyric_with_id(
+                        provider.as_ref(),
+                        song_id,
+                        title,
+                        album.unwrap_or("Unknown"),
+                        window,
+                    ));
                 }
-                _ => None,
+                None
             }
-        } else {
-            panic!("player not exists when fetching lyric");
+            "feeluown" => {
+                const FUO_PREFIX: &str = "fuo://netease/songs/";
+                if let Ok(metadata) = player.get_metadata() {
+                    let url = metadata.url().unwrap();
+                    if !url.starts_with(FUO_PREFIX) {
+                        return None;
+                    }
+                    let song_id: usize = url.strip_prefix(FUO_PREFIX).unwrap().parse().unwrap();
+                    return Some(set_lyric_with_id(
+                        provider.as_ref(),
+                        song_id,
+                        title,
+                        album.unwrap_or("Unknown"),
+                        window,
+                    ));
+                }
+                None
+            }
+            _ => None,
         }
     });
     if let Some(result) = get_id {
