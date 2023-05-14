@@ -23,7 +23,7 @@ serde = { version = "1.0", features = ["derive"] }
 lrc-nom = "0.1.1"
 
 # ui
-gtk = { version = "0.6.6", package = "gtk4", features = ["v4_8", "v4_10"] }
+gtk = { version = "0.6.6", package = "gtk4" }
 ncmapi = "0.1.13"
 tokio = { version = "1", features = ["rt-multi-thread"] }
 mpris = "2.0.0"

@@ -1,10 +1,11 @@
 # Waylyrics
 
 [![tg-group](https://img.shields.io/badge/tg%20group-open-blue)](https://t.me/waylyrics)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fpoly000%2Fwaylyrics.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fpoly000%2Fwaylyrics?ref=badge_shield)
 
 Simple universal on screen lyrics made with GTK4 and ❤️.
 
-![](https://user-images.githubusercontent.com/34085039/235869618-1f0fe78d-2637-4898-b8a1-53eb015d6731.png)
+![](https://github.com/poly000/waylyrics/assets/34085039/43037cb4-9a07-4e77-b112-1408365199e2)
 
 - [Waylyrics](#waylyrics)
   - [Build/Install](#buildinstall)
@@ -15,6 +16,7 @@ Simple universal on screen lyrics made with GTK4 and ❤️.
   - [Approach](#approach)
   - [Alternatives](#alternatives)
   - [Credit](#credit)
+  - [License](#license)
 
 ## Build/Install
 
@@ -32,7 +34,7 @@ online:
 - [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
 - [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
 - [Telegram](https://t.me/Music163Bot)
-- [FeelUOwn](https://github.com/feeluown/FeelUOwn/), after the [Pull Request](https://github.com/feeluown/FeelUOwn/pull/690) merged.
+- [FeelUOwn](https://github.com/feeluown/FeelUOwn/), with the latest code
 
 local:
 - [mpv-mpris](https://github.com/hoyon/mpv-mpris)
@@ -42,6 +44,7 @@ local:
 
 [netease-cloud-music-gtk]: https://github.com/gmg137/netease-cloud-music-gtk
 [flutter-netease-music]: https://github.com/boyan01/flutter-netease-music
+[youtube-music]: https://github.com/th-ch/youtube-music
 
 
 | Player                    | OSD | issue                                     |
@@ -49,6 +52,7 @@ local:
 | [netease-cloud-music-gtk] | X   | gives 0 position                          |
 | Firefox                   | X   | do not provide position call              |
 | Chrom*                    | X   | break the "unique" gurantee for TrackID   |
+| [youtube-music]           | X   | break the "unique" gurantee for TrackID   |
 | qqmusic                   | O   | no info other than title/artist avaliable |
 | [flutter-netease-music]   | X   | no mpris support                          |
 
@@ -68,7 +72,8 @@ Current approach my seems dirty:
 
 1. get the likely actived player when none is connnected, and disconnect from one only if it's not avaliable more
 2. keep sync with 2s interval and 20ms refresh for lyrics
-3. use the length-matched result (or first result if former is not found) of `search_song` and sync START in each run, fetch lyric only when needed
+3. for Qcm, Feeluown-netease, ElectronNCM, we could get song id directly
+4. use the length-matched result (or first result if former is not found) of `search_song` and sync START in each run, fetch lyric only when needed
 
 ## Alternatives
 
@@ -88,3 +93,8 @@ Copay's [caraoke-plasmoid](https://github.com/Copay/caraoke-plasmoid) is current
 [gtk4-rs]: https://github.com/gtk-rs/gtk4-rs
 
 - [gtk4-rs], Rust bind to GTK-4.
+
+
+## License
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fpoly000%2Fwaylyrics.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fpoly000%2Fwaylyrics?ref=badge_large)
