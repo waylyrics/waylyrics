@@ -1,12 +1,13 @@
 use crate::EXLUDED_REGEXIES;
 
-use super::window::Window;
-use gtk::{prelude::*, Label};
+use gtk::{
+    cairo::{RectangleInt, Region},
+    gdk::Surface,
+    prelude::*,
+    Label,
+};
 
-pub fn allow_click_through(window: &Window) {
-    use gtk::cairo::{RectangleInt, Region};
-    let native = window.native().unwrap();
-    let surface = native.surface();
+pub fn set_click_through(surface: &Surface) {
     surface.set_input_region(&Region::create_rectangle(&RectangleInt::new(0, 0, 0, 0)));
 }
 

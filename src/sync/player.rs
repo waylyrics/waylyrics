@@ -1,22 +1,21 @@
-use std::path::PathBuf;
+use std::borrow::Cow;
+use std::error::Error;
 use std::time::{Duration, SystemTime};
 
 use gtk::glib::WeakRef;
 use gtk::{glib, Application};
 use gtk::{prelude::*, Window};
 use mpris::{Metadata, PlaybackStatus, Player, ProgressTracker};
-use serde::{Deserialize, Serialize};
 use tracing::{debug, error, info};
 
 use crate::app::get_label;
 use crate::lyric::netease::NeteaseLyricProvider;
 use crate::lyric::{LyricOwned, LyricProvider, LyricStore, SongInfo};
 use crate::sync::LYRIC_OFFSET_MILLISEC;
-use crate::CACHE_DIR;
 
 use super::{
-    utils, CACHE_LYRICS, DEFAULT_TEXT, LENGTH_TOLERATION_MILLISEC, LYRIC, LYRIC_START, PLAYER,
-    PLAYER_FINDER, TOKIO_RUNTIME_HANDLE, TRACK_PLAYING_PAUSED,
+    utils, CACHE_LYRICS, DEFAULT_TEXT, LYRIC, LYRIC_START, PLAYER, PLAYER_FINDER,
+    TOKIO_RUNTIME_HANDLE, TRACK_PLAYING_PAUSED,
 };
 
 enum PlayerStatus {
@@ -75,7 +74,7 @@ fn try_sync_player(window: &gtk::Window) -> Result<(), PlayerStatus> {
 
             let cache = CACHE_LYRICS.with_borrow(|cache| *cache);
             let fetch_result = if cache {
-                fetch_lyric_cached(title, album, artists.as_deref(), length, window)
+                super::cache::fetch_lyric_cached(title, album, artists.as_deref(), length, window)
             } else {
                 fetch_lyric(title, album, artists.as_deref(), length, window)
             };
@@ -157,152 +156,18 @@ pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
     });
 }
 
-fn fetch_lyric_cached(
+pub fn fetch_lyric(
     title: &str,
     album: Option<&str>,
-    artists: Option<&[&str]>,
+    _artists: Option<&[&str]>,
     length: Option<Duration>,
     window: &gtk::Window,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let digest = md5::compute(format!("{title}-{artists:?}-{album:?}-{length:?}"));
-    let cache_dir = CACHE_DIR
-        .with_borrow(|cache_home| PathBuf::from(cache_home).join(utils::md5_cache_dir(digest)));
-    let cache_path = cache_dir.join(format!("{digest:x}.json"));
-    debug!(
-        "cache_path for {} - {title} - {length:?}: {cache_path:?}",
-        album.unwrap_or("Unknown")
-    );
+    let artists = _artists
+        .map(|s| Cow::Owned(s.join(",")))
+        .unwrap_or(Cow::Borrowed("Unknown"));
 
-    if let Err(e) = std::fs::create_dir_all(&cache_dir) {
-        error!("cannot create cache dir {cache_dir:?}: {e}");
-    }
-
-    match std::fs::read_to_string(&cache_path) {
-        Ok(lyric) => {
-            let cached_lyric: Result<LyricCache, _> = serde_json::from_str(&lyric);
-            match cached_lyric {
-                Ok(LyricCache {
-                    olyric,
-                    tlyric,
-                    offset,
-                }) => {
-                    LYRIC.set((olyric, tlyric));
-                    LYRIC_OFFSET_MILLISEC.set(offset);
-                    info!("set offset: {offset}ms");
-                    return Ok(());
-                }
-                Err(e) => error!("cache parse error: {e} from {cache_path:?}"),
-            }
-        }
-        Err(e) => info!("cache missed: {e}"),
-    }
-    let result = fetch_lyric(title, album, artists, length, window);
-    if result.is_ok() {
-        LYRIC.with_borrow(|lyric| {
-            if &(LyricOwned::None, LyricOwned::None) == lyric {
-                return;
-            }
-
-            if let Err(e) = std::fs::write(
-                &cache_path,
-                serde_json::to_string(&LyricCache {
-                    olyric: lyric.0.clone(),
-                    tlyric: lyric.1.clone(),
-                    offset: 0,
-                })
-                .expect("cannot serialize lyrics!"),
-            ) {
-                error!("cannot write cache {cache_path:?}: {e}");
-            } else {
-                info!("cached to {cache_path:?}");
-            }
-        });
-    }
-    result
-}
-
-#[derive(Deserialize, Serialize)]
-struct LyricCache {
-    olyric: LyricOwned,
-    tlyric: LyricOwned,
-    offset: i64,
-}
-
-fn fetch_lyric(
-    title: &str,
-    album: Option<&str>,
-    artists: Option<&[&str]>,
-    length: Option<Duration>,
-    window: &gtk::Window,
-) -> Result<(), Box<dyn std::error::Error>> {
-    // TODO: specify a provider? use "abosolute" result weight?
-    let get_id = PLAYER.with_borrow(|player| {
-        let player = player
-            .as_ref()
-            .expect("player not exists in lyric fetching");
-        let player_name = player.identity();
-        match player_name {
-            "Qcm" => {
-                let provider = NeteaseLyricProvider::new().unwrap();
-                const PREFIX: &str = "/trackid/";
-
-                get_id_with_metadata(
-                    provider.as_ref(),
-                    player,
-                    title,
-                    album.unwrap_or("Unknown"),
-                    window,
-                    |meta| {
-                        meta.track_id()
-                            .unwrap()
-                            .as_str()
-                            .strip_prefix(PREFIX)
-                            .map(|id| id.parse().unwrap())
-                    },
-                )
-            }
-            "feeluown" => {
-                let provider = NeteaseLyricProvider::new().unwrap();
-                const PREFIX: &str = "fuo://netease/songs/";
-
-                get_id_with_metadata(
-                    provider.as_ref(),
-                    player,
-                    title,
-                    album.unwrap_or("Unknown"),
-                    window,
-                    |meta| {
-                        meta.url()
-                            .unwrap()
-                            .strip_prefix(PREFIX)
-                            .map(|id| id.parse().unwrap())
-                    },
-                )
-            }
-            "ElectronNCM" => {
-                let provider = NeteaseLyricProvider::new().unwrap();
-                const PREFIX: &str = "/org/mpris/MediaPlayer2/";
-
-                get_id_with_metadata(
-                    provider.as_ref(),
-                    player,
-                    title,
-                    album.unwrap_or("Unknown"),
-                    window,
-                    |meta| {
-                        meta.track_id()
-                            .unwrap()
-                            .as_str()
-                            .strip_prefix(PREFIX)
-                            .map(|id| id.parse().unwrap())
-                    },
-                )
-            }
-
-            _ => None,
-        }
-    });
-    if let Some(result) = get_id {
+    if let Some(result) = set_lyric_with_songid_or_file(title, &artists, window) {
         info!("fetched lyric directly");
         return result;
     }
@@ -312,25 +177,18 @@ fn fetch_lyric(
     let search_result = search_song(
         provider.as_ref(),
         album.as_deref().unwrap_or_default(),
-        artists.unwrap_or_default(),
+        _artists.unwrap_or(&[]),
         title,
     )?;
 
-    if let Some(&song_id) = match_likely_lyric(album.zip(Some(title)), length, &search_result) {
+    if let Some(&song_id) =
+        utils::match_likely_lyric(album.zip(Some(title)), length, &search_result)
+    {
         info!("matched songid: {song_id}");
-        set_lyric_with_id(
-            provider.as_ref(),
-            song_id,
-            title,
-            album.as_deref().unwrap_or("Unknown"),
-            window,
-        )?;
+        set_lyric(provider.as_ref(), song_id, title, &artists, window)?;
         Ok(())
     } else {
-        info!(
-            "Failed searching for {} - {title}",
-            album.as_deref().unwrap_or("Unknown"),
-        );
+        info!("Failed searching for {artists} - {title}",);
         utils::clear_lyric();
         Err("No lyric found".into())
     }
@@ -352,34 +210,11 @@ fn search_song<P: LyricProvider>(
     TOKIO_RUNTIME_HANDLE.with_borrow(|handle| provider.search_song(handle, album, artists, title))
 }
 
-fn match_likely_lyric<'a, Id>(
-    album_title: Option<(&str, &str)>,
-    length: Option<Duration>,
-    search_result: &'a [SongInfo<Id>],
-) -> Option<&'a Id> {
-    length
-        .and_then(|leng| {
-            search_result.iter().find(|SongInfo { length, .. }| {
-                length.as_millis().abs_diff(leng.as_millis())
-                    <= LENGTH_TOLERATION_MILLISEC.with_borrow(|toleration| *toleration as _)
-            })
-        })
-        .or_else(|| {
-            album_title.and_then(|(_album, _title)| {
-                search_result.iter().find(|SongInfo { title, album, .. }| {
-                    title == _title && album.as_ref().is_some_and(|album| album == _album)
-                })
-            })
-        })
-        .or(search_result.get(0))
-        .map(|song| &song.id)
-}
-
-fn set_lyric_with_id<P: LyricProvider>(
+fn set_lyric<P: LyricProvider>(
     provider: &P,
     song_id: P::Id,
     title: &str,
-    artist: &str,
+    artists: &str,
     window: &gtk::Window,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let lyric = fetch_lyric_by_id(provider, song_id).unwrap();
@@ -392,13 +227,13 @@ fn set_lyric_with_id<P: LyricProvider>(
     match &olyric {
         LyricOwned::LineTimestamp(_) => (),
         _ => {
-            info!("No lyric for {} - {title}", artist,);
+            info!("No lyric for {} - {title}", artists,);
         }
     }
 
     if let LyricOwned::LineTimestamp(_) = &tlyric {
     } else {
-        info!("No translated lyric for {} - {title}", artist,);
+        info!("No translated lyric for {} - {title}", artists,);
         get_label(window, true).set_visible(false);
     }
     LYRIC.set((olyric, tlyric));
@@ -406,16 +241,94 @@ fn set_lyric_with_id<P: LyricProvider>(
     Ok(())
 }
 
-fn get_id_with_metadata<P: LyricProvider>(
+fn set_lyric_with_songid_or_file(
+    title: &str,
+    artists: &str,
+    window: &Window,
+) -> Option<Result<(), Box<(dyn Error + 'static)>>> {
+    PLAYER.with_borrow(|player| {
+        let player = player
+            .as_ref()
+            .expect("player not exists in lyric fetching");
+        let player_name = player.identity();
+        match player_name {
+            "mpv" => {
+                tracing::warn!("local lyric files are still not supported");
+                None
+            }
+            "Qcm" => {
+                let provider = NeteaseLyricProvider::new().unwrap();
+                const PREFIX: &str = "/trackid/";
+
+                set_lyric_with_player_songid(
+                    provider.as_ref(),
+                    player,
+                    title,
+                    artists,
+                    window,
+                    |meta| {
+                        meta.track_id()
+                            .unwrap()
+                            .as_str()
+                            .strip_prefix(PREFIX)
+                            .map(|id| id.parse().unwrap())
+                    },
+                )
+            }
+            "feeluown" => {
+                let provider = NeteaseLyricProvider::new().unwrap();
+                const PREFIX: &str = "fuo://netease/songs/";
+
+                set_lyric_with_player_songid(
+                    provider.as_ref(),
+                    player,
+                    title,
+                    artists,
+                    window,
+                    |meta| {
+                        meta.url()
+                            .unwrap()
+                            .strip_prefix(PREFIX)
+                            .map(|id| id.parse().unwrap())
+                    },
+                )
+            }
+            "ElectronNCM" => {
+                let provider = NeteaseLyricProvider::new().unwrap();
+                const PREFIX: &str = "/org/mpris/MediaPlayer2/";
+
+                set_lyric_with_player_songid(
+                    provider.as_ref(),
+                    player,
+                    title,
+                    artists,
+                    window,
+                    |meta| {
+                        meta.track_id()
+                            .unwrap()
+                            .as_str()
+                            .strip_prefix(PREFIX)
+                            .map(|id| id.parse().unwrap())
+                    },
+                )
+            }
+
+            _ => None,
+        }
+    })
+}
+
+fn set_lyric_with_player_songid<P: LyricProvider>(
     provider: &P,
     player: &Player,
     title: &str,
-    album: &str,
+    artists: &str,
     window: &Window,
     parse_id: impl Fn(&Metadata) -> Option<P::Id>,
 ) -> Option<Result<(), Box<dyn std::error::Error>>> {
     if let Ok(metadata) = player.get_metadata() {
-        return parse_id(&metadata).map(|id| set_lyric_with_id(provider, id, title, album, window));
+        return parse_id(&metadata)
+            .map(|song_id| set_lyric(provider, song_id, title, artists, window));
     }
     None
 }

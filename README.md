@@ -1,7 +1,7 @@
 # Waylyrics
 
 [![tg-group](https://img.shields.io/badge/tg%20group-open-blue)](https://t.me/waylyrics)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fpoly000%2Fwaylyrics.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fpoly000%2Fwaylyrics?ref=badge_shield)
+[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B37701%2Fgithub.com%2Fpoly000%2Fwaylyrics.svg?type=shield)](https://app.fossa.com/projects/custom%2B37701%2Fgithub.com%2Fpoly000%2Fwaylyrics?ref=badge_shield)
 
 Simple universal on screen lyrics made with GTK4 and ❤️.
 

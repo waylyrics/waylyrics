@@ -57,11 +57,10 @@ pub fn build_main_window(
     window.set_child(Some(&verical_box));
 
     if allow_click_through_me {
-        utils::allow_click_through(&window);
+        utils::set_click_through(&window.surface())
     }
 
     window.set_icon_name(Some(crate::APP_ID));
-
     window
 }
 

@@ -11,6 +11,7 @@ const DEFAULT_TEXT: &str = "Waylyrics";
 mod utils;
 mod lyric;
 mod player;
+mod cache;
 
 pub use lyric::register_lyric_display;
 pub use player::register_mpris_sync;

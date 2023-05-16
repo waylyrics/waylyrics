@@ -40,7 +40,7 @@ sudo apt-get install libssl-dev libgtk-4-dev libdbus-1-dev
 ## Arch-based
 
 ```bash
-paru -S gtk4
+paru -S gtk4 libxcb
 ```
 
 # Build
