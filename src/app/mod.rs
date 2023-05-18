@@ -10,7 +10,7 @@ pub fn build_main_window(
     app: &Application,
     full_width_label_bg: bool,
     hide_label_on_empty_text: bool,
-    allow_click_through_me: bool,
+    click_pass_through: bool,
     origin_lyric_in_above: bool,
     enable_filter_regex: bool,
     cache_lyrics: bool,
@@ -58,8 +58,8 @@ pub fn build_main_window(
 
     window.set_child(Some(&verical_box));
 
-    if allow_click_through_me {
-        utils::set_click_through(&window.surface(), true)
+    if click_pass_through {
+        utils::set_click_pass_through(&window.surface(), true)
     }
 
     window.set_icon_name(Some(crate::APP_ID));

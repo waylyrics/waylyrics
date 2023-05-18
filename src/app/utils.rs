@@ -7,8 +7,8 @@ use gtk::{
     Label,
 };
 
-pub fn set_click_through(surface: &Surface, switch: bool) {
-    if switch {
+pub fn set_click_pass_through(surface: &Surface, enabled: bool) {
+    if enabled {
         surface.set_input_region(&Region::create());
     } else {
         surface.set_input_region(&Region::create_rectangle(&RectangleInt::new(
