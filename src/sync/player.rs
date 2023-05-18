@@ -217,7 +217,7 @@ fn set_lyric<P: LyricProvider>(
     artists: &str,
     window: &gtk::Window,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let lyric = fetch_lyric_by_id(provider, song_id).unwrap();
+    let lyric = fetch_lyric_by_id(provider, song_id)?;
     let olyric = lyric.get_lyric().into_owned();
     let tlyric = lyric.get_translated_lyric().into_owned();
     debug!("original lyric: {olyric:?}");
