@@ -1,29 +1,31 @@
 use std::time::Duration;
 
-use crate::lyric::{LyricOwned, SongInfo};
+use gtk::subclass::prelude::ObjectSubclassIsExt;
 
-use super::{
-    LENGTH_TOLERATION_MILLISEC, LYRIC, LYRIC_CURRENT, LYRIC_OFFSET_MILLISEC,
-    LYRIC_TRANSLATION_CURRENT,
+use crate::{
+    app,
+    lyric::{LyricOwned, SongInfo},
 };
 
-pub fn clear_lyric() {
+use super::LYRIC;
+
+pub fn clear_lyric(window: &app::Window) {
     LYRIC.set((LyricOwned::None, LyricOwned::None));
-    LYRIC_CURRENT.set(None);
-    LYRIC_TRANSLATION_CURRENT.set(None);
-    LYRIC_OFFSET_MILLISEC.set(0);
+    window.imp().lyric_playing.set(None);
+    window.imp().lyric_playing_translation.set(None);
+    window.imp().lyric_offset_ms.set(0);
 }
 
 pub fn match_likely_lyric<'a, Id>(
     album_title: Option<(&str, &str)>,
     length: Option<Duration>,
     search_result: &'a [SongInfo<Id>],
+    length_toleration_ms: u128,
 ) -> Option<&'a Id> {
     length
         .and_then(|leng| {
             search_result.iter().find(|SongInfo { length, .. }| {
-                length.as_millis().abs_diff(leng.as_millis())
-                    <= LENGTH_TOLERATION_MILLISEC.with_borrow(|toleration| *toleration as _)
+                length.as_millis().abs_diff(leng.as_millis()) <= length_toleration_ms
             })
         })
         .or_else(|| {

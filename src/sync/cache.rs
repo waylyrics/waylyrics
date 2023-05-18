@@ -1,21 +1,22 @@
 use std::{path::PathBuf, time::Duration};
 
+use gtk::subclass::prelude::ObjectSubclassIsExt;
 use serde::{Deserialize, Serialize};
 use tracing::{debug, error, info};
 
-use super::{player::fetch_lyric, LYRIC, LYRIC_OFFSET_MILLISEC};
-use crate::{lyric::LyricOwned, CACHE_DIR};
+use super::{player::fetch_lyric, LYRIC};
+use crate::{app, lyric::LyricOwned, CACHE_DIR};
 
 pub fn fetch_lyric_cached(
     title: &str,
     album: Option<&str>,
     artists: Option<&[&str]>,
     length: Option<Duration>,
-    window: &gtk::Window,
+    window: &app::Window,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let digest = md5::compute(format!("{title}-{artists:?}-{album:?}-{length:?}"));
-    let cache_dir = CACHE_DIR
-        .with_borrow(|cache_home| PathBuf::from(cache_home).join(md5_cache_dir(digest)));
+    let cache_dir =
+        CACHE_DIR.with_borrow(|cache_home| PathBuf::from(cache_home).join(md5_cache_dir(digest)));
     let cache_path = cache_dir.join(format!("{digest:x}.json"));
     debug!(
         "cache_path for {title}-{artists:?}-{}-{length:?}: {cache_path:?}",
@@ -36,7 +37,7 @@ pub fn fetch_lyric_cached(
                     offset,
                 }) => {
                     LYRIC.set((olyric, tlyric));
-                    LYRIC_OFFSET_MILLISEC.set(offset);
+                    window.imp().lyric_offset_ms.set(offset);
                     info!("set offset: {offset}ms");
                     return Ok(());
                 }

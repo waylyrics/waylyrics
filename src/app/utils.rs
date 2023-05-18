@@ -7,8 +7,17 @@ use gtk::{
     Label,
 };
 
-pub fn set_click_through(surface: &Surface) {
-    surface.set_input_region(&Region::create_rectangle(&RectangleInt::new(0, 0, 0, 0)));
+pub fn set_click_through(surface: &Surface, switch: bool) {
+    if switch {
+        surface.set_input_region(&Region::create());
+    } else {
+        surface.set_input_region(&Region::create_rectangle(&RectangleInt::new(
+            0,
+            0,
+            i32::MAX,
+            i32::MAX,
+        )))
+    }
 }
 
 pub fn merge_css(css: &str) {

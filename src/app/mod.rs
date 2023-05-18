@@ -1,6 +1,6 @@
 mod window;
-use gtk::{prelude::*, Application, Label};
-use window::Window;
+use gtk::{prelude::*, subclass::prelude::ObjectSubclassIsExt, Application, Label};
+pub use window::Window;
 
 const WINDOW_MIN_HEIGHT: i32 = 120;
 
@@ -13,6 +13,8 @@ pub fn build_main_window(
     allow_click_through_me: bool,
     origin_lyric_in_above: bool,
     enable_filter_regex: bool,
+    cache_lyrics: bool,
+    length_toleration_ms: u128,
 ) -> Window {
     let window = Window::new(app);
 
@@ -57,14 +59,16 @@ pub fn build_main_window(
     window.set_child(Some(&verical_box));
 
     if allow_click_through_me {
-        utils::set_click_through(&window.surface())
+        utils::set_click_through(&window.surface(), true)
     }
 
     window.set_icon_name(Some(crate::APP_ID));
+    window.imp().cache_lyrics.set(cache_lyrics);
+    window.imp().length_toleration_ms.set(length_toleration_ms);
     window
 }
 
-pub fn get_label(window: &gtk::Window, translation: bool) -> Label {
+pub fn get_label(window: &Window, translation: bool) -> Label {
     let vbox: gtk::Box = window.child().unwrap().downcast().unwrap();
     let first: Label = vbox.first_child().unwrap().downcast().unwrap();
     let last: Label = vbox.last_child().unwrap().downcast().unwrap();

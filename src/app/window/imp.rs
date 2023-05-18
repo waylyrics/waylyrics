@@ -1,12 +1,21 @@
+use std::cell::Cell;
+use std::time::{Duration, SystemTime};
+
 use gio::Settings;
+use glib::once_cell::sync::OnceCell;
 use glib::signal::Inhibit;
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib, ApplicationWindow};
-use glib::once_cell::sync::OnceCell;
 
 #[derive(Default)]
 pub struct Window {
     pub settings: OnceCell<Settings>,
+    pub cache_lyrics: Cell<bool>,
+    pub lyric_start: Cell<Option<SystemTime>>,
+    pub lyric_playing: Cell<Option<Duration>>,
+    pub lyric_playing_translation: Cell<Option<Duration>>,
+    pub lyric_offset_ms: Cell<i64>,
+    pub length_toleration_ms: Cell<u128>,
 }
 
 #[glib::object_subclass]

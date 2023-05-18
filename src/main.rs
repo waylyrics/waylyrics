@@ -103,14 +103,13 @@ fn build_ui(app: &Application) -> Result<(), Box<dyn Error>> {
         allow_click_through_me,
         origin_lyric_in_above,
         enable_filter_regex && !filter_regexies.is_empty(),
+        cache_lyrics,
+        parse_time(&length_toleration)?.as_millis(),
     );
 
     if enable_filter_regex {
         EXLUDED_REGEXIES.set(RegexSet::new(&filter_regexies)?);
     }
-
-    CACHE_LYRICS.set(cache_lyrics);
-    LENGTH_TOLERATION_MILLISEC.set(parse_time(&length_toleration)?.as_millis() as _);
 
     Ok(())
 }

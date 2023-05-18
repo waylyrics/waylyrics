@@ -20,9 +20,10 @@ pub struct LyricLine<'a> {
     pub start_time: Duration,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq, Default)]
 #[serde(tag = "type", content = "content")]
 pub enum LyricOwned {
+    #[default]
     None,
     NoTimestamp,
     LineTimestamp(Vec<LyricLineOwned>),

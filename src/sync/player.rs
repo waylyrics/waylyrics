@@ -3,19 +3,19 @@ use std::error::Error;
 use std::time::{Duration, SystemTime};
 
 use gtk::glib::WeakRef;
+use gtk::prelude::*;
+use gtk::subclass::prelude::ObjectSubclassIsExt;
 use gtk::{glib, Application};
-use gtk::{prelude::*, Window};
 use mpris::{Metadata, PlaybackStatus, Player, ProgressTracker};
 use tracing::{debug, error, info};
 
-use crate::app::get_label;
+use crate::app;
 use crate::lyric::netease::NeteaseLyricProvider;
 use crate::lyric::{LyricOwned, LyricProvider, LyricStore, SongInfo};
-use crate::sync::LYRIC_OFFSET_MILLISEC;
+use crate::sync::LYRIC;
 
 use super::{
-    utils, CACHE_LYRICS, DEFAULT_TEXT, LYRIC, LYRIC_START, PLAYER, PLAYER_FINDER,
-    TOKIO_RUNTIME_HANDLE, TRACK_PLAYING_PAUSED,
+    utils, DEFAULT_TEXT, PLAYER, PLAYER_FINDER, TOKIO_RUNTIME_HANDLE, TRACK_PLAYING_PAUSED,
 };
 
 enum PlayerStatus {
@@ -24,7 +24,7 @@ enum PlayerStatus {
     Unsupported(&'static str),
 }
 
-fn try_sync_player(window: &gtk::Window) -> Result<(), PlayerStatus> {
+fn try_sync_player(window: &crate::app::Window) -> Result<(), PlayerStatus> {
     PLAYER.with_borrow(|player| {
         let player = player.as_ref().ok_or(PlayerStatus::Missing)?;
 
@@ -62,7 +62,7 @@ fn try_sync_player(window: &gtk::Window) -> Result<(), PlayerStatus> {
             });
 
         if need_update_lyric {
-            utils::clear_lyric();
+            utils::clear_lyric(&window);
 
             let title = track_meta
                 .title()
@@ -72,8 +72,7 @@ fn try_sync_player(window: &gtk::Window) -> Result<(), PlayerStatus> {
 
             let length = track_meta.length();
 
-            let cache = CACHE_LYRICS.with_borrow(|cache| *cache);
-            let fetch_result = if cache {
+            let fetch_result = if window.imp().cache_lyrics.get() {
                 super::cache::fetch_lyric_cached(title, album, artists.as_deref(), length, window)
             } else {
                 fetch_lyric(title, album, artists.as_deref(), length, window)
@@ -83,8 +82,8 @@ fn try_sync_player(window: &gtk::Window) -> Result<(), PlayerStatus> {
                 error!("lyric fetch error: {e}");
             }
 
-            get_label(window, false).set_label(DEFAULT_TEXT);
-            get_label(window, true).set_label("");
+            app::get_label(window, false).set_label(DEFAULT_TEXT);
+            app::get_label(window, true).set_label("");
         }
 
         // sync play position
@@ -98,7 +97,7 @@ fn try_sync_player(window: &gtk::Window) -> Result<(), PlayerStatus> {
                     "Position is greater than SystemTime",
                 ))?;
 
-        let offset = LYRIC_OFFSET_MILLISEC.with_borrow(|offset| *offset);
+        let offset = window.imp().lyric_offset_ms.get();
         if offset.is_negative() {
             start = start
                 .checked_sub(Duration::from_millis(offset.unsigned_abs()))
@@ -109,7 +108,7 @@ fn try_sync_player(window: &gtk::Window) -> Result<(), PlayerStatus> {
                 .expect("infinite offset time");
         }
 
-        LYRIC_START.set(start);
+        window.imp().lyric_start.set(Some(start));
 
         Ok(())
     })
@@ -118,12 +117,13 @@ fn try_sync_player(window: &gtk::Window) -> Result<(), PlayerStatus> {
 pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
     glib::timeout_add_local(interval, move || {
         if let Some(app) = app.upgrade() {
-            let windows = app.windows();
+            let mut windows = app.windows();
             if windows.is_empty() {
                 return Continue(true);
             }
+            let window: app::Window = windows.remove(0).downcast().unwrap();
 
-            let sync_status = try_sync_player(&windows[0]);
+            let sync_status = try_sync_player(&window);
 
             match sync_status {
                 Err(PlayerStatus::Missing) => {
@@ -135,15 +135,15 @@ pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                             PLAYER.set(None);
                         }
                     });
-                    get_label(&windows[0], true).set_label(DEFAULT_TEXT);
-                    get_label(&windows[0], false).set_label("");
+                    app::get_label(&window, true).set_label(DEFAULT_TEXT);
+                    app::get_label(&window, false).set_label("");
                     TRACK_PLAYING_PAUSED.set((None, false));
                 }
                 Err(PlayerStatus::Unsupported(kind)) => {
-                    get_label(&windows[0], true).set_label("Unsupported Player");
-                    get_label(&windows[0], false).set_label("");
+                    app::get_label(&window, true).set_label("Unsupported Player");
+                    app::get_label(&window, false).set_label("");
 
-                    utils::clear_lyric();
+                    utils::clear_lyric(&window);
                     error!(kind);
                 }
                 Err(PlayerStatus::Paused) => {
@@ -161,7 +161,7 @@ pub fn fetch_lyric(
     album: Option<&str>,
     _artists: Option<&[&str]>,
     length: Option<Duration>,
-    window: &gtk::Window,
+    window: &app::Window,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let artists = _artists
         .map(|s| Cow::Owned(s.join(",")))
@@ -181,15 +181,19 @@ pub fn fetch_lyric(
         title,
     )?;
 
-    if let Some(&song_id) =
-        utils::match_likely_lyric(album.zip(Some(title)), length, &search_result)
-    {
+    let length_toleration_ms = window.imp().length_toleration_ms.get();
+    if let Some(&song_id) = utils::match_likely_lyric(
+        album.zip(Some(title)),
+        length,
+        &search_result,
+        length_toleration_ms,
+    ) {
         info!("matched songid: {song_id}");
         set_lyric(provider.as_ref(), song_id, title, &artists, window)?;
         Ok(())
     } else {
         info!("Failed searching for {artists} - {title}",);
-        utils::clear_lyric();
+        utils::clear_lyric(&window);
         Err("No lyric found".into())
     }
 }
@@ -215,7 +219,7 @@ fn set_lyric<P: LyricProvider>(
     song_id: P::Id,
     title: &str,
     artists: &str,
-    window: &gtk::Window,
+    window: &app::Window,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let lyric = fetch_lyric_by_id(provider, song_id)?;
     let olyric = lyric.get_lyric().into_owned();
@@ -234,7 +238,7 @@ fn set_lyric<P: LyricProvider>(
     if let LyricOwned::LineTimestamp(_) = &tlyric {
     } else {
         info!("No translated lyric for {} - {title}", artists,);
-        get_label(window, true).set_visible(false);
+        app::get_label(window, true).set_visible(false);
     }
     LYRIC.set((olyric, tlyric));
 
@@ -244,7 +248,7 @@ fn set_lyric<P: LyricProvider>(
 fn set_lyric_with_songid_or_file(
     title: &str,
     artists: &str,
-    window: &Window,
+    window: &app::Window,
 ) -> Option<Result<(), Box<(dyn Error + 'static)>>> {
     PLAYER.with_borrow(|player| {
         let player = player
@@ -323,7 +327,7 @@ fn set_lyric_with_player_songid<P: LyricProvider>(
     player: &Player,
     title: &str,
     artists: &str,
-    window: &Window,
+    window: &app::Window,
     parse_id: impl Fn(&Metadata) -> Option<P::Id>,
 ) -> Option<Result<(), Box<dyn std::error::Error>>> {
     if let Ok(metadata) = player.get_metadata() {
