@@ -238,8 +238,7 @@ fn set_lyric<P: LyricProvider>(
         }
     }
 
-    if let LyricOwned::LineTimestamp(_) = &tlyric {
-    } else {
+    if !matches!(tlyric, LyricOwned::LineTimestamp(_)) {
         info!("No translated lyric for {} - {title}", artists,);
         app::get_label(window, true).set_visible(false);
     }
