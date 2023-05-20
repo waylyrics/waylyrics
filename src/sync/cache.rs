@@ -53,19 +53,20 @@ pub fn fetch_lyric_cached(
                 return;
             }
 
-            if let Err(e) = std::fs::write(
+            let Err(e) = std::fs::write(
                 &cache_path,
                 serde_json::to_string(&LyricCache {
                     olyric: lyric.0.clone(),
                     tlyric: lyric.1.clone(),
                     offset: 0,
                 })
-                .expect("cannot serialize lyrics!"),
-            ) {
-                error!("cannot write cache {cache_path:?}: {e}");
-            } else {
+                .expect("cannot serialize lyrics!"),)
+            else {
                 info!("cached to {cache_path:?}");
-            }
+                return;
+            };
+
+            error!("cannot write cache {cache_path:?}: {e}");
         });
     }
     result

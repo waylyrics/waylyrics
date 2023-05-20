@@ -10,7 +10,7 @@ default-run = "waylyrics"
 
 [profile.release]
 lto = "thin"
-strip = true
+# strip = true
 panic = "abort"
 opt-level = "z"
 

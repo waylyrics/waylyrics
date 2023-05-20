@@ -45,20 +45,19 @@ fn try_sync_player(window: &crate::app::Window) -> Result<(), PlayerStatus> {
             .map_err(|_| PlayerStatus::Unsupported("cannot get metadata of track playing"))?;
         let need_update_lyric =
             TRACK_PLAYING_PAUSED.with_borrow_mut(|(track_id_playing, paused)| {
-                if let Some(track_id) = track_meta.track_id() {
-                    let need = track_id_playing.is_none()
-                        || track_id_playing.as_ref().is_some_and(|p| p != &track_id)
-                            && !(*paused
-                                && track_id_playing.as_ref().is_some_and(|p| p == &track_id));
-
-                    *track_id_playing = Some(track_id);
-                    *paused = false;
-                    need
-                } else {
+                let Some(track_id) = track_meta.track_id()  else {
                     *track_id_playing = None;
                     *paused = false;
-                    false
-                }
+                    return false
+                };
+
+                let need = track_id_playing.is_none()
+                    || track_id_playing.as_ref().is_some_and(|p| p != &track_id)
+                        && !(*paused && track_id_playing.as_ref().is_some_and(|p| p == &track_id));
+
+                *track_id_playing = Some(track_id);
+                *paused = false;
+                need
             });
 
         if need_update_lyric {
@@ -116,42 +115,46 @@ fn try_sync_player(window: &crate::app::Window) -> Result<(), PlayerStatus> {
 
 pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
     glib::timeout_add_local(interval, move || {
-        if let Some(app) = app.upgrade() {
-            let mut windows = app.windows();
-            if windows.is_empty() {
-                return Continue(true);
-            }
-            let window: app::Window = windows.remove(0).downcast().unwrap();
+        let Some(app) = app.upgrade() else {
+            return Continue(false)
+        };
 
-            let sync_status = try_sync_player(&window);
-
-            match sync_status {
-                Err(PlayerStatus::Missing) => {
-                    PLAYER_FINDER.with_borrow(|player_finder| {
-                        if let Ok(player) = player_finder.find_active() {
-                            info!("connected to player: {}", player.identity());
-                            PLAYER.set(Some(player));
-                        } else {
-                            PLAYER.set(None);
-                        }
-                    });
-                    app::get_label(&window, true).set_label(DEFAULT_TEXT);
-                    app::get_label(&window, false).set_label("");
-                    TRACK_PLAYING_PAUSED.set((None, false));
-                }
-                Err(PlayerStatus::Unsupported(kind)) => {
-                    app::get_label(&window, true).set_label("Unsupported Player");
-                    app::get_label(&window, false).set_label("");
-
-                    utils::clear_lyric(&window);
-                    error!(kind);
-                }
-                Err(PlayerStatus::Paused) => {
-                    TRACK_PLAYING_PAUSED.with_borrow_mut(|(_, paused)| *paused = true)
-                }
-                _ => (),
-            }
+        let mut windows = app.windows();
+        if windows.is_empty() {
+            return Continue(true);
         }
+        let window: app::Window = windows.remove(0).downcast().unwrap();
+
+        let sync_status = try_sync_player(&window);
+
+        match sync_status {
+            Err(PlayerStatus::Missing) => {
+                PLAYER_FINDER.with_borrow(|player_finder| {
+                    let Ok(player) = player_finder.find_active() else {
+                        PLAYER.set(None);
+                        return;
+                    };
+
+                    info!("connected to player: {}", player.identity());
+                    PLAYER.set(Some(player));
+                });
+                app::get_label(&window, true).set_label(DEFAULT_TEXT);
+                app::get_label(&window, false).set_label("");
+                TRACK_PLAYING_PAUSED.set((None, false));
+            }
+            Err(PlayerStatus::Unsupported(kind)) => {
+                app::get_label(&window, true).set_label("Unsupported Player");
+                app::get_label(&window, false).set_label("");
+
+                utils::clear_lyric(&window);
+                error!(kind);
+            }
+            Err(PlayerStatus::Paused) => {
+                TRACK_PLAYING_PAUSED.with_borrow_mut(|(_, paused)| *paused = true)
+            }
+            _ => (),
+        }
+
         Continue(true)
     });
 }
@@ -182,20 +185,20 @@ pub fn fetch_lyric(
     )?;
 
     let length_toleration_ms = window.imp().length_toleration_ms.get();
-    if let Some(&song_id) = utils::match_likely_lyric(
+    let Some(&song_id) = utils::match_likely_lyric(
         album.zip(Some(title)),
         length,
         &search_result,
         length_toleration_ms,
-    ) {
-        info!("matched songid: {song_id}");
-        set_lyric(provider.as_ref(), song_id, title, &artists, window)?;
-        Ok(())
-    } else {
+    ) else {
         info!("Failed searching for {artists} - {title}",);
         utils::clear_lyric(&window);
-        Err("No lyric found".into())
-    }
+        return Err("No lyric found".into());
+    };
+
+    info!("matched songid: {song_id}");
+    set_lyric(provider.as_ref(), song_id, title, &artists, window)?;
+    Ok(())
 }
 
 fn fetch_lyric_by_id<P: LyricProvider>(
@@ -330,9 +333,7 @@ fn set_lyric_with_player_songid<P: LyricProvider>(
     window: &app::Window,
     parse_id: impl Fn(&Metadata) -> Option<P::Id>,
 ) -> Option<Result<(), Box<dyn std::error::Error>>> {
-    if let Ok(metadata) = player.get_metadata() {
-        return parse_id(&metadata)
-            .map(|song_id| set_lyric(provider, song_id, title, artists, window));
-    }
-    None
+    player.get_metadata().ok().and_then(|metadata| {
+        parse_id(&metadata).map(|song_id| set_lyric(provider, song_id, title, artists, window))
+    })
 }
