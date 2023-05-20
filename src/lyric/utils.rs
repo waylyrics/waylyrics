@@ -3,8 +3,8 @@ use std::time::Duration;
 
 use super::{LyricLine, LyricLineOwned};
 
-pub fn lrc_iter<'a>(lyric: &'a str, lf: &str) -> Result<Vec<LyricLine<'a>>, LrcParseError> {
-    let mut lrc_vec: Vec<_> = parse(lyric, lf)?
+pub fn lrc_iter<'a>(lyric_lines: impl Iterator<Item = &'a str>) -> Result<Vec<LyricLine<'a>>, LrcParseError> {
+    let mut lrc_vec: Vec<_> = parse(lyric_lines)?
         .into_iter()
         .filter_map(|lrc_item| match lrc_item {
             lrc_nom::LrcItem::Metadata(_) => None,

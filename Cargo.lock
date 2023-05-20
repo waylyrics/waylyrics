@@ -1080,9 +1080,9 @@ dependencies = [
 
 [[package]]
 name = "lrc-nom"
-version = "0.1.2"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cd7ed970a277b6d78f4255238087c608ec7fc96aa41928eb250c27d2ed7d3dfb"
+checksum = "cb7b624e31b9613023e400fb5dd998facc31b593e90c8115d67d561d9bd6a671"
 dependencies = [
  "nom",
  "rust_decimal",

@@ -135,7 +135,7 @@ fn match_lyric(lyric: Option<&str>) -> Lyric<'_> {
     match lyric {
         Some("") | None => super::Lyric::None,
         Some(lyric) => {
-            if let Ok(parsed) = super::utils::lrc_iter(lyric, "\n") {
+            if let Ok(parsed) = super::utils::lrc_iter(lyric.split("\n")) {
                 Lyric::LineTimestamp(parsed)
             } else {
                 Lyric::NoTimestamp
