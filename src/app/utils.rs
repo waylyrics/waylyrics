@@ -46,18 +46,15 @@ pub fn setup_label(label: &Label, hide_empty_label: bool, hide_filtered_words: b
         }
         (false, true) => {
             label.connect_label_notify(|label| {
-                let label_text = label.label();
-                let label_text = label_text.as_str();
-
-                label.set_visible(!has_filtered_word(label_text));
+                label.set_visible(!has_filtered_word(label.label().as_str()));
             });
         }
         (true, true) => {
             label.connect_label_notify(|label| {
                 let label_text = label.label();
-                let label_text = label_text.as_str();
 
-                label.set_visible(!has_filtered_word(label_text) && !label.label().is_empty());
+                label
+                    .set_visible(!has_filtered_word(label_text.as_str()) && !label_text.is_empty());
             });
         }
         (false, false) => (),
