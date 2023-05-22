@@ -48,16 +48,16 @@ pub fn fetch_lyric_cached(
     }
     let result = fetch_lyric(title, album, artists, length, window);
     if result.is_ok() {
-        LYRIC.with_borrow(|lyric| {
-            if &(LyricOwned::None, LyricOwned::None) == lyric {
+        LYRIC.with_borrow(|(olyric, tlyric)| {
+            if (&LyricOwned::None, &LyricOwned::None) == (olyric, tlyric) {
                 return;
             }
 
             let Err(e) = std::fs::write(
                 &cache_path,
                 serde_json::to_string(&LyricCache {
-                    olyric: lyric.0.clone(),
-                    tlyric: lyric.1.clone(),
+                    olyric: olyric.clone(),
+                    tlyric: tlyric.clone(),
                     offset: 0,
                 })
                 .expect("cannot serialize lyrics!"),)

@@ -36,10 +36,10 @@ impl Window {
     }
 
     pub fn save_window_size(&self) -> Result<(), glib::BoolError> {
-        let size = self.default_size();
+        let (width, height) = self.default_size();
 
-        self.settings().set_int("window-width", size.0)?;
-        self.settings().set_int("window-height", size.1)?;
+        self.settings().set_int("window-width", width)?;
+        self.settings().set_int("window-height", height)?;
 
         Ok(())
     }
