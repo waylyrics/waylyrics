@@ -264,7 +264,6 @@ fn set_lyric_with_songid_or_file(
             }
             "Qcm" => {
                 let provider = NeteaseLyricProvider::new().unwrap();
-                const PREFIX: &str = "/trackid/";
 
                 set_lyric_with_player_songid(
                     provider.as_ref(),
@@ -273,17 +272,15 @@ fn set_lyric_with_songid_or_file(
                     artists,
                     window,
                     |meta| {
-                        meta.track_id()
-                            .unwrap()
-                            .as_str()
-                            .strip_prefix(PREFIX)
-                            .map(|id| id.parse().unwrap())
+                        meta.get("mpris:trackid")
+                            .and_then(mpris::MetadataValue::as_str)
+                            .and_then(|s| s.strip_prefix("/trackid/"))
                     },
+                    |songid| songid.parse().ok(),
                 )
             }
             "feeluown" => {
                 let provider = NeteaseLyricProvider::new().unwrap();
-                const PREFIX: &str = "fuo://netease/songs/";
 
                 set_lyric_with_player_songid(
                     provider.as_ref(),
@@ -291,17 +288,12 @@ fn set_lyric_with_songid_or_file(
                     title,
                     artists,
                     window,
-                    |meta| {
-                        meta.url()
-                            .unwrap()
-                            .strip_prefix(PREFIX)
-                            .map(|id| id.parse().unwrap())
-                    },
+                    |meta| meta.url()?.strip_prefix("fuo://netease/songs/"),
+                    |songid| songid.parse().ok(),
                 )
             }
             "ElectronNCM" => {
                 let provider = NeteaseLyricProvider::new().unwrap();
-                const PREFIX: &str = "/org/mpris/MediaPlayer2/";
 
                 set_lyric_with_player_songid(
                     provider.as_ref(),
@@ -310,12 +302,11 @@ fn set_lyric_with_songid_or_file(
                     artists,
                     window,
                     |meta| {
-                        meta.track_id()
-                            .unwrap()
-                            .as_str()
-                            .strip_prefix(PREFIX)
-                            .map(|id| id.parse().unwrap())
+                        meta.get("mpris:trackid")
+                            .and_then(mpris::MetadataValue::as_str)
+                            .and_then(|s| s.strip_prefix("/org/mpris/MediaPlayer2/"))
                     },
+                    |songid| songid.parse().ok(),
                 )
             }
 
@@ -330,9 +321,12 @@ fn set_lyric_with_player_songid<P: LyricProvider>(
     title: &str,
     artists: &str,
     window: &app::Window,
-    parse_id: impl Fn(&Metadata) -> Option<P::Id>,
+    extract_field: impl for<'a> FnOnce(&'a Metadata) -> Option<&'a str>,
+    parse_id: impl FnOnce(&str) -> Option<P::Id>,
 ) -> Option<Result<(), Box<dyn std::error::Error>>> {
     player.get_metadata().ok().and_then(|metadata| {
-        parse_id(&metadata).map(|song_id| set_lyric(provider, song_id, title, artists, window))
+        extract_field(&metadata)
+            .and_then(parse_id)
+            .map(|song_id| set_lyric(provider, song_id, title, artists, window))
     })
 }
