@@ -56,16 +56,26 @@ export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 
 ```bash
 export RUSTC_BOOTSTRAP=1
-cargo build --release --locked --target target
+cargo build --release --locked --target-dir target
 ```
 
 ## With nightly toolchain
 
 ```bash
-cargo +nightly build --release --locked --target target
+cargo +nightly build --release --locked --target-dir target
 ```
 
 Target binaries are placed in `target/release/`.
+
+## Compiling Schema
+
+You can install the schema locally:
+
+```bash
+mkdir -p ~/.local/share/glib-2.0/schemas
+cp io.poly000.waylyrics.gschema.xml ~/.local/share/glib-2.0/schemas/
+glib-compile-schemas ~/.local/share/glib-2.0/schemas/
+```
 
 ## Packging example
 
@@ -74,6 +84,7 @@ An example packaging script:
 ```bash
 cargo run --bin gen_config_example
 sudo install -m644 config.toml /usr/share/waylyrics/config.toml
-sudo install -Dm755 /usr/share/waylyrics/themes
+sudo install -m644 io.poly000.waylyrics.gschema.xml /usr/share/glib-2.0/schemas/
+sudo install -dm755 /usr/share/waylyrics/themes
 sudo cp -r themes/* /usr/share/waylyrics/themes/
 ```
