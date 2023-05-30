@@ -17,5 +17,5 @@ pub const APP_ID: &str = "io.poly000.waylyrics";
 thread_local! {
     pub static CONFIG_HOME: RefCell<String> = RefCell::new(String::new());
     pub static CACHE_DIR: RefCell<String> = RefCell::new(String::new());
-    pub static EXLUDED_REGEXIES: RefCell<RegexSet> = RefCell::new(RegexSet::empty());
+    pub static EXCLUDED_REGEXES: RefCell<RegexSet> = RefCell::new(RegexSet::empty());
 }

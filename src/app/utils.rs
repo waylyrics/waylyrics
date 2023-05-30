@@ -1,4 +1,4 @@
-use crate::EXLUDED_REGEXIES;
+use crate::EXCLUDED_REGEXES;
 
 use gtk::{
     cairo::{RectangleInt, Region},
@@ -34,7 +34,7 @@ pub fn merge_css(css: &str) {
 }
 
 pub fn has_filtered_word(text: &str) -> bool {
-    EXLUDED_REGEXIES.with_borrow(|regex_set| regex_set.is_match(text))
+    EXCLUDED_REGEXES.with_borrow(|regex_set| regex_set.is_match(text))
 }
 
 pub fn setup_label(label: &Label, hide_empty_label: bool, hide_filtered_words: bool) {
