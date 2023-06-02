@@ -9,7 +9,7 @@ use gtk::{glib, Application};
 use regex::RegexSet;
 use waylyrics::app::{self, build_main_window};
 use waylyrics::config::Config;
-use waylyrics::{utils, EXLUDED_REGEXIES};
+use waylyrics::{utils, EXCLUDED_REGEXES};
 
 use waylyrics::sync::*;
 
@@ -107,7 +107,7 @@ fn build_ui(app: &Application) -> Result<(), Box<dyn Error>> {
     );
 
     if enable_filter_regex {
-        EXLUDED_REGEXIES.set(RegexSet::new(&filter_regexies)?);
+        EXCLUDED_REGEXES.set(RegexSet::new(&filter_regexies)?);
     }
 
     Ok(())
