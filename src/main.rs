@@ -17,8 +17,7 @@ use waylyrics::sync::*;
 pub const DEFAULT_CONFIG_PATH: &str = env!("WAYLYRICS_DEFAULT_CONFIG");
 pub const THEME_PRESETS_DIR: &str = env!("WAYLYRICS_THEME_PRESETS_DIR");
 
-#[tokio::main]
-async fn main() -> Result<glib::ExitCode, Box<dyn std::error::Error>> {
+fn main() -> Result<glib::ExitCode, Box<dyn std::error::Error>> {
     tracing_subscriber::fmt::init();
 
     let app = Application::builder()

@@ -15,7 +15,7 @@ use crate::lyric::{LyricOwned, LyricProvider, LyricStore, SongInfo};
 use crate::sync::LYRIC;
 
 use super::{
-    utils, DEFAULT_TEXT, PLAYER, PLAYER_FINDER, TOKIO_RUNTIME_HANDLE, TRACK_PLAYING_PAUSED,
+    utils, DEFAULT_TEXT, PLAYER, PLAYER_FINDER, TRACK_PLAYING_PAUSED,
 };
 
 enum PlayerStatus {
@@ -205,7 +205,7 @@ fn fetch_lyric_by_id<P: LyricProvider>(
     provider: &P,
     id: P::Id,
 ) -> Result<P::LStore, Box<dyn std::error::Error>> {
-    TOKIO_RUNTIME_HANDLE.with_borrow(|handle| provider.query_lyric(handle, id))
+    provider.query_lyric(id)
 }
 
 fn search_song<P: LyricProvider>(
@@ -214,7 +214,7 @@ fn search_song<P: LyricProvider>(
     artists: &[&str],
     title: &str,
 ) -> Result<Vec<SongInfo<P::Id>>, Box<dyn std::error::Error>> {
-    TOKIO_RUNTIME_HANDLE.with_borrow(|handle| provider.search_song(handle, album, artists, title))
+    provider.search_song(album, artists, title)
 }
 
 fn set_lyric<P: LyricProvider>(

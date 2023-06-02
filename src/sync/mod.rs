@@ -1,7 +1,6 @@
 use std::cell::RefCell;
 
 use mpris::{Player, PlayerFinder, TrackID};
-use tokio::runtime::Handle;
 
 use crate::lyric::{LyricOwned};
 
@@ -20,5 +19,4 @@ thread_local! {
     static PLAYER_FINDER: RefCell<PlayerFinder> = RefCell::new(PlayerFinder::new().unwrap());
     static LYRIC: RefCell<(LyricOwned, LyricOwned)> = RefCell::new((LyricOwned::None, LyricOwned::None));
     static TRACK_PLAYING_PAUSED: RefCell<(Option<TrackID>, bool)> = RefCell::new((None, false));
-    static TOKIO_RUNTIME_HANDLE: RefCell<Handle> = RefCell::new(Handle::current());
 }

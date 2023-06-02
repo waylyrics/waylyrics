@@ -1,10 +1,10 @@
-use std::{thread, time::Duration};
+use async_compat::CompatExt;
+use std::time::Duration;
 
 use ncmapi::{
     types::{Album, Artist, Song},
     NcmApi,
 };
-use tokio::runtime::Handle;
 
 use ncmapi::types::{LyricResp, SearchSongResp};
 
@@ -25,29 +25,23 @@ impl super::LyricProvider for NeteaseLyricProvider {
 
     fn search_song(
         &self,
-        handle: &Handle,
         album: &str,
         artists: &[&str],
         title: &str,
     ) -> Result<Vec<super::SongInfo<Self::Id>>, Box<dyn std::error::Error>> {
-        let handle = handle.clone();
         let keyword = format!("{title} {album} {}", artists.join("/"));
 
         tracing::debug!("search keyword: {keyword}");
 
         let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
-        let search_result = thread::spawn(move || {
-            let api = NcmApi::new(
-                false,
-                Duration::from_secs(60 * 60),
-                Duration::from_secs(5 * 60),
-                true,
-                &cookie_path,
-            );
-            handle.block_on(async { api.search(&keyword, None).await })
-        })
-        .join()
-        .unwrap()?;
+        let api = NcmApi::new(
+            false,
+            Duration::from_secs(60 * 60),
+            Duration::from_secs(5 * 60),
+            true,
+            &cookie_path,
+        );
+        let search_result = smol::block_on(async { api.search(&keyword, None).compat().await })?;
         let resp: SearchSongResp = search_result.deserialize()?;
         tracing::debug!("search result: {resp:?}");
 
@@ -84,25 +78,16 @@ impl super::LyricProvider for NeteaseLyricProvider {
             .collect())
     }
 
-    fn query_lyric(
-        &self,
-        handle: &Handle,
-        id: Self::Id,
-    ) -> Result<NeteaseLyric, Box<dyn std::error::Error>> {
-        let handle = handle.clone();
+    fn query_lyric(&self, id: Self::Id) -> Result<NeteaseLyric, Box<dyn std::error::Error>> {
         let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
-        let query_result = thread::spawn(move || {
-            let api = NcmApi::new(
-                false,
-                Duration::from_secs(60 * 60),
-                Duration::from_secs(5 * 60),
-                true,
-                &cookie_path,
-            );
-            handle.block_on(async { api.lyric(id).await })
-        })
-        .join()
-        .unwrap()?;
+        let api = NcmApi::new(
+            false,
+            Duration::from_secs(60 * 60),
+            Duration::from_secs(5 * 60),
+            true,
+            &cookie_path,
+        );
+        let query_result = smol::block_on(async { api.lyric(id).compat().await })?;
 
         let lyric_resp: LyricResp = query_result.deserialize()?;
 

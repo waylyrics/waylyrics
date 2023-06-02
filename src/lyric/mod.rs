@@ -5,7 +5,6 @@ pub mod netease;
 use std::time::Duration;
 
 use serde::{Deserialize, Serialize};
-use tokio::runtime::Handle;
 
 #[derive(Debug)]
 pub enum Lyric<'a> {
@@ -52,12 +51,10 @@ pub trait LyricProvider {
     fn new() -> Result<Box<Self>, Box<dyn std::error::Error>>;
     fn query_lyric(
         &self,
-        handle: &Handle,
         id: Self::Id,
     ) -> Result<Self::LStore, Box<dyn std::error::Error>>;
     fn search_song(
         &self,
-        handle: &Handle,
         album: &str,
         artists: &[&str],
         title: &str,
