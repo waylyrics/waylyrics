@@ -10,6 +10,7 @@ BuildRequires:  cargo
 BuildRequires:  libgraphene-devel
 BuildRequires:  gtk4-devel
 BuildRequires:  openssl-devel
+BuildRequires:  dbus-1-devel
 
 %define debug_package %{nil}
 
