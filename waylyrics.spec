@@ -22,6 +22,7 @@ Simple universal on screen lyrics made with GTK4 and love.
 cargo --version
 
 %build
+export RUSTC_BOOTSTRAP=1
 export WAYLYRICS_DEFAULT_CONFIG=/usr/share/waylyrics/config.toml
 export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 cargo build --release --locked --target-dir target
