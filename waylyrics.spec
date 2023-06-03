@@ -1,6 +1,6 @@
 Name:           waylyrics
-Version:        %autorelease
-Release:        {{{ git_repo_version }}}
+Version:        {{{ git_repo_version }}}
+Release:        0
 Summary:        Simple universal on screen lyrics made with GTK4 and love.
 License:        MIT
 Group:          Productivity
