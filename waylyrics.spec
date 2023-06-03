@@ -1,11 +1,11 @@
 Name:           waylyrics
 Version:        %autorelease
-Release:        0
+Release:        {{{ git_repo_version }}}
 Summary:        Simple universal on screen lyrics made with GTK4 and love.
 License:        MIT
 Group:          Productivity
 Url:            https://github.com/poly000/waylyrics
-Source0:        https://github.com/poly000/waylyrics/archive/%{version}.tar.gz
+Source0:        https://github.com/poly000/waylyrics/archive/master.tar.gz
 BuildRequires:  cargo
 BuildRequires:  libgraphene-devel
 BuildRequires:  gtk4-devel
