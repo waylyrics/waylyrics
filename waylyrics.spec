@@ -16,7 +16,7 @@ BuildRequires:  gtk4-devel
 Simple universal on screen lyrics made with GTK4 and love.
 
 %prep
-%setup -q -n waylyrics
+%setup -q -n waylyrics-master
 cargo --version
 
 %build
