@@ -9,6 +9,7 @@ Source0:        https://github.com/poly000/waylyrics/archive/master.tar.gz
 BuildRequires:  cargo
 BuildRequires:  libgraphene-devel
 BuildRequires:  gtk4-devel
+BuildRequires:  openssl-devel
 
 %define debug_package %{nil}
 
