@@ -28,6 +28,9 @@ export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 cargo build --release --locked --target-dir target
 
 %install
+export RUSTC_BOOTSTRAP=1
+export WAYLYRICS_DEFAULT_CONFIG=/usr/share/waylyrics/config.toml
+export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 cargo install --path . --root=%{buildroot}%{_prefix}
 cargo run --bin gen_config_example
 install -m644 config.toml %{buildroot}/usr/share/waylyrics/config.toml
