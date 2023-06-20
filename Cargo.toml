@@ -25,7 +25,7 @@ lrc-nom = "0.2.0"
 # ui
 gtk = { version = "0.6.6", package = "gtk4" }
 ncmapi = "0.1.13"
-mpris = "2.0.0"
+mpris = "2.0.1"
 rust_decimal = { version = "1.29.1", default-features = false, features = [
     "std",
 ] }
