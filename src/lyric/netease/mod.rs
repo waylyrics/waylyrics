@@ -1,5 +1,6 @@
 use async_compat::CompatExt;
 use std::time::Duration;
+use anyhow::Result;
 
 use ncmapi::{
     types::{Album, Artist, Song},
@@ -28,7 +29,7 @@ impl super::LyricProvider for NeteaseLyricProvider {
         album: &str,
         artists: &[&str],
         title: &str,
-    ) -> Result<Vec<super::SongInfo<Self::Id>>, Box<dyn std::error::Error>> {
+    ) -> Result<Vec<super::SongInfo<Self::Id>>> {
         let keyword = format!("{title} {album} {}", artists.join("/"));
 
         tracing::debug!("search keyword: {keyword}");
@@ -47,7 +48,7 @@ impl super::LyricProvider for NeteaseLyricProvider {
 
         Ok(resp
             .result
-            .ok_or("no search result")?
+            .ok_or(super::Error::NoResult)?
             .songs
             .iter()
             .map(
@@ -78,7 +79,7 @@ impl super::LyricProvider for NeteaseLyricProvider {
             .collect())
     }
 
-    fn query_lyric(&self, id: Self::Id) -> Result<NeteaseLyric, Box<dyn std::error::Error>> {
+    fn query_lyric(&self, id: Self::Id) -> Result<NeteaseLyric> {
         let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
         let api = NcmApi::new(
             false,
@@ -99,7 +100,7 @@ impl super::LyricProvider for NeteaseLyricProvider {
         })
     }
 
-    fn new() -> Result<Box<Self>, Box<dyn std::error::Error>> {
+    fn new() -> Result<Box<Self>> {
         Ok(Box::new(Self {}))
     }
 }

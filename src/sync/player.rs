@@ -1,5 +1,6 @@
+use anyhow::Result;
 use std::borrow::Cow;
-use std::error::Error;
+use std::marker::PhantomData;
 use std::time::{Duration, SystemTime};
 
 use gtk::glib::WeakRef;
@@ -14,9 +15,7 @@ use crate::lyric::netease::NeteaseLyricProvider;
 use crate::lyric::{LyricOwned, LyricProvider, LyricStore, SongInfo};
 use crate::sync::LYRIC;
 
-use super::{
-    utils, DEFAULT_TEXT, PLAYER, PLAYER_FINDER, TRACK_PLAYING_PAUSED,
-};
+use super::{utils, DEFAULT_TEXT, PLAYER, PLAYER_FINDER, TRACK_PLAYING_PAUSED};
 
 enum PlayerStatus {
     Missing,
@@ -165,7 +164,7 @@ pub fn fetch_lyric(
     _artists: Option<&[&str]>,
     length: Option<Duration>,
     window: &app::Window,
-) -> Result<(), Box<dyn std::error::Error>> {
+) -> Result<()> {
     let artists = _artists
         .map(|s| Cow::Owned(s.join(",")))
         .unwrap_or(Cow::Borrowed("Unknown"));
@@ -193,7 +192,7 @@ pub fn fetch_lyric(
     ) else {
         info!("Failed searching for {artists} - {title}",);
         utils::clear_lyric(&window);
-        return Err("No lyric found".into());
+        return Err(crate::lyric::Error::NoLyric)?;
     };
 
     info!("matched songid: {song_id}");
@@ -201,10 +200,7 @@ pub fn fetch_lyric(
     Ok(())
 }
 
-fn fetch_lyric_by_id<P: LyricProvider>(
-    provider: &P,
-    id: P::Id,
-) -> Result<P::LStore, Box<dyn std::error::Error>> {
+fn fetch_lyric_by_id<P: LyricProvider>(provider: &P, id: P::Id) -> Result<P::LStore> {
     provider.query_lyric(id)
 }
 
@@ -213,7 +209,7 @@ fn search_song<P: LyricProvider>(
     album: &str,
     artists: &[&str],
     title: &str,
-) -> Result<Vec<SongInfo<P::Id>>, Box<dyn std::error::Error>> {
+) -> Result<Vec<SongInfo<P::Id>>> {
     provider.search_song(album, artists, title)
 }
 
@@ -223,7 +219,7 @@ fn set_lyric<P: LyricProvider>(
     title: &str,
     artists: &str,
     window: &app::Window,
-) -> Result<(), Box<dyn std::error::Error>> {
+) -> Result<()> {
     let lyric = fetch_lyric_by_id(provider, song_id)?;
     let olyric = lyric.get_lyric().into_owned();
     let tlyric = lyric.get_translated_lyric().into_owned();
@@ -251,7 +247,7 @@ fn set_lyric_with_songid_or_file(
     title: &str,
     artists: &str,
     window: &app::Window,
-) -> Option<Result<(), Box<(dyn Error + 'static)>>> {
+) -> Option<Result<(), anyhow::Error>> {
     PLAYER.with_borrow(|player| {
         let player = player
             .as_ref()
@@ -262,71 +258,45 @@ fn set_lyric_with_songid_or_file(
                 tracing::warn!("local lyric files are still not supported");
                 None
             }
-            "Qcm" => {
+            "ElectronNCM" | "Qcm" => {
                 let provider = NeteaseLyricProvider::new().unwrap();
 
                 set_lyric_with_player_songid(
-                    provider.as_ref(),
+                    PhantomData::<NeteaseLyricProvider>,
                     player,
-                    title,
-                    artists,
-                    window,
                     |meta| {
                         meta.get("mpris:trackid")
                             .and_then(mpris::MetadataValue::as_str)
-                            .and_then(|s| s.strip_prefix("/trackid/"))
+                            .and_then(|s| s.split('/').last())
                     },
                     |songid| songid.parse().ok(),
                 )
+                .map(|song_id| set_lyric(&*provider, song_id, title, artists, window))
             }
             "feeluown" => {
                 let provider = NeteaseLyricProvider::new().unwrap();
 
                 set_lyric_with_player_songid(
-                    provider.as_ref(),
+                    PhantomData::<NeteaseLyricProvider>,
                     player,
-                    title,
-                    artists,
-                    window,
                     |meta| meta.url()?.strip_prefix("fuo://netease/songs/"),
                     |songid| songid.parse().ok(),
                 )
+                .map(|song_id| set_lyric(&*provider, song_id, title, artists, window))
             }
-            "ElectronNCM" => {
-                let provider = NeteaseLyricProvider::new().unwrap();
-
-                set_lyric_with_player_songid(
-                    provider.as_ref(),
-                    player,
-                    title,
-                    artists,
-                    window,
-                    |meta| {
-                        meta.get("mpris:trackid")
-                            .and_then(mpris::MetadataValue::as_str)
-                            .and_then(|s| s.strip_prefix("/org/mpris/MediaPlayer2/"))
-                    },
-                    |songid| songid.parse().ok(),
-                )
-            }
-
             _ => None,
         }
     })
 }
 
 fn set_lyric_with_player_songid<P: LyricProvider>(
-    provider: &P,
+    _provider: PhantomData<P>,
     player: &Player,
-    title: &str,
-    artists: &str,
-    window: &app::Window,
     extract_field: impl for<'a> FnOnce(&'a Metadata) -> Option<&'a str>,
     parse_id: impl FnOnce(&str) -> Option<P::Id>,
-) -> Option<Result<(), Box<dyn std::error::Error>>> {
-    player.get_metadata().ok().and_then(|metadata| {
-        extract_field(&metadata)
-            .and_then(parse_id)
-            .map(|song_id| set_lyric(provider, song_id, title, artists, window))
-    })
+) -> Option<P::Id> {
+    player
+        .get_metadata()
+        .ok()
+        .and_then(|metadata| extract_field(&metadata).and_then(parse_id))
 }

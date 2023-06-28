@@ -1,4 +1,5 @@
 pub mod utils;
+use anyhow::Result;
 
 pub mod netease;
 
@@ -48,17 +49,18 @@ pub trait LyricProvider {
     type LStore: LyricStore;
 
     const NAME: &'static str;
-    fn new() -> Result<Box<Self>, Box<dyn std::error::Error>>;
+    fn new() -> Result<Box<Self>>;
+
     fn query_lyric(
         &self,
         id: Self::Id,
-    ) -> Result<Self::LStore, Box<dyn std::error::Error>>;
+    ) -> Result<Self::LStore>;
     fn search_song(
         &self,
         album: &str,
         artists: &[&str],
         title: &str,
-    ) -> Result<Vec<SongInfo<Self::Id>>, Box<dyn std::error::Error>>;
+    ) -> Result<Vec<SongInfo<Self::Id>>>;
 }
 
 pub trait LyricStore {
@@ -86,4 +88,12 @@ impl<'a> Lyric<'a> {
             ),
         }
     }
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum Error {
+    #[error("no search result!")]
+    NoResult,
+    #[error("no lyrics for such song")]
+    NoLyric,
 }
