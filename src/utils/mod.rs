@@ -1,6 +1,7 @@
-use std::{error::Error, time::Duration};
+use anyhow::Result;
+use std::time::Duration;
 
-pub fn parse_time(time: &str) -> Result<Duration, Box<dyn Error>> {
+pub fn parse_time(time: &str) -> Result<Duration, ParseError> {
     use rust_decimal::prelude::*;
     use rust_decimal_macros::dec;
 
@@ -11,10 +12,22 @@ pub fn parse_time(time: &str) -> Result<Duration, Box<dyn Error>> {
         let milli_sec = time.trim_end_matches('s');
         Decimal::from_str_exact(milli_sec)? * dec!(1000)
     } else {
-        return Err("unsupported time format! should be ended with 's' or 'ms'.".into());
+        return Err(ParseError::IllFormed);
     };
 
-    Ok(Duration::from_millis(time_ms.to_u64().ok_or(
-        "could not represent duration more accurate than ms",
-    )?))
+    Ok(Duration::from_millis(
+        time_ms.to_u64().ok_or(ParseError::ExceedsLimits)?,
+    ))
+}
+
+#[derive(thiserror::Error, Debug)]
+pub enum ParseError {
+    #[error("{0}")]
+    InvalidDecimal(#[from] rust_decimal::Error),
+
+    #[error("could not represent duration more accurate than ms")]
+    ExceedsLimits,
+
+    #[error("unsupported time format! should be ended with 's' or 'ms'.")]
+    IllFormed,
 }

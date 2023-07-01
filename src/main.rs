@@ -1,10 +1,11 @@
 #![feature(local_key_cell_methods)]
 
-use std::error::Error;
 use std::path::PathBuf;
 
 use gtk::prelude::*;
 use gtk::{glib, Application};
+
+use anyhow::Result;
 
 use regex::RegexSet;
 use waylyrics::app::{self, build_main_window};
@@ -17,7 +18,7 @@ use waylyrics::sync::*;
 pub const DEFAULT_CONFIG_PATH: &str = env!("WAYLYRICS_DEFAULT_CONFIG");
 pub const THEME_PRESETS_DIR: &str = env!("WAYLYRICS_THEME_PRESETS_DIR");
 
-fn main() -> Result<glib::ExitCode, Box<dyn std::error::Error>> {
+fn main() -> Result<glib::ExitCode> {
     tracing_subscriber::fmt::init();
 
     let app = Application::builder()
@@ -29,7 +30,7 @@ fn main() -> Result<glib::ExitCode, Box<dyn std::error::Error>> {
     Ok(app.run())
 }
 
-fn build_ui(app: &Application) -> Result<(), Box<dyn Error>> {
+fn build_ui(app: &Application) -> Result<()> {
     use utils::parse_time;
 
     let xdg_dirs = xdg::BaseDirectories::with_prefix("waylyrics")?;
@@ -38,13 +39,13 @@ fn build_ui(app: &Application) -> Result<(), Box<dyn Error>> {
     waylyrics::CONFIG_HOME.set(
         config_home
             .to_str()
-            .ok_or("xdg config home is not valid UTF-8")?
+            .expect("xdg config home is not valid UTF-8")
             .into(),
     );
     waylyrics::CACHE_DIR.set(
         cache_dir
             .to_str()
-            .ok_or("xdg config home is not valid UTF-8")?
+            .expect("xdg config home is not valid UTF-8")
             .into(),
     );
 

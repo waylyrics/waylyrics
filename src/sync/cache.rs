@@ -1,4 +1,5 @@
 use std::{path::PathBuf, time::Duration};
+use anyhow::Result;
 
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use serde::{Deserialize, Serialize};
@@ -13,7 +14,7 @@ pub fn fetch_lyric_cached(
     artists: Option<&[&str]>,
     length: Option<Duration>,
     window: &app::Window,
-) -> Result<(), Box<dyn std::error::Error>> {
+) -> Result<()> {
     let digest = md5::compute(format!("{title}-{artists:?}-{album:?}-{length:?}"));
     let cache_dir =
         CACHE_DIR.with_borrow(|cache_home| PathBuf::from(cache_home).join(md5_cache_dir(digest)));
