@@ -32,9 +32,13 @@ export RUSTC_BOOTSTRAP=1
 export WAYLYRICS_DEFAULT_CONFIG=/usr/share/waylyrics/config.toml
 export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 cargo install --path . --root=%{buildroot}%{_prefix}
+
+install -dm644 %{buildroot}/usr/share/waylyrics
+
 cargo run --bin gen_config_example
 install -m644 config.toml %{buildroot}/usr/share/waylyrics/config.toml
 install -m644 io.poly000.waylyrics.gschema.xml %{buildroot}/usr/share/glib-2.0/schemas/
+
 install -dm755 %{buildroot}/usr/share/waylyrics/themes
 cp -r themes/* %{buildroot}/usr/share/waylyrics/themes/
 
@@ -43,8 +47,7 @@ cp -r themes/* %{buildroot}/usr/share/waylyrics/themes/
 %files
 %{_bindir}/waylyrics
 /usr/share/waylyrics/
-/usr/share/glib-2.0/schemas/
-/usr/share/waylyrics/themes/
+/usr/share/glib-2.0/schemas/io.poly000.waylyrics.gschema.xml
 
 %changelog
 {{{ git_repo_changelog }}}
