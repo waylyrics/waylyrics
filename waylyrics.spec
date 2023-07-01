@@ -43,7 +43,7 @@ install -m644 io.poly000.waylyrics.gschema.xml %{buildroot}/usr/share/glib-2.0/s
 
 cp -r themes %{buildroot}/usr/share/waylyrics/
 
-rm /usr/.crates.toml /usr/.crates2.json /usr/bin/gen_config_example
+rm %{buildroot}/usr/.crates.toml %{buildroot}/usr/.crates2.json %{buildroot}/usr/bin/gen_config_example
 
 %check
 
