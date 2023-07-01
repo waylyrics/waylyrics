@@ -33,7 +33,7 @@ export WAYLYRICS_DEFAULT_CONFIG=/usr/share/waylyrics/config.toml
 export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 cargo install --path . --root=%{buildroot}%{_prefix}
 
-install -dm644 %{buildroot}/usr/share/waylyrics
+install -d %{buildroot}/usr/share/waylyrics
 
 cargo run --bin gen_config_example
 install -m644 config.toml %{buildroot}/usr/share/waylyrics/config.toml
