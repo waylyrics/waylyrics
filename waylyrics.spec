@@ -37,10 +37,11 @@ install -d %{buildroot}/usr/share/waylyrics
 
 cargo run --bin gen_config_example
 install -m644 config.toml %{buildroot}/usr/share/waylyrics/config.toml
+
+install -d %{buildroot}/usr/share/glib-2.0/schemas/
 install -m644 io.poly000.waylyrics.gschema.xml %{buildroot}/usr/share/glib-2.0/schemas/
 
-install -dm755 %{buildroot}/usr/share/waylyrics/themes
-cp -r themes/* %{buildroot}/usr/share/waylyrics/themes/
+cp -r themes %{buildroot}/usr/share/waylyrics/
 
 %check
 
