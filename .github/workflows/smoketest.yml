@@ -1,0 +1,56 @@
+name: Smoke test
+
+on:
+  - push
+  - pull_request
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTC_BOOTSTRAP: 1
+  WAYLYRICS_DEFAULT_CONFIG: /usr/share/waylyrics/config.toml
+  WAYLYRICS_THEME_PRESETS_DIR: /usr/share/waylyrics/themes
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - run: rustup toolchain install stable --profile minimal
+    - name: Install deps
+      run: |
+        sudo apt update
+        sudo apt install -y --no-install-recommends libgtk-4-dev libdbus-1-dev pkg-config weston
+    - uses: Swatinem/rust-cache@v2
+    - name: Build
+      run: cargo build --verbose
+    - name: Installation
+      run: |
+        cargo run --bin gen_config_example
+        sudo mkdir -p /usr/share/waylyrics
+        sudo install -m644 config.toml /usr/share/waylyrics/config.toml
+        sudo install -m644 io.poly000.waylyrics.gschema.xml /usr/share/glib-2.0/schemas/
+        sudo install -dm755 /usr/share/waylyrics/themes
+        sudo cp -r themes/* /usr/share/waylyrics/themes/
+
+        # install schema
+        sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
+    - name: Run tests
+      run: cargo test --verbose
+    - name: Start waylyrics
+      run: |
+        # init weston
+        weston --backend=headless-backend.so -Swayland-1 &
+        # let weston prepare for 1s
+        sleep 1
+        # start waylyrics
+        ret=-1
+        WAYLAND_DISPLAY=wayland-1 RUST_BACKTRACE=1 timeout 5s ./target/debug/waylyrics || ret=$?
+        if [ $ret -eq 124 ]; then
+          echo "waylyrics survived the smoke test"
+          exit 0
+        else
+          echo "waylyrics crashed during the smoke test (exit code $ret)"
+          exit 1
+        fi
