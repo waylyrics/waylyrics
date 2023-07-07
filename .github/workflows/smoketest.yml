@@ -1,0 +1,27 @@
+name: Smoke test
+
+on:
+  - push
+  - pull_request
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTC_BOOTSTRAP: 1
+  WAYLYRICS_DEFAULT_CONFIG: /usr/share/waylyrics/themes
+  WAYLYRICS_THEME_PRESETS_DIR: /usr/share/waylyrics/config.toml
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install deps
+      run: |
+        sudo apt update
+        sudo apt install libgtk-4-dev libdbus-1-dev pkg-config
+    - name: Build
+      run: cargo build --verbose
+    - name: Run tests
+      run: cargo test --verbose
