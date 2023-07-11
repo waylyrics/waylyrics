@@ -85,6 +85,7 @@ fn build_ui(app: &Application) -> Result<()> {
         enable_filter_regex,
         filter_regexies,
         length_toleration,
+        window_decoration,
     } = toml::from_str(&config).unwrap();
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval)?;
@@ -105,6 +106,7 @@ fn build_ui(app: &Application) -> Result<()> {
         enable_filter_regex && !filter_regexies.is_empty(),
         cache_lyrics,
         parse_time(&length_toleration)?.as_millis(),
+        window_decoration
     );
 
     if enable_filter_regex {

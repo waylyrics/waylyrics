@@ -7,6 +7,7 @@ pub struct Config {
     pub lyric_update_interval: String,
     pub length_toleration: String,
     pub cache_lyrics: bool,
+    pub window_decoration: bool,
     pub click_pass_through: bool,
     pub full_width_lyric_bg: bool,
     pub hide_label_on_empty_text: bool,
@@ -29,6 +30,7 @@ impl Default for Config {
             origin_lyric_in_above: true,
             cache_lyrics: true,
             enable_filter_regex: false,
+            window_decoration: true,
             /// inspired by LyricX's filter [list](https://github.com/ddddxxx/LyricsX/blob/c16b6a413dda7bc0b793b897522e0c4ee0ffc716/LyricsX/Supporting%20Files/UserDefaults.plist#L31-L62)
             filter_regexies: vec![
                 "^作词".into(),

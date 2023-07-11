@@ -15,12 +15,13 @@ pub fn build_main_window(
     enable_filter_regex: bool,
     cache_lyrics: bool,
     length_toleration_ms: u128,
+    window_decoration: bool,
 ) -> Window {
     let window = Window::new(app);
 
     window.set_size_request(500, WINDOW_MIN_HEIGHT);
     window.set_title(Some("Waylyrics"));
-    window.set_decorated(false);
+    window.set_decorated(window_decoration);
     window.present();
 
     let olabel = Label::builder().label("Waylyrics").name("origin").build();
