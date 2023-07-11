@@ -12,7 +12,7 @@ default-run = "waylyrics"
 lto = "thin"
 strip = true
 panic = "abort"
-opt-level = "3"
+opt-level = 3
 
 [dependencies]
 # configuration
