@@ -8,7 +8,7 @@ use gtk::prelude::*;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use gtk::{glib, Application};
 use mpris::{Metadata, PlaybackStatus, Player, ProgressTracker};
-use tracing::{debug, error, info};
+use tracing::{debug, error, info, trace};
 
 use crate::app;
 use crate::lyric::netease::NeteaseLyricProvider;
@@ -44,11 +44,13 @@ fn try_sync_player(window: &crate::app::Window) -> Result<(), PlayerStatus> {
             .map_err(|_| PlayerStatus::Unsupported("cannot get metadata of track playing"))?;
         let need_update_lyric =
             TRACK_PLAYING_PAUSED.with_borrow_mut(|(track_id_playing, paused)| {
-                let Some(track_id) = track_meta.track_id()  else {
+                let Some(track_id) = track_meta.track_id() else {
                     *track_id_playing = None;
                     *paused = false;
-                    return false
+                    return false;
                 };
+
+                trace!("got track_id: {track_id}");
 
                 let need = track_id_playing.is_none()
                     || track_id_playing.as_ref().is_some_and(|p| p != &track_id)
@@ -115,7 +117,7 @@ fn try_sync_player(window: &crate::app::Window) -> Result<(), PlayerStatus> {
 pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
     glib::timeout_add_local(interval, move || {
         let Some(app) = app.upgrade() else {
-            return Continue(false)
+            return Continue(false);
         };
 
         let mut windows = app.windows();
