@@ -2,7 +2,8 @@ window {
     background-color: rgba(0, 0, 0, 0.0);
 }
 
-label {
+/* 标题栏的标题也是 label，因此需要特别指定 origin 和 translated */
+label#origin, label#translated {
     /* 圆角 */
     border-radius: 16px;
 
@@ -12,10 +13,15 @@ label {
     padding: 10px;
 }
 
-/* 相比于label的变更, 改为 label#origin 则为应用到原歌词 */
+/* 相比于 label 的变更, 改为 label#origin 则为应用到原歌词 */
 label#translated {
     border-radius: 12px;
     margin: 5px 0px;
     font-size: 24px;
     padding: 7px;
+}
+
+/* 减少 Gtk CSD 的阴影 */
+window {
+    box-shadow: 0px 0px 1px 0px;
 }
