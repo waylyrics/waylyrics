@@ -97,6 +97,7 @@ fn build_ui(app: &Application) -> Result<()> {
 
     register_mpris_sync(ObjectExt::downgrade(app), mpris_sync_interval);
     register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
+    utils::register_sigusr2_decoration(ObjectExt::downgrade(app));
 
     build_main_window(
         app,

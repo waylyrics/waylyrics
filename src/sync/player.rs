@@ -115,8 +115,7 @@ fn try_sync_player(window: &crate::app::Window) -> Result<(), PlayerStatus> {
 }
 
 pub fn register_sigusr1_disconnect() {
-    let sigusr1: i32 = libc::SIGUSR1;
-    glib::unix_signal_add_local(sigusr1, move || {
+    glib::unix_signal_add_local(libc::SIGUSR1, move || {
         PLAYER.set(None);
         Continue(true)
     });

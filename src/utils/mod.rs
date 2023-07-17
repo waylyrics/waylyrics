@@ -1,4 +1,5 @@
 use anyhow::Result;
+use gtk::{Application, glib::WeakRef, prelude::*};
 use std::time::Duration;
 
 pub fn parse_time(time: &str) -> Result<Duration, ParseError> {
@@ -30,4 +31,23 @@ pub enum ParseError {
 
     #[error("unsupported time format! should be ended with 's' or 'ms'.")]
     IllFormed,
+}
+
+pub fn register_sigusr2_decoration(app: WeakRef<Application>) {
+    gtk::glib::unix_signal_add_local(libc::SIGUSR2, move || {
+        let Some(app) = app.upgrade() else {
+            return Continue(false);
+        };
+
+        let mut windows = app.windows();
+        if windows.is_empty() {
+            return Continue(true);
+        }
+        let window = windows.remove(0);
+
+        let decorated = window.is_decorated();
+        window.set_decorated(!decorated);
+
+        Continue(true)
+    });
 }

@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use gtk::subclass::prelude::ObjectSubclassIsExt;
+use gtk::subclass::prelude::*;
 
 use crate::{
     app,
