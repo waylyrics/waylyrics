@@ -77,7 +77,6 @@ fn build_ui(app: &Application) -> Result<()> {
         mpris_sync_interval,
         lyric_update_interval,
         click_pass_through,
-        full_width_lyric_bg,
         hide_label_on_empty_text,
         origin_lyric_in_above,
         theme,
@@ -86,6 +85,7 @@ fn build_ui(app: &Application) -> Result<()> {
         filter_regexies,
         length_toleration,
         window_decoration,
+        lyric_align,
     } = toml::from_str(&config).unwrap();
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval)?;
@@ -99,14 +99,14 @@ fn build_ui(app: &Application) -> Result<()> {
 
     build_main_window(
         app,
-        full_width_lyric_bg,
         hide_label_on_empty_text,
         click_pass_through,
         origin_lyric_in_above,
         enable_filter_regex && !filter_regexies.is_empty(),
         cache_lyrics,
         parse_time(&length_toleration)?.as_millis(),
-        window_decoration
+        window_decoration,
+        lyric_align.into(),
     );
 
     if enable_filter_regex {

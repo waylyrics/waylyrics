@@ -8,6 +8,7 @@ Simple universal on screen lyrics made with GTK4 and ❤️.
 
 - [Waylyrics](#waylyrics)
   - [Build/Install](#buildinstall)
+  - [Update](#update)
   - [Requirement](#requirement)
     - [Recommended Players](#recommended-players)
     - [MPRIS-unfriendly Players](#mpris-unfriendly-players)
@@ -20,6 +21,16 @@ Simple universal on screen lyrics made with GTK4 and ❤️.
 ## Build/Install
 
 Check [INSTALLATION.md](INSTALLATION.md)
+
+## Update
+
+After [`f900e9be`](https://github.com/poly000/waylyrics/commit/f900e9bebd327b1be4fb93329c0a2c3e839c43d1), waylyrics ignores existing deprecated fields. But you could always get latest template with:
+
+```bash
+# Typically this will be `/usr/share/waylyrics/config.toml`,
+# but it depends on your packager/disturbution.
+cat ${WAYLYRICS_DEFAULT_CONFIG}
+```
 
 ## Requirement
 

@@ -1,5 +1,5 @@
 mod window;
-use gtk::{prelude::*, subclass::prelude::ObjectSubclassIsExt, Application, Label};
+use gtk::{prelude::*, subclass::prelude::ObjectSubclassIsExt, Align, Application, Label};
 pub use window::Window;
 
 const WINDOW_MIN_HEIGHT: i32 = 120;
@@ -8,7 +8,6 @@ pub mod utils;
 
 pub fn build_main_window(
     app: &Application,
-    full_width_label_bg: bool,
     hide_label_on_empty_text: bool,
     click_pass_through: bool,
     origin_lyric_in_above: bool,
@@ -16,6 +15,7 @@ pub fn build_main_window(
     cache_lyrics: bool,
     length_toleration_ms: u128,
     window_decoration: bool,
+    lyric_align: Align,
 ) -> Window {
     let window = Window::new(app);
 
@@ -37,10 +37,8 @@ pub fn build_main_window(
     olabel.set_vexpand(true);
     tlabel.set_vexpand(true);
 
-    if !full_width_label_bg {
-        olabel.set_halign(gtk::Align::Center);
-        tlabel.set_halign(gtk::Align::Center);
-    }
+    olabel.set_halign(lyric_align);
+    tlabel.set_halign(lyric_align);
 
     let verical_box = gtk::Box::builder()
         .baseline_position(gtk::BaselinePosition::Center)

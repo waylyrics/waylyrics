@@ -1,15 +1,27 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
+#[serde(tag = "type")]
+pub enum Align {
+    /// left align
+    Start,
+    /// right align
+    End,
+    /// (default)
+    Center,
+    Fill,
+}
+
+#[derive(Deserialize, Serialize)]
 #[serde(rename_all = "kebab-case", default)]
 pub struct Config {
     pub mpris_sync_interval: String,
+    pub lyric_align: Align,
     pub lyric_update_interval: String,
     pub length_toleration: String,
     pub cache_lyrics: bool,
     pub window_decoration: bool,
     pub click_pass_through: bool,
-    pub full_width_lyric_bg: bool,
     pub hide_label_on_empty_text: bool,
     pub origin_lyric_in_above: bool,
     pub theme: String,
@@ -24,7 +36,6 @@ impl Default for Config {
             lyric_update_interval: "20ms".to_owned(),
             length_toleration: "2s".to_owned(),
             click_pass_through: true,
-            full_width_lyric_bg: false,
             hide_label_on_empty_text: true,
             theme: "default".into(),
             origin_lyric_in_above: true,
@@ -59,6 +70,18 @@ impl Default for Config {
                 "^SoundTrack".into(),
                 "^アニメ)".into(),
             ],
+            lyric_align: Align::Center,
+        }
+    }
+}
+
+impl From<Align> for gtk::Align {
+    fn from(value: Align) -> Self {
+        match value {
+            Align::Start => Self::Start,
+            Align::End => Self::End,
+            Align::Center => Self::Center,
+            Align::Fill => Self::Fill,
         }
     }
 }
