@@ -20,6 +20,7 @@ pub const THEME_PRESETS_DIR: &str = env!("WAYLYRICS_THEME_PRESETS_DIR");
 
 fn main() -> Result<glib::ExitCode> {
     tracing_subscriber::fmt::init();
+    tracing::info!("process id: {}", std::process::id());
 
     let app = Application::builder()
         .application_id(waylyrics::APP_ID)
