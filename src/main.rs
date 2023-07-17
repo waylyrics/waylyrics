@@ -26,6 +26,7 @@ fn main() -> Result<glib::ExitCode> {
         .build();
 
     app.connect_activate(|app| build_ui(app).unwrap());
+    register_sigusr1_disconnect();
 
     Ok(app.run())
 }

@@ -2848,6 +2848,7 @@ dependencies = [
  "anyhow",
  "async-compat",
  "gtk4",
+ "libc",
  "lrc-nom",
  "md5",
  "mpris",

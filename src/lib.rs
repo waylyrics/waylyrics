@@ -2,7 +2,7 @@
 #![feature(local_key_cell_methods)]
 #![feature(is_some_and)]
 
-use std::{cell::RefCell};
+use std::cell::RefCell;
 
 use regex::RegexSet;
 

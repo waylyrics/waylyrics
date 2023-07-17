@@ -114,6 +114,14 @@ fn try_sync_player(window: &crate::app::Window) -> Result<(), PlayerStatus> {
     })
 }
 
+pub fn register_sigusr1_disconnect() {
+    let sigusr1: i32 = libc::SIGUSR1;
+    glib::unix_signal_add_local(sigusr1, move || {
+        PLAYER.set(None);
+        Continue(true)
+    });
+}
+
 pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
     glib::timeout_add_local(interval, move || {
         let Some(app) = app.upgrade() else {
