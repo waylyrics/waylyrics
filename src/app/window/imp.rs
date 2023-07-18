@@ -7,6 +7,8 @@ use glib::signal::Inhibit;
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib, ApplicationWindow};
 
+use crate::app::utils::set_click_pass_through;
+
 #[derive(Default)]
 pub struct Window {
     pub settings: OnceCell<Settings>,
@@ -16,6 +18,9 @@ pub struct Window {
     pub lyric_playing_translation: Cell<Option<Duration>>,
     pub lyric_offset_ms: Cell<i64>,
     pub length_toleration_ms: Cell<u128>,
+
+    pub headerbar: gtk::HeaderBar,
+    pub clickthrough: Cell<bool>,
 }
 
 #[glib::object_subclass]
@@ -33,7 +38,13 @@ impl ObjectImpl for Window {
         obj.load_window_size();
     }
 }
-impl WidgetImpl for Window {}
+impl WidgetImpl for Window {
+    fn size_allocate(&self, width: i32, height: i32, baseline: i32) {
+        self.parent_size_allocate(width, height, baseline);
+        let clickthrough = self.clickthrough.get();
+        set_click_pass_through(&self.obj(), clickthrough);
+    }
+}
 impl WindowImpl for Window {
     // Save window state right before the window will be closed
     fn close_request(&self) -> Inhibit {

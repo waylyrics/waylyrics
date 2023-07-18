@@ -16,8 +16,12 @@ glib::wrapper! {
 }
 
 impl Window {
-    pub fn new(app: &Application) -> Self {
-        Object::builder().property("application", app).build()
+    pub fn new(app: &Application, clickthrough: bool) -> Self {
+        let window: Self = Object::builder().property("application", app).build();
+        let imp = window.imp();
+        window.set_titlebar(Some(&imp.headerbar));
+        imp.clickthrough.set(clickthrough);
+        window
     }
 
     fn setup_settings(&self) {

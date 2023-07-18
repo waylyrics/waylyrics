@@ -1,6 +1,12 @@
 mod window;
-use gtk::{prelude::*, subclass::prelude::ObjectSubclassIsExt, Align, Application, Label};
+use gtk::{
+    prelude::*,
+    subclass::prelude::ObjectSubclassIsExt,
+    Align, Application, Label,
+};
 pub use window::Window;
+
+use crate::app::utils::set_click_pass_through;
 
 const WINDOW_MIN_HEIGHT: i32 = 120;
 
@@ -17,7 +23,7 @@ pub fn build_main_window(
     window_decoration: bool,
     lyric_align: Align,
 ) -> Window {
-    let window = Window::new(app);
+    let window = Window::new(app, click_pass_through);
 
     window.set_size_request(500, WINDOW_MIN_HEIGHT);
     window.set_title(Some("Waylyrics"));
@@ -57,9 +63,11 @@ pub fn build_main_window(
 
     window.set_child(Some(&verical_box));
 
-    if click_pass_through {
-        utils::set_click_pass_through(&window.surface(), true)
-    }
+    window.connect_decorated_notify(|window| {
+        tracing::debug!("triggered decorated signal");
+        let clickthrough = window.imp().clickthrough.get();
+        set_click_pass_through(window, clickthrough)
+    });
 
     window.set_icon_name(Some(crate::APP_ID));
     window.imp().cache_lyrics.set(cache_lyrics);
