@@ -8,6 +8,7 @@ Simple universal on screen lyrics made with GTK4 and ❤️.
 
 - [Waylyrics](#waylyrics)
   - [Build/Install](#buildinstall)
+  - [Usage](#usage)
   - [Update](#update)
   - [Requirement](#requirement)
     - [Recommended Players](#recommended-players)
@@ -21,6 +22,12 @@ Simple universal on screen lyrics made with GTK4 and ❤️.
 ## Build/Install
 
 Check [INSTALLATION.md](INSTALLATION.md)
+
+## Usage
+
+SIGUSR1: disconnect from current player
+
+SIGUSR2: switch gtk decoration on/off
 
 ## Update
 
