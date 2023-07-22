@@ -35,6 +35,56 @@ fn main() -> Result<glib::ExitCode> {
 fn build_ui(app: &Application) -> Result<()> {
     use utils::parse_time;
 
+    let (config_path, theme_dir) = init_dirs()?;
+
+    let config = std::fs::read_to_string(&config_path)?;
+    let config: Config = toml::from_str(&config).unwrap();
+    std::fs::write(&config_path, toml::to_string(&config)?)?;
+    let Config {
+        mpris_sync_interval,
+        lyric_update_interval,
+        click_pass_through,
+        hide_label_on_empty_text,
+        origin_lyric_in_above,
+        theme,
+        cache_lyrics,
+        enable_filter_regex,
+        filter_regexies,
+        ref length_toleration,
+        window_decoration,
+        lyric_align,
+    } = config;
+
+    let mpris_sync_interval = parse_time(&mpris_sync_interval)?;
+    let lyric_update_interval = parse_time(&lyric_update_interval)?;
+    let css_style = std::fs::read_to_string(theme_dir.join(format!("{theme}.css")))?;
+
+    app::utils::merge_css(&css_style);
+
+    register_mpris_sync(ObjectExt::downgrade(app), mpris_sync_interval);
+    register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
+    utils::register_sigusr2_decoration(ObjectExt::downgrade(app));
+
+    build_main_window(
+        app,
+        hide_label_on_empty_text,
+        click_pass_through,
+        origin_lyric_in_above,
+        enable_filter_regex && !filter_regexies.is_empty(),
+        cache_lyrics,
+        parse_time(&length_toleration)?.as_millis(),
+        window_decoration,
+        lyric_align.into(),
+    );
+
+    if enable_filter_regex {
+        EXCLUDED_REGEXES.set(RegexSet::new(&filter_regexies)?);
+    }
+
+    Ok(())
+}
+
+fn init_dirs() -> Result<(PathBuf, PathBuf)> {
     let xdg_dirs = xdg::BaseDirectories::with_prefix("waylyrics")?;
     let config_home = xdg_dirs.get_config_home();
     let cache_dir = xdg_dirs.get_cache_home();
@@ -74,47 +124,5 @@ fn build_ui(app: &Application) -> Result<()> {
         }
     }
 
-    let config = std::fs::read_to_string(config_path)?;
-    let Config {
-        mpris_sync_interval,
-        lyric_update_interval,
-        click_pass_through,
-        hide_label_on_empty_text,
-        origin_lyric_in_above,
-        theme,
-        cache_lyrics,
-        enable_filter_regex,
-        filter_regexies,
-        length_toleration,
-        window_decoration,
-        lyric_align,
-    } = toml::from_str(&config).unwrap();
-
-    let mpris_sync_interval = parse_time(&mpris_sync_interval)?;
-    let lyric_update_interval = parse_time(&lyric_update_interval)?;
-    let css_style = std::fs::read_to_string(theme_dir.join(format!("{theme}.css")))?;
-
-    app::utils::merge_css(&css_style);
-
-    register_mpris_sync(ObjectExt::downgrade(app), mpris_sync_interval);
-    register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
-    utils::register_sigusr2_decoration(ObjectExt::downgrade(app));
-
-    build_main_window(
-        app,
-        hide_label_on_empty_text,
-        click_pass_through,
-        origin_lyric_in_above,
-        enable_filter_regex && !filter_regexies.is_empty(),
-        cache_lyrics,
-        parse_time(&length_toleration)?.as_millis(),
-        window_decoration,
-        lyric_align.into(),
-    );
-
-    if enable_filter_regex {
-        EXCLUDED_REGEXES.set(RegexSet::new(&filter_regexies)?);
-    }
-
-    Ok(())
+    Ok((config_path, theme_dir))
 }
