@@ -25,6 +25,7 @@ lrc-nom = "0.2.0"
 # ui
 gtk = { version = "0.6.6", package = "gtk4" }
 ncmapi = "0.1.13"
+dbus = "0.9.7"
 mpris = "2.0.1"
 rust_decimal = { version = "1.30.0", default-features = false, features = [
     "std",
@@ -41,3 +42,7 @@ async-compat = "0.2.1"
 anyhow = "1.0.72"
 thiserror = "1.0.43"
 libc = "0.2.147"
+
+[features]
+vendored = ["dbus/vendored"]
+default = []
