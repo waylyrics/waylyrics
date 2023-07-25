@@ -1,6 +1,6 @@
 # Waylyrics
 
-[![tg-group](https://img.shields.io/badge/tg%20group-open-blue)](https://t.me/waylyrics)
+[![tg-group](https://img.shields.io/badge/tg%20group-open-blue)](https://t.me/waylyrics_x)
 
 Simple universal on screen lyrics made with GTK4 and ❤️.
 
