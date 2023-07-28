@@ -64,8 +64,9 @@ fn build_ui(app: &Application) -> Result<()> {
     register_mpris_sync(ObjectExt::downgrade(app), mpris_sync_interval);
     register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
     utils::register_sigusr2_decoration(ObjectExt::downgrade(app));
+    register_action_disconnect(app);
 
-    build_main_window(
+    let wind= build_main_window(
         app,
         hide_label_on_empty_text,
         click_pass_through,
@@ -76,6 +77,8 @@ fn build_ui(app: &Application) -> Result<()> {
         window_decoration,
         lyric_align.into(),
     );
+
+    utils::register_action_hide_decoration(&wind);
 
     if enable_filter_regex {
         EXCLUDED_REGEXES.set(RegexSet::new(&filter_regexies)?);

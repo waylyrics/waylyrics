@@ -14,6 +14,7 @@ mod cache;
 pub use lyric::register_lyric_display;
 pub use player::register_mpris_sync;
 pub use player::register_sigusr1_disconnect;
+pub use player::register_action_disconnect;
 
 thread_local! {
     static PLAYER: RefCell<Option<Player>> = RefCell::new(None);

@@ -1,4 +1,5 @@
 use anyhow::Result;
+use gtk::gio::SimpleAction;
 use std::borrow::Cow;
 use std::marker::PhantomData;
 use std::time::{Duration, SystemTime};
@@ -112,6 +113,14 @@ fn try_sync_player(window: &crate::app::Window) -> Result<(), PlayerStatus> {
 
         Ok(())
     })
+}
+
+pub fn register_action_disconnect(app: &Application) {
+    let action = SimpleAction::new("disconnect", None);
+    action.connect_activate(|_, _| {
+        PLAYER.set(None);
+    });
+    app.add_action(&action);
 }
 
 pub fn register_sigusr1_disconnect() {

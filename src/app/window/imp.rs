@@ -4,6 +4,7 @@ use std::time::{Duration, SystemTime};
 use gio::Settings;
 use glib::once_cell::sync::OnceCell;
 use glib::signal::Inhibit;
+use gtk::gio::MenuItem;
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib, ApplicationWindow};
 
@@ -20,6 +21,8 @@ pub struct Window {
     pub length_toleration_ms: Cell<u128>,
 
     pub headerbar: gtk::HeaderBar,
+    pub menubutton: gtk::MenuButton,
+    pub menu: gio::Menu,
     pub clickthrough: Cell<bool>,
 }
 
@@ -36,6 +39,18 @@ impl ObjectImpl for Window {
         let obj = self.obj();
         obj.setup_settings();
         obj.load_window_size();
+
+        self.headerbar.set_decoration_layout(Some("menu:close"));
+        self.menubutton.set_icon_name("open-menu-symbolic");
+
+        let disconnect = MenuItem::new(Some("Disconnect"), Some("app.disconnect"));
+        let hide_decoration = MenuItem::new(Some("Hide Decoration"), Some("win.hide_decoration"));
+
+        self.menu.append_item(&disconnect);
+        self.menu.append_item(&hide_decoration);
+
+        self.menubutton.set_menu_model(Some(&self.menu));
+        self.headerbar.pack_start(&self.menubutton)
     }
 }
 impl WidgetImpl for Window {

@@ -25,3 +25,8 @@ label#translated {
 window {
     box-shadow: 0px 0px 1px 0px;
 }
+
+/* 设置 headerbar 为 50% 不透明度 */
+headerbar {
+    opacity: 0.5;
+}
