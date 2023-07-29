@@ -1,6 +1,6 @@
 # Waylyrics
 
-[![tg-group](https://img.shields.io/badge/tg%20group-open-blue)](https://t.me/waylyrics_x)
+[![tg-group](https://img.shields.io/matrix/waylyrics_x:catgirl.cloud.svg?server_fqdn=matrix.catgirl.cloud)](https://matrix.to/#/#waylyrics_x:catgirl.cloud)
 
 Simple universal on screen lyrics made with GTK4 and ❤️.
 
