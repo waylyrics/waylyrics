@@ -27,7 +27,7 @@ gtk = { version = "0.6.6", package = "gtk4" }
 ncmapi = "0.1.13"
 dbus = "0.9.7"
 mpris = "2.0.1"
-rust_decimal = { version = "1.30.0", default-features = false, features = [
+rust_decimal = { version = "1.31.0", default-features = false, features = [
     "std",
 ] }
 rust_decimal_macros = "1.30.0"
