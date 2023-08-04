@@ -5,10 +5,12 @@ use gio::Settings;
 use glib::once_cell::sync::OnceCell;
 use glib::signal::Inhibit;
 use gtk::gio::MenuItem;
+use gtk::prelude::{ObjectExt, ToVariant};
 use gtk::subclass::prelude::*;
-use gtk::{gio, glib, ApplicationWindow};
+use gtk::{gio, glib, ApplicationWindow, PopoverMenu};
 
 use crate::app::utils::set_click_pass_through;
+use crate::sync::list_avaliable_players;
 
 #[derive(Default)]
 pub struct Window {
@@ -23,6 +25,7 @@ pub struct Window {
     pub headerbar: gtk::HeaderBar,
     pub menubutton: gtk::MenuButton,
     pub menu: gio::Menu,
+    pub submenu: gio::Menu,
     pub clickthrough: Cell<bool>,
 }
 
@@ -46,10 +49,33 @@ impl ObjectImpl for Window {
         let disconnect = MenuItem::new(Some("Disconnect"), Some("app.disconnect"));
         let hide_decoration = MenuItem::new(Some("Hide Decoration"), Some("win.hide_decoration"));
 
+        let popover = PopoverMenu::builder()
+            .accessible_role(gtk::AccessibleRole::MenuItemRadio)
+            .build();
         self.menu.append_item(&disconnect);
         self.menu.append_item(&hide_decoration);
+        self.menu
+            .append_submenu(Some("Switch players"), &self.submenu);
+        popover.set_menu_model(Some(&self.menu));
+        let _submenu = self.submenu.downgrade();
+        popover.connect_visible_submenu_notify(move |_| {
+            let Some(menu) = _submenu.upgrade() else {
+                return;
+            };
+            menu.remove_all();
 
-        self.menubutton.set_menu_model(Some(&self.menu));
+            let players = list_avaliable_players();
+            for player in players {
+                let item = MenuItem::new(Some(player.identity()), None);
+                item.set_action_and_target_value(
+                    Some("app.connect"),
+                    Some(&ToVariant::to_variant(player.identity())),
+                );
+                menu.append_item(&item);
+            }
+        });
+
+        self.menubutton.set_popover(Some(&popover));
         self.headerbar.pack_start(&self.menubutton)
     }
 }

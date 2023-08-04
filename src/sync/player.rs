@@ -4,12 +4,12 @@ use std::borrow::Cow;
 use std::marker::PhantomData;
 use std::time::{Duration, SystemTime};
 
-use gtk::glib::WeakRef;
+use gtk::glib::{VariantTy, WeakRef};
 use gtk::prelude::*;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use gtk::{glib, Application};
 use mpris::{Metadata, PlaybackStatus, Player, ProgressTracker};
-use tracing::{debug, error, info, trace};
+use tracing::{debug, error, info, trace, warn};
 
 use crate::app;
 use crate::lyric::netease::NeteaseLyricProvider;
@@ -130,6 +130,34 @@ pub fn register_sigusr1_disconnect() {
     });
 }
 
+pub fn register_action_connect(app: &Application) {
+    let connect = SimpleAction::new("connect", Some(&VariantTy::STRING));
+    connect.connect_activate(|_, player_id| {
+        let Some(player_id) = player_id.and_then(|p| p.str()) else {
+            warn!("did not received string paramter for action \'app.connect\'");
+            return;
+        };
+        PLAYER_FINDER.with_borrow(|player_finder| {
+            if let Ok(player) = player_finder.find_by_name(&player_id) {
+                PLAYER.set(Some(player));
+            } else {
+                error!("cannot connect to: {player_id}");
+            }
+        });
+    });
+    app.add_action(&connect);
+}
+
+pub fn list_avaliable_players() -> Vec<Player> {
+    PLAYER_FINDER.with_borrow(|player_finder| match player_finder.find_all() {
+        Ok(players) => players,
+        Err(e) => {
+            error!("cannot find players!: {e}");
+            panic!("please check your d-bus connection!")
+        }
+    })
+}
+
 pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
     glib::timeout_add_local(interval, move || {
         let Some(app) = app.upgrade() else {
@@ -157,6 +185,7 @@ pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                 });
                 app::get_label(&window, true).set_label(DEFAULT_TEXT);
                 app::get_label(&window, false).set_label("");
+                utils::clear_lyric(&window);
                 TRACK_PLAYING_PAUSED.set((None, false));
             }
             Err(PlayerStatus::Unsupported(kind)) => {

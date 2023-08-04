@@ -65,6 +65,7 @@ fn build_ui(app: &Application) -> Result<()> {
     register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
     utils::register_sigusr2_decoration(ObjectExt::downgrade(app));
     register_action_disconnect(app);
+    register_action_connect(app);
 
     let wind= build_main_window(
         app,

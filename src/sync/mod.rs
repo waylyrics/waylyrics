@@ -15,6 +15,9 @@ pub use lyric::register_lyric_display;
 pub use player::register_mpris_sync;
 pub use player::register_sigusr1_disconnect;
 pub use player::register_action_disconnect;
+pub use player::register_action_connect;
+
+pub(crate) use player::list_avaliable_players;
 
 thread_local! {
     static PLAYER: RefCell<Option<Player>> = RefCell::new(None);
