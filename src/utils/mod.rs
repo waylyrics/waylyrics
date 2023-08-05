@@ -5,7 +5,7 @@ use gtk::{
 };
 use std::time::Duration;
 
-use crate::app::Window;
+use crate::app::{Window, utils::set_click_pass_through};
 
 pub fn parse_time(time: &str) -> Result<Duration, ParseError> {
     use rust_decimal::prelude::*;
@@ -58,11 +58,24 @@ pub fn register_sigusr2_decoration(app: WeakRef<Application>) {
 }
 
 pub fn register_action_hide_decoration(wind: &Window) {
-    let action = SimpleAction::new("hide_decoration", None);
-    let _wind = Window::downgrade(&wind);
+    let action = SimpleAction::new("hide-decoration", None);
+    let _wind = Window::downgrade(wind);
     action.connect_activate(move |_, _| {
         if let Some(wind) = _wind.upgrade() {
             wind.imp().headerbar.set_visible(false);
+        }
+    });
+    wind.add_action(&action);
+}
+
+pub fn register_action_switch_passthrough(wind: &Window) {
+    let action = SimpleAction::new("switch-passthrough", None);
+    let _wind = Window::downgrade(wind);
+    action.connect_activate(move |_, _| {
+        if let Some(wind) = _wind.upgrade() {
+            let clickthrough = !wind.imp().clickthrough.get();
+            wind.imp().clickthrough.set(clickthrough);
+            set_click_pass_through(&wind, clickthrough);
         }
     });
     wind.add_action(&action);

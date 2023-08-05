@@ -80,6 +80,7 @@ fn build_ui(app: &Application) -> Result<()> {
     );
 
     utils::register_action_hide_decoration(&wind);
+    utils::register_action_switch_passthrough(&wind);
 
     if enable_filter_regex {
         EXCLUDED_REGEXES.set(RegexSet::new(&filter_regexies)?);

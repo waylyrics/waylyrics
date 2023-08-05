@@ -47,15 +47,17 @@ impl ObjectImpl for Window {
         self.menubutton.set_icon_name("open-menu-symbolic");
 
         let disconnect = MenuItem::new(Some("Disconnect"), Some("app.disconnect"));
-        let hide_decoration = MenuItem::new(Some("Hide Decoration"), Some("win.hide_decoration"));
+        let hide_decoration = MenuItem::new(Some("Hide Decoration"), Some("win.hide-decoration"));
+        let passthrough = MenuItem::new(Some("Switch Passthrough"), Some("win.switch-passthrough"));
 
         let popover = PopoverMenu::builder()
             .accessible_role(gtk::AccessibleRole::MenuItemRadio)
             .build();
         self.menu.append_item(&disconnect);
-        self.menu.append_item(&hide_decoration);
+        self.menu.append_item(&passthrough);
         self.menu
             .append_submenu(Some("Switch players"), &self.submenu);
+        self.menu.append_item(&hide_decoration);
         popover.set_menu_model(Some(&self.menu));
         let _submenu = self.submenu.downgrade();
         popover.connect_visible_submenu_notify(move |_| {
