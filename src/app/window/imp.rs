@@ -76,7 +76,7 @@ impl ObjectImpl for Window {
         });
 
         self.menubutton.set_popover(Some(&popover));
-        self.headerbar.pack_start(&self.menubutton)
+        self.headerbar.pack_end(&self.menubutton)
     }
 }
 impl WidgetImpl for Window {
