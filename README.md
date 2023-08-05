@@ -115,4 +115,6 @@ Copay's [caraoke-plasmoid](https://github.com/Copay/caraoke-plasmoid) is current
 
 ## License
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fpoly000%2Fwaylyrics.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fpoly000%2Fwaylyrics?ref=badge_large)
+[The MIT License (MIT)](https://raw.githubusercontent.com/waylyrics/waylyrics/master/LICENSE)
+
+This project icon is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
