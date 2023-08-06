@@ -46,7 +46,7 @@ impl ObjectImpl for Window {
         self.headerbar.set_decoration_layout(Some("menu:close"));
         self.menubutton.set_icon_name("open-menu-symbolic");
 
-        let hide_decoration = MenuItem::new(Some("Hide Decoration"), Some("win.hide-decoration"));
+        let hide_decoration = MenuItem::new(Some("Hide Decoration"), Some("win.switch-decoration"));
         let passthrough = MenuItem::new(Some("Switch Passthrough"), Some("win.switch-passthrough"));
 
         let popover = PopoverMenu::builder()

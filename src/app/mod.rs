@@ -1,9 +1,5 @@
 mod window;
-use gtk::{
-    prelude::*,
-    subclass::prelude::ObjectSubclassIsExt,
-    Align, Application, Label,
-};
+use gtk::{prelude::*, subclass::prelude::ObjectSubclassIsExt, Align, Application, Label};
 pub use window::Window;
 
 use crate::app::utils::set_click_pass_through;
@@ -21,7 +17,7 @@ pub fn build_main_window(
     cache_lyrics: bool,
     length_toleration_ms: u128,
     window_decoration: bool,
-    lyric_align: Align,
+    lyric_align: impl Into<Align> + Copy,
 ) -> Window {
     let window = Window::new(app, click_pass_through);
 
@@ -43,8 +39,8 @@ pub fn build_main_window(
     olabel.set_vexpand(true);
     tlabel.set_vexpand(true);
 
-    olabel.set_halign(lyric_align);
-    tlabel.set_halign(lyric_align);
+    olabel.set_halign(lyric_align.into());
+    tlabel.set_halign(lyric_align.into());
 
     let verical_box = gtk::Box::builder()
         .baseline_position(gtk::BaselinePosition::Center)

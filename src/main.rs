@@ -53,6 +53,7 @@ fn build_ui(app: &Application) -> Result<()> {
         ref length_toleration,
         window_decoration,
         lyric_align,
+        switch_decoration_trigger,
     } = config;
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval)?;
@@ -67,7 +68,7 @@ fn build_ui(app: &Application) -> Result<()> {
     register_action_disconnect(app);
     register_action_connect(app);
 
-    let wind= build_main_window(
+    let wind = build_main_window(
         app,
         hide_label_on_empty_text,
         click_pass_through,
@@ -76,10 +77,10 @@ fn build_ui(app: &Application) -> Result<()> {
         cache_lyrics,
         parse_time(&length_toleration)?.as_millis(),
         window_decoration,
-        lyric_align.into(),
+        lyric_align,
     );
 
-    utils::register_action_hide_decoration(&wind);
+    utils::register_action_switch_decoration(&wind, &switch_decoration_trigger);
     utils::register_action_switch_passthrough(&wind);
 
     if enable_filter_regex {

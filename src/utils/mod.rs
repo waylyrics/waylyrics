@@ -1,11 +1,11 @@
 use anyhow::Result;
 use gtk::{
-    gio::SimpleAction, glib::WeakRef, prelude::*, subclass::prelude::ObjectSubclassIsExt,
-    Application,
+    gio::SimpleAction, glib::WeakRef, prelude::*, subclass::prelude::*, Application, NamedAction,
+    Shortcut, ShortcutController, ShortcutTrigger,
 };
 use std::time::Duration;
 
-use crate::app::{Window, utils::set_click_pass_through};
+use crate::app::{utils::set_click_pass_through, Window};
 
 pub fn parse_time(time: &str) -> Result<Duration, ParseError> {
     use rust_decimal::prelude::*;
@@ -57,15 +57,24 @@ pub fn register_sigusr2_decoration(app: WeakRef<Application>) {
     });
 }
 
-pub fn register_action_hide_decoration(wind: &Window) {
-    let action = SimpleAction::new("hide-decoration", None);
+pub fn register_action_switch_decoration(wind: &Window, switch_decoration_trigger: &str) {
+    let action = SimpleAction::new("switch-decoration", None);
     let _wind = Window::downgrade(wind);
     action.connect_activate(move |_, _| {
         if let Some(wind) = _wind.upgrade() {
-            wind.set_decorated(false);
+            wind.set_decorated(!wind.is_decorated());
         }
     });
     wind.add_action(&action);
+
+    let shortcut = Shortcut::builder()
+        .action(&NamedAction::new("win.switch-decoration"))
+        .trigger(&ShortcutTrigger::parse_string(switch_decoration_trigger).unwrap())
+        .build();
+    let controller = ShortcutController::new();
+    controller.set_scope(gtk::ShortcutScope::Global);
+    controller.add_shortcut(shortcut);
+    wind.add_controller(controller);
 }
 
 pub fn register_action_switch_passthrough(wind: &Window) {
