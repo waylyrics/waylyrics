@@ -1,11 +1,11 @@
 use anyhow::Result;
 use gtk::{
     gio::SimpleAction, glib::WeakRef, prelude::*, subclass::prelude::ObjectSubclassIsExt,
-    Application,
+    AlertDialog, Application,
 };
 use std::time::Duration;
 
-use crate::app::{Window, utils::set_click_pass_through};
+use crate::app::{utils::set_click_pass_through, Window};
 
 pub fn parse_time(time: &str) -> Result<Duration, ParseError> {
     use rust_decimal::prelude::*;
@@ -62,6 +62,28 @@ pub fn register_action_hide_decoration(wind: &Window) {
     let _wind = Window::downgrade(wind);
     action.connect_activate(move |_, _| {
         if let Some(wind) = _wind.upgrade() {
+            #[cfg(feature = "v4_10")]
+            {
+                let alert = AlertDialog::builder()
+                    .detail(format!(
+                        "You could still show decoration again by send SIGUSR2 to {}",
+                        std::process::id()
+                    ))
+                    .message("Are you sure to hide decoration?")
+                    .buttons(["Yes", "No"])
+                    .default_button(1)
+                    .cancel_button(1)
+                    .build();
+                let _wind = Window::downgrade(&wind);
+                alert.choose(Some(&wind), gtk::gio::Cancellable::NONE, move |result| {
+                    if Ok(0) == result {
+                        if let Some(wind) = _wind.upgrade() {
+                            wind.set_decorated(false);
+                        }
+                    }
+                });
+            }
+            #[cfg(not(feature = "v4_10"))]
             wind.set_decorated(false);
         }
     });
