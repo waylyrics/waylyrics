@@ -10,7 +10,7 @@ use anyhow::Result;
 use regex::RegexSet;
 use waylyrics::app::{self, build_main_window};
 use waylyrics::config::Config;
-use waylyrics::{utils, EXCLUDED_REGEXES};
+use waylyrics::{utils, EXCLUDED_REGEXES, THEME_PATH};
 
 use waylyrics::sync::*;
 
@@ -54,13 +54,16 @@ fn build_ui(app: &Application) -> Result<()> {
         window_decoration,
         lyric_align,
         switch_decoration_trigger,
+        reload_theme_trigger,
     } = config;
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval)?;
     let lyric_update_interval = parse_time(&lyric_update_interval)?;
-    let css_style = std::fs::read_to_string(theme_dir.join(format!("{theme}.css")))?;
 
+    let theme_path = theme_dir.join(format!("{theme}.css"));
+    let css_style = std::fs::read_to_string(&theme_path)?;
     app::utils::merge_css(&css_style);
+    THEME_PATH.set(theme_path);
 
     register_mpris_sync(ObjectExt::downgrade(app), mpris_sync_interval);
     register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
@@ -82,6 +85,7 @@ fn build_ui(app: &Application) -> Result<()> {
 
     utils::register_action_switch_decoration(&wind, &switch_decoration_trigger);
     utils::register_action_switch_passthrough(&wind);
+    utils::register_action_reload_theme(app, &wind, &reload_theme_trigger);
 
     if enable_filter_regex {
         EXCLUDED_REGEXES.set(RegexSet::new(&filter_regexies)?);

@@ -48,6 +48,7 @@ impl ObjectImpl for Window {
 
         let hide_decoration = MenuItem::new(Some("Hide Decoration"), Some("win.switch-decoration"));
         let passthrough = MenuItem::new(Some("Switch Passthrough"), Some("win.switch-passthrough"));
+        let reload_theme = MenuItem::new(Some("Reload theme"), Some("app.reload-theme"));
 
         let popover = PopoverMenu::builder()
             .accessible_role(gtk::AccessibleRole::MenuItemRadio)
@@ -56,6 +57,7 @@ impl ObjectImpl for Window {
             .append_submenu(Some("Switch players"), &self.submenu);
         self.menu.append_item(&passthrough);
         self.menu.append_item(&hide_decoration);
+        self.menu.append_item(&reload_theme);
         popover.set_menu_model(Some(&self.menu));
 
         let _submenu = self.submenu.downgrade();
