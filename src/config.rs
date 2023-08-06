@@ -29,6 +29,8 @@ pub struct Config {
     pub filter_regexies: Vec<String>,
     /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
     pub switch_decoration_trigger: String,
+    /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
+    pub switch_passthrough_trigger: String,
 }
 
 impl Default for Config {
@@ -74,6 +76,7 @@ impl Default for Config {
             ],
             lyric_align: Align::Center,
             switch_decoration_trigger: "<Control>d".into(),
+            switch_passthrough_trigger: "<Alt>p".into(),
         }
     }
 }

@@ -54,6 +54,7 @@ fn build_ui(app: &Application) -> Result<()> {
         window_decoration,
         lyric_align,
         switch_decoration_trigger,
+        switch_passthrough_trigger,
     } = config;
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval)?;
@@ -81,7 +82,7 @@ fn build_ui(app: &Application) -> Result<()> {
     );
 
     utils::register_action_switch_decoration(&wind, &switch_decoration_trigger);
-    utils::register_action_switch_passthrough(&wind);
+    utils::register_action_switch_passthrough(&wind, &switch_passthrough_trigger);
 
     if enable_filter_regex {
         EXCLUDED_REGEXES.set(RegexSet::new(&filter_regexies)?);
