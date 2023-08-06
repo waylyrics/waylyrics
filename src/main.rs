@@ -67,7 +67,7 @@ fn build_ui(app: &Application) -> Result<()> {
     register_action_disconnect(app);
     register_action_connect(app);
 
-    let wind= build_main_window(
+    let wind = build_main_window(
         app,
         hide_label_on_empty_text,
         click_pass_through,

@@ -25,6 +25,7 @@ pub fn build_main_window(
 ) -> Window {
     let window = Window::new(app, click_pass_through);
 
+    window.set_property("name", "main");
     window.set_size_request(500, WINDOW_MIN_HEIGHT);
     window.set_title(Some("Waylyrics"));
     window.set_decorated(window_decoration);
