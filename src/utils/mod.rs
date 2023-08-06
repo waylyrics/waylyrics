@@ -62,7 +62,7 @@ pub fn register_action_hide_decoration(wind: &Window) {
     let _wind = Window::downgrade(wind);
     action.connect_activate(move |_, _| {
         if let Some(wind) = _wind.upgrade() {
-            wind.imp().headerbar.set_visible(false);
+            wind.set_decorated(false);
         }
     });
     wind.add_action(&action);
