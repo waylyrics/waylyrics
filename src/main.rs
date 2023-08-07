@@ -14,8 +14,6 @@ use waylyrics::{utils, EXCLUDED_REGEXES, THEME_PATH};
 
 use waylyrics::sync::*;
 
-// waylyrics will copy from there if no config file was found in XDG_CONFIG_HOME/waylyrics/
-pub const DEFAULT_CONFIG_PATH: &str = env!("WAYLYRICS_DEFAULT_CONFIG");
 pub const THEME_PRESETS_DIR: &str = env!("WAYLYRICS_THEME_PRESETS_DIR");
 
 fn main() -> Result<glib::ExitCode> {
@@ -127,7 +125,7 @@ fn init_dirs() -> Result<(PathBuf, PathBuf)> {
     let user_theme_dir = xdg_dirs.get_data_home().join("_themes");
 
     if !config_path.exists() {
-        std::fs::copy(DEFAULT_CONFIG_PATH, &config_path)?;
+        std::fs::write(&config_path, toml::to_string(&Config::default())?)?;
     }
     if !user_theme_dir.exists() {
         std::fs::create_dir_all(&user_theme_dir)?;

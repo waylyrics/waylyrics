@@ -8,6 +8,7 @@
 - [Build](#build)
   - [With stable toolchain](#with-stable-toolchain)
   - [With nightly toolchain](#with-nightly-toolchain)
+  - [Compiling Schema](#compiling-schema)
   - [Packging example](#packging-example)
 
 
@@ -46,7 +47,6 @@ paru -S gtk4 libxcb
 # Build
 
 ```bash
-export WAYLYRICS_DEFAULT_CONFIG=/usr/share/waylyrics/config.toml
 export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 ```
 
@@ -82,8 +82,6 @@ glib-compile-schemas ~/.local/share/glib-2.0/schemas/
 An example packaging script:
 
 ```bash
-cargo run --bin gen_config_example
-sudo install -m644 config.toml /usr/share/waylyrics/config.toml
 sudo install -m644 io.poly000.waylyrics.gschema.xml /usr/share/glib-2.0/schemas/
 sudo install -dm755 /usr/share/waylyrics/themes
 sudo cp -r themes/* /usr/share/waylyrics/themes/
