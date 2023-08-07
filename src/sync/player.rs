@@ -353,6 +353,17 @@ fn set_lyric_with_songid_or_file(
                 )
                 .map(|song_id| set_lyric(&*provider, song_id, title, artists, window))
             }
+            "YesPlayMusic" => {
+                let provider = NeteaseLyricProvider::new().unwrap();
+
+                set_lyric_with_player_songid(
+                    PhantomData::<NeteaseLyricProvider>,
+                    player,
+                    |meta| meta.url()?.strip_prefix("/trackid/"),
+                    |songid| songid.parse().ok(),
+                )
+                .map(|song_id| set_lyric(&*provider, song_id, title, artists, window))
+            }
             _ => None,
         }
     })
