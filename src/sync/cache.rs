@@ -1,9 +1,9 @@
-use std::{path::PathBuf, time::Duration};
 use anyhow::Result;
+use std::{path::PathBuf, time::Duration};
 
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use serde::{Deserialize, Serialize};
-use tracing::{debug, error, info};
+use tracing::{error, info};
 
 use super::{player::fetch_lyric, LYRIC};
 use crate::{app, lyric::LyricOwned, CACHE_DIR};
@@ -19,7 +19,7 @@ pub fn fetch_lyric_cached(
     let cache_dir =
         CACHE_DIR.with_borrow(|cache_home| PathBuf::from(cache_home).join(md5_cache_dir(digest)));
     let cache_path = cache_dir.join(format!("{digest:x}.json"));
-    debug!(
+    info!(
         "cache_path for {title}-{artists:?}-{}-{length:?}: {cache_path:?}",
         album.unwrap_or("Unknown")
     );
@@ -61,8 +61,8 @@ pub fn fetch_lyric_cached(
                     tlyric: tlyric.clone(),
                     offset: 0,
                 })
-                .expect("cannot serialize lyrics!"),)
-            else {
+                .expect("cannot serialize lyrics!"),
+            ) else {
                 info!("cached to {cache_path:?}");
                 return;
             };
