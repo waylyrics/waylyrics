@@ -56,6 +56,7 @@ fn build_ui(app: &Application) -> Result<()> {
         switch_decoration_trigger,
         reload_theme_trigger,
         reload_lyric_trigger,
+        switch_passthrough_trigger,
     } = config;
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval)?;
@@ -85,7 +86,7 @@ fn build_ui(app: &Application) -> Result<()> {
     );
 
     utils::register_action_switch_decoration(&wind, &switch_decoration_trigger);
-    utils::register_action_switch_passthrough(&wind);
+    utils::register_action_switch_passthrough(&wind, &switch_passthrough_trigger);
     utils::register_action_reload_theme(app, &wind, &reload_theme_trigger);
     register_action_reload_lyric(app, &wind, &reload_lyric_trigger);
 

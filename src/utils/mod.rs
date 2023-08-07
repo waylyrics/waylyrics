@@ -97,7 +97,7 @@ pub fn register_action_reload_theme(app: &Application, wind: &Window, reload_the
     controller.add_shortcut(shortcut);
     wind.add_controller(controller);
 }
-pub fn register_action_switch_passthrough(wind: &Window) {
+pub fn register_action_switch_passthrough(wind: &Window, switch_passthrough_trigger: &str) {
     let action = SimpleAction::new("switch-passthrough", None);
     let _wind = Window::downgrade(wind);
     action.connect_activate(move |_, _| {
@@ -105,7 +105,17 @@ pub fn register_action_switch_passthrough(wind: &Window) {
             let clickthrough = !wind.imp().clickthrough.get();
             wind.imp().clickthrough.set(clickthrough);
             set_click_pass_through(&wind, clickthrough);
+            wind.present();
         }
     });
     wind.add_action(&action);
+
+    let shortcut = Shortcut::builder()
+        .action(&NamedAction::new("win.switch-passthrough"))
+        .trigger(&ShortcutTrigger::parse_string(switch_passthrough_trigger).unwrap())
+        .build();
+    let controller = ShortcutController::new();
+    controller.set_scope(gtk::ShortcutScope::Global);
+    controller.add_shortcut(shortcut);
+    wind.add_controller(controller);
 }
