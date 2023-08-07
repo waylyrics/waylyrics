@@ -27,9 +27,7 @@ jobs:
       run: cargo build --verbose
     - name: Installation
       run: |
-        cargo run --bin gen_config_example
         sudo mkdir -p /usr/share/waylyrics
-        sudo install -m644 config.toml /usr/share/waylyrics/config.toml
         sudo install -m644 io.poly000.waylyrics.gschema.xml /usr/share/glib-2.0/schemas/
         sudo install -dm755 /usr/share/waylyrics/themes
         sudo cp -r themes/* /usr/share/waylyrics/themes/
