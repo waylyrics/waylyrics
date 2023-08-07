@@ -45,6 +45,7 @@ impl Default for Config {
             hide_label_on_empty_text: true,
             theme: "default".into(),
             origin_lyric_in_above: true,
+            /// note: persistenced lyric offset settings depends on this
             cache_lyrics: true,
             enable_filter_regex: false,
             window_decoration: true,
