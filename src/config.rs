@@ -23,7 +23,6 @@ pub struct Config {
     pub window_decoration: bool,
     pub click_pass_through: bool,
     pub hide_label_on_empty_text: bool,
-    pub origin_lyric_in_above: bool,
     pub theme: String,
     pub enable_filter_regex: bool,
     pub filter_regexies: Vec<String>,
@@ -46,7 +45,6 @@ impl Default for Config {
             click_pass_through: true,
             hide_label_on_empty_text: true,
             theme: "default".into(),
-            origin_lyric_in_above: true,
             /// note: persistenced lyric offset settings depends on this
             cache_lyrics: true,
             enable_filter_regex: false,
