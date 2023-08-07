@@ -29,7 +29,7 @@ pub fn build_main_window(
     let below_label = Label::builder()
         .label("")
         .name("below")
-        .visible(true)
+        .visible(false)
         .build();
 
     for label in [&above_label, &below_label] {

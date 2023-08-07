@@ -61,7 +61,16 @@ fn build_ui(app: &Application) -> Result<()> {
     let mpris_sync_interval = parse_time(&mpris_sync_interval)?;
     let lyric_update_interval = parse_time(&lyric_update_interval)?;
 
-    let theme_path = theme_dir.join(format!("{theme}.css"));
+    let theme_file_name = format!("{theme}.css");
+    let user_theme = theme_dir.join(&theme_file_name);
+    let global_theme = PathBuf::from(THEME_PRESETS_DIR).join(&theme_file_name);
+
+    let theme_path = if user_theme.exists() {
+        user_theme
+    } else {
+        global_theme
+    };
+
     let css_style = std::fs::read_to_string(&theme_path)?;
     app::utils::merge_css(&css_style);
     THEME_PATH.set(theme_path);
@@ -115,25 +124,14 @@ fn init_dirs() -> Result<(PathBuf, PathBuf)> {
     std::fs::create_dir_all(&config_home)?;
     std::fs::create_dir_all(&cache_dir)?;
     let config_path = config_home.join("config.toml");
-    let theme_dir = xdg_dirs.get_data_home().join("themes");
+    let user_theme_dir = xdg_dirs.get_data_home().join("_themes");
 
     if !config_path.exists() {
         std::fs::copy(DEFAULT_CONFIG_PATH, &config_path)?;
     }
-    if !theme_dir.exists() {
-        std::fs::create_dir_all(&theme_dir)?;
-        let mut theme_dir_iter =
-            std::fs::read_dir(THEME_PRESETS_DIR).expect("cannot access theme presets dir");
-        while let Some(Ok(entry)) = theme_dir_iter.next() {
-            if entry.file_type().unwrap().is_file()
-                && entry.file_name().to_str().unwrap().ends_with(".css")
-            {
-                let source_file = PathBuf::from(THEME_PRESETS_DIR).join(entry.file_name());
-                let dest_file = theme_dir.join(entry.file_name());
-                std::fs::copy(source_file, dest_file).unwrap();
-            }
-        }
+    if !user_theme_dir.exists() {
+        std::fs::create_dir_all(&user_theme_dir)?;
     }
 
-    Ok((config_path, theme_dir))
+    Ok((config_path, user_theme_dir))
 }
