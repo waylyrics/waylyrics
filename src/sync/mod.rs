@@ -16,6 +16,7 @@ pub use player::register_mpris_sync;
 pub use player::register_sigusr1_disconnect;
 pub use player::register_action_disconnect;
 pub use player::register_action_connect;
+pub use player::register_action_reload_lyric;
 
 pub(crate) use player::list_avaliable_players;
 

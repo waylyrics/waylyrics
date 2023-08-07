@@ -55,6 +55,7 @@ fn build_ui(app: &Application) -> Result<()> {
         lyric_align,
         switch_decoration_trigger,
         reload_theme_trigger,
+        reload_lyric_trigger,
     } = config;
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval)?;
@@ -86,6 +87,7 @@ fn build_ui(app: &Application) -> Result<()> {
     utils::register_action_switch_decoration(&wind, &switch_decoration_trigger);
     utils::register_action_switch_passthrough(&wind);
     utils::register_action_reload_theme(app, &wind, &reload_theme_trigger);
+    register_action_reload_lyric(app, &wind, &reload_lyric_trigger);
 
     if enable_filter_regex {
         EXCLUDED_REGEXES.set(RegexSet::new(&filter_regexies)?);

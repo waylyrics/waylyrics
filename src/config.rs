@@ -31,6 +31,8 @@ pub struct Config {
     pub switch_decoration_trigger: String,
     /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
     pub reload_theme_trigger: String,
+    /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
+    pub reload_lyric_trigger: String,
 }
 
 impl Default for Config {
@@ -77,6 +79,7 @@ impl Default for Config {
             lyric_align: Align::Center,
             switch_decoration_trigger: "<Control>d".into(),
             reload_theme_trigger: "<Control><Shift>t".into(),
+            reload_lyric_trigger: "<Alt><Shift>l".into(),
         }
     }
 }

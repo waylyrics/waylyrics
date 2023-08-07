@@ -5,9 +5,9 @@ use std::marker::PhantomData;
 use std::time::{Duration, SystemTime};
 
 use gtk::glib::{VariantTy, WeakRef};
-use gtk::prelude::*;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use gtk::{glib, Application};
+use gtk::{prelude::*, NamedAction, Shortcut, ShortcutController, ShortcutTrigger};
 use mpris::{Metadata, PlaybackStatus, Player, ProgressTracker};
 use tracing::{debug, error, info, trace, warn};
 
@@ -128,6 +128,28 @@ pub fn register_sigusr1_disconnect() {
         PLAYER.set(None);
         Continue(true)
     });
+}
+
+pub fn register_action_reload_lyric(
+    app: &Application,
+    wind: &app::Window,
+    reload_lyric_trigger: &str,
+) {
+    let action = SimpleAction::new("reload-lyric", None);
+    action.connect_activate(move |_, _| {
+        TRACK_PLAYING_PAUSED.set((None, false));
+        info!("cleaned lyric");
+    });
+    app.add_action(&action);
+
+    let shortcut = Shortcut::builder()
+        .action(&NamedAction::new("app.reload-lyric"))
+        .trigger(&ShortcutTrigger::parse_string(reload_lyric_trigger).unwrap())
+        .build();
+    let controller = ShortcutController::new();
+    controller.set_scope(gtk::ShortcutScope::Global);
+    controller.add_shortcut(shortcut);
+    wind.add_controller(controller);
 }
 
 pub fn register_action_connect(app: &Application) {
