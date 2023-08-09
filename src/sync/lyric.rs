@@ -35,17 +35,17 @@ pub fn register_lyric_display(app: WeakRef<Application>, interval: Duration) {
                         LyricOwned::LineTimestamp(origin_lyric),
                         LyricOwned::LineTimestamp(translation_lyric),
                     ) => {
-                        let next_translation = crate::lyric::utils::find_next_lyric(&elapsed, translation_lyric);
-                        let next_origin = crate::lyric::utils::find_next_lyric(&elapsed, origin_lyric);
-                        set_lyric(&window, next_translation, "above");
-                        set_lyric(&window, next_origin, "below");
+                        let next_translation =
+                            crate::lyric::utils::find_next_lyric(&elapsed, translation_lyric);
+                        let next_origin =
+                            crate::lyric::utils::find_next_lyric(&elapsed, origin_lyric);
+                        set_lyric(&window, next_translation, "above", true);
+                        set_lyric(&window, next_origin, "below", false);
                     }
-                    (
-                        LyricOwned::LineTimestamp(origin_lyric),
-                        _
-                    ) => {
-                        let next_origin = crate::lyric::utils::find_next_lyric(&elapsed, origin_lyric);
-                        set_lyric(&window, next_origin, "above");
+                    (LyricOwned::LineTimestamp(origin_lyric), _) => {
+                        let next_origin =
+                            crate::lyric::utils::find_next_lyric(&elapsed, origin_lyric);
+                        set_lyric(&window, next_origin, "above", false);
                     }
                     _ => (),
                 }
@@ -56,21 +56,22 @@ pub fn register_lyric_display(app: WeakRef<Application>, interval: Duration) {
     });
 }
 
-fn set_lyric(window: &app::Window, new_text: Option<&LyricLineOwned>, position: &str) {
-    if let Some(LyricLineOwned { text, start_time }) = new_text {
-        if window
-            .imp()
-            .lyric_playing
-            .get()
-            .is_some_and(|time| &time == start_time)
-        {
+fn set_lyric(
+    window: &app::Window,
+    next_text: Option<&LyricLineOwned>,
+    position: &str,
+    translation: bool,
+) {
+    let status = &window.imp().lyric_playing[translation as usize];
+    if let Some(LyricLineOwned { text, start_time }) = next_text {
+        if status.get().is_some_and(|time| &time == start_time) {
             return;
         }
 
-        window.imp().lyric_playing.set(Some(*start_time));
+        status.set(Some(*start_time));
         get_label(window, position).set_label(text);
     } else {
-        window.imp().lyric_playing.set(None);
+        status.set(None);
         get_label(window, position).set_label("");
     }
 }

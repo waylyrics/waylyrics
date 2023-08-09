@@ -11,8 +11,8 @@ use super::LYRIC;
 
 pub fn clear_lyric(window: &app::Window) {
     LYRIC.set((LyricOwned::None, LyricOwned::None));
-    window.imp().lyric_playing.set(None);
-    window.imp().lyric_playing_translation.set(None);
+    window.imp().lyric_playing[0].set(None);
+    window.imp().lyric_playing[1].set(None);
     window.imp().lyric_offset_ms.set(0);
 }
 

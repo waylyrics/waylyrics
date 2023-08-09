@@ -17,8 +17,7 @@ pub struct Window {
     pub settings: OnceCell<Settings>,
     pub cache_lyrics: Cell<bool>,
     pub lyric_start: Cell<Option<SystemTime>>,
-    pub lyric_playing: Cell<Option<Duration>>,
-    pub lyric_playing_translation: Cell<Option<Duration>>,
+    pub lyric_playing: [Cell<Option<Duration>>; 2],
     pub lyric_offset_ms: Cell<i64>,
     pub length_toleration_ms: Cell<u128>,
 

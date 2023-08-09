@@ -24,11 +24,7 @@ paru -S aur/waylyrics-git
 
 ## NixOS
 
-After the [PR](https://github.com/NixOS/nixpkgs/pull/231984) merged:
-
-```
-nix-env -iA 
-```
+check this [PR](https://github.com/NixOS/nixpkgs/pull/231984) for an outdated example
 
 # Prepare Dependencies
 
