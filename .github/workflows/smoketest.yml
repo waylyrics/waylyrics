@@ -55,12 +55,6 @@ jobs:
       run: |
         tar -cvzf amd64-linux-gnu.tar.gz target/release/waylyrics \
         LICENSE res io.poly000.waylyrics.gschema.xml
-        
-    - name: Declare some variables # https://stackoverflow.com/a/61699863
-      id: vars
-      shell: bash
-      run: |
-        echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
     - uses: actions/upload-artifact@v3
       with:
