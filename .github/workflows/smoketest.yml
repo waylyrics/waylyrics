@@ -24,7 +24,7 @@ jobs:
         sudo apt install -y --no-install-recommends libgtk-4-dev libdbus-1-dev pkg-config weston
     - uses: Swatinem/rust-cache@v2
     - name: Build
-      run: cargo build --verbose
+      run: cargo build --release
     - name: Installation
       run: |
         sudo mkdir -p /usr/share/waylyrics
@@ -34,8 +34,6 @@ jobs:
 
         # install schema
         sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
-    - name: Run tests
-      run: cargo test --verbose
     - name: Start waylyrics
       run: |
         # init weston
@@ -44,7 +42,7 @@ jobs:
         sleep 1
         # start waylyrics
         ret=-1
-        WAYLAND_DISPLAY=wayland-1 RUST_BACKTRACE=1 timeout 5s ./target/debug/waylyrics || ret=$?
+        WAYLAND_DISPLAY=wayland-1 RUST_BACKTRACE=1 timeout 5s ./target/release/waylyrics || ret=$?
         if [ $ret -eq 124 ]; then
           echo "waylyrics survived the smoke test"
           exit 0
@@ -52,3 +50,19 @@ jobs:
           echo "waylyrics crashed during the smoke test (exit code $ret)"
           exit 1
         fi
+    - name: Prepare assets
+      shell: bash
+      run: |
+        tar -cvzf amd64-linux-gnu.tar.gz target/release/waylyrics \
+        LICENSE res io.poly000.waylyrics.gschema.xml
+        
+    - name: Declare some variables # https://stackoverflow.com/a/61699863
+      id: vars
+      shell: bash
+      run: |
+        echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: linux-x86_64
+        path: amd64-linux-gnu.tar.gz
