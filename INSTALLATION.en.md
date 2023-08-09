@@ -1,19 +1,19 @@
 
-- [通过包管理器安装](#通过包管理器安装)
+- [Install with package manager](#install-with-package-manager)
   - [Arch-based](#arch-based)
   - [NixOS](#nixos)
-- [安装构建依赖](#安装构建依赖)
+- [Prepare Dependencies](#prepare-dependencies)
   - [Debian-based](#debian-based)
   - [Arch-based](#arch-based-1)
   - [openSUSE/RHEL/Fedora..](#opensuserhelfedora)
-- [编译](#编译)
-  - [使用 stable 工具链](#使用-stable-工具链)
-  - [使用 nightly 工具链](#使用-nightly-工具链)
-  - [编译Schema](#编译schema)
+- [Build](#build)
+  - [With stable toolchain](#with-stable-toolchain)
+  - [With nightly toolchain](#with-nightly-toolchain)
+  - [Compiling Schema](#compiling-schema)
   - [Packging example](#packging-example)
 
 
-# 通过包管理器安装
+# Install with package manager
 
 ## Arch-based
 
@@ -21,13 +21,13 @@
 paru -S aur/waylyrics-git
 ```
 
-Archlinuxcn也有 [Waylyrics-git](https://github.com/archlinuxcn/repo/tree/master/archlinuxcn/waylyrics-git) 的打包
+[Waylyrics-git](https://github.com/archlinuxcn/repo/tree/master/archlinuxcn/waylyrics-git) is also avaliable in archlinuxcn.
 
 ## NixOS
 
-这个 [PR](https://github.com/NixOS/nixpkgs/pull/231984) 虽然坏了但是可以参考
+check this [PR](https://github.com/NixOS/nixpkgs/pull/231984) for an outdated example
 
-# 安装构建依赖
+# Prepare Dependencies
 
 ## Debian-based
 
@@ -47,32 +47,32 @@ paru -S gtk4 libxcb
 cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel
 ```
 
-# 编译
+# Build
 
 ```bash
 export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 ```
 
-## 使用 stable 工具链
+## With stable toolchain
 
-* note: 你的 rustc 需要在 1.52+
+* note: your rustc should be 1.52+
 
 ```bash
 export RUSTC_BOOTSTRAP=1
 cargo build --release --locked --target-dir target
 ```
 
-## 使用 nightly 工具链
+## With nightly toolchain
 
 ```bash
 cargo +nightly build --release --locked --target-dir target
 ```
 
-生成的二进制会被放在 `target/release/`
+Target binaries are placed in `target/release/`.
 
-## 编译Schema
+## Compiling Schema
 
-你也可以本地安装schema:
+You can install the schema locally:
 
 ```bash
 mkdir -p ~/.local/share/glib-2.0/schemas

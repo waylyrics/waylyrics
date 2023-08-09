@@ -4,8 +4,8 @@ Release:        0
 Summary:        Simple universal on screen lyrics made with GTK4 and love.
 License:        MIT
 Group:          Productivity
-Url:            https://github.com/poly000/waylyrics
-Source0:        https://github.com/poly000/waylyrics/archive/master.tar.gz
+Url:            https://github.com/waylyrics/waylyrics
+Source0:        https://github.com/waylyrics/waylyrics/archive/master.tar.gz
 BuildRequires:  cargo
 BuildRequires:  libgraphene-devel
 BuildRequires:  gtk4-devel
@@ -38,7 +38,7 @@ install -m644 io.poly000.waylyrics.gschema.xml %{buildroot}/usr/share/glib-2.0/s
 
 cp -r themes %{buildroot}/usr/share/waylyrics/
 
-rm %{buildroot}/usr/.crates.toml %{buildroot}/usr/.crates2.json %{buildroot}/usr/bin/gen_config_example
+rm %{buildroot}/usr/.crates.toml %{buildroot}/usr/.crates2.json
 
 %check
 
