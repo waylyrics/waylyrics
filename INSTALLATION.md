@@ -12,6 +12,7 @@
   - [编译Schema](#编译schema)
   - [Packging example](#packging-example)
 
+可以在 [Actions](https://github.com/waylyrics/waylyrics/actions/workflows/smoketest.yml) 下载发布
 
 # 通过包管理器安装
 

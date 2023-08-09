@@ -12,6 +12,7 @@
   - [Compiling Schema](#compiling-schema)
   - [Packging example](#packging-example)
 
+Releases are avaliable in [Actions](https://github.com/waylyrics/waylyrics/actions/workflows/smoketest.yml)
 
 # Install with package manager
 
