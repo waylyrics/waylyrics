@@ -9,7 +9,7 @@ use anyhow::Result;
 
 use regex::RegexSet;
 use waylyrics::app::{self, build_main_window};
-use waylyrics::config::Config;
+use waylyrics::config::{Config, Triggers};
 use waylyrics::{utils, EXCLUDED_REGEXES, THEME_PATH};
 
 use waylyrics::sync::*;
@@ -48,12 +48,14 @@ fn build_ui(app: &Application) -> Result<()> {
         enable_filter_regex,
         filter_regexies,
         ref length_toleration,
-        window_decoration,
         lyric_align,
-        switch_decoration_trigger,
-        reload_theme_trigger,
-        reload_lyric_trigger,
-        switch_passthrough_trigger,
+        triggers:
+            Triggers {
+                switch_decoration,
+                reload_theme,
+                reload_lyric,
+                switch_passthrough,
+            },
     } = config;
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval)?;
@@ -86,14 +88,13 @@ fn build_ui(app: &Application) -> Result<()> {
         enable_filter_regex && !filter_regexies.is_empty(),
         cache_lyrics,
         parse_time(&length_toleration)?.as_millis(),
-        window_decoration,
         lyric_align,
     );
 
-    utils::register_action_switch_decoration(&wind, &switch_decoration_trigger);
-    utils::register_action_switch_passthrough(&wind, &switch_passthrough_trigger);
-    utils::register_action_reload_theme(app, &wind, &reload_theme_trigger);
-    register_action_reload_lyric(app, &wind, &reload_lyric_trigger);
+    utils::register_action_switch_decoration(&wind, &switch_decoration);
+    utils::register_action_switch_passthrough(&wind, &switch_passthrough);
+    utils::register_action_reload_theme(app, &wind, &reload_theme);
+    register_action_reload_lyric(app, &wind, &reload_lyric);
 
     if enable_filter_regex {
         EXCLUDED_REGEXES.set(RegexSet::new(&filter_regexies)?);

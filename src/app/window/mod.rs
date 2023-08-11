@@ -39,19 +39,23 @@ impl Window {
             .expect("`settings` should be set in `setup_settings`.")
     }
 
-    pub fn save_window_size(&self) -> Result<(), glib::BoolError> {
+    pub fn save_window_state(&self) -> Result<(), glib::BoolError> {
         let (width, height) = self.default_size();
+        let decorated = self.is_decorated();
 
         self.settings().set_int("window-width", width)?;
         self.settings().set_int("window-height", height)?;
+        self.settings().set_boolean("window-decorated", decorated)?;
 
         Ok(())
     }
 
-    fn load_window_size(&self) {
+    fn load_window_state(&self) {
         let height = self.settings().int("window-height");
         let width = self.settings().int("window-width");
+        let decorated = self.settings().boolean("window-decorated");
 
         self.set_default_size(width, height);
+        self.set_decorated(decorated);
     }
 }

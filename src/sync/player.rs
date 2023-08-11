@@ -133,7 +133,7 @@ pub fn register_sigusr1_disconnect() {
 pub fn register_action_reload_lyric(
     app: &Application,
     wind: &app::Window,
-    reload_lyric_trigger: &str,
+    trigger: &str,
 ) {
     let action = SimpleAction::new("reload-lyric", None);
     action.connect_activate(move |_, _| {
@@ -144,7 +144,7 @@ pub fn register_action_reload_lyric(
 
     let shortcut = Shortcut::builder()
         .action(&NamedAction::new("app.reload-lyric"))
-        .trigger(&ShortcutTrigger::parse_string(reload_lyric_trigger).unwrap())
+        .trigger(&ShortcutTrigger::parse_string(trigger).unwrap())
         .build();
     let controller = ShortcutController::new();
     controller.set_scope(gtk::ShortcutScope::Global);

@@ -40,7 +40,7 @@ impl ObjectImpl for Window {
         // Load latest window state
         let obj = self.obj();
         obj.setup_settings();
-        obj.load_window_size();
+        obj.load_window_state();
 
         self.headerbar.set_decoration_layout(Some("menu:close"));
         self.menubutton.set_icon_name("open-menu-symbolic");
@@ -103,7 +103,7 @@ impl WindowImpl for Window {
     fn close_request(&self) -> Inhibit {
         // Save window size
         self.obj()
-            .save_window_size()
+            .save_window_state()
             .expect("Failed to save window state");
 
         // Don't inhibit the default handler

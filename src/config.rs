@@ -20,20 +20,32 @@ pub struct Config {
     pub lyric_update_interval: String,
     pub length_toleration: String,
     pub cache_lyrics: bool,
-    pub window_decoration: bool,
     pub click_pass_through: bool,
     pub hide_label_on_empty_text: bool,
     pub theme: String,
     pub enable_filter_regex: bool,
     pub filter_regexies: Vec<String>,
-    /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
-    pub switch_decoration_trigger: String,
-    /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
-    pub reload_theme_trigger: String,
-    /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
-    pub reload_lyric_trigger: String,
-    /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
-    pub switch_passthrough_trigger: String,
+    pub triggers: Triggers,
+}
+
+/// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
+#[derive(Deserialize, Serialize)]
+pub struct Triggers {
+    pub switch_decoration: String,
+    pub reload_theme: String,
+    pub reload_lyric: String,
+    pub switch_passthrough: String,
+}
+
+impl Default for Triggers {
+    fn default() -> Self {
+        Self {
+            switch_decoration: "<Control>d".into(),
+            reload_theme: "<Control><Shift>t".into(),
+            reload_lyric: "<Alt><Shift>l".into(),
+            switch_passthrough: "<Alt>p".into(),
+        }
+    }
 }
 
 impl Default for Config {
@@ -48,7 +60,6 @@ impl Default for Config {
             /// note: persistenced lyric offset settings depends on this
             cache_lyrics: true,
             enable_filter_regex: false,
-            window_decoration: true,
             /// inspired by LyricX's filter [list](https://github.com/ddddxxx/LyricsX/blob/c16b6a413dda7bc0b793b897522e0c4ee0ffc716/LyricsX/Supporting%20Files/UserDefaults.plist#L31-L62)
             filter_regexies: vec![
                 "^作词".into(),
@@ -78,10 +89,7 @@ impl Default for Config {
                 "^アニメ)".into(),
             ],
             lyric_align: Align::Center,
-            switch_decoration_trigger: "<Control>d".into(),
-            reload_theme_trigger: "<Control><Shift>t".into(),
-            reload_lyric_trigger: "<Alt><Shift>l".into(),
-            switch_passthrough_trigger: "<Alt>p".into(),
+            triggers: Default::default(),
         }
     }
 }

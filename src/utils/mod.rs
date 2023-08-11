@@ -77,7 +77,7 @@ pub fn register_action_switch_decoration(wind: &Window, switch_decoration_trigge
     wind.add_controller(controller);
 }
 
-pub fn register_action_reload_theme(app: &Application, wind: &Window, reload_theme_trigger: &str) {
+pub fn register_action_reload_theme(app: &Application, wind: &Window, trigger: &str) {
     let action = SimpleAction::new("reload-theme", None);
     action.connect_activate(move |_, _| {
         crate::THEME_PATH.with_borrow(|theme_path| {
@@ -90,14 +90,14 @@ pub fn register_action_reload_theme(app: &Application, wind: &Window, reload_the
 
     let shortcut = Shortcut::builder()
         .action(&NamedAction::new("app.reload-theme"))
-        .trigger(&ShortcutTrigger::parse_string(reload_theme_trigger).unwrap())
+        .trigger(&ShortcutTrigger::parse_string(trigger).unwrap())
         .build();
     let controller = ShortcutController::new();
     controller.set_scope(gtk::ShortcutScope::Global);
     controller.add_shortcut(shortcut);
     wind.add_controller(controller);
 }
-pub fn register_action_switch_passthrough(wind: &Window, switch_passthrough_trigger: &str) {
+pub fn register_action_switch_passthrough(wind: &Window, trigger: &str) {
     let action = SimpleAction::new("switch-passthrough", None);
     let _wind = Window::downgrade(wind);
     action.connect_activate(move |_, _| {
@@ -112,7 +112,7 @@ pub fn register_action_switch_passthrough(wind: &Window, switch_passthrough_trig
 
     let shortcut = Shortcut::builder()
         .action(&NamedAction::new("win.switch-passthrough"))
-        .trigger(&ShortcutTrigger::parse_string(switch_passthrough_trigger).unwrap())
+        .trigger(&ShortcutTrigger::parse_string(trigger).unwrap())
         .build();
     let controller = ShortcutController::new();
     controller.set_scope(gtk::ShortcutScope::Global);

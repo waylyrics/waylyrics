@@ -9,5 +9,9 @@
       <default>300</default>
       <summary>Default window height</summary>
     </key>
+    <key name="window-decorated" type="b">
+      <default>true</default>
+      <summary>enable GTK+ CSD</summary>
+    </key>
   </schema>
 </schemalist>
