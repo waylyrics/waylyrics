@@ -86,7 +86,7 @@ impl Default for Config {
                 "^片头曲".into(),
                 "^片尾曲".into(),
                 "^SoundTrack".into(),
-                "^アニメ)".into(),
+                "^アニメ".into(),
             ],
             lyric_align: Align::Center,
             triggers: Default::default(),
