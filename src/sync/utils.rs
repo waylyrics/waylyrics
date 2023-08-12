@@ -9,7 +9,7 @@ use crate::{
 
 use super::LYRIC;
 
-pub fn clear_lyric(window: &app::Window) {
+pub fn clean_lyric(window: &app::Window) {
     LYRIC.set((LyricOwned::None, LyricOwned::None));
     window.imp().lyric_playing[0].set(None);
     window.imp().lyric_playing[1].set(None);

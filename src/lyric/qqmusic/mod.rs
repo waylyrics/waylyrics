@@ -30,14 +30,13 @@ impl super::LyricProvider for QQMusicLyricProvider {
 
     fn query_lyric(&self, id: &str) -> Result<LyricStore> {
         let client = Client::builder().user_agent("Waylyrics/0.1").build()?;
-        let songid;
 
         // might be a little tricky
-        if let Ok(_) = id.parse::<u32>() {
-            songid = SongId::Songid(id)
+        let songid = if id.parse::<u32>().is_ok() {
+            SongId::Songid(id)
         } else {
-            songid = SongId::Songmid(id)
-        }
+            SongId::Songmid(id)
+        };
 
         QQMUSIC_API_CLIENT.with_borrow(|api| {
             let Some(api) = api.as_ref() else {
@@ -72,7 +71,7 @@ fn match_lyric(lyric: Option<&str>) -> Lyric<'_> {
     match lyric {
         Some("") | None => super::Lyric::None,
         Some(lyric) => {
-            if let Ok(parsed) = super::utils::lrc_iter(lyric.split("\n")) {
+            if let Ok(parsed) = super::utils::lrc_iter(lyric.split('\n')) {
                 Lyric::LineTimestamp(parsed)
             } else {
                 Lyric::NoTimestamp

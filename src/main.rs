@@ -19,6 +19,11 @@ use waylyrics::sync::*;
 
 pub const THEME_PRESETS_DIR: &str = env!("WAYLYRICS_THEME_PRESETS_DIR");
 
+use utils::{
+    register_action_reload_theme, register_action_switch_decoration,
+    register_action_switch_passthrough, register_sigusr2_decoration,
+};
+
 fn main() -> Result<glib::ExitCode> {
     tracing_subscriber::fmt::init();
     tracing::info!("process id: {}", std::process::id());
@@ -28,7 +33,6 @@ fn main() -> Result<glib::ExitCode> {
         .build();
 
     app.connect_activate(|app| build_ui(app).unwrap());
-    register_sigusr1_disconnect();
 
     Ok(app.run())
 }
@@ -80,25 +84,25 @@ fn build_ui(app: &Application) -> Result<()> {
     app::utils::merge_css(&css_style);
     THEME_PATH.set(theme_path);
 
-    register_mpris_sync(ObjectExt::downgrade(app), mpris_sync_interval);
-    register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
-    utils::register_sigusr2_decoration(ObjectExt::downgrade(app));
-    register_action_disconnect(app);
-    register_action_connect(app);
-
     let wind = build_main_window(
         app,
         hide_label_on_empty_text,
         click_pass_through,
         enable_filter_regex && !filter_regexies.is_empty(),
         cache_lyrics,
-        parse_time(&length_toleration)?.as_millis(),
+        parse_time(length_toleration)?.as_millis(),
         lyric_align,
     );
 
-    utils::register_action_switch_decoration(&wind, &switch_decoration);
-    utils::register_action_switch_passthrough(&wind, &switch_passthrough);
-    utils::register_action_reload_theme(app, &wind, &reload_theme);
+    register_mpris_sync(ObjectExt::downgrade(app), mpris_sync_interval);
+    register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
+    register_action_connect(app);
+    register_action_disconnect(app);
+    register_sigusr1_disconnect();
+    register_sigusr2_decoration(ObjectExt::downgrade(app));
+    register_action_switch_decoration(&wind, &switch_decoration);
+    register_action_switch_passthrough(&wind, &switch_passthrough);
+    register_action_reload_theme(app, &wind, &reload_theme);
     register_action_reload_lyric(app, &wind, &reload_lyric);
 
     if enable_filter_regex {

@@ -1,170 +1,28 @@
 use anyhow::Result;
-use gtk::gio::SimpleAction;
 use std::borrow::Cow;
-use std::time::{Duration, SystemTime};
+use std::time::Duration;
 
-use gtk::glib::{VariantTy, WeakRef};
+use gtk::prelude::*;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
-use gtk::{glib, Application};
-use gtk::{prelude::*, NamedAction, Shortcut, ShortcutController, ShortcutTrigger};
-use mpris::{Metadata, PlaybackStatus, Player, ProgressTracker};
-use tracing::{debug, error, info, trace, warn};
+use mpris::{Metadata, Player};
+use tracing::{debug, error, info};
 
 use crate::lyric::netease::NeteaseLyricProvider;
-use crate::lyric::{LyricOwned, LyricParse, LyricProvider, LyricStore, SongInfo};
+use crate::lyric::qqmusic::QQMusicLyricProvider;
+use crate::lyric::{LyricOwned, LyricParse, LyricProvider, SongInfo};
 use crate::sync::LYRIC;
 use crate::{app, LYRIC_PROVIDERS};
 
-use super::{utils, PLAYER, PLAYER_FINDER, TRACK_PLAYING_PAUSED};
-use crate::DEFAULT_TEXT;
+use super::{utils, PLAYER, PLAYER_FINDER};
 
-enum PlayerStatus {
-    Missing,
-    Paused,
-    Unsupported(&'static str),
-}
+mod interop;
 
-fn try_sync_player(window: &crate::app::Window) -> Result<(), PlayerStatus> {
-    PLAYER.with_borrow(|player| {
-        let player = player.as_ref().ok_or(PlayerStatus::Missing)?;
+pub use interop::acts::{
+    register_action_connect, register_action_disconnect, register_action_reload_lyric,
+    register_sigusr1_disconnect,
+};
 
-        if !player.is_running() {
-            info!("disconnected from player: {}", player.identity());
-            return Err(PlayerStatus::Missing);
-        }
-
-        let mut progress_tracker = ProgressTracker::new(player, 0)
-            .map_err(|_| PlayerStatus::Unsupported("cannot fetch progress"))?;
-
-        let progress_tick = progress_tracker.tick();
-        if progress_tick.progress.playback_status() != PlaybackStatus::Playing {
-            return Err(PlayerStatus::Paused);
-        }
-        let track_meta = player
-            .get_metadata()
-            .map_err(|_| PlayerStatus::Unsupported("cannot get metadata of track playing"))?;
-        let need_update_lyric =
-            TRACK_PLAYING_PAUSED.with_borrow_mut(|(track_id_playing, paused)| {
-                let Some(track_id) = track_meta.track_id() else {
-                    *track_id_playing = None;
-                    *paused = false;
-                    return false;
-                };
-
-                trace!("got track_id: {track_id}");
-
-                let need = track_id_playing.is_none()
-                    || track_id_playing.as_ref().is_some_and(|p| p != &track_id)
-                        && !(*paused && track_id_playing.as_ref().is_some_and(|p| p == &track_id));
-
-                *track_id_playing = Some(track_id);
-                *paused = false;
-                need
-            });
-
-        if need_update_lyric {
-            utils::clear_lyric(&window);
-
-            let title = track_meta
-                .title()
-                .ok_or(PlayerStatus::Unsupported("cannot get song title"))?;
-            let album = track_meta.album_name();
-            let artists = track_meta.artists();
-
-            let length = track_meta.length();
-
-            let fetch_result = if window.imp().cache_lyrics.get() {
-                super::cache::fetch_lyric_cached(title, album, artists.as_deref(), length, window)
-            } else {
-                fetch_lyric(title, album, artists.as_deref(), length, window)
-            };
-
-            if let Err(e) = fetch_result {
-                error!("lyric fetch error: {e}");
-            }
-
-            app::get_label(window, "above").set_label(DEFAULT_TEXT);
-            app::get_label(window, "below").set_label("");
-        }
-
-        // sync play position
-        let position = player
-            .get_position()
-            .map_err(|_| PlayerStatus::Unsupported("cannot get playback position"))?;
-        let mut start =
-            SystemTime::now()
-                .checked_sub(position)
-                .ok_or(PlayerStatus::Unsupported(
-                    "Position is greater than SystemTime",
-                ))?;
-
-        let offset = window.imp().lyric_offset_ms.get();
-        if offset.is_negative() {
-            start = start
-                .checked_sub(Duration::from_millis(offset.unsigned_abs()))
-                .expect("infinite offset time");
-        } else {
-            start = start
-                .checked_add(Duration::from_millis(offset as _))
-                .expect("infinite offset time");
-        }
-
-        window.imp().lyric_start.set(Some(start));
-
-        Ok(())
-    })
-}
-
-pub fn register_action_disconnect(app: &Application) {
-    let action = SimpleAction::new("disconnect", None);
-    action.connect_activate(|_, _| {
-        PLAYER.set(None);
-    });
-    app.add_action(&action);
-}
-
-pub fn register_sigusr1_disconnect() {
-    glib::unix_signal_add_local(libc::SIGUSR1, move || {
-        PLAYER.set(None);
-        Continue(true)
-    });
-}
-
-pub fn register_action_reload_lyric(app: &Application, wind: &app::Window, trigger: &str) {
-    let action = SimpleAction::new("reload-lyric", None);
-    action.connect_activate(move |_, _| {
-        TRACK_PLAYING_PAUSED.set((None, false));
-        info!("cleaned lyric");
-    });
-    app.add_action(&action);
-
-    let shortcut = Shortcut::builder()
-        .action(&NamedAction::new("app.reload-lyric"))
-        .trigger(&ShortcutTrigger::parse_string(trigger).unwrap())
-        .build();
-    let controller = ShortcutController::new();
-    controller.set_scope(gtk::ShortcutScope::Global);
-    controller.add_shortcut(shortcut);
-    wind.add_controller(controller);
-}
-
-pub fn register_action_connect(app: &Application) {
-    let connect = SimpleAction::new("connect", Some(&VariantTy::STRING));
-    connect.connect_activate(|_, player_id| {
-        let Some(player_id) = player_id.and_then(|p| p.str()) else {
-            warn!("did not received string paramter for action \'app.connect\'");
-            return;
-        };
-        PLAYER_FINDER.with_borrow(|player_finder| {
-            if let Ok(player) = player_finder.find_by_name(&player_id) {
-                PLAYER.set(Some(player));
-            } else {
-                error!("cannot connect to: {player_id}");
-            }
-        });
-    });
-    app.add_action(&connect);
-}
+pub use interop::register_mpris_sync;
 
 pub fn list_avaliable_players() -> Vec<Player> {
     PLAYER_FINDER.with_borrow(|player_finder| match player_finder.find_all() {
@@ -174,53 +32,6 @@ pub fn list_avaliable_players() -> Vec<Player> {
             panic!("please check your d-bus connection!")
         }
     })
-}
-
-pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
-    glib::timeout_add_local(interval, move || {
-        let Some(app) = app.upgrade() else {
-            return Continue(false);
-        };
-
-        let mut windows = app.windows();
-        if windows.is_empty() {
-            return Continue(true);
-        }
-        let window: app::Window = windows.remove(0).downcast().unwrap();
-
-        let sync_status = try_sync_player(&window);
-
-        match sync_status {
-            Err(PlayerStatus::Missing) => {
-                PLAYER_FINDER.with_borrow(|player_finder| {
-                    let Ok(player) = player_finder.find_active() else {
-                        PLAYER.set(None);
-                        return;
-                    };
-
-                    info!("connected to player: {}", player.identity());
-                    PLAYER.set(Some(player));
-                });
-                app::get_label(&window, "above").set_label(DEFAULT_TEXT);
-                app::get_label(&window, "below").set_label("");
-                utils::clear_lyric(&window);
-                TRACK_PLAYING_PAUSED.set((None, false));
-            }
-            Err(PlayerStatus::Unsupported(kind)) => {
-                app::get_label(&window, "above").set_label("Unsupported Player");
-                app::get_label(&window, "below").set_label("");
-
-                utils::clear_lyric(&window);
-                error!(kind);
-            }
-            Err(PlayerStatus::Paused) => {
-                TRACK_PLAYING_PAUSED.with_borrow_mut(|(_, paused)| *paused = true)
-            }
-            _ => (),
-        }
-
-        Continue(true)
-    });
 }
 
 pub fn fetch_lyric(
@@ -244,7 +55,7 @@ pub fn fetch_lyric(
         for provider in providers {
             let tracks = match search_song(
                 provider.as_ref(),
-                album.as_deref().unwrap_or_default(),
+                album.unwrap_or_default(),
                 _artists.unwrap_or(&[]),
                 title,
             ) {
@@ -263,7 +74,7 @@ pub fn fetch_lyric(
                 length_toleration_ms,
             ) {
                 info!("matched {song_id} from {}", provider.provider_name());
-                match fetch_lyric_by_id(provider.as_ref(), song_id) {
+                match provider.query_lyric(song_id) {
                     Ok(lyric) => {
                         let olyric = provider.get_lyric(&lyric).into_owned();
                         let tlyric = provider.get_translated_lyric(&lyric).into_owned();
@@ -283,17 +94,13 @@ pub fn fetch_lyric(
 
     if results.is_empty() {
         info!("Failed searching for {artists} - {title}",);
-        utils::clear_lyric(&window);
-        return Err(crate::lyric::Error::NoLyric)?;
+        utils::clean_lyric(window);
+        Err(crate::lyric::Error::NoLyric)?;
     }
 
     let best_result = results.into_iter().min_by_key(|r| r.2).unwrap();
     let (olyric, tlyric, _) = best_result;
     set_lyric(olyric, tlyric, title, &artists, window)
-}
-
-fn fetch_lyric_by_id<P: LyricProvider + ?Sized>(provider: &P, id: &str) -> Result<LyricStore> {
-    provider.query_lyric(id)
 }
 
 fn search_song<P: LyricProvider + ?Sized>(
@@ -344,54 +151,61 @@ fn set_lyric_with_songid_or_file(
         let player_name = player.identity();
         match player_name {
             "mpv" => {
-                tracing::warn!("local lyric files are still not supported");
+                tracing::warn!("local lyric files are still unsupported");
                 None
             }
-            "ElectronNCM" | "Qcm" => {
+            "ElectronNCM" | "Qcm" => get_song_id_from_player(player, |meta| {
+                meta.get("mpris:trackid")
+                    .and_then(mpris::MetadataValue::as_str)
+                    .and_then(|s| s.split('/').last())
+            })
+            .map(|song_id| {
                 let provider = NeteaseLyricProvider;
-
-                set_lyric_with_player_songid(player, |meta| {
-                    meta.get("mpris:trackid")
-                        .and_then(mpris::MetadataValue::as_str)
-                        .and_then(|s| s.split('/').last())
+                let lyric = provider.query_lyric(&song_id)?;
+                let olyric = provider.get_lyric(&lyric).into_owned();
+                let tlyric = provider.get_translated_lyric(&lyric).into_owned();
+                set_lyric(olyric, tlyric, title, artists, window)
+            }),
+            "feeluown" => get_song_id_from_player(player, |meta| {
+                meta.url()?.strip_prefix("fuo://netease/songs/")
+            })
+            .map(|song_id| {
+                let provider = NeteaseLyricProvider;
+                let lyric = provider.query_lyric(&song_id)?;
+                let olyric = provider.get_lyric(&lyric).into_owned();
+                let tlyric = provider.get_translated_lyric(&lyric).into_owned();
+                set_lyric(olyric, tlyric, title, artists, window)
+            })
+            .or_else(|| {
+                get_song_id_from_player(player, |meta| {
+                    meta.url()?.strip_prefix("fuo://qqmusic/songs/")
                 })
                 .map(|song_id| {
-                    let lyric = fetch_lyric_by_id(&provider, &song_id)?;
+                    let provider = QQMusicLyricProvider;
+                    let lyric = provider.query_lyric(&song_id)?;
                     let olyric = provider.get_lyric(&lyric).into_owned();
                     let tlyric = provider.get_translated_lyric(&lyric).into_owned();
-                    set_lyric(olyric, tlyric, title, &artists, window)
+                    set_lyric(olyric, tlyric, title, artists, window)
                 })
-            }
-            "feeluown" => {
-                let provider = NeteaseLyricProvider;
-
-                set_lyric_with_player_songid(player, |meta| {
-                    meta.url()?.strip_prefix("fuo://netease/songs/")
-                })
-                .map(|song_id| {
-                    let lyric = fetch_lyric_by_id(&provider, &song_id)?;
-                    let olyric = provider.get_lyric(&lyric).into_owned();
-                    let tlyric = provider.get_translated_lyric(&lyric).into_owned();
-                    set_lyric(olyric, tlyric, title, &artists, window)
-                })
-            }
+            }),
             "YesPlayMusic" => {
-                let provider = NeteaseLyricProvider;
-
-                set_lyric_with_player_songid(player, |meta| meta.url()?.strip_prefix("/trackid/"))
-                    .map(|song_id| {
-                        let lyric = fetch_lyric_by_id(&provider, &song_id)?;
+                get_song_id_from_player(player, |meta| meta.url()?.strip_prefix("/trackid/")).map(
+                    |song_id| {
+                        let provider = NeteaseLyricProvider;
+                        let lyric = provider.query_lyric(&song_id)?;
                         let olyric = provider.get_lyric(&lyric).into_owned();
                         let tlyric = provider.get_translated_lyric(&lyric).into_owned();
-                        set_lyric(olyric, tlyric, title, &artists, window)
-                    })
+                        set_lyric(olyric, tlyric, title, artists, window)
+                    },
+                )
             }
+
             _ => None,
         }
     })
 }
 
-fn set_lyric_with_player_songid(
+fn get_song_id_from_player(
     player: &Player,
     extract_field: impl for<'a> FnOnce(&'a Metadata) -> Option<&'a str>,
 ) -> Option<String> {
