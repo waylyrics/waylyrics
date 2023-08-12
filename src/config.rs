@@ -93,7 +93,8 @@ impl Default for Config {
             lyric_align: Align::Center,
             triggers: Default::default(),
             qqmusic_api_base_url: None,
-            lyric_search_source: vec!["网易云音乐".into(), "QQ音乐".into()],
+            /// avaliable options: 网易云音乐, QQ音乐
+            lyric_search_source: vec!["网易云音乐".into()],
         }
     }
 }
