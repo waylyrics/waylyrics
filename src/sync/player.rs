@@ -249,7 +249,7 @@ pub fn fetch_lyric(
     )?;
 
     let length_toleration_ms = window.imp().length_toleration_ms.get();
-    let Some(&song_id) = utils::match_likely_lyric(
+    let Some(song_id) = utils::match_likely_lyric(
         album.zip(Some(title)),
         length,
         &search_result,
@@ -261,11 +261,11 @@ pub fn fetch_lyric(
     };
 
     info!("matched songid: {song_id}");
-    set_lyric(&provider, song_id, title, &artists, window)?;
+    set_lyric(&provider, &song_id, title, &artists, window)?;
     Ok(())
 }
 
-fn fetch_lyric_by_id<P: LyricProvider>(provider: &P, id: P::Id) -> Result<P::LStore> {
+fn fetch_lyric_by_id<P: LyricProvider>(provider: &P, id: &str) -> Result<LyricStore> {
     provider.query_lyric(id)
 }
 
@@ -274,20 +274,20 @@ fn search_song<P: LyricProvider>(
     album: &str,
     artists: &[&str],
     title: &str,
-) -> Result<Vec<SongInfo<P::Id>>> {
+) -> Result<Vec<SongInfo>> {
     provider.search_song(album, artists, title)
 }
 
 fn set_lyric<P: LyricProvider>(
     provider: &P,
-    song_id: P::Id,
+    song_id: &str,
     title: &str,
     artists: &str,
     window: &app::Window,
 ) -> Result<()> {
     let lyric = fetch_lyric_by_id(provider, song_id)?;
-    let olyric = lyric.get_lyric().into_owned();
-    let tlyric = lyric.get_translated_lyric().into_owned();
+    let olyric = provider.get_lyric(&lyric).into_owned();
+    let tlyric = provider.get_translated_lyric(&lyric).into_owned();
     debug!("original lyric: {olyric:?}");
     debug!("translated lyric: {tlyric:?}");
 
@@ -326,49 +326,40 @@ fn set_lyric_with_songid_or_file(
             "ElectronNCM" | "Qcm" => {
                 let provider = NeteaseLyricProvider;
 
-                set_lyric_with_player_songid::<NeteaseLyricProvider>(
-                    player,
-                    |meta| {
-                        meta.get("mpris:trackid")
-                            .and_then(mpris::MetadataValue::as_str)
-                            .and_then(|s| s.split('/').last())
-                    },
-                    |songid| songid.parse().ok(),
-                )
-                .map(|song_id| set_lyric(&provider, song_id, title, artists, window))
+                set_lyric_with_player_songid(player, |meta| {
+                    meta.get("mpris:trackid")
+                        .and_then(mpris::MetadataValue::as_str)
+                        .and_then(|s| s.split('/').last())
+                })
+                .map(|song_id| set_lyric(&provider, &song_id, title, artists, window))
             }
             "feeluown" => {
                 let provider = NeteaseLyricProvider;
 
-                set_lyric_with_player_songid::<NeteaseLyricProvider>(
-                    player,
-                    |meta| meta.url()?.strip_prefix("fuo://netease/songs/"),
-                    |songid| songid.parse().ok(),
-                )
-                .map(|song_id| set_lyric(&provider, song_id, title, artists, window))
+                set_lyric_with_player_songid(player, |meta| {
+                    meta.url()?.strip_prefix("fuo://netease/songs/")
+                })
+                .map(|song_id| set_lyric(&provider, &song_id, title, artists, window))
             }
             "YesPlayMusic" => {
                 let provider = NeteaseLyricProvider;
 
-                set_lyric_with_player_songid::<NeteaseLyricProvider>(
-                    player,
-                    |meta| meta.url()?.strip_prefix("/trackid/"),
-                    |songid| songid.parse().ok(),
-                )
-                .map(|song_id| set_lyric(&provider, song_id, title, artists, window))
+                set_lyric_with_player_songid(player, |meta| {
+                    meta.url()?.strip_prefix("/trackid/")
+                })
+                .map(|song_id| set_lyric(&provider, &song_id, title, artists, window))
             }
             _ => None,
         }
     })
 }
 
-fn set_lyric_with_player_songid<P: LyricProvider>(
+fn set_lyric_with_player_songid(
     player: &Player,
     extract_field: impl for<'a> FnOnce(&'a Metadata) -> Option<&'a str>,
-    parse_id: impl FnOnce(&str) -> Option<P::Id>,
-) -> Option<P::Id> {
+) -> Option<String> {
     player
         .get_metadata()
         .ok()
-        .and_then(|metadata| extract_field(&metadata).and_then(parse_id))
+        .and_then(|metadata| extract_field(&metadata).map(|s| s.to_owned()))
 }

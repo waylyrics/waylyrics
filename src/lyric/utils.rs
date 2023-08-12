@@ -3,7 +3,9 @@ use std::time::Duration;
 
 use super::{LyricLine, LyricLineOwned};
 
-pub fn lrc_iter<'a>(lyric_lines: impl Iterator<Item = &'a str>) -> Result<Vec<LyricLine<'a>>, LrcParseError> {
+pub fn lrc_iter<'a>(
+    lyric_lines: impl Iterator<Item = &'a str>,
+) -> Result<Vec<LyricLine<'a>>, LrcParseError> {
     let mut lrc_vec: Vec<_> = parse(lyric_lines)?
         .into_iter()
         .filter_map(|lrc_item| match lrc_item {
@@ -19,9 +21,32 @@ pub fn lrc_iter<'a>(lyric_lines: impl Iterator<Item = &'a str>) -> Result<Vec<Ly
     Ok(lrc_vec)
 }
 
-pub fn find_next_lyric<'a>(elapsed: &Duration, lyric: &'a [LyricLineOwned]) -> Option<&'a LyricLineOwned> {
+pub fn find_next_lyric<'a>(
+    elapsed: &Duration,
+    lyric: &'a [LyricLineOwned],
+) -> Option<&'a LyricLineOwned> {
     lyric
         .iter()
-        .take_while(|LyricLineOwned { start_time: off, .. }| off <= elapsed)
+        .take_while(
+            |LyricLineOwned {
+                 start_time: off, ..
+             }| off <= elapsed,
+        )
         .last()
+}
+
+pub fn register_provider(provider_id: &str) {
+    use super::netease::NeteaseLyricProvider;
+    use super::qqmusic::QQMusicLyricProvider;
+    let providers: [Box<dyn super::LyricProvider>; 2] = [
+        Box::new(NeteaseLyricProvider),
+        Box::new(QQMusicLyricProvider),
+    ];
+    for provider in providers {
+        if provider_id == provider.provider_name() {
+            crate::LYRIC_PROVIDERS.with_borrow_mut(|pro| {
+                pro.push(provider);
+            })
+        }
+    }
 }
