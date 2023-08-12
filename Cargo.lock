@@ -753,8 +753,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "26b01e40b772d54cf6c6d721c1d1abd0647a0106a12ecaa1c186273392a69533"
 dependencies = [
  "futures-core",
+ "futures-io",
  "futures-macro",
  "futures-task",
+ "memchr",
  "pin-project-lite",
  "pin-utils",
  "slab",
@@ -1803,6 +1805,16 @@ checksum = "96a8c1bda5ae1af7f99a2962e49df150414a43d62404644d98dd5c3a93d07457"
 dependencies = [
  "idna 0.3.0",
  "psl-types",
+]
+
+[[package]]
+name = "qqmusic-rs"
+version = "0.1.0"
+source = "git+https://github.com/waylyrics/qqmusic-rs.git#f1c4c0bddcc5904b223a3401c4374945d3f08a97"
+dependencies = [
+ "serde",
+ "serde_json",
+ "url",
 ]
 
 [[package]]
@@ -2885,7 +2897,9 @@ dependencies = [
  "md5",
  "mpris",
  "ncmapi",
+ "qqmusic-rs",
  "regex",
+ "reqwest",
  "rust_decimal",
  "rust_decimal_macros",
  "serde",
@@ -2895,6 +2909,7 @@ dependencies = [
  "toml 0.7.6",
  "tracing",
  "tracing-subscriber",
+ "url",
  "xdg",
 ]
 

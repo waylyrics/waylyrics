@@ -2,6 +2,7 @@ pub mod utils;
 use anyhow::Result;
 
 pub mod netease;
+pub mod qqmusic;
 
 use std::time::Duration;
 
@@ -36,36 +37,31 @@ pub struct LyricLineOwned {
 }
 
 #[derive(Debug)]
-pub struct SongInfo<Id> {
-    pub id: Id,
+pub struct SongInfo{
+    pub id: String,
     pub title: String,
     pub singer: String,
     pub album: Option<String>,
     pub length: Duration,
 }
 
-pub trait LyricProvider {
-    type Id;
-    type LStore: LyricStore;
-
-    const NAME: &'static str;
-    fn new() -> Result<Box<Self>>;
-
+pub trait LyricProvider: LyricParse {
     fn query_lyric(
         &self,
-        id: Self::Id,
-    ) -> Result<Self::LStore>;
+        id: &str,
+    ) -> Result<LyricStore>;
     fn search_song(
         &self,
         album: &str,
         artists: &[&str],
         title: &str,
-    ) -> Result<Vec<SongInfo<Self::Id>>>;
+    ) -> Result<Vec<SongInfo>>;
+    fn provider_name(&self) -> &'static str;
 }
 
-pub trait LyricStore {
-    fn get_lyric(&self) -> Lyric<'_>;
-    fn get_translated_lyric(&self) -> Lyric<'_>;
+pub trait LyricParse {
+    fn get_lyric<'a>(&self, store: &'a LyricStore) -> Lyric<'a>;
+    fn get_translated_lyric<'a>(&self, store: &'a LyricStore) -> Lyric<'a>;
 }
 
 impl<'a> Lyric<'a> {
@@ -88,6 +84,11 @@ impl<'a> Lyric<'a> {
             ),
         }
     }
+}
+
+pub struct LyricStore {
+    lyric: Option<String>,
+    tlyric: Option<String>,
 }
 
 #[derive(Debug, thiserror::Error)]

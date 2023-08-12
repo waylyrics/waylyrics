@@ -1,6 +1,6 @@
+use anyhow::Result;
 use async_compat::CompatExt;
 use std::time::Duration;
-use anyhow::Result;
 
 use ncmapi::{
     types::{Album, Artist, Song},
@@ -9,27 +9,20 @@ use ncmapi::{
 
 use ncmapi::types::{LyricResp, SearchSongResp};
 
-use super::Lyric;
+use super::{Lyric, LyricStore};
 
-pub struct NeteaseLyricProvider {}
-
-pub struct NeteaseLyric {
-    lyric: Option<String>,
-    tlyric: Option<String>,
-}
+pub struct NeteaseLyricProvider;
 
 impl super::LyricProvider for NeteaseLyricProvider {
-    type Id = usize;
-    type LStore = NeteaseLyric;
-
-    const NAME: &'static str = "网易云音乐";
-
+    fn provider_name(&self) -> &'static str {
+        "网易云音乐"
+    }
     fn search_song(
         &self,
         album: &str,
         artists: &[&str],
         title: &str,
-    ) -> Result<Vec<super::SongInfo<Self::Id>>> {
+    ) -> Result<Vec<super::SongInfo>> {
         let keyword = format!("{title} {album} {}", artists.join("/"));
 
         tracing::debug!("search keyword: {keyword}");
@@ -60,7 +53,7 @@ impl super::LyricProvider for NeteaseLyricProvider {
                      album: Album { name: album, .. },
                      ..
                  }| super::SongInfo {
-                    id: *id as _,
+                    id: id.to_string(),
                     title: name.into(),
                     album: album.clone(),
                     singer: artists
@@ -79,7 +72,7 @@ impl super::LyricProvider for NeteaseLyricProvider {
             .collect())
     }
 
-    fn query_lyric(&self, id: Self::Id) -> Result<NeteaseLyric> {
+    fn query_lyric(&self, id: &str) -> Result<LyricStore> {
         let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
         let api = NcmApi::new(
             false,
@@ -88,31 +81,28 @@ impl super::LyricProvider for NeteaseLyricProvider {
             true,
             &cookie_path,
         );
+        let id = id.parse()?;
         let query_result = smol::block_on(async { api.lyric(id).compat().await })?;
 
         let lyric_resp: LyricResp = query_result.deserialize()?;
 
         tracing::debug!("lyric query result: {lyric_resp:?}");
 
-        Ok(NeteaseLyric {
+        Ok(LyricStore {
             lyric: lyric_resp.lrc.map(|l| l.lyric),
             tlyric: lyric_resp.tlyric.map(|l| l.lyric),
         })
     }
-
-    fn new() -> Result<Box<Self>> {
-        Ok(Box::new(Self {}))
-    }
 }
 
-impl super::LyricStore for NeteaseLyric {
-    fn get_lyric(&self) -> Lyric<'_> {
-        let lyric = self.lyric.as_deref();
+impl super::LyricParse for NeteaseLyricProvider {
+    fn get_lyric<'a>(&self, store: &'a LyricStore) -> Lyric<'a> {
+        let lyric = store.lyric.as_deref();
         match_lyric(lyric)
     }
 
-    fn get_translated_lyric(&self) -> Lyric<'_> {
-        let lyric = self.tlyric.as_deref();
+    fn get_translated_lyric<'a>(&self, store: &'a LyricStore) -> Lyric<'a> {
+        let lyric = store.tlyric.as_deref();
         match_lyric(lyric)
     }
 }

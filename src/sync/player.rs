@@ -1,7 +1,6 @@
 use anyhow::Result;
 use gtk::gio::SimpleAction;
 use std::borrow::Cow;
-use std::marker::PhantomData;
 use std::time::{Duration, SystemTime};
 
 use gtk::glib::{VariantTy, WeakRef};
@@ -11,12 +10,13 @@ use gtk::{prelude::*, NamedAction, Shortcut, ShortcutController, ShortcutTrigger
 use mpris::{Metadata, PlaybackStatus, Player, ProgressTracker};
 use tracing::{debug, error, info, trace, warn};
 
-use crate::app;
 use crate::lyric::netease::NeteaseLyricProvider;
-use crate::lyric::{LyricOwned, LyricProvider, LyricStore, SongInfo};
+use crate::lyric::{LyricOwned, LyricParse, LyricProvider, LyricStore, SongInfo};
 use crate::sync::LYRIC;
+use crate::{app, LYRIC_PROVIDERS};
 
-use super::{utils, DEFAULT_TEXT, PLAYER, PLAYER_FINDER, TRACK_PLAYING_PAUSED};
+use super::{utils, PLAYER, PLAYER_FINDER, TRACK_PLAYING_PAUSED};
+use crate::DEFAULT_TEXT;
 
 enum PlayerStatus {
     Missing,
@@ -130,11 +130,7 @@ pub fn register_sigusr1_disconnect() {
     });
 }
 
-pub fn register_action_reload_lyric(
-    app: &Application,
-    wind: &app::Window,
-    trigger: &str,
-) {
+pub fn register_action_reload_lyric(app: &Application, wind: &app::Window, trigger: &str) {
     let action = SimpleAction::new("reload-lyric", None);
     action.connect_activate(move |_, _| {
         TRACK_PLAYING_PAUSED.set((None, false));
@@ -243,55 +239,79 @@ pub fn fetch_lyric(
         return result;
     }
 
-    let provider = NeteaseLyricProvider::new().unwrap();
+    let mut results: Vec<(LyricOwned, LyricOwned, u8)> = vec![];
+    LYRIC_PROVIDERS.with_borrow(|providers| {
+        for provider in providers {
+            let tracks = match search_song(
+                provider.as_ref(),
+                album.as_deref().unwrap_or_default(),
+                _artists.unwrap_or(&[]),
+                title,
+            ) {
+                Ok(songs) => songs,
+                Err(e) => {
+                    error!("{e} when searching {title} on {}", provider.provider_name());
+                    continue;
+                }
+            };
 
-    let search_result = search_song(
-        provider.as_ref(),
-        album.as_deref().unwrap_or_default(),
-        _artists.unwrap_or(&[]),
-        title,
-    )?;
+            let length_toleration_ms = window.imp().length_toleration_ms.get();
+            if let Some((song_id, weight)) = utils::match_likely_lyric(
+                album.zip(Some(title)),
+                length,
+                &tracks,
+                length_toleration_ms,
+            ) {
+                info!("matched {song_id} from {}", provider.provider_name());
+                match fetch_lyric_by_id(provider.as_ref(), song_id) {
+                    Ok(lyric) => {
+                        let olyric = provider.get_lyric(&lyric).into_owned();
+                        let tlyric = provider.get_translated_lyric(&lyric).into_owned();
+                        results.push((olyric, tlyric, weight));
+                    }
+                    Err(e) => {
+                        error!(
+                            "{e} when get lyric for {title} on {}",
+                            provider.provider_name()
+                        );
+                        continue;
+                    }
+                }
+            }
+        }
+    });
 
-    let length_toleration_ms = window.imp().length_toleration_ms.get();
-    let Some(&song_id) = utils::match_likely_lyric(
-        album.zip(Some(title)),
-        length,
-        &search_result,
-        length_toleration_ms,
-    ) else {
+    if results.is_empty() {
         info!("Failed searching for {artists} - {title}",);
         utils::clear_lyric(&window);
         return Err(crate::lyric::Error::NoLyric)?;
-    };
+    }
 
-    info!("matched songid: {song_id}");
-    set_lyric(provider.as_ref(), song_id, title, &artists, window)?;
-    Ok(())
+    let best_result = results.into_iter().min_by_key(|r| r.2).unwrap();
+    let (olyric, tlyric, _) = best_result;
+    set_lyric(olyric, tlyric, title, &artists, window)
 }
 
-fn fetch_lyric_by_id<P: LyricProvider>(provider: &P, id: P::Id) -> Result<P::LStore> {
+fn fetch_lyric_by_id<P: LyricProvider + ?Sized>(provider: &P, id: &str) -> Result<LyricStore> {
     provider.query_lyric(id)
 }
 
-fn search_song<P: LyricProvider>(
+fn search_song<P: LyricProvider + ?Sized>(
     provider: &P,
     album: &str,
     artists: &[&str],
     title: &str,
-) -> Result<Vec<SongInfo<P::Id>>> {
+) -> Result<Vec<SongInfo>> {
     provider.search_song(album, artists, title)
 }
 
-fn set_lyric<P: LyricProvider>(
-    provider: &P,
-    song_id: P::Id,
+fn set_lyric(
+    olyric: LyricOwned,
+    tlyric: LyricOwned,
     title: &str,
     artists: &str,
     window: &app::Window,
 ) -> Result<()> {
-    let lyric = fetch_lyric_by_id(provider, song_id)?;
-    let olyric = lyric.get_lyric().into_owned();
-    let tlyric = lyric.get_translated_lyric().into_owned();
     debug!("original lyric: {olyric:?}");
     debug!("translated lyric: {tlyric:?}");
 
@@ -328,55 +348,55 @@ fn set_lyric_with_songid_or_file(
                 None
             }
             "ElectronNCM" | "Qcm" => {
-                let provider = NeteaseLyricProvider::new().unwrap();
+                let provider = NeteaseLyricProvider;
 
-                set_lyric_with_player_songid(
-                    PhantomData::<NeteaseLyricProvider>,
-                    player,
-                    |meta| {
-                        meta.get("mpris:trackid")
-                            .and_then(mpris::MetadataValue::as_str)
-                            .and_then(|s| s.split('/').last())
-                    },
-                    |songid| songid.parse().ok(),
-                )
-                .map(|song_id| set_lyric(&*provider, song_id, title, artists, window))
+                set_lyric_with_player_songid(player, |meta| {
+                    meta.get("mpris:trackid")
+                        .and_then(mpris::MetadataValue::as_str)
+                        .and_then(|s| s.split('/').last())
+                })
+                .map(|song_id| {
+                    let lyric = fetch_lyric_by_id(&provider, &song_id)?;
+                    let olyric = provider.get_lyric(&lyric).into_owned();
+                    let tlyric = provider.get_translated_lyric(&lyric).into_owned();
+                    set_lyric(olyric, tlyric, title, &artists, window)
+                })
             }
             "feeluown" => {
-                let provider = NeteaseLyricProvider::new().unwrap();
+                let provider = NeteaseLyricProvider;
 
-                set_lyric_with_player_songid(
-                    PhantomData::<NeteaseLyricProvider>,
-                    player,
-                    |meta| meta.url()?.strip_prefix("fuo://netease/songs/"),
-                    |songid| songid.parse().ok(),
-                )
-                .map(|song_id| set_lyric(&*provider, song_id, title, artists, window))
+                set_lyric_with_player_songid(player, |meta| {
+                    meta.url()?.strip_prefix("fuo://netease/songs/")
+                })
+                .map(|song_id| {
+                    let lyric = fetch_lyric_by_id(&provider, &song_id)?;
+                    let olyric = provider.get_lyric(&lyric).into_owned();
+                    let tlyric = provider.get_translated_lyric(&lyric).into_owned();
+                    set_lyric(olyric, tlyric, title, &artists, window)
+                })
             }
             "YesPlayMusic" => {
-                let provider = NeteaseLyricProvider::new().unwrap();
+                let provider = NeteaseLyricProvider;
 
-                set_lyric_with_player_songid(
-                    PhantomData::<NeteaseLyricProvider>,
-                    player,
-                    |meta| meta.url()?.strip_prefix("/trackid/"),
-                    |songid| songid.parse().ok(),
-                )
-                .map(|song_id| set_lyric(&*provider, song_id, title, artists, window))
+                set_lyric_with_player_songid(player, |meta| meta.url()?.strip_prefix("/trackid/"))
+                    .map(|song_id| {
+                        let lyric = fetch_lyric_by_id(&provider, &song_id)?;
+                        let olyric = provider.get_lyric(&lyric).into_owned();
+                        let tlyric = provider.get_translated_lyric(&lyric).into_owned();
+                        set_lyric(olyric, tlyric, title, &artists, window)
+                    })
             }
             _ => None,
         }
     })
 }
 
-fn set_lyric_with_player_songid<P: LyricProvider>(
-    _provider: PhantomData<P>,
+fn set_lyric_with_player_songid(
     player: &Player,
     extract_field: impl for<'a> FnOnce(&'a Metadata) -> Option<&'a str>,
-    parse_id: impl FnOnce(&str) -> Option<P::Id>,
-) -> Option<P::Id> {
+) -> Option<String> {
     player
         .get_metadata()
         .ok()
-        .and_then(|metadata| extract_field(&metadata).and_then(parse_id))
+        .and_then(|metadata| extract_field(&metadata).map(|s| s.to_owned()))
 }

@@ -4,7 +4,6 @@ use mpris::{Player, PlayerFinder, TrackID};
 
 use crate::lyric::LyricOwned;
 
-const DEFAULT_TEXT: &str = "Waylyrics";
 
 mod utils;
 mod lyric;

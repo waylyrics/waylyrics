@@ -1,16 +1,19 @@
 #![feature(local_key_cell_methods)]
 
 use std::path::PathBuf;
+use std::str::FromStr;
 
 use gtk::prelude::*;
 use gtk::{glib, Application};
 
 use anyhow::Result;
 
+use qqmusic_rs::QQMusicApi;
 use regex::RegexSet;
 use waylyrics::app::{self, build_main_window};
 use waylyrics::config::{Config, Triggers};
-use waylyrics::{utils, EXCLUDED_REGEXES, THEME_PATH};
+use waylyrics::lyric::utils::register_provider;
+use waylyrics::{utils, EXCLUDED_REGEXES, QQMUSIC_API_CLIENT, THEME_PATH};
 
 use waylyrics::sync::*;
 
@@ -56,6 +59,8 @@ fn build_ui(app: &Application) -> Result<()> {
                 reload_lyric,
                 switch_passthrough,
             },
+        qqmusic_api_base_url,
+        lyric_search_source,
     } = config;
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval)?;
@@ -98,6 +103,15 @@ fn build_ui(app: &Application) -> Result<()> {
 
     if enable_filter_regex {
         EXCLUDED_REGEXES.set(RegexSet::new(&filter_regexies)?);
+    }
+
+    if let Some(base_url) = qqmusic_api_base_url {
+        let base_url = url::Url::from_str(&base_url)?;
+        QQMUSIC_API_CLIENT.set(Some(QQMusicApi::new(base_url)));
+    }
+
+    for source in lyric_search_source {
+        register_provider(&source);
     }
 
     Ok(())
