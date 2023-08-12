@@ -1,6 +1,6 @@
+use anyhow::Result;
 use async_compat::CompatExt;
 use std::time::Duration;
-use anyhow::Result;
 
 use ncmapi::{
     types::{Album, Artist, Song},
@@ -99,9 +99,10 @@ impl super::LyricProvider for NeteaseLyricProvider {
             tlyric: lyric_resp.tlyric.map(|l| l.lyric),
         })
     }
-
-    fn new() -> Result<Box<Self>> {
-        Ok(Box::new(Self {}))
+}
+impl NeteaseLyricProvider {
+    pub fn new() -> Result<Self> {
+        Ok(Self{})
     }
 }
 
