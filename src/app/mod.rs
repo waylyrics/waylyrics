@@ -2,7 +2,7 @@ mod window;
 use gtk::{prelude::*, subclass::prelude::ObjectSubclassIsExt, Align, Application, Label};
 pub use window::Window;
 
-use crate::app::utils::set_click_pass_through;
+use crate::{app::utils::set_click_pass_through, DEFAULT_TEXT};
 
 const WINDOW_MIN_HEIGHT: i32 = 120;
 
@@ -20,7 +20,7 @@ pub fn build_main_window(
     let window = Window::new(app, click_pass_through);
 
     window.set_size_request(500, WINDOW_MIN_HEIGHT);
-    window.set_title(Some("Waylyrics"));
+    window.set_title(Some(DEFAULT_TEXT));
     window.present();
 
     let above_label = Label::builder().label("Waylyrics").name("above").build();
