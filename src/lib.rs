@@ -4,6 +4,7 @@
 
 use std::{cell::RefCell, path::PathBuf};
 
+use lyric::LyricProvider;
 use qqmusic_rs::QQMusicApi;
 use regex::RegexSet;
 
@@ -21,6 +22,7 @@ thread_local! {
     pub static THEME_PATH: RefCell<PathBuf> = RefCell::new(PathBuf::new());
     pub static EXCLUDED_REGEXES: RefCell<RegexSet> = RefCell::new(RegexSet::empty());
 
+    pub static LYRIC_PROVIDERS: RefCell<Vec<Box<dyn LyricProvider>>> = RefCell::new(vec![]);
     pub static QQMUSIC_API_CLIENT: RefCell<Option<QQMusicApi>> = RefCell::new(None);
 }
 

@@ -1,40 +1,44 @@
 use anyhow::Result;
-use qqmusic_rs::lyric::{QueryLyric, QueryLyricResp};
+use qqmusic_rs::{
+    lyric::{QueryLyric, QueryLyricResp},
+    SongId,
+};
 use reqwest::blocking::Client;
 
 use crate::QQMUSIC_API_CLIENT;
 
-use super::Lyric;
+use super::{Lyric, LyricStore};
 
+#[derive(Clone, Copy)]
 pub struct QQMusicLyricProvider;
 
-pub struct QQMusicLyric {
-    lyric: Option<String>,
-    tlyric: Option<String>,
-}
-
 impl super::LyricProvider for QQMusicLyricProvider {
-    type Id = u32;
-    type LStore = QQMusicLyric;
-
-    const NAME: &'static str = "QQ音乐";
-
+    fn provider_name(&self) -> &'static str {
+        "QQ音乐"
+    }
     fn search_song(
         &self,
         album: &str,
         artists: &[&str],
         title: &str,
-    ) -> Result<Vec<super::SongInfo<Self::Id>>> {
+    ) -> Result<Vec<super::SongInfo>> {
         let keyword = format!("{title} {album} {}", artists.join("/"));
         tracing::debug!("search keyword: {keyword}");
 
         todo!()
     }
 
-    fn query_lyric(&self, id: Self::Id) -> Result<QQMusicLyric> {
+    fn query_lyric(&self, id: &str) -> Result<LyricStore> {
         let client = Client::builder().user_agent("Waylyrics/0.1").build()?;
-        let id = id.to_string();
-        let songid = qqmusic_rs::SongId::Songid(&id);
+        let songid;
+
+        // might be a little tricky
+        if let Ok(_) = id.parse::<u32>() {
+            songid = SongId::Songid(id)
+        } else {
+            songid = SongId::Songmid(id)
+        }
+
         QQMUSIC_API_CLIENT.with_borrow(|api| {
             let Some(api) = api.as_ref() else {
                 return Err(Error::ApiClientNotInit)?;
@@ -44,7 +48,7 @@ impl super::LyricProvider for QQMusicLyricProvider {
             let resp: QueryLyricResp =
                 serde_json::from_slice(client.get(url).send()?.bytes()?.as_ref())?;
 
-            Ok(QQMusicLyric {
+            Ok(LyricStore {
                 lyric: Some(resp.data.lyric),
                 tlyric: Some(resp.data.trans),
             })
@@ -52,14 +56,14 @@ impl super::LyricProvider for QQMusicLyricProvider {
     }
 }
 
-impl super::LyricStore for QQMusicLyric {
-    fn get_lyric(&self) -> Lyric<'_> {
-        let lyric = self.lyric.as_deref();
+impl super::LyricParse for QQMusicLyricProvider {
+    fn get_lyric<'a>(&self, store: &'a LyricStore) -> Lyric<'a> {
+        let lyric = store.lyric.as_deref();
         match_lyric(lyric)
     }
 
-    fn get_translated_lyric(&self) -> Lyric<'_> {
-        let lyric = self.tlyric.as_deref();
+    fn get_translated_lyric<'a>(&self, store: &'a LyricStore) -> Lyric<'a> {
+        let lyric = store.tlyric.as_deref();
         match_lyric(lyric)
     }
 }
@@ -78,7 +82,7 @@ fn match_lyric(lyric: Option<&str>) -> Lyric<'_> {
 }
 
 #[derive(thiserror::Error, Debug)]
-pub enum Error{
+pub enum Error {
     #[error("please make sure you configured QQMusicApi base URL")]
     ApiClientNotInit,
 }

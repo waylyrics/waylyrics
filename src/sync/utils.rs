@@ -16,12 +16,12 @@ pub fn clear_lyric(window: &app::Window) {
     window.imp().lyric_offset_ms.set(0);
 }
 
-pub fn match_likely_lyric<'a, Id>(
+pub fn match_likely_lyric<'a>(
     album_title: Option<(&str, &str)>,
     length: Option<Duration>,
-    search_result: &'a [SongInfo<Id>],
+    search_result: &'a [SongInfo],
     length_toleration_ms: u128,
-) -> Option<&'a Id> {
+) -> Option<&'a str> {
     length
         .and_then(|leng| {
             search_result.iter().find(|SongInfo { length, .. }| {
@@ -37,4 +37,5 @@ pub fn match_likely_lyric<'a, Id>(
         })
         .or(search_result.get(0))
         .map(|song| &song.id)
+        .map(|x| x.as_str())
 }
