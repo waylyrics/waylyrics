@@ -11,7 +11,7 @@ use ncmapi::types::{LyricResp, SearchSongResp};
 
 use super::Lyric;
 
-pub struct NeteaseLyricProvider {}
+pub struct NeteaseLyricProvider;
 
 pub struct NeteaseLyric {
     lyric: Option<String>,
@@ -98,11 +98,6 @@ impl super::LyricProvider for NeteaseLyricProvider {
             lyric: lyric_resp.lrc.map(|l| l.lyric),
             tlyric: lyric_resp.tlyric.map(|l| l.lyric),
         })
-    }
-}
-impl NeteaseLyricProvider {
-    pub fn new() -> Result<Self> {
-        Ok(Self{})
     }
 }
 

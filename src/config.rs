@@ -26,6 +26,7 @@ pub struct Config {
     pub enable_filter_regex: bool,
     pub filter_regexies: Vec<String>,
     pub triggers: Triggers,
+    pub qqmusic_api_base_url: Option<String>,
 }
 
 /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
@@ -90,6 +91,7 @@ impl Default for Config {
             ],
             lyric_align: Align::Center,
             triggers: Default::default(),
+            qqmusic_api_base_url: None,
         }
     }
 }

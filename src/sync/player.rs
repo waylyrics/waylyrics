@@ -15,7 +15,8 @@ use crate::lyric::netease::NeteaseLyricProvider;
 use crate::lyric::{LyricOwned, LyricProvider, LyricStore, SongInfo};
 use crate::sync::LYRIC;
 
-use super::{utils, DEFAULT_TEXT, PLAYER, PLAYER_FINDER, TRACK_PLAYING_PAUSED};
+use super::{utils, PLAYER, PLAYER_FINDER, TRACK_PLAYING_PAUSED};
+use crate::DEFAULT_TEXT;
 
 enum PlayerStatus {
     Missing,
@@ -238,7 +239,7 @@ pub fn fetch_lyric(
         return result;
     }
 
-    let provider = NeteaseLyricProvider::new().unwrap();
+    let provider = NeteaseLyricProvider;
 
     let search_result = search_song(
         &provider,
@@ -323,7 +324,7 @@ fn set_lyric_with_songid_or_file(
                 None
             }
             "ElectronNCM" | "Qcm" => {
-                let provider = NeteaseLyricProvider::new().unwrap();
+                let provider = NeteaseLyricProvider;
 
                 set_lyric_with_player_songid::<NeteaseLyricProvider>(
                     player,
@@ -337,7 +338,7 @@ fn set_lyric_with_songid_or_file(
                 .map(|song_id| set_lyric(&provider, song_id, title, artists, window))
             }
             "feeluown" => {
-                let provider = NeteaseLyricProvider::new().unwrap();
+                let provider = NeteaseLyricProvider;
 
                 set_lyric_with_player_songid::<NeteaseLyricProvider>(
                     player,
@@ -347,7 +348,7 @@ fn set_lyric_with_songid_or_file(
                 .map(|song_id| set_lyric(&provider, song_id, title, artists, window))
             }
             "YesPlayMusic" => {
-                let provider = NeteaseLyricProvider::new().unwrap();
+                let provider = NeteaseLyricProvider;
 
                 set_lyric_with_player_songid::<NeteaseLyricProvider>(
                     player,
