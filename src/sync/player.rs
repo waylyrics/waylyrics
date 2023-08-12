@@ -1,7 +1,6 @@
 use anyhow::Result;
 use gtk::gio::SimpleAction;
 use std::borrow::Cow;
-use std::marker::PhantomData;
 use std::time::{Duration, SystemTime};
 
 use gtk::glib::{VariantTy, WeakRef};
@@ -130,11 +129,7 @@ pub fn register_sigusr1_disconnect() {
     });
 }
 
-pub fn register_action_reload_lyric(
-    app: &Application,
-    wind: &app::Window,
-    trigger: &str,
-) {
+pub fn register_action_reload_lyric(app: &Application, wind: &app::Window, trigger: &str) {
     let action = SimpleAction::new("reload-lyric", None);
     action.connect_activate(move |_, _| {
         TRACK_PLAYING_PAUSED.set((None, false));
@@ -330,8 +325,7 @@ fn set_lyric_with_songid_or_file(
             "ElectronNCM" | "Qcm" => {
                 let provider = NeteaseLyricProvider::new().unwrap();
 
-                set_lyric_with_player_songid(
-                    PhantomData::<NeteaseLyricProvider>,
+                set_lyric_with_player_songid::<NeteaseLyricProvider>(
                     player,
                     |meta| {
                         meta.get("mpris:trackid")
@@ -345,8 +339,7 @@ fn set_lyric_with_songid_or_file(
             "feeluown" => {
                 let provider = NeteaseLyricProvider::new().unwrap();
 
-                set_lyric_with_player_songid(
-                    PhantomData::<NeteaseLyricProvider>,
+                set_lyric_with_player_songid::<NeteaseLyricProvider>(
                     player,
                     |meta| meta.url()?.strip_prefix("fuo://netease/songs/"),
                     |songid| songid.parse().ok(),
@@ -356,8 +349,7 @@ fn set_lyric_with_songid_or_file(
             "YesPlayMusic" => {
                 let provider = NeteaseLyricProvider::new().unwrap();
 
-                set_lyric_with_player_songid(
-                    PhantomData::<NeteaseLyricProvider>,
+                set_lyric_with_player_songid::<NeteaseLyricProvider>(
                     player,
                     |meta| meta.url()?.strip_prefix("/trackid/"),
                     |songid| songid.parse().ok(),
@@ -370,7 +362,6 @@ fn set_lyric_with_songid_or_file(
 }
 
 fn set_lyric_with_player_songid<P: LyricProvider>(
-    _provider: PhantomData<P>,
     player: &Player,
     extract_field: impl for<'a> FnOnce(&'a Metadata) -> Option<&'a str>,
     parse_id: impl FnOnce(&str) -> Option<P::Id>,
