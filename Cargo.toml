@@ -52,6 +52,8 @@ xdg = "2.5.2"
 # error handling
 anyhow = "1.0.72"
 thiserror = "1.0.44"
+qqmusic-rs = { git = "https://github.com/waylyrics/qqmusic-rs.git", version = "0.1.0" }
+url = "2.4.0"
 
 [features]
 vendored = ["dbus/vendored"]

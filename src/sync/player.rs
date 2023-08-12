@@ -241,7 +241,7 @@ pub fn fetch_lyric(
     let provider = NeteaseLyricProvider::new().unwrap();
 
     let search_result = search_song(
-        provider.as_ref(),
+        &provider,
         album.as_deref().unwrap_or_default(),
         _artists.unwrap_or(&[]),
         title,
@@ -260,7 +260,7 @@ pub fn fetch_lyric(
     };
 
     info!("matched songid: {song_id}");
-    set_lyric(provider.as_ref(), song_id, title, &artists, window)?;
+    set_lyric(&provider, song_id, title, &artists, window)?;
     Ok(())
 }
 
@@ -334,7 +334,7 @@ fn set_lyric_with_songid_or_file(
                     },
                     |songid| songid.parse().ok(),
                 )
-                .map(|song_id| set_lyric(&*provider, song_id, title, artists, window))
+                .map(|song_id| set_lyric(&provider, song_id, title, artists, window))
             }
             "feeluown" => {
                 let provider = NeteaseLyricProvider::new().unwrap();
@@ -344,7 +344,7 @@ fn set_lyric_with_songid_or_file(
                     |meta| meta.url()?.strip_prefix("fuo://netease/songs/"),
                     |songid| songid.parse().ok(),
                 )
-                .map(|song_id| set_lyric(&*provider, song_id, title, artists, window))
+                .map(|song_id| set_lyric(&provider, song_id, title, artists, window))
             }
             "YesPlayMusic" => {
                 let provider = NeteaseLyricProvider::new().unwrap();
@@ -354,7 +354,7 @@ fn set_lyric_with_songid_or_file(
                     |meta| meta.url()?.strip_prefix("/trackid/"),
                     |songid| songid.parse().ok(),
                 )
-                .map(|song_id| set_lyric(&*provider, song_id, title, artists, window))
+                .map(|song_id| set_lyric(&provider, song_id, title, artists, window))
             }
             _ => None,
         }

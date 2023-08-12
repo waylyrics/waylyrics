@@ -1,8 +1,15 @@
 use anyhow::Result;
+use qqmusic_rs::{
+    lyric::{QueryLyric, QueryLyricResp},
+    QQMusicApi,
+};
+use reqwest::blocking::Client;
 
 use super::Lyric;
 
-pub struct QQMusicLyricProvider {}
+pub struct QQMusicLyricProvider {
+    api: QQMusicApi,
+}
 
 pub struct QQMusicLyric {
     lyric: Option<String>,
@@ -28,11 +35,25 @@ impl super::LyricProvider for QQMusicLyricProvider {
     }
 
     fn query_lyric(&self, id: Self::Id) -> Result<QQMusicLyric> {
-        todo!()
-    }
+        let client = Client::builder().user_agent("Waylyrics/0.1").build()?;
+        let id = id.to_string();
+        let songid = qqmusic_rs::SongId::Songid(&id);
+        let url = self.api.query_lyric(songid);
+        let resp: QueryLyricResp =
+            serde_json::from_slice(client.get(url).send()?.bytes()?.as_ref())?;
 
-    fn new() -> Result<Box<Self>> {
-        Ok(Box::new(Self {}))
+        Ok(QQMusicLyric {
+            lyric: Some(resp.data.lyric),
+            tlyric: Some(resp.data.trans),
+        })
+    }
+}
+
+impl QQMusicLyricProvider {
+    pub fn new(base_url: url::Url) -> Result<Self> {
+        Ok(Self {
+            api: QQMusicApi::new(base_url),
+        })
     }
 }
 

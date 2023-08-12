@@ -1808,6 +1808,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "qqmusic-rs"
+version = "0.1.0"
+source = "git+https://github.com/waylyrics/qqmusic-rs.git#f1c4c0bddcc5904b223a3401c4374945d3f08a97"
+dependencies = [
+ "serde",
+ "serde_json",
+ "url",
+]
+
+[[package]]
 name = "quote"
 version = "0.3.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2887,6 +2897,7 @@ dependencies = [
  "md5",
  "mpris",
  "ncmapi",
+ "qqmusic-rs",
  "regex",
  "reqwest",
  "rust_decimal",
@@ -2898,6 +2909,7 @@ dependencies = [
  "toml 0.7.6",
  "tracing",
  "tracing-subscriber",
+ "url",
  "xdg",
 ]
 

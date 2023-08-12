@@ -50,7 +50,6 @@ pub trait LyricProvider {
     type LStore: LyricStore;
 
     const NAME: &'static str;
-    fn new() -> Result<Box<Self>>;
 
     fn query_lyric(
         &self,
