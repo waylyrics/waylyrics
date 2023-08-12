@@ -2,6 +2,7 @@ pub mod utils;
 use anyhow::Result;
 
 pub mod netease;
+pub mod qqmusic;
 
 use std::time::Duration;
 
