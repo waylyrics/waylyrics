@@ -1810,7 +1810,7 @@ dependencies = [
 [[package]]
 name = "qqmusic-rs"
 version = "0.1.0"
-source = "git+https://github.com/waylyrics/qqmusic-rs.git#f1c4c0bddcc5904b223a3401c4374945d3f08a97"
+source = "git+https://github.com/waylyrics/qqmusic-rs.git#d66426d3dbfa4bb47bcccbbac3aa0da855ada45c"
 dependencies = [
  "serde",
  "serde_json",
