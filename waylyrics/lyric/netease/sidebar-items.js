@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["NeteaseLyricProvider"]};
+window.SIDEBAR_ITEMS = {"fn":["match_lyric"],"struct":["NeteaseLyricProvider"]};

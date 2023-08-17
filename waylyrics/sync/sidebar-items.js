@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["register_action_connect","register_action_disconnect","register_action_reload_lyric","register_lyric_display","register_mpris_sync","register_sigusr1_disconnect"]};
+window.SIDEBAR_ITEMS = {"constant":["LYRIC","PLAYER","PLAYER_FINDER","TRACK_PLAYING_PAUSED"],"fn":["register_action_connect","register_action_disconnect","register_action_reload_lyric","register_lyric_display","register_mpris_sync","register_sigusr1_disconnect"],"mod":["cache","lyric","player","utils"]};

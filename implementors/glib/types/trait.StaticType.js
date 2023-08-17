@@ -1,3 +1,3 @@
 (function() {var implementors = {
-"waylyrics":[["impl StaticType for <a class=\"struct\" href=\"waylyrics/app/struct.Window.html\" title=\"struct waylyrics::app::Window\">Window</a>"]]
+"waylyrics":[["impl StaticType for <a class=\"struct\" href=\"waylyrics/app/window/struct.Window.html\" title=\"struct waylyrics::app::window::Window\">Window</a>"]]
 };if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
