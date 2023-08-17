@@ -39,9 +39,13 @@ jobs:
               with:
                 command: doc
                 args: --all --no-deps
-            
+
             - name: Deploy Documentation
-              uses: peaceiris/actions-gh-pages@v3
-              with:
-                  github_token: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-                  publish_dir: ./targeut/doc
+              env:
+                ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+                PUBLISH_BRANCH: gh-pages
+                PUBLISH_DIR: ./target/doc
+                SCRIPT_MODE: true
+              run: |
+                wget https://raw.githubusercontent.com/peaceiris/actions-gh-pages/v2.5.0/entrypoint.sh
+                bash ./entrypoint.sh
