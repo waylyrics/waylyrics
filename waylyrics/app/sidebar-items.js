@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["build_main_window","get_label"],"mod":["utils"],"struct":["Window"]};

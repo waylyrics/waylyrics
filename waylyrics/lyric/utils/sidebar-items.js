@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["find_next_lyric","lrc_iter","register_provider"]};

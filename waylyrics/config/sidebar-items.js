@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Align"],"struct":["Config","Triggers"]};
