@@ -6,8 +6,6 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  RUSTC_BOOTSTRAP: 1
-  WAYLYRICS_DEFAULT_CONFIG: /usr/share/waylyrics/config.toml
   WAYLYRICS_THEME_PRESETS_DIR: /usr/share/waylyrics/themes
 
 jobs:
@@ -17,7 +15,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - run: rustup toolchain install stable --profile minimal
+    - run: rustup toolchain install nightly --profile minimal
     - name: Install deps
       run: |
         sudo apt update
