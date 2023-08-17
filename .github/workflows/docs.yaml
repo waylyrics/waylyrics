@@ -38,7 +38,7 @@ jobs:
               uses: actions-rs/cargo@v1
               with:
                 command: doc
-                args: --all --no-deps
+                args: --all --no-deps --document-private-items
 
             - name: Deploy Documentation
               env:
