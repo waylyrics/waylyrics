@@ -16,6 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - run: rustup toolchain install nightly --profile minimal
+    - run: rustup default nightly
     - name: Install deps
       run: |
         sudo apt update
