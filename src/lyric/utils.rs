@@ -29,8 +29,7 @@ pub fn find_next_lyric<'a>(
         .iter()
         .take_while(
             |LyricLineOwned {
-                 text: text.trim(),
-                 start_time: off,
+                 start_time: off, ..
              }| off <= elapsed,
         )
         .last()

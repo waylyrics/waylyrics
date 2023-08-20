@@ -64,6 +64,7 @@ fn set_lyric(
 ) {
     let status = &window.imp().lyric_playing[translation as usize];
     if let Some(LyricLineOwned { text, start_time }) = next_text {
+        let text = text.trim();
         if status.get().is_some_and(|time| &time == start_time) {
             return;
         }
