@@ -15,7 +15,7 @@ panic = "abort"
 # serializing
 toml = "0.7.6"
 serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0.105"
+serde_json = "1.0.106"
 rust_decimal = { version = "1.32.0", default-features = false, features = [
     "std",
 ] }
