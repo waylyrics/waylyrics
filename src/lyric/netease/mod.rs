@@ -14,7 +14,7 @@ use super::{Lyric, LyricStore};
 pub struct NeteaseLyricProvider;
 
 impl super::LyricProvider for NeteaseLyricProvider {
-    fn provider_name(&self) -> &'static str {
+    fn provider_unique_name(&self) -> &'static str {
         "网易云音乐"
     }
     fn search_song(

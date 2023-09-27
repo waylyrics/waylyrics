@@ -43,7 +43,7 @@ pub fn register_provider(provider_id: &str) {
         Box::new(QQMusicLyricProvider),
     ];
     for provider in providers {
-        if provider_id == provider.provider_name() {
+        if provider_id == provider.provider_unique_name() {
             crate::LYRIC_PROVIDERS.with_borrow_mut(|pro| {
                 pro.push(provider);
             })

@@ -56,7 +56,7 @@ pub trait LyricProvider: LyricParse {
         artists: &[&str],
         title: &str,
     ) -> Result<Vec<SongInfo>>;
-    fn provider_name(&self) -> &'static str;
+    fn provider_unique_name(&self) -> &'static str;
 }
 
 pub trait LyricParse {

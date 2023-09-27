@@ -1,3 +1,4 @@
+#![allow(stable_features)]
 #![feature(local_key_cell_methods)]
 
 use std::path::PathBuf;

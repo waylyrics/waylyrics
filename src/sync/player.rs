@@ -50,9 +50,10 @@ pub fn fetch_lyric(
         return result;
     }
 
-    let mut results: Vec<(LyricOwned, LyricOwned, u8)> = vec![];
+    let mut results: Vec<(&'static str, String, u8)> = vec![];
     LYRIC_PROVIDERS.with_borrow(|providers| {
         for provider in providers {
+            let provider_id = provider.provider_unique_name();
             let tracks = match search_song(
                 provider.as_ref(),
                 album.unwrap_or_default(),
@@ -61,7 +62,10 @@ pub fn fetch_lyric(
             ) {
                 Ok(songs) => songs,
                 Err(e) => {
-                    error!("{e} when searching {title} on {}", provider.provider_name());
+                    error!(
+                        "{e} occurs when search {title} on {}",
+                        provider_id
+                    );
                     continue;
                 }
             };
@@ -73,21 +77,8 @@ pub fn fetch_lyric(
                 &tracks,
                 length_toleration_ms,
             ) {
-                info!("matched {song_id} from {}", provider.provider_name());
-                match provider.query_lyric(song_id) {
-                    Ok(lyric) => {
-                        let olyric = provider.get_lyric(&lyric).into_owned();
-                        let tlyric = provider.get_translated_lyric(&lyric).into_owned();
-                        results.push((olyric, tlyric, weight));
-                    }
-                    Err(e) => {
-                        error!(
-                            "{e} when get lyric for {title} on {}",
-                            provider.provider_name()
-                        );
-                        continue;
-                    }
-                }
+                info!("matched {song_id} from {}", provider_id);
+                results.push((provider_id, song_id.to_string(), weight));
             }
         }
     });
@@ -98,9 +89,36 @@ pub fn fetch_lyric(
         Err(crate::lyric::Error::NoLyric)?;
     }
 
-    let best_result = results.into_iter().min_by_key(|r| r.2).unwrap();
-    let (olyric, tlyric, _) = best_result;
-    set_lyric(olyric, tlyric, title, &artists, window)
+    results.sort_by_key(|(_, _, weight)| *weight);
+
+    for (platform_id, song_id, _) in results {
+        let fetch_result = LYRIC_PROVIDERS.with_borrow(|providers| {
+            let provider = providers
+                .iter()
+                .find(|p| p.provider_unique_name() == platform_id)
+                .unwrap();
+            match provider.query_lyric(&song_id) {
+                Ok(lyric) => {
+                    let olyric = provider.get_lyric(&lyric).into_owned();
+                    let tlyric = provider.get_translated_lyric(&lyric).into_owned();
+                    return set_lyric(olyric, tlyric, title, &artists, window);
+                }
+                Err(e) => {
+                    error!(
+                        "{e} when get lyric for {title} on {}",
+                        provider.provider_unique_name()
+                    );
+                    Err(crate::lyric::Error::NoResult)?
+                }
+            }
+        });
+
+        if fetch_result.is_ok() {
+            break;
+        }
+    }
+
+    Err(crate::lyric::Error::NoResult)?
 }
 
 fn search_song<P: LyricProvider + ?Sized>(

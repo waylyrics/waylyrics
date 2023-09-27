@@ -59,10 +59,10 @@ impl Default for Config {
             click_pass_through: true,
             hide_label_on_empty_text: true,
             theme: "default".into(),
-            /// note: persistenced lyric offset settings depends on this
+            // note: persistenced lyric offset settings depends on this
             cache_lyrics: true,
             enable_filter_regex: false,
-            /// inspired by LyricX's filter [list](https://github.com/ddddxxx/LyricsX/blob/c16b6a413dda7bc0b793b897522e0c4ee0ffc716/LyricsX/Supporting%20Files/UserDefaults.plist#L31-L62)
+            // inspired by LyricX's filter [list](https://github.com/ddddxxx/LyricsX/blob/c16b6a413dda7bc0b793b897522e0c4ee0ffc716/LyricsX/Supporting%20Files/UserDefaults.plist#L31-L62)
             filter_regexies: vec![
                 "^作词".into(),
                 "^作詞".into(),
@@ -93,7 +93,7 @@ impl Default for Config {
             lyric_align: Align::Center,
             triggers: Default::default(),
             qqmusic_api_base_url: None,
-            /// avaliable options: 网易云音乐, QQ音乐
+            // avaliable options: 网易云音乐, QQ音乐
             lyric_search_source: vec!["网易云音乐".into()],
         }
     }

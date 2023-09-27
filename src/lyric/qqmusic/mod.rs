@@ -13,7 +13,7 @@ use super::{Lyric, LyricStore};
 pub struct QQMusicLyricProvider;
 
 impl super::LyricProvider for QQMusicLyricProvider {
-    fn provider_name(&self) -> &'static str {
+    fn provider_unique_name(&self) -> &'static str {
         "QQ音乐"
     }
     fn search_song(

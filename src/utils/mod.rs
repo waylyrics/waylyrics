@@ -1,8 +1,10 @@
 use anyhow::Result;
 use gtk::{
-    gio::SimpleAction, glib::WeakRef, prelude::*, subclass::prelude::*, Application, NamedAction,
+    prelude::*, subclass::prelude::*, Application, NamedAction,
     Shortcut, ShortcutController, ShortcutTrigger,
 };
+use gtk::gio::SimpleAction;
+use gtk::glib::WeakRef;
 use std::time::Duration;
 
 use crate::app::{utils::set_click_pass_through, Window};
