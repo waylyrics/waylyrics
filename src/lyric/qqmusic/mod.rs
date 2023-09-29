@@ -1,5 +1,6 @@
 use anyhow::Result;
 use qqmusic_rs::{
+    song::{SongDetail, SongDetailResp},
     lyric::{QueryLyric, QueryLyricResp},
     SongId,
 };
@@ -16,6 +17,7 @@ impl super::LyricProvider for QQMusicLyricProvider {
     fn provider_unique_name(&self) -> &'static str {
         "QQ音乐"
     }
+
     fn search_song(
         &self,
         album: &str,
@@ -25,7 +27,7 @@ impl super::LyricProvider for QQMusicLyricProvider {
         let keyword = format!("{title} {album} {}", artists.join("/"));
         tracing::debug!("search keyword: {keyword}");
 
-        todo!()
+        Err(Error::NotImplemented)
     }
 
     fn query_lyric(&self, id: &str) -> Result<LyricStore> {
@@ -42,8 +44,13 @@ impl super::LyricProvider for QQMusicLyricProvider {
             let Some(api) = api.as_ref() else {
                 return Err(Error::ApiClientNotInit)?;
             };
+            
+            let mid = match songid {
+                SongId::Songmid(mid) => mid.to_owned(),
+                SongId::Songid(id) => get_songmid(api, &client, songid)?,
+            };
 
-            let url = api.query_lyric(songid);
+            let url = api.query_lyric(SongId::Songmid(&mid));
             let resp: QueryLyricResp =
                 serde_json::from_slice(client.get(url).send()?.bytes()?.as_ref())?;
 
@@ -53,6 +60,12 @@ impl super::LyricProvider for QQMusicLyricProvider {
             })
         })
     }
+}
+
+fn get_songmid(api: &QQMusicApi, client: &Client, songid: &str) -> Result<String> {
+    let url = api.song_detail(SongId::Songid(songid));
+    let resp: SongDetailResp = serde_json::from_slice(client.get(url).send()?.bytes()?.as_ref())?;
+    Ok(resp.data.track_info.mid)
 }
 
 impl super::LyricParse for QQMusicLyricProvider {
@@ -84,4 +97,6 @@ fn match_lyric(lyric: Option<&str>) -> Lyric<'_> {
 pub enum Error {
     #[error("please make sure you configured QQMusicApi base URL")]
     ApiClientNotInit,
+    #[error("Not implemented")]
+    NotImplemented,
 }
