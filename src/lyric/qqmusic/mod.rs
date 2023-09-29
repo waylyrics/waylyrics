@@ -1,12 +1,15 @@
+use std::time::Duration;
+
 use anyhow::Result;
 use qqmusic_rs::{
-    song::{SongDetail, SongDetailResp},
     lyric::{QueryLyric, QueryLyricResp},
-    SongId,
+    search::{Search, SearchType, Track},
+    song::{SongDetail, SongDetailResp},
+    QQMusicApi, SongId,
 };
 use reqwest::blocking::Client;
 
-use crate::QQMUSIC_API_CLIENT;
+use crate::{lyric::SongInfo, QQMUSIC_API_CLIENT};
 
 use super::{Lyric, LyricStore};
 
@@ -18,16 +21,43 @@ impl super::LyricProvider for QQMusicLyricProvider {
         "QQ音乐"
     }
 
-    fn search_song(
-        &self,
-        album: &str,
-        artists: &[&str],
-        title: &str,
-    ) -> Result<Vec<super::SongInfo>> {
+    fn search_song(&self, album: &str, artists: &[&str], title: &str) -> Result<Vec<SongInfo>> {
         let keyword = format!("{title} {album} {}", artists.join("/"));
         tracing::debug!("search keyword: {keyword}");
 
-        Err(Error::NotImplemented)
+        let client = Client::builder().user_agent("Waylyrics/0.1").build()?;
+
+        QQMUSIC_API_CLIENT.with_borrow(|api| {
+            let Some(api) = api.as_ref() else {
+                return Err(Error::ApiClientNotInit)?;
+            };
+
+            let url = api.search::<Track>(&keyword, None, None);
+            let resp: <Track as SearchType>::Resp =
+                serde_json::from_slice(client.get(url).send()?.bytes()?.as_ref())?;
+
+            Ok(resp
+                .data
+                .list
+                .into_iter()
+                .map(|song| SongInfo {
+                    id: song.songmid,
+                    title: song.songname,
+                    singer: song.singer.iter().map(|singer| &singer.name).fold(
+                        String::new(),
+                        |mut s, op| {
+                            if !s.is_empty() {
+                                s.push(',')
+                            }
+                            s += &op;
+                            s
+                        },
+                    ),
+                    album: Some(song.albumname),
+                    length: Duration::from_secs(song.interval as _),
+                })
+                .collect())
+        })
     }
 
     fn query_lyric(&self, id: &str) -> Result<LyricStore> {
@@ -44,13 +74,13 @@ impl super::LyricProvider for QQMusicLyricProvider {
             let Some(api) = api.as_ref() else {
                 return Err(Error::ApiClientNotInit)?;
             };
-            
+
             let mid = match songid {
                 SongId::Songmid(mid) => mid.to_owned(),
-                SongId::Songid(id) => get_songmid(api, &client, songid)?,
+                SongId::Songid(id) => get_songmid(api, &client, id)?,
             };
 
-            let url = api.query_lyric(SongId::Songmid(&mid));
+            let url = api.query_lyric(&mid);
             let resp: QueryLyricResp =
                 serde_json::from_slice(client.get(url).send()?.bytes()?.as_ref())?;
 
