@@ -36,6 +36,7 @@ pub struct Config {
 pub struct Triggers {
     pub switch_decoration: String,
     pub reload_theme: String,
+    pub search_lyric: String,
     pub reload_lyric: String,
     pub switch_passthrough: String,
 }
@@ -45,6 +46,7 @@ impl Default for Triggers {
         Self {
             switch_decoration: "<Control>d".into(),
             reload_theme: "<Control><Shift>t".into(),
+            search_lyric: "<Control>s".into(),
             reload_lyric: "<Alt><Shift>l".into(),
             switch_passthrough: "<Alt>p".into(),
         }

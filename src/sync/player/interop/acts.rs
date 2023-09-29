@@ -8,7 +8,7 @@ use tracing::{error, info, warn};
 
 use crate::{
     app,
-    sync::{PLAYER, PLAYER_FINDER, TRACK_PLAYING_PAUSED},
+    sync::{PLAYER, PLAYER_FINDER, TRACK_PLAYING_PAUSED, search_window},
 };
 
 pub fn register_action_disconnect(app: &Application) {
@@ -24,6 +24,25 @@ pub fn register_sigusr1_disconnect() {
         PLAYER.set(None);
         Continue(true)
     });
+}
+
+// TODO: code cleanup
+pub fn register_action_search_lyric(app: &Application, wind: &app::Window, trigger: &str) {
+    let action = SimpleAction::new("search-lyric", None);
+    action.connect_activate(move |_, _| {
+        let window = search_window::Window::new();
+        window.present();
+    });
+    app.add_action(&action);
+
+    let shortcut = Shortcut::builder()
+        .action(&NamedAction::new("app.search-lyric"))
+        .trigger(&ShortcutTrigger::parse_string(trigger).unwrap())
+        .build();
+    let controller = ShortcutController::new();
+    controller.set_scope(gtk::ShortcutScope::Global);
+    controller.add_shortcut(shortcut);
+    wind.add_controller(controller);
 }
 
 pub fn register_action_reload_lyric(app: &Application, wind: &app::Window, trigger: &str) {
@@ -42,6 +61,15 @@ pub fn register_action_reload_lyric(app: &Application, wind: &app::Window, trigg
     controller.set_scope(gtk::ShortcutScope::Global);
     controller.add_shortcut(shortcut);
     wind.add_controller(controller);
+}
+
+pub fn register_action_remove_lyric(app: &Application) {
+    let action = SimpleAction::new("remove-lyric", None);
+    action.connect_activate(move |_, _| {
+        // TODO: which func?
+        info!("removed lyric");
+    });
+    app.add_action(&action);
 }
 
 pub fn register_action_connect(app: &Application) {

@@ -908,7 +908,7 @@ dependencies = [
  "futures-task",
  "futures-util",
  "gio-sys",
- "glib-macros",
+ "glib-macros 0.17.10",
  "glib-sys",
  "gobject-sys",
  "libc",
@@ -931,6 +931,20 @@ dependencies = [
  "proc-macro2",
  "quote 1.0.33",
  "syn 1.0.109",
+]
+
+[[package]]
+name = "glib-macros"
+version = "0.18.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f8da903822b136d42360518653fcf154455defc437d3e7a81475bf9a95ff1e47"
+dependencies = [
+ "heck 0.4.1",
+ "proc-macro-crate 1.3.1",
+ "proc-macro-error",
+ "proc-macro2",
+ "quote 1.0.33",
+ "syn 2.0.37",
 ]
 
 [[package]]
@@ -2939,6 +2953,7 @@ dependencies = [
  "anyhow",
  "async-compat",
  "dbus",
+ "glib-macros 0.18.2",
  "gtk4",
  "libc",
  "lrc-nom",

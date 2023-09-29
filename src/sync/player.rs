@@ -18,8 +18,8 @@ use super::{utils, PLAYER, PLAYER_FINDER};
 mod interop;
 
 pub use interop::acts::{
-    register_action_connect, register_action_disconnect, register_action_reload_lyric,
-    register_sigusr1_disconnect,
+    register_action_connect, register_action_disconnect, register_action_search_lyric,
+    register_action_remove_lyric, register_action_reload_lyric, register_sigusr1_disconnect,
 };
 
 pub use interop::register_mpris_sync;

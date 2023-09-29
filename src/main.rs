@@ -61,6 +61,7 @@ fn build_ui(app: &Application) -> Result<()> {
             Triggers {
                 switch_decoration,
                 reload_theme,
+                search_lyric,
                 reload_lyric,
                 switch_passthrough,
             },
@@ -104,6 +105,8 @@ fn build_ui(app: &Application) -> Result<()> {
     register_action_switch_decoration(&wind, &switch_decoration);
     register_action_switch_passthrough(&wind, &switch_passthrough);
     register_action_reload_theme(app, &wind, &reload_theme);
+    register_action_search_lyric(app, &wind, &search_lyric);
+    register_action_remove_lyric(app);
     register_action_reload_lyric(app, &wind, &reload_lyric);
 
     if enable_filter_regex {

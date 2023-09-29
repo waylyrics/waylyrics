@@ -9,12 +9,15 @@ mod utils;
 mod lyric;
 mod player;
 mod cache;
+mod search_window;
 
 pub use lyric::register_lyric_display;
 pub use player::register_mpris_sync;
 pub use player::register_sigusr1_disconnect;
 pub use player::register_action_disconnect;
 pub use player::register_action_connect;
+pub use player::register_action_search_lyric;
+pub use player::register_action_remove_lyric;
 pub use player::register_action_reload_lyric;
 
 pub(crate) use player::list_avaliable_players;

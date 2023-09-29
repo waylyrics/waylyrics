@@ -21,6 +21,7 @@ impl Window {
         let imp = window.imp();
         window.set_titlebar(Some(&imp.headerbar));
         imp.clickthrough.set(clickthrough);
+        window.set_widget_name("main-window");
         window
     }
 

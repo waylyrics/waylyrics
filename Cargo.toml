@@ -54,6 +54,7 @@ anyhow = "1.0.75"
 thiserror = "1.0.48"
 qqmusic-rs = { git = "https://github.com/waylyrics/qqmusic-rs.git", version = "0.1.0" }
 url = "2.4.1"
+glib-macros = "0.18.2"
 
 [features]
 vendored = ["dbus/vendored"]
