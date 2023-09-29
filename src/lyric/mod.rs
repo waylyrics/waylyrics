@@ -60,8 +60,8 @@ pub trait LyricProvider: LyricParse {
 }
 
 pub trait LyricParse {
-    fn get_lyric<'a>(&self, store: &'a LyricStore) -> Lyric<'a>;
-    fn get_translated_lyric<'a>(&self, store: &'a LyricStore) -> Lyric<'a>;
+    fn get_lyric<'a>(&self, store: &'a LyricStore) -> LyricOwned;
+    fn get_translated_lyric<'a>(&self, store: &'a LyricStore) -> LyricOwned;
 }
 
 impl<'a> Lyric<'a> {

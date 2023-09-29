@@ -99,8 +99,8 @@ pub fn fetch_lyric(
                 .unwrap();
             match provider.query_lyric(&song_id) {
                 Ok(lyric) => {
-                    let olyric = provider.get_lyric(&lyric).into_owned();
-                    let tlyric = provider.get_translated_lyric(&lyric).into_owned();
+                    let olyric = provider.get_lyric(&lyric);
+                    let tlyric = provider.get_translated_lyric(&lyric);
                     return set_lyric(olyric, tlyric, title, &artists, window);
                 }
                 Err(e) => {
@@ -180,8 +180,8 @@ fn set_lyric_with_songid_or_file(
             .map(|song_id| {
                 let provider = NeteaseLyricProvider;
                 let lyric = provider.query_lyric(&song_id)?;
-                let olyric = provider.get_lyric(&lyric).into_owned();
-                let tlyric = provider.get_translated_lyric(&lyric).into_owned();
+                let olyric = provider.get_lyric(&lyric);
+                let tlyric = provider.get_translated_lyric(&lyric);
                 set_lyric(olyric, tlyric, title, artists, window)
             }),
             "feeluown" => get_song_id_from_player(player, |meta| {
@@ -190,8 +190,8 @@ fn set_lyric_with_songid_or_file(
             .map(|song_id| {
                 let provider = NeteaseLyricProvider;
                 let lyric = provider.query_lyric(&song_id)?;
-                let olyric = provider.get_lyric(&lyric).into_owned();
-                let tlyric = provider.get_translated_lyric(&lyric).into_owned();
+                let olyric = provider.get_lyric(&lyric);
+                let tlyric = provider.get_translated_lyric(&lyric);
                 set_lyric(olyric, tlyric, title, artists, window)
             })
             .or_else(|| {
@@ -201,8 +201,8 @@ fn set_lyric_with_songid_or_file(
                 .map(|song_id| {
                     let provider = QQMusicLyricProvider;
                     let lyric = provider.query_lyric(&song_id)?;
-                    let olyric = provider.get_lyric(&lyric).into_owned();
-                    let tlyric = provider.get_translated_lyric(&lyric).into_owned();
+                    let olyric = provider.get_lyric(&lyric);
+                    let tlyric = provider.get_translated_lyric(&lyric);
                     set_lyric(olyric, tlyric, title, artists, window)
                 })
             }),
@@ -211,8 +211,8 @@ fn set_lyric_with_songid_or_file(
                     |song_id| {
                         let provider = NeteaseLyricProvider;
                         let lyric = provider.query_lyric(&song_id)?;
-                        let olyric = provider.get_lyric(&lyric).into_owned();
-                        let tlyric = provider.get_translated_lyric(&lyric).into_owned();
+                        let olyric = provider.get_lyric(&lyric);
+                        let tlyric = provider.get_translated_lyric(&lyric);
                         set_lyric(olyric, tlyric, title, artists, window)
                     },
                 )

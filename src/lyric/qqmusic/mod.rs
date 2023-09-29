@@ -11,7 +11,7 @@ use reqwest::blocking::Client;
 
 use crate::{lyric::SongInfo, QQMUSIC_API_CLIENT};
 
-use super::{Lyric, LyricStore};
+use super::{Lyric, LyricOwned, LyricStore};
 
 #[derive(Clone, Copy)]
 pub struct QQMusicLyricProvider;
@@ -99,25 +99,32 @@ fn get_songmid(api: &QQMusicApi, client: &Client, songid: &str) -> Result<String
 }
 
 impl super::LyricParse for QQMusicLyricProvider {
-    fn get_lyric<'a>(&self, store: &'a LyricStore) -> Lyric<'a> {
+    fn get_lyric<'a>(&self, store: &'a LyricStore) -> LyricOwned {
         let lyric = store.lyric.as_deref();
-        match_lyric(lyric)
+        verify_lyric(lyric)
     }
 
-    fn get_translated_lyric<'a>(&self, store: &'a LyricStore) -> Lyric<'a> {
+    fn get_translated_lyric<'a>(&self, store: &'a LyricStore) -> LyricOwned {
         let lyric = store.tlyric.as_deref();
-        match_lyric(lyric)
+        verify_lyric(lyric)
     }
 }
 
-fn match_lyric(lyric: Option<&str>) -> Lyric<'_> {
+fn verify_lyric(lyric: Option<&str>) -> LyricOwned {
     match lyric {
-        Some("") | None => super::Lyric::None,
+        Some("") | None => super::LyricOwned::None,
         Some(lyric) => {
+            let lyric = lyric
+                .replace("&amp;", "&")
+                .replace("&lt;", "<")
+                .replace("&gt;", ">")
+                .replace("&quot;", "\"")
+                .replace("&apos;", "\'");
+
             if let Ok(parsed) = super::utils::lrc_iter(lyric.split('\n')) {
-                Lyric::LineTimestamp(parsed)
+                Lyric::LineTimestamp(parsed).into_owned()
             } else {
-                Lyric::NoTimestamp
+                LyricOwned::NoTimestamp
             }
         }
     }

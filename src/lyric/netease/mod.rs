@@ -9,7 +9,7 @@ use ncmapi::{
 
 use ncmapi::types::{LyricResp, SearchSongResp};
 
-use super::{Lyric, LyricStore};
+use super::{Lyric, LyricStore, LyricOwned};
 
 pub struct NeteaseLyricProvider;
 
@@ -96,14 +96,14 @@ impl super::LyricProvider for NeteaseLyricProvider {
 }
 
 impl super::LyricParse for NeteaseLyricProvider {
-    fn get_lyric<'a>(&self, store: &'a LyricStore) -> Lyric<'a> {
+    fn get_lyric<'a>(&self, store: &'a LyricStore) -> LyricOwned {
         let lyric = store.lyric.as_deref();
-        match_lyric(lyric)
+        match_lyric(lyric).into_owned()
     }
 
-    fn get_translated_lyric<'a>(&self, store: &'a LyricStore) -> Lyric<'a> {
+    fn get_translated_lyric<'a>(&self, store: &'a LyricStore) -> LyricOwned{
         let lyric = store.tlyric.as_deref();
-        match_lyric(lyric)
+        match_lyric(lyric).into_owned()
     }
 }
 
