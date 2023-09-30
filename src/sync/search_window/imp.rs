@@ -8,6 +8,7 @@ use gtk::{gio, glib};
 
 #[derive(Default)]
 pub struct ResultData {
+    pub id: String,
     pub name: String,
 }
 
@@ -15,6 +16,7 @@ pub struct ResultData {
 #[properties(wrapper_type = super::ResultObject)]
 pub struct ResultObject {
     #[property(name = "name", get, set, type = String, member = name)]
+    #[property(name = "id", get, set, type = String, member = id)]
     pub data: RefCell<ResultData>,
 }
 

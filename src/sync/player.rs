@@ -121,7 +121,7 @@ pub fn fetch_lyric(
     Err(crate::lyric::Error::NoResult)?
 }
 
-fn search_song<P: LyricProvider + ?Sized>(
+pub fn search_song<P: LyricProvider + ?Sized>(
     provider: &P,
     album: &str,
     artists: &[&str],

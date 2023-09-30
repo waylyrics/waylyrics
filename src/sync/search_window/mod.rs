@@ -5,15 +5,20 @@ use gtk::glib::clone;
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib};
 use gtk::{prelude::*, ListItem};
-use tracing::info;
+use tracing::{error, info};
+
+use crate::LYRIC_PROVIDERS;
 
 glib::wrapper! {
     pub struct ResultObject(ObjectSubclass<imp::ResultObject>);
 }
 
 impl ResultObject {
-    pub fn new(name: String) -> Self {
-        Object::builder().property("name", name).build()
+    pub fn new(id: String, name: String) -> Self {
+        Object::builder()
+            .property("name", name)
+            .property("id", id)
+            .build()
     }
 }
 
@@ -73,9 +78,58 @@ impl Window {
             return;
         }
 
-        // TODO: search and modify results
-        let result = ResultObject::new(query);
-        self.results().append(&result);
+        let mut results = vec![];
+        LYRIC_PROVIDERS.with_borrow(|providers| {
+            for provider in providers {
+                let provider_id = provider.provider_unique_name();
+                // Use a hack to directly search with query
+                let tracks =
+                    match crate::sync::player::search_song(provider.as_ref(), "", &[""], &query) {
+                        Ok(songs) => songs,
+                        Err(e) => {
+                            // TODO: to show errors to users in GUI
+                            error!("{e} occurs when search {query} on {}", provider_id);
+                            continue;
+                        }
+                    };
+                for track in tracks {
+                    // TODO: present in a better format
+                    results.push(ResultObject::new(
+                        track.id,
+                        format!(
+                            "{} {} {:?} ({}s)",
+                            track.title,
+                            track.singer,
+                            track.album,
+                            track.length.as_secs()
+                        ),
+                    ));
+                }
+            }
+        });
+        self.results().remove_all();
+        for result in results {
+            self.results().append(&result);
+        }
+    }
+
+    fn get_selected_result(&self) -> Option<ResultObject> {
+        let selection_model = self
+            .imp()
+            .result_list
+            .model()
+            .and_downcast::<gtk::SingleSelection>()
+            .expect("Needs to be SingleSelection");
+        let selected = selection_model.selected();
+        if selected == gtk::INVALID_LIST_POSITION {
+            return None;
+        }
+        let result = self
+            .results()
+            .item(selected)
+            .and_downcast::<ResultObject>()
+            .expect("Needs to be ResultObject");
+        Some(result)
     }
 
     fn setup_callbacks(&self) {
@@ -91,9 +145,10 @@ impl Window {
             }));
 
         imp.set_button
-            .connect_activate(clone!(@weak self as window => move |_| {
+            .connect_clicked(clone!(@weak self as window => move |_| {
                 // TODO: set lyric
-                info!("set lyric");
+                let result = window.get_selected_result();
+                info!("set lyric: {:?}", result);
             }));
     }
 
