@@ -46,6 +46,7 @@ impl TryFrom<Metadata> for TrackMeta {
     }
 }
 
+
 pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
     TRACK_PLAYING_STATE.with_borrow_mut(|(track_id_playing, paused, cache_path)| {
         let track_id = &track_meta.track_id;
@@ -67,6 +68,7 @@ pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
 }
 
 pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<(), PlayerStatus> {
+
     crate::sync::utils::clean_lyric(window);
 
     let title = &track_meta.title;
