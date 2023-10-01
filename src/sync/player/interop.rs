@@ -6,13 +6,13 @@ use tracing::{error, info, trace};
 
 use crate::{
     app,
-    sync::{PLAYER, TRACK_PLAYING_PAUSED, utils, PLAYER_FINDER},
+    sync::{PLAYER, TRACK_PLAYING_PAUSED, utils, PLAYER_FINDER, lyric::refresh_lyric},
     DEFAULT_TEXT,
 };
 
 pub mod acts;
 
-pub fn need_update_lyric(track_meta: &Metadata) -> bool {
+pub fn need_fetch_lyric(track_meta: &Metadata) -> bool {
     TRACK_PLAYING_PAUSED.with_borrow_mut(|(track_id_playing, paused)| {
         let Some(track_id) = track_meta.track_id() else {
             *track_id_playing = None;
@@ -23,8 +23,7 @@ pub fn need_update_lyric(track_meta: &Metadata) -> bool {
         trace!("got track_id: {track_id}");
 
         let need = track_id_playing.is_none()
-            || track_id_playing.as_ref().is_some_and(|p| p != &track_id)
-                && !(*paused && track_id_playing.as_ref().is_some_and(|p| p == &track_id));
+            || track_id_playing.as_ref().is_some_and(|p| p != &track_id);
 
         *track_id_playing = Some(track_id);
         *paused = false;
@@ -32,7 +31,7 @@ pub fn need_update_lyric(track_meta: &Metadata) -> bool {
     })
 }
 
-pub fn update_lyric(track_meta: &Metadata, window: &app::Window) -> Result<(), PlayerStatus> {
+pub fn fetch_lyric(track_meta: &Metadata, window: &app::Window) -> Result<(), PlayerStatus> {
     crate::sync::utils::clean_lyric(window);
 
     let title = track_meta
@@ -83,7 +82,7 @@ pub fn sync_position(player: &Player, window: &app::Window) -> Result<(), Player
     Ok(())
 }
 
-pub fn try_sync_player(window: &crate::app::Window) -> Result<(), PlayerStatus> {
+pub fn sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
     PLAYER.with_borrow(|player| {
         let player = player.as_ref().ok_or(PlayerStatus::Missing)?;
 
@@ -103,11 +102,12 @@ pub fn try_sync_player(window: &crate::app::Window) -> Result<(), PlayerStatus> 
             .get_metadata()
             .map_err(|_| PlayerStatus::Unsupported("cannot get metadata of track playing"))?;
 
-        if need_update_lyric(&track_meta) {
-            update_lyric(&track_meta, window)?;
+        if need_fetch_lyric(&track_meta) {
+            fetch_lyric(&track_meta, window)?;
         }
 
         sync_position(player, window)?;
+        refresh_lyric(window);
         Ok(())
     })
 }
@@ -130,7 +130,7 @@ pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
         }
         let window: app::Window = windows.remove(0).downcast().unwrap();
 
-        match try_sync_player(&window) {
+        match sync_track(&window) {
             Err(PlayerStatus::Missing) => {
                 PLAYER_FINDER.with_borrow(|player_finder| {
                     let Ok(player) = player_finder.find_active() else {
