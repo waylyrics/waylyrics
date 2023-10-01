@@ -114,7 +114,7 @@ pub fn fetch_lyric(
         });
 
         if fetch_result.is_ok() {
-            break;
+            return Ok(());
         }
     }
 
