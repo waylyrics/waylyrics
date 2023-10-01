@@ -16,10 +16,6 @@ pub fn get_or_create_cache_path(title: &str, album: Option<&str>, artists: Optio
         error!("cannot create cache dir {cache_dir:?}: {e}");
     }
     let cache_path = cache_dir.join(format!("{digest:x}.json"));
-    info!(
-        "cache_path for {title}-{artists:?}-{}-{length:?}: {cache_path:?}",
-        album.unwrap_or("Unknown")
-    );
     cache_path
 }
 
@@ -31,6 +27,10 @@ pub fn fetch_lyric_cached(
     window: &app::Window,
 ) -> Result<()> {
     let cache_path = get_or_create_cache_path(title, album, artists, length);
+    info!(
+        "cache_path for {title}-{artists:?}-{}-{length:?}: {cache_path:?}",
+        album.unwrap_or("Unknown")
+    );
 
     match std::fs::read_to_string(&cache_path) {
         Ok(lyric) => {

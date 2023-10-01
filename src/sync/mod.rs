@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use std::path::PathBuf;
 
 use mpris::{Player, PlayerFinder, TrackID};
 
@@ -26,5 +27,7 @@ thread_local! {
     static PLAYER: RefCell<Option<Player>> = RefCell::new(None);
     static PLAYER_FINDER: RefCell<PlayerFinder> = RefCell::new(PlayerFinder::new().unwrap());
     static LYRIC: RefCell<(LyricOwned, LyricOwned)> = RefCell::new((LyricOwned::None, LyricOwned::None));
-    static TRACK_PLAYING_PAUSED: RefCell<(Option<TrackID>, bool)> = RefCell::new((None, false));
+    /// A global variable that contains current playing state (excluding lyrics)
+    /// including: track_id, paused, cache_path
+    static TRACK_PLAYING_STATE: RefCell<(Option<TrackID>, bool, Option<PathBuf>)> = RefCell::new((None, false, None));
 }

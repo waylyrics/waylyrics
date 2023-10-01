@@ -1,47 +1,79 @@
 use std::time::{Duration, SystemTime};
 
-use gtk::{subclass::prelude::*, prelude::*, glib::{WeakRef, self}, Application};
+use gtk::{
+    glib::{self, WeakRef},
+    prelude::*,
+    subclass::prelude::*,
+    Application,
+};
 use mpris::{Metadata, PlaybackStatus, Player, ProgressTracker};
 use tracing::{error, info, trace};
 
 use crate::{
     app,
-    sync::{PLAYER, TRACK_PLAYING_PAUSED, utils, PLAYER_FINDER},
+    sync::{cache::get_or_create_cache_path, utils, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE},
     DEFAULT_TEXT,
 };
 
 pub mod acts;
 
-pub fn need_update_lyric(track_meta: &Metadata) -> bool {
-    TRACK_PLAYING_PAUSED.with_borrow_mut(|(track_id_playing, paused)| {
-        let Some(track_id) = track_meta.track_id() else {
-            *track_id_playing = None;
-            *paused = false;
-            return false;
-        };
+/// A struct from metadata in mpris::TrackID to avoid track_id and title unwrapping
+pub struct TrackMeta {
+    pub track_id: mpris::TrackID,
+    pub title: String,
+    pub meta: Metadata,
+}
 
+impl TryFrom<Metadata> for TrackMeta {
+    type Error = PlayerStatus;
+
+    fn try_from(meta: Metadata) -> Result<Self, Self::Error> {
+        let track_id = meta
+            .track_id()
+            .ok_or(())
+            .map_err(|_| PlayerStatus::Unsupported("cannot get track id"))?;
+        let title = meta
+            .title()
+            .ok_or(())
+            .map_err(|_| PlayerStatus::Unsupported("cannot get title"))?
+            .to_string();
+
+        Ok(Self {
+            track_id,
+            title,
+            meta,
+        })
+    }
+}
+
+pub fn need_update_lyric(track_meta: &TrackMeta) -> bool {
+    TRACK_PLAYING_STATE.with_borrow_mut(|(track_id_playing, paused, cache_path)| {
+        let track_id = &track_meta.track_id;
         trace!("got track_id: {track_id}");
 
-        let need = track_id_playing.is_none()
-            || track_id_playing.as_ref().is_some_and(|p| p != &track_id)
-                && !(*paused && track_id_playing.as_ref().is_some_and(|p| p == &track_id));
+        let need =
+            track_id_playing.is_none() || track_id_playing.as_ref().is_some_and(|p| p != track_id);
 
-        *track_id_playing = Some(track_id);
+        *track_id_playing = Some(track_id.clone());
         *paused = false;
+        *cache_path = Some(get_or_create_cache_path(
+            &track_meta.title,
+            track_meta.meta.album_name(),
+            track_meta.meta.artists().as_deref(),
+            track_meta.meta.length(),
+        ));
         need
     })
 }
 
-pub fn update_lyric(track_meta: &Metadata, window: &app::Window) -> Result<(), PlayerStatus> {
+pub fn update_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<(), PlayerStatus> {
     crate::sync::utils::clean_lyric(window);
 
-    let title = track_meta
-        .title()
-        .ok_or(PlayerStatus::Unsupported("cannot get song title"))?;
-    let album = track_meta.album_name();
-    let artists = track_meta.artists();
+    let title = &track_meta.title;
+    let album = track_meta.meta.album_name();
+    let artists = track_meta.meta.artists();
 
-    let length = track_meta.length();
+    let length = track_meta.meta.length();
 
     let fetch_result = if window.imp().cache_lyrics.get() {
         crate::sync::cache::fetch_lyric_cached(title, album, artists.as_deref(), length, window)
@@ -103,8 +135,18 @@ pub fn try_sync_player(window: &crate::app::Window) -> Result<(), PlayerStatus> 
             .get_metadata()
             .map_err(|_| PlayerStatus::Unsupported("cannot get metadata of track playing"))?;
 
-        if need_update_lyric(&track_meta) {
-            update_lyric(&track_meta, window)?;
+        let meta = match TrackMeta::try_from(track_meta) {
+            Ok(meta) => meta,
+            Err(e) => {
+                // no track_id or title is available
+                // reset
+                TRACK_PLAYING_STATE.set((None, false, None));
+                return Err(e);
+            }
+        };
+
+        if need_update_lyric(&meta) {
+            update_lyric(&meta, window)?;
         }
 
         sync_position(player, window)?;
@@ -144,7 +186,7 @@ pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                 app::get_label(&window, "above").set_label(DEFAULT_TEXT);
                 app::get_label(&window, "below").set_label("");
                 utils::clean_lyric(&window);
-                TRACK_PLAYING_PAUSED.set((None, false));
+                TRACK_PLAYING_STATE.set((None, false, None));
             }
             Err(PlayerStatus::Unsupported(kind)) => {
                 app::get_label(&window, "above").set_label("Unsupported Player");
@@ -154,7 +196,7 @@ pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                 error!(kind);
             }
             Err(PlayerStatus::Paused) => {
-                TRACK_PLAYING_PAUSED.with_borrow_mut(|(_, paused)| *paused = true)
+                TRACK_PLAYING_STATE.with_borrow_mut(|(_, paused, _)| *paused = true)
             }
             _ => (),
         }

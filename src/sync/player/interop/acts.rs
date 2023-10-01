@@ -8,7 +8,7 @@ use tracing::{error, info, warn};
 
 use crate::{
     app,
-    sync::{PLAYER, PLAYER_FINDER, TRACK_PLAYING_PAUSED, search_window},
+    sync::{PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE, search_window},
 };
 
 pub fn register_action_disconnect(app: &Application) {
@@ -48,7 +48,7 @@ pub fn register_action_search_lyric(app: &Application, wind: &app::Window, trigg
 pub fn register_action_reload_lyric(app: &Application, wind: &app::Window, trigger: &str) {
     let action = SimpleAction::new("reload-lyric", None);
     action.connect_activate(move |_, _| {
-        TRACK_PLAYING_PAUSED.set((None, false));
+        TRACK_PLAYING_STATE.set((None, false, None));
         info!("cleaned lyric");
     });
     app.add_action(&action);
