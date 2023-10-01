@@ -32,6 +32,7 @@ pub struct Config {
 
 /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
 #[derive(Deserialize, Serialize)]
+#[serde(default)]
 pub struct Triggers {
     pub switch_decoration: String,
     pub reload_theme: String,
