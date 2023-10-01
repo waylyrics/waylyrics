@@ -26,31 +26,7 @@ pub fn register_lyric_display(app: WeakRef<Application>, interval: Duration) {
             return Continue(true); // skip lyric scrolling
         }
 
-        LYRIC.with_borrow(|(origin, translation)| {
-            let system_time = window.imp().lyric_start.get().unwrap();
-            let elapsed = system_time.elapsed().ok();
-            if let Some(elapsed) = elapsed {
-                match (origin, translation) {
-                    (
-                        LyricOwned::LineTimestamp(origin_lyric),
-                        LyricOwned::LineTimestamp(translation_lyric),
-                    ) => {
-                        let next_translation =
-                            crate::lyric::utils::find_next_lyric(&elapsed, translation_lyric);
-                        let next_origin =
-                            crate::lyric::utils::find_next_lyric(&elapsed, origin_lyric);
-                        set_lyric(&window, next_translation, "above", true);
-                        set_lyric(&window, next_origin, "below", false);
-                    }
-                    (LyricOwned::LineTimestamp(origin_lyric), _) => {
-                        let next_origin =
-                            crate::lyric::utils::find_next_lyric(&elapsed, origin_lyric);
-                        set_lyric(&window, next_origin, "above", false);
-                    }
-                    _ => (),
-                }
-            }
-        });
+        refresh_lyric(&window);
 
         Continue(true)
     });
@@ -75,4 +51,30 @@ fn set_lyric(
         status.set(None);
         get_label(window, position).set_label("");
     }
+}
+
+pub fn refresh_lyric(window: &app::Window) {
+    LYRIC.with_borrow(|(origin, translation)| {
+        let system_time = window.imp().lyric_start.get().unwrap();
+        let elapsed = system_time.elapsed().ok();
+        if let Some(elapsed) = elapsed {
+            match (origin, translation) {
+                (
+                    LyricOwned::LineTimestamp(origin_lyric),
+                    LyricOwned::LineTimestamp(translation_lyric),
+                ) => {
+                    let next_translation =
+                        crate::lyric::utils::find_next_lyric(&elapsed, translation_lyric);
+                    let next_origin = crate::lyric::utils::find_next_lyric(&elapsed, origin_lyric);
+                    set_lyric(&window, next_translation, "above", true);
+                    set_lyric(&window, next_origin, "below", false);
+                }
+                (LyricOwned::LineTimestamp(origin_lyric), _) => {
+                    let next_origin = crate::lyric::utils::find_next_lyric(&elapsed, origin_lyric);
+                    set_lyric(&window, next_origin, "above", false);
+                }
+                _ => (),
+            }
+        }
+    });
 }
