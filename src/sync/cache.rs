@@ -8,13 +8,12 @@ use tracing::{error, info};
 use super::{player::fetch_lyric, LYRIC};
 use crate::{app, lyric::LyricOwned, CACHE_DIR};
 
-pub fn get_or_create_cache_path(title: &str, album: Option<&str>, artists: Option<&[&str]>, length: Option<Duration>) -> PathBuf {
+/// This will not create cache dir for you -- you should create it yourself.
+/// Note that window.imp().cache_lyrics controls whether to cache lyrics.
+pub fn get_cache_path(title: &str, album: Option<&str>, artists: Option<&[&str]>, length: Option<Duration>) -> PathBuf {
     let digest = md5::compute(format!("{title}-{artists:?}-{album:?}-{length:?}"));
     let cache_dir =
         CACHE_DIR.with_borrow(|cache_home| PathBuf::from(cache_home).join(md5_cache_dir(digest)));
-    if let Err(e) = std::fs::create_dir_all(&cache_dir) {
-        error!("cannot create cache dir {cache_dir:?}: {e}");
-    }
     let cache_path = cache_dir.join(format!("{digest:x}.json"));
     cache_path
 }
@@ -26,11 +25,15 @@ pub fn fetch_lyric_cached(
     length: Option<Duration>,
     window: &app::Window,
 ) -> Result<()> {
-    let cache_path = get_or_create_cache_path(title, album, artists, length);
+    let cache_path = get_cache_path(title, album, artists, length);
     info!(
         "cache_path for {title}-{artists:?}-{}-{length:?}: {cache_path:?}",
         album.unwrap_or("Unknown")
     );
+    let cache_dir = cache_path.parent().unwrap();
+    if let Err(e) = std::fs::create_dir_all(&cache_dir) {
+        error!("cannot create cache dir {cache_dir:?}: {e}");
+    }
 
     match std::fs::read_to_string(&cache_path) {
         Ok(lyric) => {

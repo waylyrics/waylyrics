@@ -11,7 +11,7 @@ use tracing::{error, info, trace};
 
 use crate::{
     app,
-    sync::{cache::get_or_create_cache_path, utils, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE, lyric::refresh_lyric},
+    sync::{cache::get_cache_path, utils, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE, lyric::refresh_lyric},
     DEFAULT_TEXT,
 };
 
@@ -56,7 +56,7 @@ pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
 
         *track_id_playing = Some(track_id.clone());
         *paused = false;
-        *cache_path = Some(get_or_create_cache_path(
+        *cache_path = Some(get_cache_path(
             &track_meta.title,
             track_meta.meta.album_name(),
             track_meta.meta.artists().as_deref(),

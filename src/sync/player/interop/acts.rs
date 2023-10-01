@@ -2,13 +2,13 @@ use gtk::{
     gio::SimpleAction,
     glib::{self, VariantTy},
     prelude::*,
-    Application, NamedAction, Shortcut, ShortcutController, ShortcutTrigger,
+    Application, NamedAction, Shortcut, ShortcutController, ShortcutTrigger, subclass::prelude::ObjectSubclassIsExt,
 };
 use tracing::{error, info, warn};
 
 use crate::{
     app,
-    sync::{PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE, search_window},
+    sync::{PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE, search_window, LYRIC, cache::update_cached_lyric}, lyric::LyricOwned,
 };
 
 pub fn register_action_disconnect(app: &Application) {
@@ -63,10 +63,26 @@ pub fn register_action_reload_lyric(app: &Application, wind: &app::Window, trigg
     wind.add_controller(controller);
 }
 
-pub fn register_action_remove_lyric(app: &Application) {
+pub fn register_action_remove_lyric(app: &Application, wind: &app::Window) {
     let action = SimpleAction::new("remove-lyric", None);
+    let cache_lyrics = wind.imp().cache_lyrics.get();
     action.connect_activate(move |_, _| {
-        // TODO: which func?
+        // Clear current lyric
+        LYRIC.with_borrow_mut(|(origin, translation)| {
+            *origin = LyricOwned::None;
+            *translation = LyricOwned::None;
+        });
+        // Update cache
+        if cache_lyrics {
+            TRACK_PLAYING_STATE.with_borrow(|(_, _, cache_path)| {
+                if let Some(cache_path) = cache_path {
+                    // TODO: not working yet
+                    update_cached_lyric(cache_path);
+                }
+            });
+        }
+        // Remove current lyric inside window
+        // TODO: how?
         info!("removed lyric");
     });
     app.add_action(&action);
