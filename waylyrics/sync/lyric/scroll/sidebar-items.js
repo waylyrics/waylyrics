@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["refresh_lyric","register_lyric_display","set_lyric"]};

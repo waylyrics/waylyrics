@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["PlayerStatus"],"fn":["list_avaliable_players","need_fetch_lyric","register_mpris_sync","sync_position","sync_track","update_lyric"],"mod":["acts"]};

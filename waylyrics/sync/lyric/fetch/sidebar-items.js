@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["fetch_lyric","get_song_id_from_player","search_song","set_lyric"],"mod":["tricks"]};

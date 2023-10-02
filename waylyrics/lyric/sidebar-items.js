@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Error","Lyric","LyricOwned"],"mod":["netease","qqmusic","utils"],"struct":["LyricLine","LyricLineOwned","LyricStore","SongInfo"],"trait":["LyricParse","LyricProvider"]};

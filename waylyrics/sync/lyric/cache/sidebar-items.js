@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["fetch_lyric_cached","get_cache_path","md5_cache_dir","update_lyric_cache"],"struct":["LyricCache"]};

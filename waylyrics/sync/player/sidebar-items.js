@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["fetch_lyric","get_song_id_from_player","list_avaliable_players","search_song","set_lyric","set_lyric_with_songid_or_file"],"mod":["interop"]};

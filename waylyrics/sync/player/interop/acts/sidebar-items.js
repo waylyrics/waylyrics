@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["register_action_connect","register_action_disconnect","register_action_reload_lyric","register_sigusr1_disconnect"]};

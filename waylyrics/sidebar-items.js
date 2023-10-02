@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["APP_ID","CACHE_DIR","CONFIG_HOME","DEFAULT_TEXT","EXCLUDED_REGEXES","LYRIC_PROVIDERS","QQMUSIC_API_CLIENT","THEME_PATH"],"mod":["app","config","lyric","sync","utils"]};
+window.SIDEBAR_ITEMS = {"constant":["APP_ID","CACHE_DIR","CONFIG_HOME","DEFAULT_TEXT","EXCLUDED_REGEXES","LYRIC_PROVIDERS","QQMUSIC_API_CLIENT","THEME_PATH"],"mod":["app","config","lyric_providers","sync","utils"]};

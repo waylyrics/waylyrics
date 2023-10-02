@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["register_lyric_display","set_lyric"]};
+window.SIDEBAR_ITEMS = {"mod":["cache","fetch","scroll"]};
