@@ -33,6 +33,20 @@ glib::wrapper! {
                     gtk::ConstraintTarget, gtk::Native, gtk::Root, gtk::ShortcutManager;
 }
 
+fn show_error_dialog(window: &Window, msg: &str) {
+    let msg_dialog = gtk::MessageDialog::new(
+        Some(window),
+        gtk::DialogFlags::MODAL,
+        gtk::MessageType::Error,
+        gtk::ButtonsType::Ok,
+        msg,
+    );
+    msg_dialog.connect_response(|dialog, _| {
+        dialog.destroy();
+    });
+    msg_dialog.present();
+}
+
 impl Window {
     pub fn new(query_default: Option<&str>, use_cache: bool) -> Self {
         let window: Self = Object::builder().build();
@@ -117,6 +131,10 @@ impl Window {
             }
         });
         self.results().remove_all();
+        if results.is_empty() {
+            show_error_dialog(&self, "No result found.");
+            return;
+        }
         for result in results {
             self.results().append(&result);
         }
@@ -186,14 +204,7 @@ impl Window {
                             Err(e) => {
                                 let error_msg = format!("{e} when getting lyric.");
                                 error!(error_msg);
-                                let msg_dialog = gtk::MessageDialog::new(
-                                    Some(&window),
-                                    gtk::DialogFlags::MODAL,
-                                    gtk::MessageType::Error,
-                                    gtk::ButtonsType::Ok,
-                                    error_msg,
-                                );
-                                msg_dialog.present();
+                                show_error_dialog(&window, &error_msg);
                             }
                         }
                     })
