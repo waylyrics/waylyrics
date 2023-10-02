@@ -1,19 +1,23 @@
+use std::borrow::Cow;
+
 use glib_macros::clone;
 use gtk::{
     gio::SimpleAction,
-    glib::{self, VariantTy},
+    glib::{self, clone::Downgrade, VariantTy},
     prelude::*,
     subclass::prelude::ObjectSubclassIsExt,
-    Application, NamedAction, Shortcut, ShortcutController, ShortcutTrigger,
+    Application,
 };
 use tracing::{error, info, warn};
+mod utils;
 
 use crate::{
     app,
     lyric_providers::{default_search_query, LyricOwned},
     sync::{
-        interop::reset_lyric_labels, lyric::cache::update_lyric_cache, search_window, TrackState,
-        LYRIC, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
+        interop::{reset_lyric_labels, update_lyric},
+        lyric::cache::{get_cache_path, update_lyric_cache},
+        search_window, TrackState, LYRIC, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
     },
 };
 
@@ -53,32 +57,41 @@ pub fn register_action_search_lyric(app: &Application, wind: &app::Window, trigg
     });
     app.add_action(&action);
 
-    let shortcut = Shortcut::builder()
-        .action(&NamedAction::new("app.search-lyric"))
-        .trigger(&ShortcutTrigger::parse_string(trigger).unwrap())
-        .build();
-    let controller = ShortcutController::new();
-    controller.set_scope(gtk::ShortcutScope::Global);
-    controller.add_shortcut(shortcut);
-    wind.add_controller(controller);
+    utils::bind_shortcut("app.search-lyric", wind, trigger);
 }
 
-pub fn register_action_reload_lyric(app: &Application, wind: &app::Window, trigger: &str) {
-    let action = SimpleAction::new("reload-lyric", None);
+pub fn register_action_refetch_lyric(app: &Application, wind: &app::Window, trigger: &str) {
+    let action = SimpleAction::new("refetch-lyric", None);
+    let window = Downgrade::downgrade(wind);
     action.connect_activate(move |_, _| {
-        TRACK_PLAYING_STATE.take();
-        info!("cleaned lyric");
+        info!("cleaned current lyric");
+        TRACK_PLAYING_STATE.with_borrow(
+            |TrackState {
+                 metainfo,
+                 cache_path,
+                 ..
+             }| {
+                let (Some(metainfo), Some(window)) = (metainfo, window.upgrade()) else {
+                    return;
+                };
+
+                if update_lyric(metainfo, &window).is_ok() {
+                    if !window.imp().cache_lyrics.get() {
+                        return;
+                    }
+                    let cache_path = cache_path
+                        .as_ref()
+                        .map(Cow::Borrowed)
+                        .unwrap_or_else(|| Cow::Owned(get_cache_path(metainfo)));
+
+                    update_lyric_cache(&cache_path);
+                }
+            },
+        );
     });
     app.add_action(&action);
 
-    let shortcut = Shortcut::builder()
-        .action(&NamedAction::new("app.reload-lyric"))
-        .trigger(&ShortcutTrigger::parse_string(trigger).unwrap())
-        .build();
-    let controller = ShortcutController::new();
-    controller.set_scope(gtk::ShortcutScope::Global);
-    controller.add_shortcut(shortcut);
-    wind.add_controller(controller);
+    utils::bind_shortcut("app.refetch-lyric", wind, trigger);
 }
 
 pub fn register_action_remove_lyric(app: &Application, wind: &app::Window) {

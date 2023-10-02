@@ -160,7 +160,7 @@ impl Window {
         });
         self.results().remove_all();
         if results.is_empty() {
-            show_error_dialog(&self, "No result found.");
+            show_error_dialog(self, "No result found.");
             return;
         }
         for result in results {

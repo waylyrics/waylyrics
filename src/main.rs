@@ -107,7 +107,7 @@ fn build_ui(app: &Application) -> Result<()> {
     register_action_reload_theme(app, &wind, &reload_theme);
     register_action_search_lyric(app, &wind, &search_lyric);
     register_action_remove_lyric(app, &wind);
-    register_action_reload_lyric(app, &wind, &reload_lyric);
+    register_action_refetch_lyric(app, &wind, &reload_lyric);
 
     if enable_filter_regex {
         EXCLUDED_REGEXES.set(RegexSet::new(&filter_regexies)?);

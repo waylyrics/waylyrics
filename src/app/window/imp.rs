@@ -49,8 +49,9 @@ impl ObjectImpl for Window {
         let passthrough = MenuItem::new(Some("Switch Passthrough"), Some("win.switch-passthrough"));
         let reload_theme = MenuItem::new(Some("Reload theme"), Some("app.reload-theme"));
         let search_lyric = MenuItem::new(Some("Search lyric"), Some("app.search-lyric"));
-        let remove_lyric = MenuItem::new(Some("Remove current lyric"), Some("app.remove-lyric"));
-        let reload_lyric = MenuItem::new(Some("Reload lyric"), Some("app.reload-lyric"));
+        let refetch_lyric = MenuItem::new(Some("Refetch lyric"), Some("app.refetch-lyric"));
+        let remove_lyric =
+            MenuItem::new(Some("Remove lyric permanently"), Some("app.remove-lyric"));
 
         let popover = PopoverMenu::builder()
             .accessible_role(gtk::AccessibleRole::MenuItemRadio)
@@ -62,7 +63,7 @@ impl ObjectImpl for Window {
         self.menu.append_item(&reload_theme);
         self.menu.append_item(&search_lyric);
         self.menu.append_item(&remove_lyric);
-        self.menu.append_item(&reload_lyric);
+        self.menu.append_item(&refetch_lyric);
         popover.set_menu_model(Some(&self.menu));
 
         let _submenu = self.submenu.downgrade();

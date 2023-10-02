@@ -38,7 +38,7 @@ thread_local! {
 }
 
 pub use interop::acts::{
-    register_action_connect, register_action_disconnect, register_action_reload_lyric,
+    register_action_connect, register_action_disconnect, register_action_refetch_lyric,
     register_action_remove_lyric, register_action_search_lyric, register_sigusr1_disconnect,
 };
 

@@ -1,4 +1,4 @@
-use std::cell::{RefCell, Cell};
+use std::cell::{Cell, RefCell};
 
 use glib::Properties;
 use glib_macros;

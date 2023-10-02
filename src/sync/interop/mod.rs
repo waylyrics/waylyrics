@@ -13,7 +13,7 @@ use crate::{
     app,
     sync::{
         lyric::cache::get_cache_path,
-        lyric::{fetch, scroll::refresh_lyric},
+        lyric::{cache, fetch, scroll::refresh_lyric},
         utils, TrackMeta, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
     },
     utils::reset_lyric_labels,
@@ -71,12 +71,7 @@ pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
 
             *metainfo = Some(track_meta.clone());
             *paused = false;
-            *cache_path = Some(get_cache_path(
-                &track_meta.title,
-                track_meta.meta.album_name(),
-                track_meta.meta.artists().as_deref(),
-                track_meta.meta.length(),
-            ));
+            *cache_path = Some(get_cache_path(track_meta));
             need
         },
     )
@@ -85,22 +80,10 @@ pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
 pub fn update_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<(), PlayerStatus> {
     crate::sync::utils::clean_lyric(window);
 
-    let title = &track_meta.title;
-    let album = track_meta.meta.album_name();
-    let artists = track_meta.meta.artists();
-
-    let length = track_meta.meta.length();
-
     let fetch_result = if window.imp().cache_lyrics.get() {
-        crate::sync::lyric::cache::fetch_lyric_cached(
-            title,
-            album,
-            artists.as_deref(),
-            length,
-            window,
-        )
+        cache::fetch_lyric_cached(track_meta, window)
     } else {
-        fetch::fetch_lyric(title, album, artists.as_deref(), length, window)
+        fetch::fetch_lyric(track_meta, window)
     };
 
     if let Err(e) = fetch_result {

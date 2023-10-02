@@ -1,39 +1,32 @@
 use anyhow::Result;
-use std::{path::PathBuf, time::Duration};
+use std::path::PathBuf;
 
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use serde::{Deserialize, Serialize};
 use tracing::{error, info};
 
+use crate::sync::TrackMeta;
 use crate::sync::{lyric::fetch::fetch_lyric, LYRIC};
 use crate::{app, lyric_providers::LyricOwned, CACHE_DIR};
 
 /// This will not create cache dir for you -- you should create it yourself.
 /// Note that window.imp().cache_lyrics controls whether to cache lyrics.
-pub fn get_cache_path(
-    title: &str,
-    album: Option<&str>,
-    artists: Option<&[&str]>,
-    length: Option<Duration>,
-) -> PathBuf {
+pub fn get_cache_path(track_meta: &TrackMeta) -> PathBuf {
+    let title = &track_meta.title;
+    let album = track_meta.meta.album_name();
+    let artists = track_meta.meta.artists();
+    let length = track_meta.meta.length();
+
     let digest = md5::compute(format!("{title}-{artists:?}-{album:?}-{length:?}"));
+
     let cache_dir =
         CACHE_DIR.with_borrow(|cache_home| PathBuf::from(cache_home).join(md5_cache_dir(digest)));
     cache_dir.join(format!("{digest:x}.json"))
 }
 
-pub fn fetch_lyric_cached(
-    title: &str,
-    album: Option<&str>,
-    artists: Option<&[&str]>,
-    length: Option<Duration>,
-    window: &app::Window,
-) -> Result<()> {
-    let cache_path = get_cache_path(title, album, artists, length);
-    info!(
-        "cache_path for {title}-{artists:?}-{}-{length:?}: {cache_path:?}",
-        album.unwrap_or("Unknown")
-    );
+pub fn fetch_lyric_cached(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
+    let cache_path = get_cache_path(track_meta);
+    info!("cache_path for {}: {cache_path:?}", track_meta.title);
     let cache_dir = cache_path.parent().unwrap();
     if let Err(e) = std::fs::create_dir_all(cache_dir) {
         error!("cannot create cache dir {cache_dir:?}: {e}");
@@ -58,7 +51,8 @@ pub fn fetch_lyric_cached(
         }
         Err(e) => info!("cache missed: {e}"),
     }
-    let result = fetch_lyric(title, album, artists, length, window);
+
+    let result = fetch_lyric(track_meta, window);
     if result.is_ok() {
         update_lyric_cache(&cache_path);
     }

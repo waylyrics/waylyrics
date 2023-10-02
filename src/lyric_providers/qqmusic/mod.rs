@@ -9,7 +9,10 @@ use qqmusic_rs::{
 };
 use reqwest::blocking::Client;
 
-use crate::{lyric_providers::{SongInfo, default_search_query}, QQMUSIC_API_CLIENT};
+use crate::{
+    lyric_providers::{default_search_query, SongInfo},
+    QQMUSIC_API_CLIENT,
+};
 
 use super::{Lyric, LyricOwned, LyricStore};
 
@@ -99,12 +102,12 @@ fn get_songmid(api: &QQMusicApi, client: &Client, songid: &str) -> Result<String
 }
 
 impl super::LyricParse for QQMusicLyricProvider {
-    fn get_lyric<'a>(&self, store: &'a LyricStore) -> LyricOwned {
+    fn get_lyric(&self, store: &LyricStore) -> LyricOwned {
         let lyric = store.lyric.as_deref();
         verify_lyric(lyric)
     }
 
-    fn get_translated_lyric<'a>(&self, store: &'a LyricStore) -> LyricOwned {
+    fn get_translated_lyric(&self, store: &LyricStore) -> LyricOwned {
         let lyric = store.tlyric.as_deref();
         verify_lyric(lyric)
     }

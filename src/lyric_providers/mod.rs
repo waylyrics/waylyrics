@@ -37,7 +37,7 @@ pub struct LyricLineOwned {
 }
 
 #[derive(Debug)]
-pub struct SongInfo{
+pub struct SongInfo {
     pub id: String,
     pub title: String,
     pub singer: String,
@@ -46,22 +46,14 @@ pub struct SongInfo{
 }
 
 pub trait LyricProvider: LyricParse {
-    fn query_lyric(
-        &self,
-        id: &str,
-    ) -> Result<LyricStore>;
-    fn search_song(
-        &self,
-        album: &str,
-        artists: &[&str],
-        title: &str,
-    ) -> Result<Vec<SongInfo>>;
+    fn query_lyric(&self, id: &str) -> Result<LyricStore>;
+    fn search_song(&self, album: &str, artists: &[&str], title: &str) -> Result<Vec<SongInfo>>;
     fn provider_unique_name(&self) -> &'static str;
 }
 
 pub trait LyricParse {
-    fn get_lyric<'a>(&self, store: &'a LyricStore) -> LyricOwned;
-    fn get_translated_lyric<'a>(&self, store: &'a LyricStore) -> LyricOwned;
+    fn get_lyric(&self, store: &LyricStore) -> LyricOwned;
+    fn get_translated_lyric(&self, store: &LyricStore) -> LyricOwned;
 }
 
 impl<'a> Lyric<'a> {

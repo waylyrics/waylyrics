@@ -2,7 +2,6 @@ mod tricks;
 
 use anyhow::Result;
 use std::borrow::Cow;
-use std::time::Duration;
 
 use gtk::prelude::*;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
@@ -10,23 +9,23 @@ use mpris::{Metadata, Player};
 use tracing::{debug, error, info};
 
 use crate::lyric_providers::{LyricOwned, LyricProvider, SongInfo};
-use crate::sync::LYRIC;
+use crate::sync::{TrackMeta, LYRIC};
 use crate::{app, LYRIC_PROVIDERS};
 
 use crate::sync::utils;
 
-pub fn fetch_lyric(
-    title: &str,
-    album: Option<&str>,
-    _artists: Option<&[&str]>,
-    length: Option<Duration>,
-    window: &app::Window,
-) -> Result<()> {
-    let artists = _artists
+pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
+    let title = &track_meta.title;
+    let album = track_meta.meta.album_name();
+    let artists = track_meta.meta.artists();
+    let artists = artists.as_deref();
+    let length = track_meta.meta.length();
+
+    let artists_str = artists
         .map(|s| Cow::Owned(s.join(",")))
         .unwrap_or(Cow::Borrowed("Unknown"));
 
-    if let Some(result) = tricks::get_accurate_lyric(title, &artists, window) {
+    if let Some(result) = tricks::get_accurate_lyric(title, &artists_str, window) {
         info!("fetched lyric directly");
         return result;
     }
@@ -38,7 +37,7 @@ pub fn fetch_lyric(
             let tracks = match search_song(
                 provider.as_ref(),
                 album.unwrap_or_default(),
-                _artists.unwrap_or(&[]),
+                artists.unwrap_or(&[]),
                 title,
             ) {
                 Ok(songs) => songs,
@@ -62,9 +61,9 @@ pub fn fetch_lyric(
     });
 
     if results.is_empty() {
-        info!("Failed searching for {artists} - {title}",);
+        info!("Failed searching for {artists_str} - {title}",);
         utils::clean_lyric(window);
-        return Err(crate::lyric_providers::Error::NoLyric)?;
+        Err(crate::lyric_providers::Error::NoLyric)?;
     }
 
     results.sort_by_key(|(_, _, weight)| *weight);
@@ -76,7 +75,7 @@ pub fn fetch_lyric(
                 Ok(lyric) => {
                     let olyric = provider.get_lyric(&lyric);
                     let tlyric = provider.get_translated_lyric(&lyric);
-                    set_lyric(olyric, tlyric, title, &artists, window)
+                    set_lyric(olyric, tlyric, title, &artists_str, window)
                 }
                 Err(e) => {
                     error!(

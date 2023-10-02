@@ -69,12 +69,14 @@ pub fn refresh_lyric(window: &app::Window) {
                 ) => {
                     let next_translation =
                         crate::lyric_providers::utils::find_next_lyric(&elapsed, translation_lyric);
-                    let next_origin = crate::lyric_providers::utils::find_next_lyric(&elapsed, origin_lyric);
+                    let next_origin =
+                        crate::lyric_providers::utils::find_next_lyric(&elapsed, origin_lyric);
                     set_lyric(window, next_translation, "above", true);
                     set_lyric(window, next_origin, "below", false);
                 }
                 (LyricOwned::LineTimestamp(origin_lyric), _) => {
-                    let next_origin = crate::lyric_providers::utils::find_next_lyric(&elapsed, origin_lyric);
+                    let next_origin =
+                        crate::lyric_providers::utils::find_next_lyric(&elapsed, origin_lyric);
                     set_lyric(window, next_origin, "above", false);
                 }
                 _ => (),
