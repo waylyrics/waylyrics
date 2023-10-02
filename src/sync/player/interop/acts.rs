@@ -1,3 +1,4 @@
+use glib_macros::clone;
 use gtk::{
     gio::SimpleAction,
     glib::{self, VariantTy},
@@ -8,7 +9,7 @@ use tracing::{error, info, warn};
 
 use crate::{
     app,
-    sync::{PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE, search_window, LYRIC, cache::update_cached_lyric}, lyric::LyricOwned,
+    sync::{PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE, search_window, LYRIC, cache::update_cached_lyric, player::interop::reset_lyric_labels}, lyric::LyricOwned,
 };
 
 pub fn register_action_disconnect(app: &Application) {
@@ -66,25 +67,24 @@ pub fn register_action_reload_lyric(app: &Application, wind: &app::Window, trigg
 pub fn register_action_remove_lyric(app: &Application, wind: &app::Window) {
     let action = SimpleAction::new("remove-lyric", None);
     let cache_lyrics = wind.imp().cache_lyrics.get();
-    action.connect_activate(move |_, _| {
+    action.connect_activate(clone!(@weak wind as window => move |_, _| {
         // Clear current lyric
         LYRIC.with_borrow_mut(|(origin, translation)| {
-            *origin = LyricOwned::None;
+            *origin = LyricOwned::LineTimestamp(vec![]);
             *translation = LyricOwned::None;
         });
         // Update cache
         if cache_lyrics {
             TRACK_PLAYING_STATE.with_borrow(|(_, _, cache_path)| {
                 if let Some(cache_path) = cache_path {
-                    // TODO: not working yet
                     update_cached_lyric(cache_path);
                 }
             });
         }
         // Remove current lyric inside window
-        // TODO: how?
+        reset_lyric_labels(&window);
         info!("removed lyric");
-    });
+    }));
     app.add_action(&action);
 }
 

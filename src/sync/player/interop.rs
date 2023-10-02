@@ -67,8 +67,12 @@ pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
     })
 }
 
-pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<(), PlayerStatus> {
+pub fn reset_lyric_labels(window: &app::Window) {
+    app::get_label(window, "above").set_label(DEFAULT_TEXT);
+    app::get_label(window, "below").set_label("");
+}
 
+pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<(), PlayerStatus> {
     crate::sync::utils::clean_lyric(window);
 
     let title = &track_meta.title;
@@ -87,8 +91,7 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<(), P
         error!("lyric fetch error: {e}");
     }
 
-    app::get_label(window, "above").set_label(DEFAULT_TEXT);
-    app::get_label(window, "below").set_label("");
+    reset_lyric_labels(window);
     Ok(())
 }
 
