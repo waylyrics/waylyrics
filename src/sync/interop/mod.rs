@@ -19,6 +19,8 @@ use crate::{
     utils::reset_lyric_labels,
 };
 
+use crate::sync::TrackState;
+
 pub mod acts;
 
 impl TryFrom<Metadata> for TrackMeta {
@@ -54,24 +56,30 @@ pub fn list_avaliable_players() -> Vec<Player> {
 }
 
 pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
-    TRACK_PLAYING_STATE.with_borrow_mut(|(track_meta_playing, paused, cache_path)| {
-        let track_id_playing = track_meta_playing.as_ref().map(|t| t.track_id.clone());
-        let track_id = &track_meta.track_id;
-        trace!("got track_id: {track_id}");
+    TRACK_PLAYING_STATE.with_borrow_mut(
+        |TrackState {
+             metainfo,
+             paused,
+             cache_path,
+         }| {
+            let track_id_playing = metainfo.as_ref().map(|t| t.track_id.clone());
+            let track_id = &track_meta.track_id;
+            trace!("got track_id: {track_id}");
 
-        let need =
-            track_id_playing.is_none() || track_id_playing.as_ref().is_some_and(|p| p != track_id);
+            let need = track_id_playing.is_none()
+                || track_id_playing.as_ref().is_some_and(|p| p != track_id);
 
-        *track_meta_playing = Some(track_meta.clone());
-        *paused = false;
-        *cache_path = Some(get_cache_path(
-            &track_meta.title,
-            track_meta.meta.album_name(),
-            track_meta.meta.artists().as_deref(),
-            track_meta.meta.length(),
-        ));
-        need
-    })
+            *metainfo = Some(track_meta.clone());
+            *paused = false;
+            *cache_path = Some(get_cache_path(
+                &track_meta.title,
+                track_meta.meta.album_name(),
+                track_meta.meta.artists().as_deref(),
+                track_meta.meta.length(),
+            ));
+            need
+        },
+    )
 }
 
 pub fn update_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<(), PlayerStatus> {
@@ -147,7 +155,7 @@ pub fn sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
             Err(e) => {
                 // no track_id or title is available
                 // reset
-                TRACK_PLAYING_STATE.set((None, false, None));
+                TRACK_PLAYING_STATE.take();
                 return Err(e);
             }
         };
@@ -193,7 +201,7 @@ pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                 });
                 reset_lyric_labels(&window);
                 utils::clean_lyric(&window);
-                TRACK_PLAYING_STATE.set((None, false, None));
+                TRACK_PLAYING_STATE.take();
             }
             Err(PlayerStatus::Unsupported(kind)) => {
                 app::get_label(&window, "above").set_label("Unsupported Player");
@@ -203,7 +211,7 @@ pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                 error!(kind);
             }
             Err(PlayerStatus::Paused) => {
-                TRACK_PLAYING_STATE.with_borrow_mut(|(_, paused, _)| *paused = true)
+                TRACK_PLAYING_STATE.with_borrow_mut(|TrackState { paused, .. }| *paused = true)
             }
             _ => (),
         }

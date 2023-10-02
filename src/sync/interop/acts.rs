@@ -12,8 +12,8 @@ use crate::{
     app,
     lyric::{default_search_query, LyricOwned},
     sync::{
-        cache::update_lyric_cache, interop::reset_lyric_labels, search_window, LYRIC, PLAYER,
-        PLAYER_FINDER, TRACK_PLAYING_STATE,
+        cache::update_lyric_cache, interop::reset_lyric_labels, search_window, TrackState, LYRIC,
+        PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
     },
 };
 
@@ -38,8 +38,8 @@ pub fn register_action_search_lyric(app: &Application, wind: &app::Window, trigg
     let cache_lyrics = wind.imp().cache_lyrics.get();
     action.connect_activate(move |_, _| {
         // Get current playing track
-        let query_default = TRACK_PLAYING_STATE.with_borrow(|(track, _, _)| {
-            track.as_ref().map(|track| {
+        let query_default = TRACK_PLAYING_STATE.with_borrow(|TrackState { metainfo, .. }| {
+            metainfo.as_ref().map(|track| {
                 default_search_query(
                     track.meta.album_name().unwrap_or_default(),
                     &track.meta.artists().unwrap_or_default(),
@@ -66,7 +66,7 @@ pub fn register_action_search_lyric(app: &Application, wind: &app::Window, trigg
 pub fn register_action_reload_lyric(app: &Application, wind: &app::Window, trigger: &str) {
     let action = SimpleAction::new("reload-lyric", None);
     action.connect_activate(move |_, _| {
-        TRACK_PLAYING_STATE.set((None, false, None));
+        TRACK_PLAYING_STATE.take();
         info!("cleaned lyric");
     });
     app.add_action(&action);
@@ -92,7 +92,7 @@ pub fn register_action_remove_lyric(app: &Application, wind: &app::Window) {
         });
         // Update cache
         if cache_lyrics {
-            TRACK_PLAYING_STATE.with_borrow(|(_, _, cache_path)| {
+            TRACK_PLAYING_STATE.with_borrow(|TrackState{ cache_path, ..}| {
                 if let Some(cache_path) = cache_path {
                     update_lyric_cache(cache_path);
                 }

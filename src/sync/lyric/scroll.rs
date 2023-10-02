@@ -7,7 +7,7 @@ use gtk::{glib::WeakRef, Application};
 use crate::app::{self, get_label};
 use crate::lyric::{LyricLineOwned, LyricOwned};
 
-use crate::sync::{LYRIC, TRACK_PLAYING_STATE};
+use crate::sync::{TrackState, LYRIC, TRACK_PLAYING_STATE};
 
 pub fn register_lyric_display(app: WeakRef<Application>, interval: Duration) {
     glib::timeout_add_local(interval, move || {
@@ -21,7 +21,11 @@ pub fn register_lyric_display(app: WeakRef<Application>, interval: Duration) {
         }
         let window: app::Window = windows.remove(0).downcast().unwrap();
 
-        if TRACK_PLAYING_STATE.with_borrow(|(play, paused, _)| *paused || play.is_none()) {
+        if TRACK_PLAYING_STATE.with_borrow(
+            |TrackState {
+                 metainfo, paused, ..
+             }| *paused || metainfo.is_none(),
+        ) {
             // no music is playing
             return Continue(true); // skip lyric scrolling
         }

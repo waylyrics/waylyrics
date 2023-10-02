@@ -9,8 +9,8 @@ use tracing::error;
 
 use crate::LYRIC_PROVIDERS;
 
-use super::cache::update_lyric_cache;
-use super::{LYRIC, TRACK_PLAYING_STATE};
+use crate::sync::cache::update_lyric_cache;
+use crate::sync::{TrackState, LYRIC, TRACK_PLAYING_STATE};
 
 glib::wrapper! {
     pub struct ResultObject(ObjectSubclass<imp::ResultObject>);
@@ -96,7 +96,8 @@ impl Window {
 
         imp.result_scrolled_window.set_child(Some(&imp.result_list));
         imp.result_scrolled_window.set_vexpand(true);
-        imp.result_scrolled_window.set_hscrollbar_policy(gtk::PolicyType::Never);
+        imp.result_scrolled_window
+            .set_hscrollbar_policy(gtk::PolicyType::Never);
         imp.result_scrolled_window.set_height_request(300);
         imp.result_scrolled_window.set_width_request(300);
 
@@ -221,7 +222,7 @@ impl Window {
                                 });
                                 // save to cache
                                 if window.imp().use_cache.get() {
-                                    TRACK_PLAYING_STATE.with_borrow(|(_, _, cache_path)| {
+                                    TRACK_PLAYING_STATE.with_borrow(|TrackState{cache_path,..}| {
                                         if let Some(cache_path) = cache_path {
                                             update_lyric_cache(cache_path);
                                         }
