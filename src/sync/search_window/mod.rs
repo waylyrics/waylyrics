@@ -64,7 +64,7 @@ impl Window {
         if let Some(query) = query_default {
             window.imp().input.buffer().set_text(query);
         }
-        *window.imp().use_cache.borrow_mut() = use_cache;
+        window.imp().use_cache.set(use_cache);
         window
     }
 
@@ -220,7 +220,7 @@ impl Window {
                                     *translation = tlyric;
                                 });
                                 // save to cache
-                                if *window.imp().use_cache.borrow() {
+                                if window.imp().use_cache.get() {
                                     TRACK_PLAYING_STATE.with_borrow(|(_, _, cache_path)| {
                                         if let Some(cache_path) = cache_path {
                                             update_lyric_cache(cache_path);

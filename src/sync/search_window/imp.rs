@@ -1,4 +1,4 @@
-use std::cell::RefCell;
+use std::cell::{RefCell, Cell};
 
 use glib::Properties;
 use glib_macros;
@@ -54,7 +54,7 @@ pub struct Window {
     pub result_length: gtk::ColumnViewColumn,
     pub results: RefCell<Option<gio::ListStore>>,
 
-    pub use_cache: RefCell<bool>,
+    pub use_cache: Cell<bool>,
 }
 
 #[glib::object_subclass]
