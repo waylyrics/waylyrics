@@ -1,10 +1,10 @@
-use crate::lyric::netease::NeteaseLyricProvider;
-use crate::lyric::qqmusic::QQMusicLyricProvider;
+use crate::lyric_providers::netease::NeteaseLyricProvider;
+use crate::lyric_providers::qqmusic::QQMusicLyricProvider;
 
 use crate::sync::PLAYER;
 
 use crate::app;
-use crate::lyric::{LyricParse, LyricProvider};
+use crate::lyric_providers::{LyricParse, LyricProvider};
 use anyhow::Result;
 
 use crate::sync::lyric::fetch::{get_song_id_from_player, set_lyric};

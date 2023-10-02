@@ -13,7 +13,7 @@ use qqmusic_rs::QQMusicApi;
 use regex::RegexSet;
 use waylyrics::app::{self, build_main_window};
 use waylyrics::config::{Config, Triggers};
-use waylyrics::lyric::utils::register_provider;
+use waylyrics::lyric_providers::utils::register_provider;
 use waylyrics::{utils, EXCLUDED_REGEXES, QQMUSIC_API_CLIENT, THEME_PATH};
 
 use waylyrics::sync::*;

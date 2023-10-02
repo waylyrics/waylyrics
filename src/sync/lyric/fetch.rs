@@ -9,7 +9,7 @@ use gtk::subclass::prelude::ObjectSubclassIsExt;
 use mpris::{Metadata, Player};
 use tracing::{debug, error, info};
 
-use crate::lyric::{LyricOwned, LyricProvider, SongInfo};
+use crate::lyric_providers::{LyricOwned, LyricProvider, SongInfo};
 use crate::sync::LYRIC;
 use crate::{app, LYRIC_PROVIDERS};
 
@@ -64,7 +64,7 @@ pub fn fetch_lyric(
     if results.is_empty() {
         info!("Failed searching for {artists} - {title}",);
         utils::clean_lyric(window);
-        return Err(crate::lyric::Error::NoLyric)?;
+        return Err(crate::lyric_providers::Error::NoLyric)?;
     }
 
     results.sort_by_key(|(_, _, weight)| *weight);
@@ -83,7 +83,7 @@ pub fn fetch_lyric(
                         "{e} when get lyric for {title} on {}",
                         provider.provider_unique_name()
                     );
-                    Err(crate::lyric::Error::NoResult)?
+                    Err(crate::lyric_providers::Error::NoResult)?
                 }
             }
         });
@@ -93,7 +93,7 @@ pub fn fetch_lyric(
         }
     }
 
-    Err(crate::lyric::Error::NoResult)?
+    Err(crate::lyric_providers::Error::NoResult)?
 }
 
 pub fn search_song<P: LyricProvider + ?Sized>(

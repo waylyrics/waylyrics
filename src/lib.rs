@@ -4,13 +4,13 @@
 
 use std::{cell::RefCell, path::PathBuf};
 
-use lyric::LyricProvider;
+use lyric_providers::LyricProvider;
 use qqmusic_rs::QQMusicApi;
 use regex::RegexSet;
 
 pub mod app;
 pub mod config;
-pub mod lyric;
+pub mod lyric_providers;
 pub mod sync;
 pub mod utils;
 

@@ -3,7 +3,7 @@ use std::path::PathBuf;
 
 use mpris::{Player, PlayerFinder};
 
-use crate::lyric::LyricOwned;
+use crate::lyric_providers::LyricOwned;
 
 mod interop;
 pub mod lyric;

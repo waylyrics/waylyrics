@@ -5,7 +5,7 @@ use gtk::{glib, prelude::*};
 use gtk::{glib::WeakRef, Application};
 
 use crate::app::{self, get_label};
-use crate::lyric::{LyricLineOwned, LyricOwned};
+use crate::lyric_providers::{LyricLineOwned, LyricOwned};
 
 use crate::sync::{TrackState, LYRIC, TRACK_PLAYING_STATE};
 
@@ -68,13 +68,13 @@ pub fn refresh_lyric(window: &app::Window) {
                     LyricOwned::LineTimestamp(translation_lyric),
                 ) => {
                     let next_translation =
-                        crate::lyric::utils::find_next_lyric(&elapsed, translation_lyric);
-                    let next_origin = crate::lyric::utils::find_next_lyric(&elapsed, origin_lyric);
+                        crate::lyric_providers::utils::find_next_lyric(&elapsed, translation_lyric);
+                    let next_origin = crate::lyric_providers::utils::find_next_lyric(&elapsed, origin_lyric);
                     set_lyric(window, next_translation, "above", true);
                     set_lyric(window, next_origin, "below", false);
                 }
                 (LyricOwned::LineTimestamp(origin_lyric), _) => {
-                    let next_origin = crate::lyric::utils::find_next_lyric(&elapsed, origin_lyric);
+                    let next_origin = crate::lyric_providers::utils::find_next_lyric(&elapsed, origin_lyric);
                     set_lyric(window, next_origin, "above", false);
                 }
                 _ => (),

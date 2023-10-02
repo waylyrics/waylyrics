@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use tracing::{error, info};
 
 use crate::sync::{lyric::fetch::fetch_lyric, LYRIC};
-use crate::{app, lyric::LyricOwned, CACHE_DIR};
+use crate::{app, lyric_providers::LyricOwned, CACHE_DIR};
 
 /// This will not create cache dir for you -- you should create it yourself.
 /// Note that window.imp().cache_lyrics controls whether to cache lyrics.

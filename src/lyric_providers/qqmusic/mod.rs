@@ -9,7 +9,7 @@ use qqmusic_rs::{
 };
 use reqwest::blocking::Client;
 
-use crate::{lyric::{SongInfo, default_search_query}, QQMUSIC_API_CLIENT};
+use crate::{lyric_providers::{SongInfo, default_search_query}, QQMUSIC_API_CLIENT};
 
 use super::{Lyric, LyricOwned, LyricStore};
 

@@ -10,7 +10,7 @@ use tracing::{error, info, warn};
 
 use crate::{
     app,
-    lyric::{default_search_query, LyricOwned},
+    lyric_providers::{default_search_query, LyricOwned},
     sync::{
         interop::reset_lyric_labels, lyric::cache::update_lyric_cache, search_window, TrackState,
         LYRIC, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,

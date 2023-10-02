@@ -4,7 +4,7 @@ use gtk::subclass::prelude::*;
 
 use crate::{
     app,
-    lyric::{LyricOwned, SongInfo},
+    lyric_providers::{LyricOwned, SongInfo},
 };
 
 use super::LYRIC;
