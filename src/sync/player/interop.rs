@@ -11,8 +11,7 @@ use tracing::{error, info, trace};
 
 use crate::{
     app,
-    sync::{cache::get_cache_path, utils, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE, lyric::refresh_lyric, TrackMeta},
-    DEFAULT_TEXT,
+    sync::{cache::get_cache_path, utils, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE, lyric::refresh_lyric, TrackMeta}, utils::reset_lyric_labels,
 };
 
 pub mod acts;
@@ -59,11 +58,6 @@ pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
         ));
         need
     })
-}
-
-pub fn reset_lyric_labels(window: &app::Window) {
-    app::get_label(window, "above").set_label(DEFAULT_TEXT);
-    app::get_label(window, "below").set_label("");
 }
 
 pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<(), PlayerStatus> {
@@ -183,8 +177,7 @@ pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
                     info!("connected to player: {}", player.identity());
                     PLAYER.set(Some(player));
                 });
-                app::get_label(&window, "above").set_label(DEFAULT_TEXT);
-                app::get_label(&window, "below").set_label("");
+                reset_lyric_labels(&window);
                 utils::clean_lyric(&window);
                 TRACK_PLAYING_STATE.set((None, false, None));
             }

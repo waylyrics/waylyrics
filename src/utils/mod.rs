@@ -1,13 +1,19 @@
 use anyhow::Result;
-use gtk::{
-    prelude::*, subclass::prelude::*, Application, NamedAction,
-    Shortcut, ShortcutController, ShortcutTrigger,
-};
 use gtk::gio::SimpleAction;
 use gtk::glib::WeakRef;
+use gtk::{
+    prelude::*, subclass::prelude::*, Application, NamedAction, Shortcut, ShortcutController,
+    ShortcutTrigger,
+};
 use std::time::Duration;
 
-use crate::app::{utils::set_click_pass_through, Window};
+use crate::app::{get_label, utils::set_click_pass_through, Window};
+use crate::DEFAULT_TEXT;
+
+pub fn reset_lyric_labels(window: &Window) {
+    get_label(window, "above").set_label(DEFAULT_TEXT);
+    get_label(window, "below").set_label("");
+}
 
 pub fn parse_time(time: &str) -> Result<Duration, ParseError> {
     use rust_decimal::prelude::*;
