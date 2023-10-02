@@ -98,3 +98,7 @@ pub enum Error {
     #[error("no lyrics for such song")]
     NoLyric,
 }
+
+pub fn default_search_query(album: &str, artists: &[&str], title: &str) -> String {
+    format!("{title} {album} {}", artists.join("/"))
+}

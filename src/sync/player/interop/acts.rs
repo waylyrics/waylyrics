@@ -3,13 +3,18 @@ use gtk::{
     gio::SimpleAction,
     glib::{self, VariantTy},
     prelude::*,
-    Application, NamedAction, Shortcut, ShortcutController, ShortcutTrigger, subclass::prelude::ObjectSubclassIsExt,
+    subclass::prelude::ObjectSubclassIsExt,
+    Application, NamedAction, Shortcut, ShortcutController, ShortcutTrigger,
 };
 use tracing::{error, info, warn};
 
 use crate::{
     app,
-    sync::{PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE, search_window, LYRIC, cache::update_cached_lyric, player::interop::reset_lyric_labels}, lyric::LyricOwned,
+    lyric::{default_search_query, LyricOwned},
+    sync::{
+        cache::update_cached_lyric, player::interop::reset_lyric_labels, search_window, LYRIC,
+        PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
+    },
 };
 
 pub fn register_action_disconnect(app: &Application) {
@@ -30,8 +35,20 @@ pub fn register_sigusr1_disconnect() {
 // TODO: code cleanup
 pub fn register_action_search_lyric(app: &Application, wind: &app::Window, trigger: &str) {
     let action = SimpleAction::new("search-lyric", None);
+    let cache_lyrics = wind.imp().cache_lyrics.get();
     action.connect_activate(move |_, _| {
-        let window = search_window::Window::new();
+        // Get current playing track
+        let query_default = TRACK_PLAYING_STATE.with_borrow(|(track, _, _)| {
+            track.as_ref().map(|track| {
+                default_search_query(
+                    track.meta.album_name().unwrap_or_default(),
+                    &track.meta.artists().unwrap_or_default(),
+                    &track.title,
+                )
+            })
+        });
+
+        let window = search_window::Window::new(query_default.as_deref(), cache_lyrics);
         window.present();
     });
     app.add_action(&action);

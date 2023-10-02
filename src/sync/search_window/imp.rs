@@ -10,6 +10,8 @@ use gtk::{gio, glib};
 pub struct ResultData {
     pub id: String,
     pub name: String,
+    // glib seems do not support dyn so I use u8 index instead
+    pub provider_idx: u8,
 }
 
 #[derive(Properties, Default)]
@@ -17,6 +19,7 @@ pub struct ResultData {
 pub struct ResultObject {
     #[property(name = "name", get, set, type = String, member = name)]
     #[property(name = "id", get, set, type = String, member = id)]
+    #[property(name = "provider-idx", get, set, type = u8, member = provider_idx)]
     pub data: RefCell<ResultData>,
 }
 
@@ -39,6 +42,8 @@ pub struct Window {
 
     pub result_list: gtk::ListView,
     pub results: RefCell<Option<gio::ListStore>>,
+
+    pub use_cache: RefCell<bool>,
 }
 
 #[glib::object_subclass]

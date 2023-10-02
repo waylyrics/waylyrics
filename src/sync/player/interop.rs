@@ -11,18 +11,11 @@ use tracing::{error, info, trace};
 
 use crate::{
     app,
-    sync::{cache::get_cache_path, utils, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE, lyric::refresh_lyric},
+    sync::{cache::get_cache_path, utils, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE, lyric::refresh_lyric, TrackMeta},
     DEFAULT_TEXT,
 };
 
 pub mod acts;
-
-/// A struct from metadata in mpris::TrackID to avoid track_id and title unwrapping
-pub struct TrackMeta {
-    pub track_id: mpris::TrackID,
-    pub title: String,
-    pub meta: Metadata,
-}
 
 impl TryFrom<Metadata> for TrackMeta {
     type Error = PlayerStatus;
@@ -48,14 +41,15 @@ impl TryFrom<Metadata> for TrackMeta {
 
 
 pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
-    TRACK_PLAYING_STATE.with_borrow_mut(|(track_id_playing, paused, cache_path)| {
+    TRACK_PLAYING_STATE.with_borrow_mut(|(track_meta_playing, paused, cache_path)| {
+        let track_id_playing = track_meta_playing.as_ref().map(|t| t.track_id.clone());
         let track_id = &track_meta.track_id;
         trace!("got track_id: {track_id}");
 
         let need =
             track_id_playing.is_none() || track_id_playing.as_ref().is_some_and(|p| p != track_id);
 
-        *track_id_playing = Some(track_id.clone());
+        *track_meta_playing = Some(track_meta.clone());
         *paused = false;
         *cache_path = Some(get_cache_path(
             &track_meta.title,

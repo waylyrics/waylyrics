@@ -14,8 +14,7 @@ pub fn get_cache_path(title: &str, album: Option<&str>, artists: Option<&[&str]>
     let digest = md5::compute(format!("{title}-{artists:?}-{album:?}-{length:?}"));
     let cache_dir =
         CACHE_DIR.with_borrow(|cache_home| PathBuf::from(cache_home).join(md5_cache_dir(digest)));
-    let cache_path = cache_dir.join(format!("{digest:x}.json"));
-    cache_path
+    cache_dir.join(format!("{digest:x}.json"))
 }
 
 pub fn fetch_lyric_cached(
@@ -31,7 +30,7 @@ pub fn fetch_lyric_cached(
         album.unwrap_or("Unknown")
     );
     let cache_dir = cache_path.parent().unwrap();
-    if let Err(e) = std::fs::create_dir_all(&cache_dir) {
+    if let Err(e) = std::fs::create_dir_all(cache_dir) {
         error!("cannot create cache dir {cache_dir:?}: {e}");
     }
 
@@ -69,7 +68,7 @@ pub fn update_cached_lyric(cache_path: &PathBuf) {
         }
 
         let Err(e) = std::fs::write(
-            &cache_path,
+            cache_path,
             serde_json::to_string(&LyricCache {
                 olyric: olyric.clone(),
                 tlyric: tlyric.clone(),

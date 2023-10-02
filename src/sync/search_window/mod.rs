@@ -5,19 +5,23 @@ use gtk::glib::clone;
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib};
 use gtk::{prelude::*, ListItem};
-use tracing::{error, info};
+use tracing::error;
 
 use crate::LYRIC_PROVIDERS;
+
+use super::cache::update_cached_lyric;
+use super::{LYRIC, TRACK_PLAYING_STATE};
 
 glib::wrapper! {
     pub struct ResultObject(ObjectSubclass<imp::ResultObject>);
 }
 
 impl ResultObject {
-    pub fn new(id: String, name: String) -> Self {
+    pub fn new(id: String, name: String, provider_idx: usize) -> Self {
         Object::builder()
             .property("name", name)
             .property("id", id)
+            .property("provider-idx", provider_idx as u8)
             .build()
     }
 }
@@ -30,9 +34,13 @@ glib::wrapper! {
 }
 
 impl Window {
-    pub fn new() -> Self {
+    pub fn new(query_default: Option<&str>, use_cache: bool) -> Self {
         let window: Self = Object::builder().build();
         window.set_title(Some("Search lyric"));
+        if let Some(query) = query_default {
+            window.imp().input.buffer().set_text(query);
+        }
+        *window.imp().use_cache.borrow_mut() = use_cache;
         window
     }
 
@@ -80,7 +88,7 @@ impl Window {
 
         let mut results = vec![];
         LYRIC_PROVIDERS.with_borrow(|providers| {
-            for provider in providers {
+            for (idx, provider) in providers.iter().enumerate() {
                 let provider_id = provider.provider_unique_name();
                 // Use a hack to directly search with query
                 let tracks =
@@ -103,6 +111,7 @@ impl Window {
                             track.album,
                             track.length.as_secs()
                         ),
+                        idx,
                     ));
                 }
             }
@@ -148,7 +157,47 @@ impl Window {
             .connect_clicked(clone!(@weak self as window => move |_| {
                 // TODO: set lyric
                 let result = window.get_selected_result();
-                info!("set lyric: {:?}", result);
+                if let Some(result) = result {
+                    LYRIC_PROVIDERS.with_borrow(|providers| {
+                        let provider_idx = result.provider_idx() as usize;
+                        if provider_idx >= providers.len() {
+                            error!("provider_idx {} is out of range", provider_idx);
+                            return;
+                        }
+                        let provider = providers[provider_idx].as_ref();
+                        let song_id = result.id();
+                        match provider.query_lyric(&song_id) {
+                            Ok(lyric) => {
+                                let olyric = provider.get_lyric(&lyric);
+                                let tlyric = provider.get_translated_lyric(&lyric);
+                                LYRIC.with_borrow_mut(|(origin, translation)| {
+                                    *origin = olyric;
+                                    *translation = tlyric;
+                                });
+                                // save to cache
+                                if *window.imp().use_cache.borrow() {
+                                    TRACK_PLAYING_STATE.with_borrow(|(_, _, cache_path)| {
+                                        if let Some(cache_path) = cache_path {
+                                            update_cached_lyric(cache_path);
+                                        }
+                                    });
+                                }
+                            },
+                            Err(e) => {
+                                let error_msg = format!("{e} when getting lyric.");
+                                error!(error_msg);
+                                let msg_dialog = gtk::MessageDialog::new(
+                                    Some(&window),
+                                    gtk::DialogFlags::MODAL,
+                                    gtk::MessageType::Error,
+                                    gtk::ButtonsType::Ok,
+                                    error_msg,
+                                );
+                                msg_dialog.present();
+                            }
+                        }
+                    })
+                }
             }));
     }
 

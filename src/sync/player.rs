@@ -101,7 +101,7 @@ pub fn fetch_lyric(
                 Ok(lyric) => {
                     let olyric = provider.get_lyric(&lyric);
                     let tlyric = provider.get_translated_lyric(&lyric);
-                    return set_lyric(olyric, tlyric, title, &artists, window);
+                    set_lyric(olyric, tlyric, title, &artists, window)
                 }
                 Err(e) => {
                     error!(

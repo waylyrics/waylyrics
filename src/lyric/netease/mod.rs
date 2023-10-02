@@ -9,7 +9,7 @@ use ncmapi::{
 
 use ncmapi::types::{LyricResp, SearchSongResp};
 
-use super::{Lyric, LyricStore, LyricOwned};
+use super::{Lyric, LyricStore, LyricOwned, default_search_query};
 
 pub struct NeteaseLyricProvider;
 
@@ -23,7 +23,7 @@ impl super::LyricProvider for NeteaseLyricProvider {
         artists: &[&str],
         title: &str,
     ) -> Result<Vec<super::SongInfo>> {
-        let keyword = format!("{title} {album} {}", artists.join("/"));
+        let keyword = default_search_query(album, artists, title);
 
         tracing::debug!("search keyword: {keyword}");
 

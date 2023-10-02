@@ -9,7 +9,7 @@ use qqmusic_rs::{
 };
 use reqwest::blocking::Client;
 
-use crate::{lyric::SongInfo, QQMUSIC_API_CLIENT};
+use crate::{lyric::{SongInfo, default_search_query}, QQMUSIC_API_CLIENT};
 
 use super::{Lyric, LyricOwned, LyricStore};
 
@@ -22,7 +22,7 @@ impl super::LyricProvider for QQMusicLyricProvider {
     }
 
     fn search_song(&self, album: &str, artists: &[&str], title: &str) -> Result<Vec<SongInfo>> {
-        let keyword = format!("{title} {album} {}", artists.join("/"));
+        let keyword = default_search_query(album, artists, title);
         tracing::debug!("search keyword: {keyword}");
 
         let client = Client::builder().user_agent("Waylyrics/0.1").build()?;
