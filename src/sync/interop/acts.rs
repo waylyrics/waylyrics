@@ -12,8 +12,8 @@ use crate::{
     app,
     lyric::{default_search_query, LyricOwned},
     sync::{
-        cache::update_lyric_cache, interop::reset_lyric_labels, search_window, TrackState, LYRIC,
-        PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
+        interop::reset_lyric_labels, lyric::cache::update_lyric_cache, search_window, TrackState,
+        LYRIC, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
     },
 };
 

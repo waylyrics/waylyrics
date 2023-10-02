@@ -9,7 +9,7 @@ use tracing::error;
 
 use crate::LYRIC_PROVIDERS;
 
-use crate::sync::cache::update_lyric_cache;
+use crate::sync::lyric::cache::update_lyric_cache;
 use crate::sync::{TrackState, LYRIC, TRACK_PLAYING_STATE};
 
 glib::wrapper! {

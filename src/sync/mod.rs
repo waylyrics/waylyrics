@@ -5,7 +5,6 @@ use mpris::{Player, PlayerFinder};
 
 use crate::lyric::LyricOwned;
 
-mod cache;
 mod interop;
 pub mod lyric;
 mod search_window;

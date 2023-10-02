@@ -12,7 +12,7 @@ use tracing::{error, info, trace};
 use crate::{
     app,
     sync::{
-        cache::get_cache_path,
+        lyric::cache::get_cache_path,
         lyric::{fetch, scroll::refresh_lyric},
         utils, TrackMeta, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
     },
@@ -92,7 +92,13 @@ pub fn update_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<(), 
     let length = track_meta.meta.length();
 
     let fetch_result = if window.imp().cache_lyrics.get() {
-        crate::sync::cache::fetch_lyric_cached(title, album, artists.as_deref(), length, window)
+        crate::sync::lyric::cache::fetch_lyric_cached(
+            title,
+            album,
+            artists.as_deref(),
+            length,
+            window,
+        )
     } else {
         fetch::fetch_lyric(title, album, artists.as_deref(), length, window)
     };
