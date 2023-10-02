@@ -12,8 +12,8 @@ use crate::{
     app,
     lyric::{default_search_query, LyricOwned},
     sync::{
-        cache::update_cached_lyric, player::interop::reset_lyric_labels, search_window, LYRIC,
-        PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
+        cache::update_lyric_cache, interop::reset_lyric_labels, search_window, LYRIC, PLAYER,
+        PLAYER_FINDER, TRACK_PLAYING_STATE,
     },
 };
 
@@ -94,7 +94,7 @@ pub fn register_action_remove_lyric(app: &Application, wind: &app::Window) {
         if cache_lyrics {
             TRACK_PLAYING_STATE.with_borrow(|(_, _, cache_path)| {
                 if let Some(cache_path) = cache_path {
-                    update_cached_lyric(cache_path);
+                    update_lyric_cache(cache_path);
                 }
             });
         }

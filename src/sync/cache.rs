@@ -5,12 +5,17 @@ use gtk::subclass::prelude::ObjectSubclassIsExt;
 use serde::{Deserialize, Serialize};
 use tracing::{error, info};
 
-use super::{player::fetch_lyric, LYRIC};
+use crate::sync::{lyric::fetch::fetch_lyric, LYRIC};
 use crate::{app, lyric::LyricOwned, CACHE_DIR};
 
 /// This will not create cache dir for you -- you should create it yourself.
 /// Note that window.imp().cache_lyrics controls whether to cache lyrics.
-pub fn get_cache_path(title: &str, album: Option<&str>, artists: Option<&[&str]>, length: Option<Duration>) -> PathBuf {
+pub fn get_cache_path(
+    title: &str,
+    album: Option<&str>,
+    artists: Option<&[&str]>,
+    length: Option<Duration>,
+) -> PathBuf {
     let digest = md5::compute(format!("{title}-{artists:?}-{album:?}-{length:?}"));
     let cache_dir =
         CACHE_DIR.with_borrow(|cache_home| PathBuf::from(cache_home).join(md5_cache_dir(digest)));
@@ -55,13 +60,13 @@ pub fn fetch_lyric_cached(
     }
     let result = fetch_lyric(title, album, artists, length, window);
     if result.is_ok() {
-        update_cached_lyric(&cache_path);
+        update_lyric_cache(&cache_path);
     }
     result
 }
 
 /// Using olyric and tlyric inside LYRIC to update corresponding cache file.
-pub fn update_cached_lyric(cache_path: &PathBuf) {
+pub fn update_lyric_cache(cache_path: &PathBuf) {
     LYRIC.with_borrow(|(olyric, tlyric)| {
         if (&LyricOwned::None, &LyricOwned::None) == (olyric, tlyric) {
             return;

@@ -7,7 +7,7 @@ use gtk::{glib::WeakRef, Application};
 use crate::app::{self, get_label};
 use crate::lyric::{LyricLineOwned, LyricOwned};
 
-use super::{LYRIC, TRACK_PLAYING_STATE};
+use crate::sync::{LYRIC, TRACK_PLAYING_STATE};
 
 pub fn register_lyric_display(app: WeakRef<Application>, interval: Duration) {
     glib::timeout_add_local(interval, move || {

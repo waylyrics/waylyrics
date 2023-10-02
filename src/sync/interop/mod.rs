@@ -11,7 +11,12 @@ use tracing::{error, info, trace};
 
 use crate::{
     app,
-    sync::{cache::get_cache_path, utils, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE, lyric::refresh_lyric, TrackMeta}, utils::reset_lyric_labels,
+    sync::{
+        cache::get_cache_path,
+        lyric::{fetch, scroll::refresh_lyric},
+        utils, TrackMeta, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
+    },
+    utils::reset_lyric_labels,
 };
 
 pub mod acts;
@@ -38,6 +43,15 @@ impl TryFrom<Metadata> for TrackMeta {
     }
 }
 
+pub fn list_avaliable_players() -> Vec<Player> {
+    PLAYER_FINDER.with_borrow(|player_finder| match player_finder.find_all() {
+        Ok(players) => players,
+        Err(e) => {
+            error!("cannot find players!: {e}");
+            panic!("please check your d-bus connection!")
+        }
+    })
+}
 
 pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
     TRACK_PLAYING_STATE.with_borrow_mut(|(track_meta_playing, paused, cache_path)| {
@@ -60,7 +74,7 @@ pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
     })
 }
 
-pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<(), PlayerStatus> {
+pub fn update_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<(), PlayerStatus> {
     crate::sync::utils::clean_lyric(window);
 
     let title = &track_meta.title;
@@ -72,7 +86,7 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<(), P
     let fetch_result = if window.imp().cache_lyrics.get() {
         crate::sync::cache::fetch_lyric_cached(title, album, artists.as_deref(), length, window)
     } else {
-        super::fetch_lyric(title, album, artists.as_deref(), length, window)
+        fetch::fetch_lyric(title, album, artists.as_deref(), length, window)
     };
 
     if let Err(e) = fetch_result {
@@ -139,7 +153,7 @@ pub fn sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
         };
 
         if need_fetch_lyric(&meta) {
-            fetch_lyric(&meta, window)?;
+            update_lyric(&meta, window)?;
         }
 
         sync_position(player, window)?;

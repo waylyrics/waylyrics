@@ -9,7 +9,7 @@ use tracing::error;
 
 use crate::LYRIC_PROVIDERS;
 
-use super::cache::update_cached_lyric;
+use super::cache::update_lyric_cache;
 use super::{LYRIC, TRACK_PLAYING_STATE};
 
 glib::wrapper! {
@@ -105,15 +105,19 @@ impl Window {
             for (idx, provider) in providers.iter().enumerate() {
                 let provider_id = provider.provider_unique_name();
                 // Use a hack to directly search with query
-                let tracks =
-                    match crate::sync::player::search_song(provider.as_ref(), "", &[""], &query) {
-                        Ok(songs) => songs,
-                        Err(e) => {
-                            // TODO: to show errors to users in GUI
-                            error!("{e} occurs when search {query} on {}", provider_id);
-                            continue;
-                        }
-                    };
+                let tracks = match crate::sync::lyric::fetch::search_song(
+                    provider.as_ref(),
+                    "",
+                    &[""],
+                    &query,
+                ) {
+                    Ok(songs) => songs,
+                    Err(e) => {
+                        // TODO: to show errors to users in GUI
+                        error!("{e} occurs when search {query} on {}", provider_id);
+                        continue;
+                    }
+                };
                 for track in tracks {
                     // TODO: present in a better format
                     results.push(ResultObject::new(
@@ -196,7 +200,7 @@ impl Window {
                                 if *window.imp().use_cache.borrow() {
                                     TRACK_PLAYING_STATE.with_borrow(|(_, _, cache_path)| {
                                         if let Some(cache_path) = cache_path {
-                                            update_cached_lyric(cache_path);
+                                            update_lyric_cache(cache_path);
                                         }
                                     });
                                 }
