@@ -17,9 +17,19 @@ glib::wrapper! {
 }
 
 impl ResultObject {
-    pub fn new(id: String, name: String, provider_idx: usize) -> Self {
+    pub fn new(
+        id: String,
+        title: String,
+        singer: String,
+        album: String,
+        length: u64,
+        provider_idx: usize,
+    ) -> Self {
         Object::builder()
-            .property("name", name)
+            .property("title", title)
+            .property("singer", singer)
+            .property("album", album)
+            .property("length", length)
             .property("id", id)
             .property("provider-idx", provider_idx as u8)
             .build()
@@ -81,13 +91,29 @@ impl Window {
         imp.vbox
             .set_properties(&[("orientation", &gtk::Orientation::Vertical)]);
         imp.vbox.append(&imp.input);
-        imp.vbox.append(&imp.result_list);
+        imp.vbox.append(&imp.result_scrolled_window);
         imp.vbox.append(&imp.set_button);
+
+        imp.result_scrolled_window.set_child(Some(&imp.result_list));
+        imp.result_scrolled_window.set_vexpand(true);
+        imp.result_scrolled_window.set_hscrollbar_policy(gtk::PolicyType::Never);
+        imp.result_scrolled_window.set_height_request(300);
+        imp.result_scrolled_window.set_width_request(300);
+
+        imp.result_title.set_title(Some("Title"));
+        imp.result_list.append_column(&imp.result_title);
+        imp.result_title.set_expand(true);
+
+        imp.result_singer.set_title(Some("Singer"));
+        imp.result_list.append_column(&imp.result_singer);
+        imp.result_album.set_title(Some("Album"));
+        imp.result_list.append_column(&imp.result_album);
+        imp.result_length.set_title(Some("Length"));
+        imp.result_list.append_column(&imp.result_length);
 
         imp.input.set_placeholder_text(Some("Enter query..."));
         imp.input
             .set_secondary_icon_name(Some("system-search-symbolic"));
-        imp.result_list.set_height_request(200);
         imp.set_button.set_label("Set as lyric");
 
         self.set_child(Some(&imp.vbox));
@@ -122,13 +148,10 @@ impl Window {
                     // TODO: present in a better format
                     results.push(ResultObject::new(
                         track.id,
-                        format!(
-                            "{} {} {:?} ({}s)",
-                            track.title,
-                            track.singer,
-                            track.album,
-                            track.length.as_secs()
-                        ),
+                        track.title,
+                        track.singer,
+                        track.album.unwrap_or_default(),
+                        track.length.as_secs(),
                         idx,
                     ));
                 }
@@ -217,30 +240,49 @@ impl Window {
     }
 
     fn setup_factory(&self) {
-        let factory = gtk::SignalListItemFactory::new();
-        factory.connect_setup(move |_, list_item| {
-            let label = gtk::Label::new(None);
-            list_item
-                .downcast_ref::<ListItem>()
-                .expect("Needs to be ListItem")
-                .set_child(Some(&label));
-        });
-        factory.connect_bind(move |_, list_item| {
-            let result_object = list_item
-                .downcast_ref::<ListItem>()
-                .expect("Needs to be ListItem")
-                .item()
-                .and_downcast::<ResultObject>()
-                .expect("Needs to be ResultObject");
-            let label = list_item
-                .downcast_ref::<ListItem>()
-                .expect("Needs to be ListItem")
-                .child()
-                .and_downcast::<gtk::Label>()
-                .expect("Needs to be Label");
+        let imp = self.imp();
+        for (column, name) in [
+            (&imp.result_title, "title"),
+            (&imp.result_singer, "singer"),
+            (&imp.result_album, "album"),
+            (&imp.result_length, "length"),
+        ] {
+            let factory = gtk::SignalListItemFactory::new();
+            factory.connect_setup(move |_, list_item| {
+                let label = gtk::Label::new(None);
+                list_item
+                    .downcast_ref::<ListItem>()
+                    .expect("Needs to be ListItem")
+                    .set_child(Some(&label));
+            });
+            factory.connect_bind(move |_, list_item| {
+                let result_object = list_item
+                    .downcast_ref::<ListItem>()
+                    .expect("Needs to be ListItem")
+                    .item()
+                    .and_downcast::<ResultObject>()
+                    .expect("Needs to be ResultObject");
+                let label = list_item
+                    .downcast_ref::<ListItem>()
+                    .expect("Needs to be ListItem")
+                    .child()
+                    .and_downcast::<gtk::Label>()
+                    .expect("Needs to be Label");
 
-            label.set_label(&result_object.name());
-        });
-        self.imp().result_list.set_factory(Some(&factory));
+                let title = result_object.title();
+                let singer = result_object.singer();
+                let album = result_object.album();
+                let length = result_object.length();
+                let length = format!("{}:{:02}", length / 60, length % 60);
+                label.set_label(match name {
+                    "title" => &title,
+                    "singer" => &singer,
+                    "album" => &album,
+                    "length" => &length,
+                    _ => unreachable!(),
+                });
+            });
+            column.set_factory(Some(&factory));
+        }
     }
 }

@@ -9,7 +9,10 @@ use gtk::{gio, glib};
 #[derive(Default)]
 pub struct ResultData {
     pub id: String,
-    pub name: String,
+    pub title: String,
+    pub singer: String,
+    pub album: String,
+    pub length: u64,
     // glib seems do not support dyn so I use u8 index instead
     pub provider_idx: u8,
 }
@@ -17,7 +20,10 @@ pub struct ResultData {
 #[derive(Properties, Default)]
 #[properties(wrapper_type = super::ResultObject)]
 pub struct ResultObject {
-    #[property(name = "name", get, set, type = String, member = name)]
+    #[property(name = "title", get, set, type = String, member = title)]
+    #[property(name = "singer", get, set, type = String, member = singer)]
+    #[property(name = "album", get, set, type = String, member = album)]
+    #[property(name = "length", get, set, type = u64, member = length)]
     #[property(name = "id", get, set, type = String, member = id)]
     #[property(name = "provider-idx", get, set, type = u8, member = provider_idx)]
     pub data: RefCell<ResultData>,
@@ -40,7 +46,12 @@ pub struct Window {
 
     pub set_button: gtk::Button,
 
-    pub result_list: gtk::ListView,
+    pub result_scrolled_window: gtk::ScrolledWindow,
+    pub result_list: gtk::ColumnView,
+    pub result_title: gtk::ColumnViewColumn,
+    pub result_singer: gtk::ColumnViewColumn,
+    pub result_album: gtk::ColumnViewColumn,
+    pub result_length: gtk::ColumnViewColumn,
     pub results: RefCell<Option<gio::ListStore>>,
 
     pub use_cache: RefCell<bool>,
