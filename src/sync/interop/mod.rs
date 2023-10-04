@@ -77,10 +77,10 @@ pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
     )
 }
 
-pub fn update_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<(), PlayerStatus> {
+pub fn update_lyric(track_meta: &TrackMeta, window: &app::Window, ignore_cache: bool) -> Result<(), PlayerStatus> {
     crate::sync::utils::clean_lyric(window);
 
-    let fetch_result = if window.imp().cache_lyrics.get() {
+    let fetch_result = if !ignore_cache && window.imp().cache_lyrics.get() {
         cache::fetch_lyric_cached(track_meta, window)
     } else {
         fetch::fetch_lyric(track_meta, window)
@@ -150,7 +150,7 @@ pub fn sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
         };
 
         if need_fetch_lyric(&meta) {
-            update_lyric(&meta, window)?;
+            update_lyric(&meta, window, false)?;
         }
 
         sync_position(player, window)?;

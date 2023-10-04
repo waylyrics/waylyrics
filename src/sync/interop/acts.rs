@@ -75,7 +75,7 @@ pub fn register_action_refetch_lyric(app: &Application, wind: &app::Window, trig
                     return;
                 };
 
-                if update_lyric(metainfo, &window).is_ok() {
+                if update_lyric(metainfo, &window, true).is_ok() {
                     if !window.imp().cache_lyrics.get() {
                         return;
                     }

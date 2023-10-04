@@ -27,29 +27,22 @@ pub fn get_cache_path(track_meta: &TrackMeta) -> PathBuf {
 pub fn fetch_lyric_cached(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
     let cache_path = get_cache_path(track_meta);
     info!("cache_path for {}: {cache_path:?}", track_meta.title);
-    let cache_dir = cache_path.parent().unwrap();
-    if let Err(e) = std::fs::create_dir_all(cache_dir) {
-        error!("cannot create cache dir {cache_dir:?}: {e}");
-    }
 
-    match std::fs::read_to_string(&cache_path) {
-        Ok(lyric) => {
-            let cached_lyric: Result<LyricCache, _> = serde_json::from_str(&lyric);
-            match cached_lyric {
-                Ok(LyricCache {
-                    olyric,
-                    tlyric,
-                    offset,
-                }) => {
-                    LYRIC.set((olyric, tlyric));
-                    window.imp().lyric_offset_ms.set(offset);
-                    info!("set offset: {offset}ms");
-                    return Ok(());
-                }
-                Err(e) => error!("cache parse error: {e} from {cache_path:?}"),
+    if let Ok(lyric) = std::fs::read_to_string(&cache_path) {
+        let cached_lyric: Result<LyricCache, _> = serde_json::from_str(&lyric);
+        match cached_lyric {
+            Ok(LyricCache {
+                olyric,
+                tlyric,
+                offset,
+            }) => {
+                LYRIC.set((olyric, tlyric));
+                window.imp().lyric_offset_ms.set(offset);
+                info!("set offset: {offset}ms");
+                return Ok(());
             }
+            Err(e) => error!("cache parse error: {e} from {cache_path:?}"),
         }
-        Err(e) => info!("cache missed: {e}"),
     }
 
     let result = fetch_lyric(track_meta, window);
@@ -61,6 +54,12 @@ pub fn fetch_lyric_cached(track_meta: &TrackMeta, window: &app::Window) -> Resul
 
 /// Using olyric and tlyric inside LYRIC to update corresponding cache file.
 pub fn update_lyric_cache(cache_path: &PathBuf) {
+    let cache_dir = cache_path.parent().unwrap();
+    if let Err(e) = std::fs::create_dir_all(cache_dir) {
+        error!("cannot create cache dir {cache_dir:?}: {e}");
+        return;
+    }
+
     LYRIC.with_borrow(|(olyric, tlyric)| {
         if (&LyricOwned::None, &LyricOwned::None) == (olyric, tlyric) {
             return;
