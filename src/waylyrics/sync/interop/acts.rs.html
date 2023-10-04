@@ -123,21 +123,7 @@
 <a href="#123" id="123">123</a>
 <a href="#124" id="124">124</a>
 <a href="#125" id="125">125</a>
-<a href="#126" id="126">126</a>
-<a href="#127" id="127">127</a>
-<a href="#128" id="128">128</a>
-<a href="#129" id="129">129</a>
-<a href="#130" id="130">130</a>
-<a href="#131" id="131">131</a>
-<a href="#132" id="132">132</a>
-<a href="#133" id="133">133</a>
-<a href="#134" id="134">134</a>
-<a href="#135" id="135">135</a>
-<a href="#136" id="136">136</a>
-<a href="#137" id="137">137</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::borrow::Cow;
-
-<span class="kw">use </span>glib_macros::clone;
+</pre></div><pre class="rust"><code><span class="kw">use </span>glib_macros::clone;
 <span class="kw">use </span>gtk::{
     gio::SimpleAction,
     glib::{<span class="self">self</span>, clone::Downgrade, VariantTy},
@@ -149,11 +135,11 @@
 <span class="kw">mod </span>utils;
 
 <span class="kw">use crate</span>::{
-    app,
+    app::{<span class="self">self</span>, dialog::show_dialog},
     lyric_providers::{default_search_query, LyricOwned},
     sync::{
         interop::{reset_lyric_labels, update_lyric},
-        lyric::cache::{get_cache_path, update_lyric_cache},
+        lyric::cache::update_lyric_cache,
         search_window, TrackState, LYRIC, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
     },
 };
@@ -202,29 +188,19 @@
     <span class="kw">let </span>window = Downgrade::downgrade(wind);
     action.connect_activate(<span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
         <span class="macro">info!</span>(<span class="string">&quot;cleaned current lyric&quot;</span>);
-        TRACK_PLAYING_STATE.with_borrow(
-            |TrackState {
-                 metainfo,
-                 cache_path,
-                 ..
-             }| {
-                <span class="kw">let </span>(<span class="prelude-val">Some</span>(metainfo), <span class="prelude-val">Some</span>(window)) = (metainfo, window.upgrade()) <span class="kw">else </span>{
-                    <span class="kw">return</span>;
-                };
+        TRACK_PLAYING_STATE.with_borrow(|TrackState { metainfo, .. }| {
+            <span class="kw">let </span>(<span class="prelude-val">Some</span>(metainfo), <span class="prelude-val">Some</span>(window)) = (metainfo, window.upgrade()) <span class="kw">else </span>{
+                <span class="kw">return</span>;
+            };
 
-                <span class="kw">if </span>update_lyric(metainfo, <span class="kw-2">&amp;</span>window, <span class="bool-val">true</span>).is_ok() {
-                    <span class="kw">if </span>!window.imp().cache_lyrics.get() {
-                        <span class="kw">return</span>;
-                    }
-                    <span class="kw">let </span>cache_path = cache_path
-                        .as_ref()
-                        .map(Cow::Borrowed)
-                        .unwrap_or_else(|| Cow::Owned(get_cache_path(metainfo)));
-
-                    update_lyric_cache(<span class="kw-2">&amp;</span>cache_path);
-                }
-            },
-        );
+            <span class="kw">if let </span><span class="prelude-val">Err</span>(err) = update_lyric(metainfo, <span class="kw-2">&amp;</span>window, <span class="bool-val">true</span>) {
+                show_dialog(
+                    <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>window),
+                    <span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;cannot refetch lyric: {err:?}&quot;</span>),
+                    gtk::MessageType::Error,
+                )
+            }
+        });
     });
     app.add_action(<span class="kw-2">&amp;</span>action);
 

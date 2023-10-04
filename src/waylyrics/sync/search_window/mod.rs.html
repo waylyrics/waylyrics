@@ -268,19 +268,6 @@
 <a href="#268" id="268">268</a>
 <a href="#269" id="269">269</a>
 <a href="#270" id="270">270</a>
-<a href="#271" id="271">271</a>
-<a href="#272" id="272">272</a>
-<a href="#273" id="273">273</a>
-<a href="#274" id="274">274</a>
-<a href="#275" id="275">275</a>
-<a href="#276" id="276">276</a>
-<a href="#277" id="277">277</a>
-<a href="#278" id="278">278</a>
-<a href="#279" id="279">279</a>
-<a href="#280" id="280">280</a>
-<a href="#281" id="281">281</a>
-<a href="#282" id="282">282</a>
-<a href="#283" id="283">283</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>imp;
 
 <span class="kw">use </span>glib::Object;
@@ -292,6 +279,7 @@
 
 <span class="kw">use </span><span class="kw">crate</span>::LYRIC_PROVIDERS;
 
+<span class="kw">use </span><span class="kw">crate</span>::app::dialog::show_dialog;
 <span class="kw">use </span><span class="kw">crate</span>::sync::lyric::cache::update_lyric_cache;
 <span class="kw">use </span><span class="kw">crate</span>::sync::{TrackState, LYRIC, TRACK_PLAYING_STATE};
 
@@ -324,20 +312,6 @@
         @extends gtk::Window, gtk::Widget,
         @implements gio::ActionGroup, gio::ActionMap, gtk::Accessible, gtk::Buildable,
                     gtk::ConstraintTarget, gtk::Native, gtk::Root, gtk::ShortcutManager;
-}
-
-<span class="kw">fn </span>show_error_dialog(window: <span class="kw-2">&amp;</span>Window, msg: <span class="kw-2">&amp;</span>str) {
-    <span class="kw">let </span>msg_dialog = gtk::MessageDialog::new(
-        <span class="prelude-val">Some</span>(window),
-        gtk::DialogFlags::MODAL,
-        gtk::MessageType::Error,
-        gtk::ButtonsType::Ok,
-        msg,
-    );
-    msg_dialog.connect_response(|dialog, <span class="kw">_</span>| {
-        dialog.destroy();
-    });
-    msg_dialog.present();
 }
 
 <span class="kw">impl </span>Window {
@@ -436,7 +410,7 @@
         });
         <span class="self">self</span>.results().remove_all();
         <span class="kw">if </span>results.is_empty() {
-            show_error_dialog(<span class="self">self</span>, <span class="string">&quot;No result found.&quot;</span>);
+            show_dialog(<span class="prelude-val">Some</span>(<span class="self">self</span>), <span class="string">&quot;No result found.&quot;</span>, gtk::MessageType::Error);
             <span class="kw">return</span>;
         }
         <span class="kw">for </span>result <span class="kw">in </span>results {
@@ -510,7 +484,7 @@
                         <span class="prelude-val">Err</span>(e) =&gt; {
                             <span class="kw">let </span>error_msg = <span class="macro">format!</span>(<span class="string">&quot;{e} when getting lyric.&quot;</span>);
                             <span class="macro">error!</span>(error_msg);
-                            show_error_dialog(<span class="kw-2">&amp;</span>window, <span class="kw-2">&amp;</span>error_msg);
+                            show_dialog(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>window), <span class="kw-2">&amp;</span>error_msg, gtk::MessageType::Error);
                         }
                     }
                 })

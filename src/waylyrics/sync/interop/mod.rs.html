@@ -208,6 +208,11 @@
 <a href="#208" id="208">208</a>
 <a href="#209" id="209">209</a>
 <a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::time::{Duration, SystemTime};
 
 <span class="kw">use </span>gtk::{
@@ -287,11 +292,15 @@
     )
 }
 
-<span class="kw">pub fn </span>update_lyric(track_meta: <span class="kw-2">&amp;</span>TrackMeta, window: <span class="kw-2">&amp;</span>app::Window, ignore_cache: bool) -&gt; <span class="prelude-ty">Result</span>&lt;(), PlayerStatus&gt; {
+<span class="kw">pub fn </span>update_lyric(
+    track_meta: <span class="kw-2">&amp;</span>TrackMeta,
+    window: <span class="kw-2">&amp;</span>app::Window,
+    ignore_cache: bool,
+) -&gt; <span class="prelude-ty">Result</span>&lt;(), PlayerStatus&gt; {
     <span class="kw">crate</span>::sync::utils::clean_lyric(window);
 
-    <span class="kw">let </span>fetch_result = <span class="kw">if </span>!ignore_cache &amp;&amp; window.imp().cache_lyrics.get() {
-        cache::fetch_lyric_cached(track_meta, window)
+    <span class="kw">let </span>fetch_result = <span class="kw">if </span>window.imp().cache_lyrics.get() {
+        cache::fetch_lyric_cached(track_meta, ignore_cache, window)
     } <span class="kw">else </span>{
         fetch::fetch_lyric(track_meta, window)
     };
@@ -369,7 +378,8 @@
     })
 }
 
-<span class="kw">pub enum </span>PlayerStatus {
+<span class="attr">#[derive(Debug)]
+</span><span class="kw">pub enum </span>PlayerStatus {
     Missing,
     Paused,
     Unsupported(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str),

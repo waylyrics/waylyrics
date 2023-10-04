@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["connect_factory","format_length","show_error_dialog"],"mod":["imp"],"struct":["ResultObject","Window"]};
+window.SIDEBAR_ITEMS = {"fn":["connect_factory","format_length"],"mod":["imp"],"struct":["ResultObject","Window"]};

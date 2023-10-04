@@ -73,6 +73,7 @@
 <a href="#73" id="73">73</a>
 <a href="#74" id="74">74</a>
 <a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>window;
 <span class="kw">use </span>gtk::{prelude::<span class="kw-2">*</span>, subclass::prelude::ObjectSubclassIsExt, Align, Application, Label};
 <span class="kw">pub use </span>window::Window;
@@ -82,6 +83,7 @@
 <span class="kw">const </span>WINDOW_MIN_HEIGHT: i32 = <span class="number">120</span>;
 
 <span class="kw">pub mod </span>utils;
+<span class="kw">pub mod </span>dialog;
 
 <span class="kw">pub fn </span>build_main_window(
     app: <span class="kw-2">&amp;</span>Application,
