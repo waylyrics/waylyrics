@@ -280,6 +280,7 @@
 <a href="#280" id="280">280</a>
 <a href="#281" id="281">281</a>
 <a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>imp;
 
 <span class="kw">use </span>glib::Object;
@@ -532,6 +533,7 @@
     <span class="kw">let </span>factory = gtk::SignalListItemFactory::new();
     factory.connect_setup(<span class="kw">move </span>|<span class="kw">_</span>, list_item| {
         <span class="kw">let </span>label = gtk::Label::new(<span class="prelude-val">None</span>);
+        label.set_halign(gtk::Align::Start);
         list_item
             .downcast_ref::&lt;ListItem&gt;()
             .expect(<span class="string">&quot;Needs to be ListItem&quot;</span>)
