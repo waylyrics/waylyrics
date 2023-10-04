@@ -212,7 +212,7 @@
                     <span class="kw">return</span>;
                 };
 
-                <span class="kw">if </span>update_lyric(metainfo, <span class="kw-2">&amp;</span>window).is_ok() {
+                <span class="kw">if </span>update_lyric(metainfo, <span class="kw-2">&amp;</span>window, <span class="bool-val">true</span>).is_ok() {
                     <span class="kw">if </span>!window.imp().cache_lyrics.get() {
                         <span class="kw">return</span>;
                     }

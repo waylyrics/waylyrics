@@ -96,7 +96,6 @@
 <a href="#96" id="96">96</a>
 <a href="#97" id="97">97</a>
 <a href="#98" id="98">98</a>
-<a href="#99" id="99">99</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Result;
 <span class="kw">use </span>std::path::PathBuf;
 
@@ -126,29 +125,22 @@
 <span class="kw">pub fn </span>fetch_lyric_cached(track_meta: <span class="kw-2">&amp;</span>TrackMeta, window: <span class="kw-2">&amp;</span>app::Window) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
     <span class="kw">let </span>cache_path = get_cache_path(track_meta);
     <span class="macro">info!</span>(<span class="string">&quot;cache_path for {}: {cache_path:?}&quot;</span>, track_meta.title);
-    <span class="kw">let </span>cache_dir = cache_path.parent().unwrap();
-    <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = std::fs::create_dir_all(cache_dir) {
-        <span class="macro">error!</span>(<span class="string">&quot;cannot create cache dir {cache_dir:?}: {e}&quot;</span>);
-    }
 
-    <span class="kw">match </span>std::fs::read_to_string(<span class="kw-2">&amp;</span>cache_path) {
-        <span class="prelude-val">Ok</span>(lyric) =&gt; {
-            <span class="kw">let </span>cached_lyric: <span class="prelude-ty">Result</span>&lt;LyricCache, <span class="kw">_</span>&gt; = serde_json::from_str(<span class="kw-2">&amp;</span>lyric);
-            <span class="kw">match </span>cached_lyric {
-                <span class="prelude-val">Ok</span>(LyricCache {
-                    olyric,
-                    tlyric,
-                    offset,
-                }) =&gt; {
-                    LYRIC.set((olyric, tlyric));
-                    window.imp().lyric_offset_ms.set(offset);
-                    <span class="macro">info!</span>(<span class="string">&quot;set offset: {offset}ms&quot;</span>);
-                    <span class="kw">return </span><span class="prelude-val">Ok</span>(());
-                }
-                <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">error!</span>(<span class="string">&quot;cache parse error: {e} from {cache_path:?}&quot;</span>),
+    <span class="kw">if let </span><span class="prelude-val">Ok</span>(lyric) = std::fs::read_to_string(<span class="kw-2">&amp;</span>cache_path) {
+        <span class="kw">let </span>cached_lyric: <span class="prelude-ty">Result</span>&lt;LyricCache, <span class="kw">_</span>&gt; = serde_json::from_str(<span class="kw-2">&amp;</span>lyric);
+        <span class="kw">match </span>cached_lyric {
+            <span class="prelude-val">Ok</span>(LyricCache {
+                olyric,
+                tlyric,
+                offset,
+            }) =&gt; {
+                LYRIC.set((olyric, tlyric));
+                window.imp().lyric_offset_ms.set(offset);
+                <span class="macro">info!</span>(<span class="string">&quot;set offset: {offset}ms&quot;</span>);
+                <span class="kw">return </span><span class="prelude-val">Ok</span>(());
             }
+            <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">error!</span>(<span class="string">&quot;cache parse error: {e} from {cache_path:?}&quot;</span>),
         }
-        <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">info!</span>(<span class="string">&quot;cache missed: {e}&quot;</span>),
     }
 
     <span class="kw">let </span>result = fetch_lyric(track_meta, window);
@@ -160,6 +152,12 @@
 
 <span class="doccomment">/// Using olyric and tlyric inside LYRIC to update corresponding cache file.
 </span><span class="kw">pub fn </span>update_lyric_cache(cache_path: <span class="kw-2">&amp;</span>PathBuf) {
+    <span class="kw">let </span>cache_dir = cache_path.parent().unwrap();
+    <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = std::fs::create_dir_all(cache_dir) {
+        <span class="macro">error!</span>(<span class="string">&quot;cannot create cache dir {cache_dir:?}: {e}&quot;</span>);
+        <span class="kw">return</span>;
+    }
+
     LYRIC.with_borrow(|(olyric, tlyric)| {
         <span class="kw">if </span>(<span class="kw-2">&amp;</span>LyricOwned::None, <span class="kw-2">&amp;</span>LyricOwned::None) == (olyric, tlyric) {
             <span class="kw">return</span>;

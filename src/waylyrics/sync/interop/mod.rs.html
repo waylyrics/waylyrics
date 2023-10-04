@@ -287,10 +287,10 @@
     )
 }
 
-<span class="kw">pub fn </span>update_lyric(track_meta: <span class="kw-2">&amp;</span>TrackMeta, window: <span class="kw-2">&amp;</span>app::Window) -&gt; <span class="prelude-ty">Result</span>&lt;(), PlayerStatus&gt; {
+<span class="kw">pub fn </span>update_lyric(track_meta: <span class="kw-2">&amp;</span>TrackMeta, window: <span class="kw-2">&amp;</span>app::Window, ignore_cache: bool) -&gt; <span class="prelude-ty">Result</span>&lt;(), PlayerStatus&gt; {
     <span class="kw">crate</span>::sync::utils::clean_lyric(window);
 
-    <span class="kw">let </span>fetch_result = <span class="kw">if </span>window.imp().cache_lyrics.get() {
+    <span class="kw">let </span>fetch_result = <span class="kw">if </span>!ignore_cache &amp;&amp; window.imp().cache_lyrics.get() {
         cache::fetch_lyric_cached(track_meta, window)
     } <span class="kw">else </span>{
         fetch::fetch_lyric(track_meta, window)
@@ -360,7 +360,7 @@
         };
 
         <span class="kw">if </span>need_fetch_lyric(<span class="kw-2">&amp;</span>meta) {
-            update_lyric(<span class="kw-2">&amp;</span>meta, window)<span class="question-mark">?</span>;
+            update_lyric(<span class="kw-2">&amp;</span>meta, window, <span class="bool-val">false</span>)<span class="question-mark">?</span>;
         }
 
         sync_position(player, window)<span class="question-mark">?</span>;
