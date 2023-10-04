@@ -5,10 +5,9 @@ use std::borrow::Cow;
 
 use gtk::prelude::*;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
-use mpris::{Metadata, Player};
 use tracing::{debug, error, info};
 
-use crate::lyric_providers::{LyricOwned, LyricProvider, SongInfo};
+use crate::lyric_providers::LyricOwned;
 use crate::sync::{TrackMeta, LYRIC};
 use crate::{app, LYRIC_PROVIDERS};
 
@@ -34,8 +33,7 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
     LYRIC_PROVIDERS.with_borrow(|providers| {
         for (idx, provider) in providers.iter().enumerate() {
             let provider_id = provider.provider_unique_name();
-            let tracks = match search_song(
-                provider.as_ref(),
+            let tracks = match provider.search_song_detailed(
                 album.unwrap_or_default(),
                 artists.unwrap_or(&[]),
                 title,
@@ -95,15 +93,6 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
     Err(crate::lyric_providers::Error::NoResult)?
 }
 
-pub fn search_song<P: LyricProvider + ?Sized>(
-    provider: &P,
-    album: &str,
-    artists: &[&str],
-    title: &str,
-) -> Result<Vec<SongInfo>> {
-    provider.search_song(album, artists, title)
-}
-
 fn set_lyric(
     olyric: LyricOwned,
     tlyric: LyricOwned,
@@ -129,14 +118,4 @@ fn set_lyric(
     LYRIC.set((olyric, tlyric));
 
     Ok(())
-}
-
-fn get_song_id_from_player(
-    player: &Player,
-    extract_field: impl for<'a> FnOnce(&'a Metadata) -> Option<&'a str>,
-) -> Option<String> {
-    player
-        .get_metadata()
-        .ok()
-        .and_then(|metadata| extract_field(&metadata).map(|s| s.to_owned()))
 }

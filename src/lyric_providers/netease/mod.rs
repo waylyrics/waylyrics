@@ -17,14 +17,39 @@ impl super::LyricProvider for NeteaseLyricProvider {
     fn provider_unique_name(&self) -> &'static str {
         "网易云音乐"
     }
-    fn search_song(
+    fn search_song_detailed(
         &self,
         album: &str,
         artists: &[&str],
         title: &str,
     ) -> Result<Vec<super::SongInfo>> {
         let keyword = default_search_query(album, artists, title);
+        self.search_song(&keyword)
+    }
 
+    fn query_lyric(&self, id: &str) -> Result<LyricStore> {
+        let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
+        let api = NcmApi::new(
+            false,
+            Duration::from_secs(60 * 60),
+            Duration::from_secs(5 * 60),
+            true,
+            &cookie_path,
+        );
+        let id = id.parse()?;
+        let query_result = smol::block_on(async { api.lyric(id).compat().await })?;
+
+        let lyric_resp: LyricResp = query_result.deserialize()?;
+
+        tracing::debug!("lyric query result: {lyric_resp:?}");
+
+        Ok(LyricStore {
+            lyric: lyric_resp.lrc.map(|l| l.lyric),
+            tlyric: lyric_resp.tlyric.map(|l| l.lyric),
+        })
+    }
+
+    fn search_song(&self, keyword: &str) -> Result<Vec<super::SongInfo>> {
         tracing::debug!("search keyword: {keyword}");
 
         let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
@@ -70,28 +95,6 @@ impl super::LyricProvider for NeteaseLyricProvider {
                 },
             )
             .collect())
-    }
-
-    fn query_lyric(&self, id: &str) -> Result<LyricStore> {
-        let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
-        let api = NcmApi::new(
-            false,
-            Duration::from_secs(60 * 60),
-            Duration::from_secs(5 * 60),
-            true,
-            &cookie_path,
-        );
-        let id = id.parse()?;
-        let query_result = smol::block_on(async { api.lyric(id).compat().await })?;
-
-        let lyric_resp: LyricResp = query_result.deserialize()?;
-
-        tracing::debug!("lyric query result: {lyric_resp:?}");
-
-        Ok(LyricStore {
-            lyric: lyric_resp.lrc.map(|l| l.lyric),
-            tlyric: lyric_resp.tlyric.map(|l| l.lyric),
-        })
     }
 }
 

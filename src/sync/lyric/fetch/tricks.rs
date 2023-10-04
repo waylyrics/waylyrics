@@ -6,8 +6,9 @@ use crate::sync::PLAYER;
 use crate::app;
 use crate::lyric_providers::{LyricParse, LyricProvider};
 use anyhow::Result;
+use mpris::{Metadata, Player};
 
-use crate::sync::lyric::fetch::{get_song_id_from_player, set_lyric};
+use crate::sync::lyric::fetch::set_lyric;
 
 pub fn get_accurate_lyric(
     title: &str,
@@ -24,7 +25,7 @@ pub fn get_accurate_lyric(
                 tracing::warn!("local lyric files are still unsupported");
                 None
             }
-            "ElectronNCM" | "Qcm" => super::get_song_id_from_player(player, |meta| {
+            "ElectronNCM" | "Qcm" => get_song_id_from_player(player, |meta| {
                 meta.get("mpris:trackid")
                     .and_then(mpris::MetadataValue::as_str)
                     .and_then(|s| s.split('/').last())
@@ -73,4 +74,14 @@ pub fn get_accurate_lyric(
             _ => None,
         }
     })
+}
+
+fn get_song_id_from_player(
+    player: &Player,
+    extract_field: impl for<'a> FnOnce(&'a Metadata) -> Option<&'a str>,
+) -> Option<String> {
+    player
+        .get_metadata()
+        .ok()
+        .and_then(|metadata| extract_field(&metadata).map(|s| s.to_owned()))
 }

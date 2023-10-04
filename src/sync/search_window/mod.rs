@@ -3,7 +3,7 @@ mod imp;
 use glib::Object;
 use gtk::glib::clone;
 use gtk::subclass::prelude::*;
-use gtk::{gio, glib};
+use gtk::{gio, glib, ColumnViewColumn};
 use gtk::{prelude::*, ListItem};
 use tracing::error;
 
@@ -131,13 +131,7 @@ impl Window {
         LYRIC_PROVIDERS.with_borrow(|providers| {
             for (idx, provider) in providers.iter().enumerate() {
                 let provider_id = provider.provider_unique_name();
-                // Use a hack to directly search with query
-                let tracks = match crate::sync::lyric::fetch::search_song(
-                    provider.as_ref(),
-                    "",
-                    &[""],
-                    &query,
-                ) {
+                let tracks = match provider.search_song(&query) {
                     Ok(songs) => songs,
                     Err(e) => {
                         // TODO: to show errors to users in GUI
@@ -146,7 +140,6 @@ impl Window {
                     }
                 };
                 for track in tracks {
-                    // TODO: present in a better format
                     results.push(ResultObject::new(
                         track.id,
                         track.title,
@@ -201,89 +194,89 @@ impl Window {
 
         imp.set_button
             .connect_clicked(clone!(@weak self as window => move |_| {
-                // TODO: set lyric
                 let result = window.get_selected_result();
-                if let Some(result) = result {
-                    LYRIC_PROVIDERS.with_borrow(|providers| {
-                        let provider_idx = result.provider_idx() as usize;
-                        if provider_idx >= providers.len() {
-                            error!("provider_idx {} is out of range", provider_idx);
-                            return;
-                        }
-                        let provider = providers[provider_idx].as_ref();
-                        let song_id = result.id();
-                        match provider.query_lyric(&song_id) {
-                            Ok(lyric) => {
-                                let olyric = provider.get_lyric(&lyric);
-                                let tlyric = provider.get_translated_lyric(&lyric);
-                                LYRIC.with_borrow_mut(|(origin, translation)| {
-                                    *origin = olyric;
-                                    *translation = tlyric;
+                let Some(result) = result else {
+                    return;
+                };
+
+                LYRIC_PROVIDERS.with_borrow(|providers| {
+                    let provider_idx = result.provider_idx() as usize;
+                    if provider_idx >= providers.len() {
+                        error!("provider_idx {} is out of range", provider_idx);
+                        return;
+                    }
+                    let provider = providers[provider_idx].as_ref();
+                    let song_id = result.id();
+                    match provider.query_lyric(&song_id) {
+                        Ok(lyric) => {
+                            let olyric = provider.get_lyric(&lyric);
+                            let tlyric = provider.get_translated_lyric(&lyric);
+                            LYRIC.with_borrow_mut(|(origin, translation)| {
+                                *origin = olyric;
+                                *translation = tlyric;
+                            });
+
+                            if window.imp().use_cache.get() {
+                                TRACK_PLAYING_STATE.with_borrow(|TrackState {cache_path, ..}| {
+                                    if let Some(cache_path) = cache_path {
+                                        update_lyric_cache(cache_path);
+                                    }
                                 });
-                                // save to cache
-                                if window.imp().use_cache.get() {
-                                    TRACK_PLAYING_STATE.with_borrow(|TrackState{cache_path,..}| {
-                                        if let Some(cache_path) = cache_path {
-                                            update_lyric_cache(cache_path);
-                                        }
-                                    });
-                                }
-                            },
-                            Err(e) => {
-                                let error_msg = format!("{e} when getting lyric.");
-                                error!(error_msg);
-                                show_error_dialog(&window, &error_msg);
                             }
+                        },
+                        Err(e) => {
+                            let error_msg = format!("{e} when getting lyric.");
+                            error!(error_msg);
+                            show_error_dialog(&window, &error_msg);
                         }
-                    })
-                }
+                    }
+                })
             }));
     }
 
     fn setup_factory(&self) {
         let imp = self.imp();
-        for (column, name) in [
-            (&imp.result_title, "title"),
-            (&imp.result_singer, "singer"),
-            (&imp.result_album, "album"),
-            (&imp.result_length, "length"),
-        ] {
-            let factory = gtk::SignalListItemFactory::new();
-            factory.connect_setup(move |_, list_item| {
-                let label = gtk::Label::new(None);
-                list_item
-                    .downcast_ref::<ListItem>()
-                    .expect("Needs to be ListItem")
-                    .set_child(Some(&label));
-            });
-            factory.connect_bind(move |_, list_item| {
-                let result_object = list_item
-                    .downcast_ref::<ListItem>()
-                    .expect("Needs to be ListItem")
-                    .item()
-                    .and_downcast::<ResultObject>()
-                    .expect("Needs to be ResultObject");
-                let label = list_item
-                    .downcast_ref::<ListItem>()
-                    .expect("Needs to be ListItem")
-                    .child()
-                    .and_downcast::<gtk::Label>()
-                    .expect("Needs to be Label");
-
-                let title = result_object.title();
-                let singer = result_object.singer();
-                let album = result_object.album();
-                let length = result_object.length();
-                let length = format!("{}:{:02}", length / 60, length % 60);
-                label.set_label(match name {
-                    "title" => &title,
-                    "singer" => &singer,
-                    "album" => &album,
-                    "length" => &length,
-                    _ => unreachable!(),
-                });
-            });
-            column.set_factory(Some(&factory));
-        }
+        connect_factory(&imp.result_title, |result| result.title());
+        connect_factory(&imp.result_singer, |result| result.singer());
+        connect_factory(&imp.result_album, |result| result.album());
+        connect_factory(&imp.result_length, |result| format_length(result.length()));
     }
+}
+
+fn connect_factory(
+    column: &ColumnViewColumn,
+    get_field: impl 'static + Fn(ResultObject) -> String,
+) {
+    let factory = gtk::SignalListItemFactory::new();
+    factory.connect_setup(move |_, list_item| {
+        let label = gtk::Label::new(None);
+        list_item
+            .downcast_ref::<ListItem>()
+            .expect("Needs to be ListItem")
+            .set_child(Some(&label));
+    });
+    factory.connect_bind(move |_, list_item| {
+        let result_object = list_item
+            .downcast_ref::<ListItem>()
+            .expect("Needs to be ListItem")
+            .item()
+            .and_downcast::<ResultObject>()
+            .expect("Needs to be ResultObject");
+        let label = list_item
+            .downcast_ref::<ListItem>()
+            .expect("Needs to be ListItem")
+            .child()
+            .and_downcast::<gtk::Label>()
+            .expect("Needs to be Label");
+
+        label.set_label(&get_field(result_object));
+    });
+    
+    column.set_factory(Some(&factory));
+}
+
+fn format_length(length: u64) -> String {
+    let min = length / 60;
+    let sec = length % 60;
+    format!("{min:02}:{sec:02}")
 }

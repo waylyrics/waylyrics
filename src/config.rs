@@ -27,6 +27,7 @@ pub struct Config {
     pub filter_regexies: Vec<String>,
     pub triggers: Triggers,
     pub qqmusic_api_base_url: Option<String>,
+    /// avaliable options: 网易云音乐, QQ音乐
     pub lyric_search_source: Vec<String>,
 }
 
@@ -96,7 +97,6 @@ impl Default for Config {
             lyric_align: Align::Center,
             triggers: Default::default(),
             qqmusic_api_base_url: None,
-            // avaliable options: 网易云音乐, QQ音乐
             lyric_search_source: vec!["网易云音乐".into()],
         }
     }

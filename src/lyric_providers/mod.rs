@@ -47,7 +47,13 @@ pub struct SongInfo {
 
 pub trait LyricProvider: LyricParse {
     fn query_lyric(&self, id: &str) -> Result<LyricStore>;
-    fn search_song(&self, album: &str, artists: &[&str], title: &str) -> Result<Vec<SongInfo>>;
+    fn search_song_detailed(
+        &self,
+        album: &str,
+        artists: &[&str],
+        title: &str,
+    ) -> Result<Vec<SongInfo>>;
+    fn search_song(&self, keyword: &str) -> Result<Vec<SongInfo>>;
     fn provider_unique_name(&self) -> &'static str;
 }
 
