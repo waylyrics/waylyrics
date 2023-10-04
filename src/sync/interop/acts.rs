@@ -1,5 +1,3 @@
-use std::borrow::Cow;
-
 use glib_macros::clone;
 use gtk::{
     gio::SimpleAction,
@@ -12,11 +10,11 @@ use tracing::{error, info, warn};
 mod utils;
 
 use crate::{
-    app,
+    app::{self, dialog::show_dialog},
     lyric_providers::{default_search_query, LyricOwned},
     sync::{
         interop::{reset_lyric_labels, update_lyric},
-        lyric::cache::{get_cache_path, update_lyric_cache},
+        lyric::cache::update_lyric_cache,
         search_window, TrackState, LYRIC, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
     },
 };
@@ -65,29 +63,19 @@ pub fn register_action_refetch_lyric(app: &Application, wind: &app::Window, trig
     let window = Downgrade::downgrade(wind);
     action.connect_activate(move |_, _| {
         info!("cleaned current lyric");
-        TRACK_PLAYING_STATE.with_borrow(
-            |TrackState {
-                 metainfo,
-                 cache_path,
-                 ..
-             }| {
-                let (Some(metainfo), Some(window)) = (metainfo, window.upgrade()) else {
-                    return;
-                };
+        TRACK_PLAYING_STATE.with_borrow(|TrackState { metainfo, .. }| {
+            let (Some(metainfo), Some(window)) = (metainfo, window.upgrade()) else {
+                return;
+            };
 
-                if update_lyric(metainfo, &window, true).is_ok() {
-                    if !window.imp().cache_lyrics.get() {
-                        return;
-                    }
-                    let cache_path = cache_path
-                        .as_ref()
-                        .map(Cow::Borrowed)
-                        .unwrap_or_else(|| Cow::Owned(get_cache_path(metainfo)));
-
-                    update_lyric_cache(&cache_path);
-                }
-            },
-        );
+            if let Err(err) = update_lyric(metainfo, &window, true) {
+                show_dialog(
+                    Some(&window),
+                    &format!("cannot refetch lyric: {err:?}"),
+                    gtk::MessageType::Error,
+                )
+            }
+        });
     });
     app.add_action(&action);
 

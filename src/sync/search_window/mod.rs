@@ -9,6 +9,7 @@ use tracing::error;
 
 use crate::LYRIC_PROVIDERS;
 
+use crate::app::dialog::show_dialog;
 use crate::sync::lyric::cache::update_lyric_cache;
 use crate::sync::{TrackState, LYRIC, TRACK_PLAYING_STATE};
 
@@ -41,20 +42,6 @@ glib::wrapper! {
         @extends gtk::Window, gtk::Widget,
         @implements gio::ActionGroup, gio::ActionMap, gtk::Accessible, gtk::Buildable,
                     gtk::ConstraintTarget, gtk::Native, gtk::Root, gtk::ShortcutManager;
-}
-
-fn show_error_dialog(window: &Window, msg: &str) {
-    let msg_dialog = gtk::MessageDialog::new(
-        Some(window),
-        gtk::DialogFlags::MODAL,
-        gtk::MessageType::Error,
-        gtk::ButtonsType::Ok,
-        msg,
-    );
-    msg_dialog.connect_response(|dialog, _| {
-        dialog.destroy();
-    });
-    msg_dialog.present();
 }
 
 impl Window {
@@ -153,7 +140,7 @@ impl Window {
         });
         self.results().remove_all();
         if results.is_empty() {
-            show_error_dialog(self, "No result found.");
+            show_dialog(Some(self), "No result found.", gtk::MessageType::Error);
             return;
         }
         for result in results {
@@ -227,7 +214,7 @@ impl Window {
                         Err(e) => {
                             let error_msg = format!("{e} when getting lyric.");
                             error!(error_msg);
-                            show_error_dialog(&window, &error_msg);
+                            show_dialog(Some(&window), &error_msg, gtk::MessageType::Error);
                         }
                     }
                 })

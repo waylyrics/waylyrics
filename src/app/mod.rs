@@ -7,6 +7,7 @@ use crate::{app::utils::set_click_pass_through, DEFAULT_TEXT};
 const WINDOW_MIN_HEIGHT: i32 = 120;
 
 pub mod utils;
+pub mod dialog;
 
 pub fn build_main_window(
     app: &Application,

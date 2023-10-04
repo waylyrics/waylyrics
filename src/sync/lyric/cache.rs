@@ -24,24 +24,30 @@ pub fn get_cache_path(track_meta: &TrackMeta) -> PathBuf {
     cache_dir.join(format!("{digest:x}.json"))
 }
 
-pub fn fetch_lyric_cached(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
+pub fn fetch_lyric_cached(
+    track_meta: &TrackMeta,
+    ignore_cache: bool,
+    window: &app::Window,
+) -> Result<()> {
     let cache_path = get_cache_path(track_meta);
     info!("cache_path for {}: {cache_path:?}", track_meta.title);
 
-    if let Ok(lyric) = std::fs::read_to_string(&cache_path) {
-        let cached_lyric: Result<LyricCache, _> = serde_json::from_str(&lyric);
-        match cached_lyric {
-            Ok(LyricCache {
-                olyric,
-                tlyric,
-                offset,
-            }) => {
-                LYRIC.set((olyric, tlyric));
-                window.imp().lyric_offset_ms.set(offset);
-                info!("set offset: {offset}ms");
-                return Ok(());
+    if !ignore_cache {
+        if let Ok(lyric) = std::fs::read_to_string(&cache_path) {
+            let cached_lyric: Result<LyricCache, _> = serde_json::from_str(&lyric);
+            match cached_lyric {
+                Ok(LyricCache {
+                    olyric,
+                    tlyric,
+                    offset,
+                }) => {
+                    LYRIC.set((olyric, tlyric));
+                    window.imp().lyric_offset_ms.set(offset);
+                    info!("set offset: {offset}ms");
+                    return Ok(());
+                }
+                Err(e) => error!("cache parse error: {e} from {cache_path:?}"),
             }
-            Err(e) => error!("cache parse error: {e} from {cache_path:?}"),
         }
     }
 
