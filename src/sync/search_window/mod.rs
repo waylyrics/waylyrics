@@ -250,6 +250,7 @@ fn connect_factory(
     let factory = gtk::SignalListItemFactory::new();
     factory.connect_setup(move |_, list_item| {
         let label = gtk::Label::new(None);
+        label.set_halign(gtk::Align::Start);
         list_item
             .downcast_ref::<ListItem>()
             .expect("Needs to be ListItem")
