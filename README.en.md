@@ -67,8 +67,6 @@ For Qcm, Feeluown-netease, ElectronNCM, YesPlayMusic, we could get song id direc
 | ------------------------- | --- | ----------------------------------------- |
 | [netease-cloud-music-gtk] | X   | gives 0 position                          |
 | Firefox                   | X   | do not provide position call              |
-| Chrom*                    | X   | break the "unique" gurantee for TrackID   |
-| [youtube-music]           | X   | break the "unique" gurantee for TrackID   |
 | qqmusic                   | O   | no info other than title/artist avaliable |
 | [flutter-netease-music]   | X   | no mpris support                          |
 

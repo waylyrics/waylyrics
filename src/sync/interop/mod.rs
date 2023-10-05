@@ -48,7 +48,6 @@ impl TryFrom<Metadata> for TrackMeta {
             album,
             artists,
             length,
-            meta,
         })
     }
 }
@@ -70,12 +69,12 @@ pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
              paused,
              cache_path,
          }| {
-            let track_id_playing = metainfo.as_ref().map(|t| t.track_id.clone());
-            let track_id = &track_meta.track_id;
-            trace!("got track_id: {track_id}");
+            let track_meta_playing = metainfo.as_ref().map(|t| t.clone());
+            let track_meta = track_meta;
+            trace!("got track_id: {track_meta:#?}");
 
-            let need = track_id_playing.is_none()
-                || track_id_playing.as_ref().is_some_and(|p| p != track_id);
+            let need = track_meta_playing.is_none()
+                || track_meta_playing.as_ref().is_some_and(|p| p != track_meta);
 
             *metainfo = Some(track_meta.clone());
             *paused = false;
