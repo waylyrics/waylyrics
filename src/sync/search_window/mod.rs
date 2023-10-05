@@ -223,21 +223,28 @@ impl Window {
 
     fn setup_factory(&self) {
         let imp = self.imp();
-        connect_factory(&imp.result_title, |result| result.title());
-        connect_factory(&imp.result_singer, |result| result.singer());
-        connect_factory(&imp.result_album, |result| result.album());
-        connect_factory(&imp.result_length, |result| format_length(result.length()));
+        connect_factory(&imp.result_title, |result| result.title(), true);
+        connect_factory(&imp.result_singer, |result| result.singer(), false);
+        connect_factory(&imp.result_album, |result| result.album(), true);
+        connect_factory(
+            &imp.result_length,
+            |result| format_length(result.length()),
+            false,
+        );
     }
 }
 
 fn connect_factory(
     column: &ColumnViewColumn,
     get_field: impl 'static + Fn(ResultObject) -> String,
+    wrap: bool,
 ) {
     let factory = gtk::SignalListItemFactory::new();
     factory.connect_setup(move |_, list_item| {
         let label = gtk::Label::new(None);
         label.set_halign(gtk::Align::Start);
+        label.set_wrap(wrap);
+        label.set_wrap_mode(gtk::pango::WrapMode::Word);
         list_item
             .downcast_ref::<ListItem>()
             .expect("Needs to be ListItem")
