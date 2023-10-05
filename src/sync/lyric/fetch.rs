@@ -16,13 +16,18 @@ use crate::sync::utils;
 pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
     let title = track_meta.title.as_str();
     let album = track_meta.album.as_ref().map(|album| album.as_str());
-    let artists = track_meta.meta.artists();
-    let artists = artists.as_deref();
-    let length = track_meta.meta.length();
-
-    let artists_str = artists
+    let artists = &track_meta.artists;
+    let length = track_meta.length;
+    
+    let artists_str = artists.as_ref()
         .map(|s| Cow::Owned(s.join(",")))
         .unwrap_or(Cow::Borrowed("Unknown"));
+    
+    let artists = if let Some(artists) = artists {
+        artists.iter().map(|s|s.as_str()).collect()
+    } else {
+        vec![]
+    };
 
     if let Some(result) = tricks::get_accurate_lyric(title, &artists_str, window) {
         info!("fetched lyric directly");
@@ -35,7 +40,7 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
             let provider_id = provider.provider_unique_name();
             let tracks = match provider.search_song_detailed(
                 album.unwrap_or_default(),
-                artists.unwrap_or_default(),
+                &artists,
                 title,
             ) {
                 Ok(songs) => songs,

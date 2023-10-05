@@ -42,9 +42,14 @@ pub fn register_action_search_lyric(app: &Application, wind: &app::Window, trigg
         // Get current playing track
         let query_default = TRACK_PLAYING_STATE.with_borrow(|TrackState { metainfo, .. }| {
             metainfo.as_ref().map(|track| {
+                let artists = if let Some(artists) = track.artists.as_ref() {
+                    artists.iter().map(|s| s.as_str()).collect()
+                } else {
+                    vec![]
+                };
                 default_search_query(
-                    track.meta.album_name().unwrap_or_default(),
-                    &track.meta.artists().unwrap_or_default(),
+                    track.album.as_ref().map(|s| s.as_str()).unwrap_or_default(),
+                    &artists,
                     &track.title,
                 )
             })

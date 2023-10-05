@@ -66,8 +66,6 @@ Qcm, Feeluown-netease, ElectronNCM, YesPlayMusic，可以直接拿歌曲id
 | ------------------------- | --- | ------------------ |
 | [netease-cloud-music-gtk] | X   | 播放位置固定给0    |
 | Firefox                   | X   | 不提供播放位置调用 |
-| Chrom*                    | X   | TrackID不唯一      |
-| [youtube-music]           | X   | TrackID不唯一      |
 | qqmusic                   | O   | 什么都不给         |
 | [flutter-netease-music]   | X   | 完全不支持mpris    |
 
