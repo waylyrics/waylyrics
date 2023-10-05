@@ -36,10 +36,18 @@ impl TryFrom<Metadata> for TrackMeta {
             .ok_or(())
             .map_err(|_| PlayerStatus::Unsupported("cannot get title"))?
             .to_string();
+        let album = meta.album_name().map(ToOwned::to_owned);
+        let artists: Option<Vec<_>> = meta
+            .artists()
+            .map(|v| v.iter().map(ToString::to_string).collect());
+        let length = meta.length();
 
         Ok(Self {
             track_id,
             title,
+            album,
+            artists,
+            length,
             meta,
         })
     }

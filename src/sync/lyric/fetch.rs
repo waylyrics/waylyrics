@@ -14,8 +14,8 @@ use crate::{app, LYRIC_PROVIDERS};
 use crate::sync::utils;
 
 pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
-    let title = &track_meta.title;
-    let album = track_meta.meta.album_name();
+    let title = track_meta.title.as_str();
+    let album = track_meta.album.as_ref().map(|album| album.as_str());
     let artists = track_meta.meta.artists();
     let artists = artists.as_deref();
     let length = track_meta.meta.length();
@@ -35,7 +35,7 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
             let provider_id = provider.provider_unique_name();
             let tracks = match provider.search_song_detailed(
                 album.unwrap_or_default(),
-                artists.unwrap_or(&[]),
+                artists.unwrap_or_default(),
                 title,
             ) {
                 Ok(songs) => songs,

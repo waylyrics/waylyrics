@@ -1,5 +1,6 @@
 use std::cell::RefCell;
 use std::path::PathBuf;
+use std::time::Duration;
 
 use mpris::{Player, PlayerFinder};
 
@@ -18,6 +19,9 @@ pub use lyric::scroll::register_lyric_display;
 pub struct TrackMeta {
     pub track_id: mpris::TrackID,
     pub title: String,
+    pub album: Option<String>,
+    pub artists: Option<Vec<String>>,
+    pub length: Option<Duration>,
     pub meta: mpris::Metadata,
 }
 

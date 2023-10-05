@@ -13,9 +13,9 @@ use crate::{app, lyric_providers::LyricOwned, CACHE_DIR};
 /// Note that window.imp().cache_lyrics controls whether to cache lyrics.
 pub fn get_cache_path(track_meta: &TrackMeta) -> PathBuf {
     let title = &track_meta.title;
-    let album = track_meta.meta.album_name();
-    let artists = track_meta.meta.artists();
-    let length = track_meta.meta.length();
+    let album = &track_meta.album;
+    let artists = &track_meta.artists;
+    let length = track_meta.length;
 
     let digest = md5::compute(format!("{title}-{artists:?}-{album:?}-{length:?}"));
 

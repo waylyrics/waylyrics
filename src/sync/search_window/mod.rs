@@ -259,7 +259,7 @@ fn connect_factory(
 
         label.set_label(&get_field(result_object));
     });
-    
+
     column.set_factory(Some(&factory));
 }
 
