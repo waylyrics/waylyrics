@@ -135,8 +135,8 @@
 <span class="kw">use </span><span class="kw">crate</span>::sync::utils;
 
 <span class="kw">pub fn </span>fetch_lyric(track_meta: <span class="kw-2">&amp;</span>TrackMeta, window: <span class="kw-2">&amp;</span>app::Window) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
-    <span class="kw">let </span>title = <span class="kw-2">&amp;</span>track_meta.title;
-    <span class="kw">let </span>album = track_meta.meta.album_name();
+    <span class="kw">let </span>title = track_meta.title.as_str();
+    <span class="kw">let </span>album = track_meta.album.as_ref().map(|album| album.as_str());
     <span class="kw">let </span>artists = track_meta.meta.artists();
     <span class="kw">let </span>artists = artists.as_deref();
     <span class="kw">let </span>length = track_meta.meta.length();
@@ -156,7 +156,7 @@
             <span class="kw">let </span>provider_id = provider.provider_unique_name();
             <span class="kw">let </span>tracks = <span class="kw">match </span>provider.search_song_detailed(
                 album.unwrap_or_default(),
-                artists.unwrap_or(<span class="kw-2">&amp;</span>[]),
+                artists.unwrap_or_default(),
                 title,
             ) {
                 <span class="prelude-val">Ok</span>(songs) =&gt; songs,

@@ -117,9 +117,9 @@
 /// Note that window.imp().cache_lyrics controls whether to cache lyrics.
 </span><span class="kw">pub fn </span>get_cache_path(track_meta: <span class="kw-2">&amp;</span>TrackMeta) -&gt; PathBuf {
     <span class="kw">let </span>title = <span class="kw-2">&amp;</span>track_meta.title;
-    <span class="kw">let </span>album = track_meta.meta.album_name();
-    <span class="kw">let </span>artists = track_meta.meta.artists();
-    <span class="kw">let </span>length = track_meta.meta.length();
+    <span class="kw">let </span>album = <span class="kw-2">&amp;</span>track_meta.album;
+    <span class="kw">let </span>artists = <span class="kw-2">&amp;</span>track_meta.artists;
+    <span class="kw">let </span>length = track_meta.length;
 
     <span class="kw">let </span>digest = md5::compute(<span class="macro">format!</span>(<span class="string">&quot;{title}-{artists:?}-{album:?}-{length:?}&quot;</span>));
 
