@@ -43,6 +43,7 @@ fn build_ui(app: &Application) -> Result<()> {
 
     let (config_path, theme_dir) = init_dirs()?;
 
+    tracing::debug!("config path: {:?}", config_path);
     let config = std::fs::read_to_string(&config_path)?;
     let config: Config = toml::from_str(&config).unwrap();
     std::fs::write(&config_path, toml::to_string(&config)?)?;
@@ -82,6 +83,7 @@ fn build_ui(app: &Application) -> Result<()> {
         global_theme
     };
 
+    tracing::debug!("theme path: {:?}", theme_path);
     let css_style = std::fs::read_to_string(&theme_path)?;
     app::utils::merge_css(&css_style);
     THEME_PATH.set(theme_path);
