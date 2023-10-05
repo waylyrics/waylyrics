@@ -220,7 +220,6 @@
 <a href="#220" id="220">220</a>
 <a href="#221" id="221">221</a>
 <a href="#222" id="222">222</a>
-<a href="#223" id="223">223</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::time::{Duration, SystemTime};
 
 <span class="kw">use </span>gtk::{
@@ -271,7 +270,6 @@
             album,
             artists,
             length,
-            meta,
         })
     }
 }
@@ -293,12 +291,12 @@
              paused,
              cache_path,
          }| {
-            <span class="kw">let </span>track_id_playing = metainfo.as_ref().map(|t| t.track_id.clone());
-            <span class="kw">let </span>track_id = <span class="kw-2">&amp;</span>track_meta.track_id;
-            <span class="macro">trace!</span>(<span class="string">&quot;got track_id: {track_id}&quot;</span>);
+            <span class="kw">let </span>track_meta_playing = metainfo.as_ref().map(|t| t.clone());
+            <span class="kw">let </span>track_meta = track_meta;
+            <span class="macro">trace!</span>(<span class="string">&quot;got track_id: {track_meta:#?}&quot;</span>);
 
-            <span class="kw">let </span>need = track_id_playing.is_none()
-                || track_id_playing.as_ref().is_some_and(|p| p != track_id);
+            <span class="kw">let </span>need = track_meta_playing.is_none()
+                || track_meta_playing.as_ref().is_some_and(|p| p != track_meta);
 
             <span class="kw-2">*</span>metainfo = <span class="prelude-val">Some</span>(track_meta.clone());
             <span class="kw-2">*</span>paused = <span class="bool-val">false</span>;
