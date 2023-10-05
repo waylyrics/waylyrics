@@ -268,6 +268,13 @@
 <a href="#268" id="268">268</a>
 <a href="#269" id="269">269</a>
 <a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
+<a href="#272" id="272">272</a>
+<a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>imp;
 
 <span class="kw">use </span>glib::Object;
@@ -493,21 +500,28 @@
 
     <span class="kw">fn </span>setup_factory(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">let </span>imp = <span class="self">self</span>.imp();
-        connect_factory(<span class="kw-2">&amp;</span>imp.result_title, |result| result.title());
-        connect_factory(<span class="kw-2">&amp;</span>imp.result_singer, |result| result.singer());
-        connect_factory(<span class="kw-2">&amp;</span>imp.result_album, |result| result.album());
-        connect_factory(<span class="kw-2">&amp;</span>imp.result_length, |result| format_length(result.length()));
+        connect_factory(<span class="kw-2">&amp;</span>imp.result_title, |result| result.title(), <span class="bool-val">true</span>);
+        connect_factory(<span class="kw-2">&amp;</span>imp.result_singer, |result| result.singer(), <span class="bool-val">false</span>);
+        connect_factory(<span class="kw-2">&amp;</span>imp.result_album, |result| result.album(), <span class="bool-val">true</span>);
+        connect_factory(
+            <span class="kw-2">&amp;</span>imp.result_length,
+            |result| format_length(result.length()),
+            <span class="bool-val">false</span>,
+        );
     }
 }
 
 <span class="kw">fn </span>connect_factory(
     column: <span class="kw-2">&amp;</span>ColumnViewColumn,
     get_field: <span class="kw">impl </span><span class="lifetime">&#39;static </span>+ Fn(ResultObject) -&gt; String,
+    wrap: bool,
 ) {
     <span class="kw">let </span>factory = gtk::SignalListItemFactory::new();
     factory.connect_setup(<span class="kw">move </span>|<span class="kw">_</span>, list_item| {
         <span class="kw">let </span>label = gtk::Label::new(<span class="prelude-val">None</span>);
         label.set_halign(gtk::Align::Start);
+        label.set_wrap(wrap);
+        label.set_wrap_mode(gtk::pango::WrapMode::Word);
         list_item
             .downcast_ref::&lt;ListItem&gt;()
             .expect(<span class="string">&quot;Needs to be ListItem&quot;</span>)
