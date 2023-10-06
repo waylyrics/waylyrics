@@ -1,43 +1,38 @@
 use anyhow::Result;
-use async_compat::CompatExt;
 use std::time::Duration;
 
-use ncmapi::{
-    types::{Album, Artist, Song},
-    NcmApi,
-};
+use ncmapi::types::{Album, Artist, Song};
 
 use ncmapi::types::{LyricResp, SearchSongResp};
+
+use crate::NETEASE_API_CLIENT;
 
 use super::{default_search_query, Lyric, LyricOwned, LyricStore};
 
 pub struct NeteaseLyricProvider;
 
+#[async_trait::async_trait]
 impl super::LyricProvider for NeteaseLyricProvider {
-    fn provider_unique_name(&self) -> &'static str {
+    fn unique_name(&self) -> &'static str {
         "网易云音乐"
     }
-    fn search_song_detailed(
+    async fn search_song_detailed(
         &self,
         album: &str,
         artists: &[&str],
         title: &str,
     ) -> Result<Vec<super::SongInfo>> {
         let keyword = default_search_query(album, artists, title);
-        self.search_song(&keyword)
+        self.search_song(&keyword).await
     }
 
-    fn query_lyric(&self, id: &str) -> Result<LyricStore> {
-        let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
-        let api = NcmApi::new(
-            false,
-            Duration::from_secs(60 * 60),
-            Duration::from_secs(5 * 60),
-            true,
-            &cookie_path,
-        );
+    async fn query_lyric(&self, id: &str) -> Result<LyricStore> {
+        let api = NETEASE_API_CLIENT.with_borrow(|api| {
+            api.clone()
+                .ok_or(anyhow::anyhow!("ncm client must be iniitalized"))
+        })?;
         let id = id.parse()?;
-        let query_result = smol::block_on(async { api.lyric(id).compat().await })?;
+        let query_result = api.lyric(id).await?;
 
         let lyric_resp: LyricResp = query_result.deserialize()?;
 
@@ -49,18 +44,14 @@ impl super::LyricProvider for NeteaseLyricProvider {
         })
     }
 
-    fn search_song(&self, keyword: &str) -> Result<Vec<super::SongInfo>> {
+    async fn search_song(&self, keyword: &str) -> Result<Vec<super::SongInfo>> {
         tracing::debug!("search keyword: {keyword}");
 
-        let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
-        let api = NcmApi::new(
-            false,
-            Duration::from_secs(60 * 60),
-            Duration::from_secs(5 * 60),
-            true,
-            &cookie_path,
-        );
-        let search_result = smol::block_on(async { api.search(&keyword, None).compat().await })?;
+        let api = NETEASE_API_CLIENT.with_borrow(|api| {
+            api.clone()
+                .ok_or(anyhow::anyhow!("ncm client must be iniitalized"))
+        })?;
+        let search_result = api.search(&keyword, None).await?;
         let resp: SearchSongResp = search_result.deserialize()?;
         tracing::debug!("search result: {resp:?}");
 

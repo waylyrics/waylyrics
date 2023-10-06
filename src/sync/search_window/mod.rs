@@ -107,7 +107,7 @@ impl Window {
         self.set_child(Some(&imp.vbox));
     }
 
-    fn search(&self) {
+    async fn search(&self) {
         let buffer = self.imp().input.buffer();
         let query = buffer.text().to_string();
         if query.is_empty() {
@@ -115,29 +115,41 @@ impl Window {
         }
 
         let mut results = vec![];
-        LYRIC_PROVIDERS.with_borrow(|providers| {
+        let mut set = LYRIC_PROVIDERS.with_borrow(|providers| {
+            let mut set = tokio::task::JoinSet::new();
             for (idx, provider) in providers.iter().enumerate() {
-                let provider_id = provider.provider_unique_name();
-                let tracks = match provider.search_song(&query) {
-                    Ok(songs) => songs,
-                    Err(e) => {
-                        // TODO: to show errors to users in GUI
-                        error!("{e} occurs when search {query} on {}", provider_id);
-                        continue;
-                    }
-                };
-                for track in tracks {
-                    results.push(ResultObject::new(
+                let query = query.clone();
+                let provider = provider.clone();
+                set.spawn(async move { (provider.search_song(&query).await, idx, provider) });
+            }
+            set
+        });
+
+        while let Some(track) = set.join_next().await {
+            let Ok(track_result) = track else {
+                return;
+            };
+            match track_result {
+                (Ok(tracks), idx, _) => results.extend(tracks.into_iter().map(|track| {
+                    ResultObject::new(
                         track.id,
                         track.title,
                         track.singer,
                         track.album.unwrap_or_default(),
                         track.length.as_secs(),
                         idx,
-                    ));
+                    )
+                })),
+                (Err(e), _, provider) => {
+                    error!(
+                        "{e} occurs on searching song from {}",
+                        provider.unique_name()
+                    )
                 }
             }
-        });
+            // for track in tracks {
+            // }
+        }
         self.results().remove_all();
         if results.is_empty() {
             show_dialog(Some(self), "No result found.", gtk::MessageType::Error);
@@ -171,12 +183,16 @@ impl Window {
         let imp = self.imp();
         imp.input
             .connect_activate(clone!(@weak self as window => move |_| {
-                window.search();
+                gidle_future::spawn(async move {
+                    window.search().await;
+                });
             }));
 
         imp.input
             .connect_icon_release(clone!(@weak self as window => move |_, _| {
-                window.search();
+                gidle_future::spawn(async move {
+                    window.search().await;
+                });
             }));
 
         imp.set_button
@@ -194,7 +210,8 @@ impl Window {
                     }
                     let provider = providers[provider_idx].as_ref();
                     let song_id = result.id();
-                    match provider.query_lyric(&song_id) {
+                    let handle = tokio::runtime::Handle::current();
+                    match handle.block_on(provider.query_lyric(&song_id)) {
                         Ok(lyric) => {
                             let olyric = provider.get_lyric(&lyric);
                             let tlyric = provider.get_translated_lyric(&lyric);

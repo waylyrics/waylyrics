@@ -20,6 +20,7 @@ pub fn get_accurate_lyric(
             .as_ref()
             .expect("player not exists in lyric fetching");
         let player_name = player.identity();
+        let handle = tokio::runtime::Handle::current();
         match player_name {
             "mpv" => {
                 tracing::warn!("local lyric files are still unsupported");
@@ -32,7 +33,7 @@ pub fn get_accurate_lyric(
             })
             .map(|song_id| {
                 let provider = NeteaseLyricProvider;
-                let lyric = provider.query_lyric(&song_id)?;
+                let lyric = handle.block_on(provider.query_lyric(&song_id))?;
                 let olyric = provider.get_lyric(&lyric);
                 let tlyric = provider.get_translated_lyric(&lyric);
                 set_lyric(olyric, tlyric, title, artists, window)
@@ -42,7 +43,7 @@ pub fn get_accurate_lyric(
             })
             .map(|song_id| {
                 let provider = NeteaseLyricProvider;
-                let lyric = provider.query_lyric(&song_id)?;
+                let lyric = handle.block_on(provider.query_lyric(&song_id))?;
                 let olyric = provider.get_lyric(&lyric);
                 let tlyric = provider.get_translated_lyric(&lyric);
                 set_lyric(olyric, tlyric, title, artists, window)
@@ -53,7 +54,7 @@ pub fn get_accurate_lyric(
                 })
                 .map(|song_id| {
                     let provider = QQMusicLyricProvider;
-                    let lyric = provider.query_lyric(&song_id)?;
+                    let lyric = handle.block_on(provider.query_lyric(&song_id))?;
                     let olyric = provider.get_lyric(&lyric);
                     let tlyric = provider.get_translated_lyric(&lyric);
                     set_lyric(olyric, tlyric, title, artists, window)
@@ -63,7 +64,7 @@ pub fn get_accurate_lyric(
                 get_song_id_from_player(player, |meta| meta.url()?.strip_prefix("/trackid/")).map(
                     |song_id| {
                         let provider = NeteaseLyricProvider;
-                        let lyric = provider.query_lyric(&song_id)?;
+                        let lyric = handle.block_on(provider.query_lyric(&song_id))?;
                         let olyric = provider.get_lyric(&lyric);
                         let tlyric = provider.get_translated_lyric(&lyric);
                         set_lyric(olyric, tlyric, title, artists, window)

@@ -1,10 +1,11 @@
 mod tricks;
 
 use anyhow::Result;
+use gtk::subclass::prelude::ObjectSubclassIsExt;
 use std::borrow::Cow;
+use std::sync::Arc;
 
 use gtk::prelude::*;
-use gtk::subclass::prelude::ObjectSubclassIsExt;
 use tracing::{debug, error, info};
 
 use crate::lyric_providers::LyricOwned;
@@ -18,13 +19,14 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
     let album = track_meta.album.as_ref().map(|album| album.as_str());
     let artists = &track_meta.artists;
     let length = track_meta.length;
-    
-    let artists_str = artists.as_ref()
+
+    let artists_str = artists
+        .as_ref()
         .map(|s| Cow::Owned(s.join(",")))
         .unwrap_or(Cow::Borrowed("Unknown"));
-    
+
     let artists = if let Some(artists) = artists {
-        artists.iter().map(|s|s.as_str()).collect()
+        artists.iter().map(|s| s.as_str()).collect()
     } else {
         vec![]
     };
@@ -35,32 +37,38 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
     }
 
     let mut results: Vec<(usize, String, u8)> = vec![];
-    LYRIC_PROVIDERS.with_borrow(|providers| {
-        for (idx, provider) in providers.iter().enumerate() {
-            let provider_id = provider.provider_unique_name();
-            let tracks = match provider.search_song_detailed(
-                album.unwrap_or_default(),
-                &artists,
-                title,
-            ) {
-                Ok(songs) => songs,
-                Err(e) => {
-                    error!("{e} occurs when search {title} on {}", provider_id);
-                    continue;
-                }
-            };
+    let artists = Arc::new(artists);
+    let providers = LYRIC_PROVIDERS.with_borrow(|providers| providers.clone());
+    let length_toleration_ms = window.imp().length_toleration_ms.get();
 
-            let length_toleration_ms = window.imp().length_toleration_ms.get();
-            if let Some((song_id, weight)) = utils::match_likely_lyric(
-                album.zip(Some(title)),
-                length,
-                &tracks,
-                length_toleration_ms,
-            ) {
-                info!("matched {song_id} from {}", provider_id);
-                results.push((idx, song_id.to_string(), weight));
+    tokio_scoped::scope(|s| {
+        s.spawn(async {
+            for (idx, provider) in providers.iter().enumerate() {
+                let provider_id = provider.unique_name();
+                let artists = artists.clone();
+
+                let search = provider
+                    .search_song_detailed(album.unwrap_or_default(), &artists, title)
+                    .await;
+                let tracks = match search {
+                    Ok(songs) => songs,
+                    Err(e) => {
+                        error!("{e} occurs when search {title} on {}", provider_id);
+                        continue;
+                    }
+                };
+
+                if let Some((song_id, weight)) = utils::match_likely_lyric(
+                    album.zip(Some(title)),
+                    length,
+                    &tracks,
+                    length_toleration_ms,
+                ) {
+                    info!("matched {song_id} from {}", provider_id);
+                    results.push((idx, song_id.to_string(), weight));
+                }
             }
-        }
+        });
     });
 
     if results.is_empty() {
@@ -72,9 +80,9 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
     results.sort_by_key(|(_, _, weight)| *weight);
 
     for (platform_idx, song_id, _) in results {
-        let fetch_result = LYRIC_PROVIDERS.with_borrow(|providers| {
-            let provider = &providers[platform_idx];
-            match provider.query_lyric(&song_id) {
+        let provider = LYRIC_PROVIDERS.with_borrow(|p| p[platform_idx].clone());
+        let fetch_result = {
+            match tokio::runtime::Handle::current().block_on(provider.query_lyric(&song_id)) {
                 Ok(lyric) => {
                     let olyric = provider.get_lyric(&lyric);
                     let tlyric = provider.get_translated_lyric(&lyric);
@@ -83,12 +91,12 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
                 Err(e) => {
                     error!(
                         "{e} when get lyric for {title} on {}",
-                        provider.provider_unique_name()
+                        provider.unique_name()
                     );
                     Err(crate::lyric_providers::Error::NoResult)?
                 }
             }
-        });
+        };
 
         if fetch_result.is_ok() {
             return Ok(());

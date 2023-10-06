@@ -7,7 +7,7 @@ use qqmusic_rs::{
     song::{SongDetail, SongDetailResp},
     QQMusicApi, SongId,
 };
-use reqwest::blocking::Client;
+use reqwest::Client;
 
 use crate::{
     lyric_providers::{default_search_query, SongInfo},
@@ -19,22 +19,23 @@ use super::{Lyric, LyricOwned, LyricStore};
 #[derive(Clone, Copy)]
 pub struct QQMusicLyricProvider;
 
+#[async_trait::async_trait]
 impl super::LyricProvider for QQMusicLyricProvider {
-    fn provider_unique_name(&self) -> &'static str {
+    fn unique_name(&self) -> &'static str {
         "QQ音乐"
     }
 
-    fn search_song_detailed(
+    async fn search_song_detailed(
         &self,
         _album: &str,
         artists: &[&str],
         title: &str,
     ) -> Result<Vec<SongInfo>> {
         let keyword = default_search_query("", artists, title);
-        self.search_song(&keyword)
+        self.search_song(&keyword).await
     }
 
-    fn query_lyric(&self, id: &str) -> Result<LyricStore> {
+    async fn query_lyric(&self, id: &str) -> Result<LyricStore> {
         let client = Client::builder().user_agent("Waylyrics/0.1").build()?;
 
         // might be a little tricky
@@ -44,69 +45,64 @@ impl super::LyricProvider for QQMusicLyricProvider {
             SongId::Songmid(id)
         };
 
-        QQMUSIC_API_CLIENT.with_borrow(|api| {
-            let Some(api) = api.as_ref() else {
-                return Err(Error::ApiClientNotInit)?;
-            };
+        let api =
+            QQMUSIC_API_CLIENT.with_borrow(|api| api.clone().ok_or(Error::ApiClientNotInit))?;
 
-            let mid = match songid {
-                SongId::Songmid(mid) => mid.to_owned(),
-                SongId::Songid(id) => get_songmid(api, &client, id)?,
-            };
+        let mid = match songid {
+            SongId::Songmid(mid) => mid.to_owned(),
+            SongId::Songid(id) => get_songmid(&api, &client, id).await?,
+        };
 
-            let url = api.query_lyric(&mid);
-            let resp: QueryLyricResp =
-                serde_json::from_slice(client.get(url).send()?.bytes()?.as_ref())?;
+        let url = api.query_lyric(&mid);
+        let resp: QueryLyricResp =
+            serde_json::from_slice(client.get(url).send().await?.bytes().await?.as_ref())?;
 
-            Ok(LyricStore {
-                lyric: Some(resp.data.lyric),
-                tlyric: Some(resp.data.trans),
-            })
+        Ok(LyricStore {
+            lyric: Some(resp.data.lyric),
+            tlyric: Some(resp.data.trans),
         })
     }
 
-    fn search_song(&self, keyword: &str) -> Result<Vec<SongInfo>> {
+    async fn search_song(&self, keyword: &str) -> Result<Vec<SongInfo>> {
         tracing::debug!("search keyword: {keyword}");
 
         let client = Client::builder().user_agent("Waylyrics/0.1").build()?;
 
-        QQMUSIC_API_CLIENT.with_borrow(|api| {
-            let Some(api) = api.as_ref() else {
-                return Err(Error::ApiClientNotInit)?;
-            };
+        let api =
+            QQMUSIC_API_CLIENT.with_borrow(|api| api.clone().ok_or(Error::ApiClientNotInit))?;
 
-            let url = api.search::<Track>(&keyword, None, None);
-            let resp: <Track as SearchType>::Resp =
-                serde_json::from_slice(client.get(url).send()?.bytes()?.as_ref())?;
+        let url = api.search::<Track>(&keyword, None, None);
+        let resp: <Track as SearchType>::Resp =
+            serde_json::from_slice(client.get(url).send().await?.bytes().await?.as_ref())?;
 
-            Ok(resp
-                .data
-                .list
-                .into_iter()
-                .map(|song| SongInfo {
-                    id: song.songmid,
-                    title: song.songname,
-                    singer: song.singer.iter().map(|singer| &singer.name).fold(
-                        String::new(),
-                        |mut s, op| {
-                            if !s.is_empty() {
-                                s.push(',')
-                            }
-                            s += &op;
-                            s
-                        },
-                    ),
-                    album: Some(song.albumname),
-                    length: Duration::from_secs(song.interval as _),
-                })
-                .collect())
-        })
+        Ok(resp
+            .data
+            .list
+            .into_iter()
+            .map(|song| SongInfo {
+                id: song.songmid,
+                title: song.songname,
+                singer: song.singer.iter().map(|singer| &singer.name).fold(
+                    String::new(),
+                    |mut s, op| {
+                        if !s.is_empty() {
+                            s.push(',')
+                        }
+                        s += &op;
+                        s
+                    },
+                ),
+                album: Some(song.albumname),
+                length: Duration::from_secs(song.interval as _),
+            })
+            .collect())
     }
 }
 
-fn get_songmid(api: &QQMusicApi, client: &Client, songid: &str) -> Result<String> {
+async fn get_songmid(api: &QQMusicApi, client: &Client, songid: &str) -> Result<String> {
     let url = api.song_detail(SongId::Songid(songid));
-    let resp: SongDetailResp = serde_json::from_slice(client.get(url).send()?.bytes()?.as_ref())?;
+    let resp: SongDetailResp =
+        serde_json::from_slice(client.get(url).send().await?.bytes().await?.as_ref())?;
     Ok(resp.data.track_info.mid)
 }
 

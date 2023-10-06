@@ -3,18 +3,21 @@
 
 use std::path::PathBuf;
 use std::str::FromStr;
+use std::sync::Arc;
+use std::time::Duration;
 
 use gtk::prelude::*;
 use gtk::{glib, Application};
 
 use anyhow::Result;
 
+use ncmapi::NcmApi;
 use qqmusic_rs::QQMusicApi;
 use regex::RegexSet;
 use waylyrics::app::{self, build_main_window};
 use waylyrics::config::{Config, Triggers};
 use waylyrics::lyric_providers::utils::register_provider;
-use waylyrics::{utils, EXCLUDED_REGEXES, QQMUSIC_API_CLIENT, THEME_PATH};
+use waylyrics::{utils, EXCLUDED_REGEXES, NETEASE_API_CLIENT, QQMUSIC_API_CLIENT, THEME_PATH};
 
 use waylyrics::sync::*;
 
@@ -25,7 +28,8 @@ use utils::{
     register_action_switch_passthrough, register_sigusr2_decoration,
 };
 
-fn main() -> Result<glib::ExitCode> {
+#[tokio::main]
+async fn main() -> Result<glib::ExitCode> {
     tracing_subscriber::fmt::init();
     tracing::info!("process id: {}", std::process::id());
 
@@ -117,8 +121,15 @@ fn build_ui(app: &Application) -> Result<()> {
 
     if let Some(base_url) = qqmusic_api_base_url {
         let base_url = url::Url::from_str(&base_url)?;
-        QQMUSIC_API_CLIENT.set(Some(QQMusicApi::new(base_url)));
+        QQMUSIC_API_CLIENT.set(Some(Arc::new(QQMusicApi::new(base_url))));
     }
+    NETEASE_API_CLIENT.set(Some(Arc::new(NcmApi::new(
+        false,
+        Duration::from_millis(0),
+        Duration::from_millis(0),
+        true,
+        &waylyrics::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie"),
+    ))));
 
     for source in lyric_search_source {
         register_provider(&source);

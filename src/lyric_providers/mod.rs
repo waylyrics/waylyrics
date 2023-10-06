@@ -45,16 +45,17 @@ pub struct SongInfo {
     pub length: Duration,
 }
 
-pub trait LyricProvider: LyricParse {
-    fn query_lyric(&self, id: &str) -> Result<LyricStore>;
-    fn search_song_detailed(
+#[async_trait::async_trait]
+pub trait LyricProvider: LyricParse + Send + Sync {
+    async fn query_lyric(&self, id: &str) -> Result<LyricStore>;
+    async fn search_song_detailed(
         &self,
         album: &str,
         artists: &[&str],
         title: &str,
     ) -> Result<Vec<SongInfo>>;
-    fn search_song(&self, keyword: &str) -> Result<Vec<SongInfo>>;
-    fn provider_unique_name(&self) -> &'static str;
+    async fn search_song(&self, keyword: &str) -> Result<Vec<SongInfo>>;
+    fn unique_name(&self) -> &'static str;
 }
 
 pub trait LyricParse {

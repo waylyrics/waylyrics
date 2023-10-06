@@ -2,9 +2,10 @@
 #![feature(local_key_cell_methods)]
 #![feature(is_some_and)]
 
-use std::{cell::RefCell, path::PathBuf};
+use std::{cell::RefCell, path::PathBuf, sync::Arc};
 
 use lyric_providers::LyricProvider;
+use ncmapi::NcmApi;
 use qqmusic_rs::QQMusicApi;
 use regex::RegexSet;
 
@@ -22,8 +23,9 @@ thread_local! {
     pub static THEME_PATH: RefCell<PathBuf> = RefCell::new(PathBuf::new());
     pub static EXCLUDED_REGEXES: RefCell<RegexSet> = RefCell::new(RegexSet::empty());
 
-    pub static LYRIC_PROVIDERS: RefCell<Vec<Box<dyn LyricProvider>>> = RefCell::new(vec![]);
-    pub static QQMUSIC_API_CLIENT: RefCell<Option<QQMusicApi>> = RefCell::new(None);
+    pub static LYRIC_PROVIDERS: RefCell<Vec<Arc<dyn LyricProvider>>> = RefCell::new(vec![]);
+    pub static QQMUSIC_API_CLIENT: RefCell<Option<Arc<QQMusicApi>>> = RefCell::new(None);
+    pub static NETEASE_API_CLIENT: RefCell<Option<Arc<NcmApi>>> = RefCell::new(None);
 }
 
 pub const DEFAULT_TEXT: &str = "Waylyrics";
