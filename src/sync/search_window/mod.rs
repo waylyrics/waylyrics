@@ -91,11 +91,14 @@ impl Window {
         imp.result_title.set_title(Some("Title"));
         imp.result_list.append_column(&imp.result_title);
         imp.result_title.set_expand(true);
+        imp.result_title.set_resizable(true);
 
         imp.result_singer.set_title(Some("Singer"));
         imp.result_list.append_column(&imp.result_singer);
+        imp.result_singer.set_resizable(true);
         imp.result_album.set_title(Some("Album"));
         imp.result_list.append_column(&imp.result_album);
+        imp.result_album.set_resizable(true);
         imp.result_length.set_title(Some("Length"));
         imp.result_list.append_column(&imp.result_length);
 
