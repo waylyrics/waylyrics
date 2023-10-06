@@ -18,13 +18,14 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
     let album = track_meta.album.as_ref().map(|album| album.as_str());
     let artists = &track_meta.artists;
     let length = track_meta.length;
-    
-    let artists_str = artists.as_ref()
+
+    let artists_str = artists
+        .as_ref()
         .map(|s| Cow::Owned(s.join(",")))
         .unwrap_or(Cow::Borrowed("Unknown"));
-    
+
     let artists = if let Some(artists) = artists {
-        artists.iter().map(|s|s.as_str()).collect()
+        artists.iter().map(|s| s.as_str()).collect()
     } else {
         vec![]
     };
@@ -38,17 +39,14 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
     LYRIC_PROVIDERS.with_borrow(|providers| {
         for (idx, provider) in providers.iter().enumerate() {
             let provider_id = provider.provider_unique_name();
-            let tracks = match provider.search_song_detailed(
-                album.unwrap_or_default(),
-                &artists,
-                title,
-            ) {
-                Ok(songs) => songs,
-                Err(e) => {
-                    error!("{e} occurs when search {title} on {}", provider_id);
-                    continue;
-                }
-            };
+            let tracks =
+                match provider.search_song_detailed(album.unwrap_or_default(), &artists, title) {
+                    Ok(songs) => songs,
+                    Err(e) => {
+                        error!("{e} occurs when search {title} on {}", provider_id);
+                        continue;
+                    }
+                };
 
             let length_toleration_ms = window.imp().length_toleration_ms.get();
             if let Some((song_id, weight)) = utils::match_likely_lyric(
@@ -57,7 +55,7 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
                 &tracks,
                 length_toleration_ms,
             ) {
-                info!("matched {song_id} from {}", provider_id);
+                info!("matched {song_id} on {provider_id} with weight {weight}");
                 results.push((idx, song_id.to_string(), weight));
             }
         }
