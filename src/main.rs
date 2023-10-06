@@ -18,6 +18,10 @@ use waylyrics::{utils, EXCLUDED_REGEXES, QQMUSIC_API_CLIENT, THEME_PATH};
 
 use waylyrics::sync::*;
 
+use tracing_subscriber::filter::{EnvFilter, LevelFilter};
+use tracing_subscriber::prelude::*;
+use tracing_subscriber::{fmt, Registry};
+
 pub const THEME_PRESETS_DIR: &str = env!("WAYLYRICS_THEME_PRESETS_DIR");
 
 use utils::{
@@ -26,7 +30,16 @@ use utils::{
 };
 
 fn main() -> Result<glib::ExitCode> {
-    tracing_subscriber::fmt::init();
+    Registry::default()
+        .with(
+            EnvFilter::builder()
+                .with_default_directive(LevelFilter::INFO.into())
+                .from_env()?,
+        )
+        .with(fmt::Layer::new())
+        .with(tracing_journald::layer()?)
+        .init();
+
     tracing::info!("process id: {}", std::process::id());
 
     let app = Application::builder()
