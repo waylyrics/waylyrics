@@ -275,6 +275,9 @@
 <a href="#275" id="275">275</a>
 <a href="#276" id="276">276</a>
 <a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>imp;
 
 <span class="kw">use </span>glib::Object;
@@ -368,11 +371,14 @@
         imp.result_title.set_title(<span class="prelude-val">Some</span>(<span class="string">&quot;Title&quot;</span>));
         imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.result_title);
         imp.result_title.set_expand(<span class="bool-val">true</span>);
+        imp.result_title.set_resizable(<span class="bool-val">true</span>);
 
         imp.result_singer.set_title(<span class="prelude-val">Some</span>(<span class="string">&quot;Singer&quot;</span>));
         imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.result_singer);
+        imp.result_singer.set_resizable(<span class="bool-val">true</span>);
         imp.result_album.set_title(<span class="prelude-val">Some</span>(<span class="string">&quot;Album&quot;</span>));
         imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.result_album);
+        imp.result_album.set_resizable(<span class="bool-val">true</span>);
         imp.result_length.set_title(<span class="prelude-val">Some</span>(<span class="string">&quot;Length&quot;</span>));
         imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.result_length);
 
