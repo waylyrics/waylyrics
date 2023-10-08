@@ -16,8 +16,6 @@ use crate::app::dialog::show_dialog;
 use crate::sync::lyric::cache::update_lyric_cache;
 use crate::sync::{TrackState, LYRIC, TRACK_PLAYING_STATE};
 
-use super::utils::match_likely_lyric;
-
 glib::wrapper! {
     pub struct ResultObject(ObjectSubclass<imp::ResultObject>);
 }

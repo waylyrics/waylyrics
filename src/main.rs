@@ -158,7 +158,7 @@ fn init_dirs() -> Result<(PathBuf, PathBuf)> {
     let xdg_dirs = xdg::BaseDirectories::with_prefix("waylyrics")?;
     let config_home = xdg_dirs.get_config_home();
     let cache_dir = xdg_dirs.get_cache_home();
-    waylyrics::CONFIG_HOME.set(
+    let _ = waylyrics::CONFIG_HOME.set(
         config_home
             .to_str()
             .expect("xdg config home is not valid UTF-8")

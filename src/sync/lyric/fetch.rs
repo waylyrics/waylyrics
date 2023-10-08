@@ -2,6 +2,8 @@ mod tricks;
 
 use anyhow::Result;
 use std::borrow::Cow;
+use std::sync::Arc;
+use tokio::task::JoinSet;
 
 use gtk::prelude::*;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
@@ -11,11 +13,11 @@ use crate::lyric_providers::LyricOwned;
 use crate::sync::{TrackMeta, LYRIC};
 use crate::{app, LYRIC_PROVIDERS};
 
-use crate::sync::utils;
+use crate::sync::utils::{self, match_likely_lyric};
 
 pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
-    let title = track_meta.title.as_str();
-    let album = track_meta.album.as_ref().map(|album| album.as_str());
+    let title = Arc::new(track_meta.title.clone());
+    let album = Arc::new(track_meta.album.as_ref().map(|album| album.to_owned()));
     let artists = &track_meta.artists;
     let length = track_meta.length;
 
@@ -24,13 +26,7 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
         .map(|s| Cow::Owned(s.join(",")))
         .unwrap_or(Cow::Borrowed("Unknown"));
 
-    let artists = if let Some(artists) = artists {
-        artists.iter().map(|s| s.as_str()).collect()
-    } else {
-        vec![]
-    };
-
-    if let Some(result) = tricks::get_accurate_lyric(title, &artists_str, window) {
+    if let Some(result) = tricks::get_accurate_lyric(&title, &artists_str, window) {
         info!("fetched lyric directly");
         return result;
     }
@@ -38,57 +34,82 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
     let providers = LYRIC_PROVIDERS
         .get()
         .expect("lyric providers should be initialized");
-    for (idx, provider) in providers.iter().enumerate() {
-        let provider = provider.clone();
-        let search_task = provider.search_song_detailed(album.unwrap_or_default(), &artists, title);
+    let mut set = JoinSet::new();
 
-        // let length_toleration_ms = window.imp().length_toleration_ms.get();
-        // if let Some((song_id, weight)) = utils::match_likely_lyric(
-        //     album.zip(Some(title)),
-        //     length,
-        //     &tracks,
-        //     length_toleration_ms,
-        // ) {
-        //     info!("matched {song_id} on {provider_id} with weight {weight}");
-        //     results.push((idx, song_id.to_string(), weight));
-        // }
+    let artists = Arc::new(artists.as_ref().unwrap_or(&vec![]).clone());
+
+    let length_toleration_ms = window.imp().length_toleration_ms.get();
+    for (idx, provider) in providers.iter().enumerate() {
+        let title = title.clone();
+        let provider = provider.clone();
+        let artists = artists.clone();
+        let album = album.clone();
+
+        set.spawn(async move {
+            let artists = artists.iter().map(|s| s.as_str()).collect::<Vec<&str>>();
+            let album = album.as_deref();
+            let search_result = provider
+                .search_song_detailed(album.unwrap_or_default(), &artists, &title)
+                .await;
+            search_result.map(|songs| {
+                match_likely_lyric(
+                    album.zip(Some(&title)),
+                    length,
+                    &songs,
+                    length_toleration_ms,
+                )
+                .map(|(id, weight)| (id.to_owned(), weight, idx))
+            })
+        });
     }
 
-    // let mut results: Vec<(usize, String, u8)> = vec![];
+    let handle = tokio::runtime::Handle::current();
+    handle.block_on(async move {
+        let mut results = vec![];
+        while let Some(Ok(re)) = set.join_next().await {
+            let Ok(Some((id, weight, idx))) = re else {
+                continue;
+            };
+            results.push((id, weight, idx));
+        }
 
-    // if results.is_empty() {
-    //     info!("Failed searching for {artists_str} - {title}",);
-    //     utils::clean_lyric(window);
-    //     Err(crate::lyric_providers::Error::NoLyric)?;
-    // }
-    //
-    // results.sort_by_key(|(_, _, weight)| *weight);
-    //
-    // for (platform_idx, song_id, _) in results {
-    //     let fetch_result = LYRIC_PROVIDERS.with_borrow(|providers| {
-    //         let provider = &providers[platform_idx];
-    //         match provider.query_lyric(&song_id) {
-    //             Ok(lyric) => {
-    //                 let olyric = provider.get_lyric(&lyric);
-    //                 let tlyric = provider.get_translated_lyric(&lyric);
-    //                 Ok(set_lyric(olyric, tlyric, title, &artists_str, window))
-    //             }
-    //             Err(e) => {
-    //                 error!(
-    //                     "{e} when get lyric for {title} on {}",
-    //                     provider.unique_name()
-    //                 );
-    //                 Err(crate::lyric_providers::Error::NoResult)?
-    //             }
-    //         }
-    //     });
-    //
-    //     if fetch_result.is_ok() {
-    //         return Ok(());
-    //     }
-    // }
+        if results.is_empty() {
+            info!("Failed searching for {artists_str} - {title}",);
+            utils::clean_lyric(window);
+            Err(crate::lyric_providers::Error::NoResult)?;
+        };
 
-    Err(crate::lyric_providers::Error::NoResult)?
+        let providers = LYRIC_PROVIDERS
+            .get()
+            .expect("lyric providers should be initialized");
+
+        results.sort_by_key(|(_, _, weight)| *weight);
+
+        for (song_id, weight, platform_idx) in results {
+            let provider = &providers[platform_idx];
+            let fetch_result: anyhow::Result<()> = match provider.query_lyric(&song_id).await {
+                Ok(lyric) => {
+                    let olyric = provider.get_lyric(&lyric);
+                    let tlyric = provider.get_translated_lyric(&lyric);
+                    
+                    info!("fetched {song_id} from {} with weight {weight}", provider.unique_name());
+                    Ok(set_lyric(olyric, tlyric, &title, &artists_str, window))
+                }
+                Err(e) => {
+                    error!(
+                        "{e} when get lyric for {title} on {}",
+                        provider.unique_name()
+                    );
+                    Err(crate::lyric_providers::Error::NoResult)?
+                }
+            };
+
+            if fetch_result.is_ok() {
+                return Ok(());
+            }
+        }
+        Err(crate::lyric_providers::Error::NoResult)?
+    })
 }
 
 fn set_lyric(
@@ -114,5 +135,4 @@ fn set_lyric(
         app::get_label(window, "below").set_visible(false);
     }
     LYRIC.set((olyric, tlyric));
-
 }
