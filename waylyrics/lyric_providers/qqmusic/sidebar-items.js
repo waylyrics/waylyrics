@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Error"],"fn":["get_songmid","verify_lyric"],"struct":["QQMusicLyricProvider"]};
+window.SIDEBAR_ITEMS = {"enum":["Error"],"fn":["get_songmid","verify_lyric"],"struct":["QQMusic"]};

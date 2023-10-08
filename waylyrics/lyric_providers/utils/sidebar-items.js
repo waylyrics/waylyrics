@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["find_next_lyric","lrc_iter","register_provider"]};
+window.SIDEBAR_ITEMS = {"fn":["find_next_lyric","get_provider","lrc_iter"]};
