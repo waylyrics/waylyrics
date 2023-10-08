@@ -42,11 +42,8 @@ pub fn register_provider(provider_id: &str) {
         Box::new(NeteaseLyricProvider),
         Box::new(QQMusicLyricProvider),
     ];
+    crate::LYRIC_PROVIDERS;
     for provider in providers {
-        if provider_id == provider.provider_unique_name() {
-            crate::LYRIC_PROVIDERS.with_borrow_mut(|pro| {
-                pro.push(provider);
-            })
-        }
+        if provider_id == provider.unique_name() {}
     }
 }

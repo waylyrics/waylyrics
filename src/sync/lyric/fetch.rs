@@ -38,7 +38,7 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
     let mut results: Vec<(usize, String, u8)> = vec![];
     LYRIC_PROVIDERS.with_borrow(|providers| {
         for (idx, provider) in providers.iter().enumerate() {
-            let provider_id = provider.provider_unique_name();
+            let provider_id = provider.unique_name();
             let tracks =
                 match provider.search_song_detailed(album.unwrap_or_default(), &artists, title) {
                     Ok(songs) => songs,
@@ -81,7 +81,7 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
                 Err(e) => {
                     error!(
                         "{e} when get lyric for {title} on {}",
-                        provider.provider_unique_name()
+                        provider.unique_name()
                     );
                     Err(crate::lyric_providers::Error::NoResult)?
                 }

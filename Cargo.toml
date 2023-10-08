@@ -21,9 +21,6 @@ rust_decimal = { version = "1.32.0", default-features = false, features = [
 ] }
 rust_decimal_macros = "1.32.0"
 
-# lyric parse
-lrc-nom = "0.2.0"
-
 # ui
 gtk = { version = "0.6.6", package = "gtk4" }
 
@@ -31,11 +28,11 @@ gtk = { version = "0.6.6", package = "gtk4" }
 dbus = "0.9.7"
 mpris = "2.0.1"
 
-# lyrics
-smol = "1.3.0"
+# Lyrics
 ncmapi = "0.1.13"
-async-compat = "0.2.1"
-reqwest = { version = "0.11.20", features = ["blocking"] }
+qqmusic-rs = { git = "https://github.com/waylyrics/qqmusic-rs.git", version = "0.1.0" }
+lrc-nom = "0.2.0"
+url = "2.4.1"
 
 # logging
 tracing = "0.1.37"
@@ -53,9 +50,12 @@ xdg = "2.5.2"
 # error handling
 anyhow = "1.0.75"
 thiserror = "1.0.48"
-qqmusic-rs = { git = "https://github.com/waylyrics/qqmusic-rs.git", version = "0.1.0" }
-url = "2.4.1"
 glib-macros = "0.18.2"
+
+async-trait = "0.1.73"
+tokio = { version = "1.32.0", features = ["macros", "net", "time", "rt"] }
+reqwest = { version = "0.11.20" }
+gidle_future = "0.2.0"
 
 [features]
 vendored = ["dbus/vendored"]

@@ -110,7 +110,7 @@ impl Window {
         self.set_child(Some(&imp.vbox));
     }
 
-    fn search(&self) {
+    async fn search(&self) {
         let buffer = self.imp().input.buffer();
         let query = buffer.text().to_string();
         if query.is_empty() {
@@ -118,29 +118,29 @@ impl Window {
         }
 
         let mut results = vec![];
-        LYRIC_PROVIDERS.with_borrow(|providers| {
-            for (idx, provider) in providers.iter().enumerate() {
-                let provider_id = provider.provider_unique_name();
-                let tracks = match provider.search_song(&query) {
-                    Ok(songs) => songs,
-                    Err(e) => {
-                        // TODO: to show errors to users in GUI
-                        error!("{e} occurs when search {query} on {}", provider_id);
-                        continue;
-                    }
-                };
-                for track in tracks {
-                    results.push(ResultObject::new(
-                        track.id,
-                        track.title,
-                        track.singer,
-                        track.album.unwrap_or_default(),
-                        track.length.as_secs(),
-                        idx,
-                    ));
+        let providers = LYRIC_PROVIDERS
+            .with_borrow(|providers| providers.iter().map(|p| p.clone()).collect::<Vec<_>>());
+        for (idx, provider) in providers.iter().enumerate() {
+            let provider_id = provider.unique_name();
+            let tracks = match provider.search_song(&query).await {
+                Ok(songs) => songs,
+                Err(e) => {
+                    // TODO: to show errors to users in GUI
+                    error!("{e} occurs when search {query} on {}", provider_id);
+                    continue;
                 }
+            };
+            for track in tracks {
+                results.push(ResultObject::new(
+                    track.id,
+                    track.title,
+                    track.singer,
+                    track.album.unwrap_or_default(),
+                    track.length.as_secs(),
+                    idx,
+                ));
             }
-        });
+        }
         self.results().remove_all();
         if results.is_empty() {
             show_dialog(Some(self), "No result found.", gtk::MessageType::Error);
@@ -189,15 +189,16 @@ impl Window {
                     return;
                 };
 
-                LYRIC_PROVIDERS.with_borrow(|providers| {
-                    let provider_idx = result.provider_idx() as usize;
-                    if provider_idx >= providers.len() {
-                        error!("provider_idx {} is out of range", provider_idx);
-                        return;
-                    }
-                    let provider = providers[provider_idx].as_ref();
+                let provider_idx = result.provider_idx() as usize;
+                let Some(provider) = LYRIC_PROVIDERS.with_borrow(|providers| {
+                    providers.get(provider_idx)
+                }) else {
+                    error!("provider_idx {} is out of range", provider_idx);
+                    return;
+                };
+                gidle_future::spawn(async move {
                     let song_id = result.id();
-                    match provider.query_lyric(&song_id) {
+                    match provider.query_lyric(&song_id).await {
                         Ok(lyric) => {
                             let olyric = provider.get_lyric(&lyric);
                             let tlyric = provider.get_translated_lyric(&lyric);
@@ -220,7 +221,7 @@ impl Window {
                             show_dialog(Some(&window), &error_msg, gtk::MessageType::Error);
                         }
                     }
-                })
+                });
             }));
     }
 

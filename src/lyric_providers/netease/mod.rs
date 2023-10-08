@@ -1,5 +1,4 @@
 use anyhow::Result;
-use async_compat::CompatExt;
 use std::time::Duration;
 
 use ncmapi::{
@@ -13,21 +12,22 @@ use super::{default_search_query, Lyric, LyricOwned, LyricStore};
 
 pub struct NeteaseLyricProvider;
 
+#[async_trait::async_trait]
 impl super::LyricProvider for NeteaseLyricProvider {
-    fn provider_unique_name(&self) -> &'static str {
+    fn unique_name(&self) -> &'static str {
         "网易云音乐"
     }
-    fn search_song_detailed(
+    async fn search_song_detailed(
         &self,
         album: &str,
         artists: &[&str],
         title: &str,
     ) -> Result<Vec<super::SongInfo>> {
         let keyword = default_search_query(album, artists, title);
-        self.search_song(&keyword)
+        self.search_song(&keyword).await
     }
 
-    fn query_lyric(&self, id: &str) -> Result<LyricStore> {
+    async fn query_lyric(&self, id: &str) -> Result<LyricStore> {
         let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
         let api = NcmApi::new(
             false,
@@ -37,7 +37,7 @@ impl super::LyricProvider for NeteaseLyricProvider {
             &cookie_path,
         );
         let id = id.parse()?;
-        let query_result = smol::block_on(async { api.lyric(id).compat().await })?;
+        let query_result = api.lyric(id).await?;
 
         let lyric_resp: LyricResp = query_result.deserialize()?;
 
@@ -49,7 +49,7 @@ impl super::LyricProvider for NeteaseLyricProvider {
         })
     }
 
-    fn search_song(&self, keyword: &str) -> Result<Vec<super::SongInfo>> {
+    async fn search_song(&self, keyword: &str) -> Result<Vec<super::SongInfo>> {
         tracing::debug!("search keyword: {keyword}");
 
         let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
@@ -60,7 +60,7 @@ impl super::LyricProvider for NeteaseLyricProvider {
             true,
             &cookie_path,
         );
-        let search_result = smol::block_on(async { api.search(&keyword, None).compat().await })?;
+        let search_result = api.search(&keyword, None).await?;
         let resp: SearchSongResp = search_result.deserialize()?;
         tracing::debug!("search result: {resp:?}");
 
