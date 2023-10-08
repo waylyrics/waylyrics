@@ -73,7 +73,7 @@ impl super::LyricProvider for QQMusic {
             return Err(Error::ApiClientNotInit)?;
         };
 
-        let url = api.search::<Track>(&keyword, None, None);
+        let url = api.search::<Track>(keyword, None, None);
         let resp: <Track as SearchType>::Resp =
             serde_json::from_slice(client.get(url).send().await?.bytes().await?.as_ref())?;
 
@@ -109,12 +109,12 @@ async fn get_songmid(api: &QQMusicApi, client: &Client, songid: &str) -> Result<
 }
 
 impl super::LyricParse for QQMusic {
-    fn get_lyric<'a>(&self, store: &'a LyricStore) -> LyricOwned {
+    fn get_lyric(&self, store: &LyricStore) -> LyricOwned {
         let lyric = store.lyric.as_deref();
         verify_lyric(lyric)
     }
 
-    fn get_translated_lyric<'a>(&self, store: &'a LyricStore) -> LyricOwned {
+    fn get_translated_lyric(&self, store: &LyricStore) -> LyricOwned {
         let lyric = store.tlyric.as_deref();
         verify_lyric(lyric)
     }

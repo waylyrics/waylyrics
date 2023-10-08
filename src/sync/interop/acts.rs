@@ -49,7 +49,7 @@ pub fn register_action_search_lyric(app: &Application, wind: &app::Window, trigg
                     vec![]
                 };
                 default_search_query(
-                    track.album.as_ref().map(|s| s.as_str()).unwrap_or_default(),
+                    track.album.as_deref().unwrap_or_default(),
                     &artists,
                     &track.title,
                 )
@@ -69,13 +69,13 @@ pub fn register_action_refetch_lyric(app: &Application, window: &app::Window, tr
     action.connect_activate(move |_, _| {
         info!("cleaned current lyric");
         let metainfo = TRACK_PLAYING_STATE
-            .with_borrow(|TrackState { metainfo, .. }| metainfo.as_ref().map(|meta| meta.clone()));
+            .with_borrow(|TrackState { metainfo, .. }| metainfo.as_ref().cloned());
         let Some(metainfo) = metainfo else {
             return;
         };
 
         gidle_future::spawn(async move {
-            let Some(wind) = MAIN_WINDOW.with_borrow(|wind| wind.as_ref().map(|wind| wind.clone()))
+            let Some(wind) = MAIN_WINDOW.with_borrow(|wind| wind.as_ref().cloned())
             else {
                 return;
             };

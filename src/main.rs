@@ -143,7 +143,7 @@ fn build_ui(app: &Application) -> Result<()> {
         }
     }
     let _ = LYRIC_PROVIDERS.set(providers);
-    let _ = MAIN_WINDOW.set(Some(wind));
+    MAIN_WINDOW.set(Some(wind));
 
     Ok(())
 }

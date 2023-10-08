@@ -70,8 +70,7 @@ pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
              paused,
              cache_path,
          }| {
-            let track_meta_playing = metainfo.as_ref().map(|t| t.clone());
-            let track_meta = track_meta;
+            let track_meta_playing = metainfo.as_ref().cloned();
             trace!("got track_id: {track_meta:#?}");
 
             let need = track_meta_playing.is_none()

@@ -57,7 +57,7 @@ impl super::LyricProvider for Netease {
             .to_owned()
             + "ncm-cookie";
         let api = NcmApi::new(true, &cookie_path);
-        let search_result = api.search(&keyword, None).await?;
+        let search_result = api.search(keyword, None).await?;
         let resp: SearchSongResp = search_result.deserialize()?;
         tracing::debug!("search result: {resp:?}");
 
