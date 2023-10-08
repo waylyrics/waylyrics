@@ -5,7 +5,7 @@ use std::sync::Arc;
 use glib::Object;
 use gtk::glib::clone;
 use gtk::subclass::prelude::*;
-use gtk::{gio, glib, ColumnViewColumn, Expression, PropertyExpression};
+use gtk::{gio, glib, ColumnViewColumn};
 use gtk::{prelude::*, ListItem};
 use tokio::task::JoinSet;
 use tracing::error;
@@ -108,13 +108,6 @@ impl Window {
         imp.result_list.append_column(&imp.column_album);
         imp.result_list.append_column(&imp.column_length);
         imp.result_list.append_column(&imp.column_source);
-
-        imp.column_album
-            .set_sorter(Some(&gtk::StringSorter::new(Some(PropertyExpression::new(
-                ResultObject::static_type(),
-                Expression::NONE,
-                "album",
-            )))));
 
         imp.input.set_placeholder_text(Some("Enter query..."));
         imp.input

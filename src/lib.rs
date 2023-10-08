@@ -2,7 +2,11 @@
 #![feature(local_key_cell_methods)]
 #![feature(is_some_and)]
 
-use std::{cell::RefCell, path::PathBuf, sync::{OnceLock, Arc}};
+use std::{
+    cell::RefCell,
+    path::PathBuf,
+    sync::{Arc, OnceLock},
+};
 
 use app::Window;
 use lyric_providers::LyricProvider;
