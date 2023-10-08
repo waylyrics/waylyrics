@@ -114,7 +114,7 @@ impl WindowImpl for Window {
             .expect("Failed to save window state");
 
         // Don't invoke the default handler
-        Propagation::Stop
+        Propagation::Proceed
     }
 }
 impl ApplicationWindowImpl for Window {}
