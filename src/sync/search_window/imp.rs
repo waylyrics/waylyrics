@@ -15,6 +15,7 @@ pub struct ResultData {
     pub length: u64,
     // glib seems do not support dyn so I use u8 index instead
     pub provider_idx: u8,
+    pub provider_name: String,
 }
 
 #[derive(Properties, Default)]
@@ -26,6 +27,7 @@ pub struct ResultObject {
     #[property(name = "length", get, set, type = u64, member = length)]
     #[property(name = "id", get, set, type = String, member = id)]
     #[property(name = "provider-idx", get, set, type = u8, member = provider_idx)]
+    #[property(name = "provider-name", get, set, type = String, member = provider_name)]
     pub data: RefCell<ResultData>,
 }
 
@@ -48,10 +50,11 @@ pub struct Window {
 
     pub result_scrolled_window: gtk::ScrolledWindow,
     pub result_list: gtk::ColumnView,
-    pub result_title: gtk::ColumnViewColumn,
-    pub result_singer: gtk::ColumnViewColumn,
-    pub result_album: gtk::ColumnViewColumn,
-    pub result_length: gtk::ColumnViewColumn,
+    pub column_title: gtk::ColumnViewColumn,
+    pub column_singer: gtk::ColumnViewColumn,
+    pub column_album: gtk::ColumnViewColumn,
+    pub column_length: gtk::ColumnViewColumn,
+    pub column_source: gtk::ColumnViewColumn,
     pub results: RefCell<Option<gio::ListStore>>,
 
     pub use_cache: Cell<bool>,

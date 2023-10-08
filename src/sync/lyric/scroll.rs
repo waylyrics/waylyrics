@@ -1,5 +1,6 @@
 use std::time::Duration;
 
+use gtk::glib::ControlFlow;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use gtk::{glib, prelude::*};
 use gtk::{glib::WeakRef, Application};
@@ -12,12 +13,12 @@ use crate::sync::{TrackState, LYRIC, TRACK_PLAYING_STATE};
 pub fn register_lyric_display(app: WeakRef<Application>, interval: Duration) {
     glib::timeout_add_local(interval, move || {
         let Some(app) = app.upgrade() else {
-            return Continue(false);
+            return ControlFlow::Break;
         };
 
         let mut windows = app.windows();
         if windows.is_empty() {
-            return Continue(true);
+            return ControlFlow::Continue;
         }
         let window: app::Window = windows.remove(0).downcast().unwrap();
 
@@ -27,12 +28,12 @@ pub fn register_lyric_display(app: WeakRef<Application>, interval: Duration) {
              }| *paused || metainfo.is_none(),
         ) {
             // no music is playing
-            return Continue(true); // skip lyric scrolling
+            return ControlFlow::Continue;
         }
 
         refresh_lyric(&window);
 
-        Continue(true)
+        ControlFlow::Continue
     });
 }
 

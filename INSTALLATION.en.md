@@ -56,7 +56,7 @@ export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 
 ## With stable toolchain
 
-* note: your rustc should be 1.52+
+* note: your rustc should be 1.70+
 
 ```bash
 export RUSTC_BOOTSTRAP=1

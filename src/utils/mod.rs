@@ -1,6 +1,6 @@
 use anyhow::Result;
 use gtk::gio::SimpleAction;
-use gtk::glib::WeakRef;
+use gtk::glib::{ControlFlow, WeakRef};
 use gtk::{
     prelude::*, subclass::prelude::*, Application, NamedAction, Shortcut, ShortcutController,
     ShortcutTrigger,
@@ -49,19 +49,19 @@ pub enum ParseError {
 pub fn register_sigusr2_decoration(app: WeakRef<Application>) {
     gtk::glib::unix_signal_add_local(libc::SIGUSR2, move || {
         let Some(app) = app.upgrade() else {
-            return Continue(false);
+            return ControlFlow::Break;
         };
 
         let mut windows = app.windows();
         if windows.is_empty() {
-            return Continue(true);
+            return ControlFlow::Continue;
         }
         let window = windows.remove(0);
 
         let decorated = window.is_decorated();
         window.set_decorated(!decorated);
 
-        Continue(true)
+        ControlFlow::Continue
     });
 }
 

@@ -13,8 +13,10 @@ use qqmusic_rs::QQMusicApi;
 use regex::RegexSet;
 use waylyrics::app::{self, build_main_window};
 use waylyrics::config::{Config, Triggers};
-use waylyrics::lyric_providers::utils::register_provider;
-use waylyrics::{utils, EXCLUDED_REGEXES, QQMUSIC_API_CLIENT, THEME_PATH};
+use waylyrics::lyric_providers::utils::get_provider;
+use waylyrics::{
+    utils, EXCLUDED_REGEXES, LYRIC_PROVIDERS, MAIN_WINDOW, QQMUSIC_API_CLIENT, THEME_PATH,
+};
 
 use waylyrics::sync::*;
 
@@ -29,7 +31,8 @@ use utils::{
     register_action_switch_passthrough, register_sigusr2_decoration,
 };
 
-fn main() -> Result<glib::ExitCode> {
+#[tokio::main]
+async fn main() -> Result<glib::ExitCode> {
     Registry::default()
         .with(
             EnvFilter::builder()
@@ -130,12 +133,17 @@ fn build_ui(app: &Application) -> Result<()> {
 
     if let Some(base_url) = qqmusic_api_base_url {
         let base_url = url::Url::from_str(&base_url)?;
-        QQMUSIC_API_CLIENT.set(Some(QQMusicApi::new(base_url)));
+        let _ = QQMUSIC_API_CLIENT.set(Some(QQMusicApi::new(base_url)));
     }
 
+    let mut providers = vec![];
     for source in lyric_search_source {
-        register_provider(&source);
+        if let Some(provider) = get_provider(&source) {
+            providers.push(provider);
+        }
     }
+    let _ = LYRIC_PROVIDERS.set(providers);
+    MAIN_WINDOW.set(Some(wind));
 
     Ok(())
 }
@@ -144,7 +152,7 @@ fn init_dirs() -> Result<(PathBuf, PathBuf)> {
     let xdg_dirs = xdg::BaseDirectories::with_prefix("waylyrics")?;
     let config_home = xdg_dirs.get_config_home();
     let cache_dir = xdg_dirs.get_cache_home();
-    waylyrics::CONFIG_HOME.set(
+    let _ = waylyrics::CONFIG_HOME.set(
         config_home
             .to_str()
             .expect("xdg config home is not valid UTF-8")

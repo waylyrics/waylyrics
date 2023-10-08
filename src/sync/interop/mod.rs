@@ -1,5 +1,6 @@
 use std::time::{Duration, SystemTime};
 
+use anyhow::Error;
 use gtk::{
     glib::{self, WeakRef},
     prelude::*,
@@ -69,8 +70,7 @@ pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
              paused,
              cache_path,
          }| {
-            let track_meta_playing = metainfo.as_ref().map(|t| t.clone());
-            let track_meta = track_meta;
+            let track_meta_playing = metainfo.as_ref().cloned();
             trace!("got track_id: {track_meta:#?}");
 
             let need = track_meta_playing.is_none()
@@ -84,22 +84,18 @@ pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
     )
 }
 
-pub fn update_lyric(
+pub async fn update_lyric(
     track_meta: &TrackMeta,
     window: &app::Window,
     ignore_cache: bool,
-) -> Result<(), PlayerStatus> {
+) -> Result<(), Error> {
     crate::sync::utils::clean_lyric(window);
 
-    let fetch_result = if window.imp().cache_lyrics.get() {
-        cache::fetch_lyric_cached(track_meta, ignore_cache, window)
+    if window.imp().cache_lyrics.get() {
+        cache::fetch_lyric_cached(track_meta, ignore_cache, window).await?
     } else {
-        fetch::fetch_lyric(track_meta, window)
+        fetch::fetch_lyric(track_meta, window).await?
     };
-
-    if let Err(e) = fetch_result {
-        error!("lyric fetch error: {e}");
-    }
 
     reset_lyric_labels(window);
     Ok(())
@@ -131,7 +127,7 @@ pub fn sync_position(player: &Player, window: &app::Window) -> Result<(), Player
 }
 
 pub fn sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
-    PLAYER.with_borrow(|player| {
+    let meta = PLAYER.with_borrow(|player| {
         let player = player.as_ref().ok_or(PlayerStatus::Missing)?;
 
         if !player.is_running() {
@@ -150,6 +146,8 @@ pub fn sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
             .get_metadata()
             .map_err(|_| PlayerStatus::Unsupported("cannot get metadata of track playing"))?;
 
+        sync_position(player, window)?;
+
         let meta = match TrackMeta::try_from(track_meta) {
             Ok(meta) => meta,
             Err(e) => {
@@ -160,14 +158,22 @@ pub fn sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
             }
         };
 
-        if need_fetch_lyric(&meta) {
-            update_lyric(&meta, window, false)?;
-        }
+        Ok(meta)
+    })?;
+    if need_fetch_lyric(&meta) {
+        let window = gtk::prelude::ObjectExt::downgrade(window);
+        gidle_future::spawn(async move {
+            let Some(window) = window.upgrade() else {
+                return;
+            };
+            if let Err(e) = update_lyric(&meta, &window, false).await {
+                error!("{e} occurs fetching lyric")
+            }
+        });
+    }
 
-        sync_position(player, window)?;
-        refresh_lyric(window);
-        Ok(())
-    })
+    refresh_lyric(window);
+    Ok(())
 }
 
 #[derive(Debug)]
@@ -180,12 +186,12 @@ pub enum PlayerStatus {
 pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
     glib::timeout_add_local(interval, move || {
         let Some(app) = app.upgrade() else {
-            return Continue(false);
+            return glib::ControlFlow::Break;
         };
 
         let mut windows = app.windows();
         if windows.is_empty() {
-            return Continue(true);
+            return glib::ControlFlow::Continue;
         }
         let window: app::Window = windows.remove(0).downcast().unwrap();
 
@@ -217,6 +223,6 @@ pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
             _ => (),
         }
 
-        Continue(true)
+        glib::ControlFlow::Continue
     });
 }

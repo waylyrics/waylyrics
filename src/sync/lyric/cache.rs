@@ -24,7 +24,7 @@ pub fn get_cache_path(track_meta: &TrackMeta) -> PathBuf {
     cache_dir.join(format!("{digest:x}.json"))
 }
 
-pub fn fetch_lyric_cached(
+pub async fn fetch_lyric_cached(
     track_meta: &TrackMeta,
     ignore_cache: bool,
     window: &app::Window,
@@ -51,7 +51,7 @@ pub fn fetch_lyric_cached(
         }
     }
 
-    let result = fetch_lyric(track_meta, window);
+    let result = fetch_lyric(track_meta, window).await;
     if result.is_ok() {
         update_lyric_cache(&cache_path);
     }
