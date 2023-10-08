@@ -1,5 +1,7 @@
 use lrc_nom::{parse, LrcParseError};
-use std::time::Duration;
+use std::{rc::Rc, time::Duration};
+
+use crate::LYRIC_PROVIDERS;
 
 use super::{LyricLine, LyricLineOwned};
 
@@ -38,12 +40,11 @@ pub fn find_next_lyric<'a>(
 pub fn register_provider(provider_id: &str) {
     use super::netease::NeteaseLyricProvider;
     use super::qqmusic::QQMusicLyricProvider;
-    let providers: [Box<dyn super::LyricProvider>; 2] = [
-        Box::new(NeteaseLyricProvider),
-        Box::new(QQMusicLyricProvider),
-    ];
-    crate::LYRIC_PROVIDERS;
+    let providers: [Rc<dyn super::LyricProvider>; 2] =
+        [Rc::new(NeteaseLyricProvider), Rc::new(QQMusicLyricProvider)];
     for provider in providers {
-        if provider_id == provider.unique_name() {}
+        if provider_id == provider.unique_name() {
+            LYRIC_PROVIDERS.with_borrow_mut(|providers| providers.push(provider));
+        }
     }
 }

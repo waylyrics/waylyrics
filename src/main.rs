@@ -29,7 +29,8 @@ use utils::{
     register_action_switch_passthrough, register_sigusr2_decoration,
 };
 
-fn main() -> Result<glib::ExitCode> {
+#[tokio::main]
+async fn main() -> Result<glib::ExitCode> {
     Registry::default()
         .with(
             EnvFilter::builder()

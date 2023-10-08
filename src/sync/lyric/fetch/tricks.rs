@@ -4,7 +4,7 @@ use crate::lyric_providers::qqmusic::QQMusicLyricProvider;
 use crate::sync::PLAYER;
 
 use crate::app;
-use crate::lyric_providers::{LyricParse, LyricProvider};
+use crate::lyric_providers::LyricProvider;
 use anyhow::Result;
 use mpris::{Metadata, Player};
 
@@ -20,59 +20,66 @@ pub fn get_accurate_lyric(
             .as_ref()
             .expect("player not exists in lyric fetching");
         let player_name = player.identity();
-        match player_name {
-            "mpv" => {
-                tracing::warn!("local lyric files are still unsupported");
-                None
-            }
-            "ElectronNCM" | "Qcm" => get_song_id_from_player(player, |meta| {
-                meta.get("mpris:trackid")
-                    .and_then(mpris::MetadataValue::as_str)
-                    .and_then(|s| s.split('/').last())
-            })
-            .map(|song_id| {
-                let provider = NeteaseLyricProvider;
-                let lyric = provider.query_lyric(&song_id)?;
-                let olyric = provider.get_lyric(&lyric);
-                let tlyric = provider.get_translated_lyric(&lyric);
-                set_lyric(olyric, tlyric, title, artists, window)
-            }),
-            "feeluown" => get_song_id_from_player(player, |meta| {
-                meta.url()?.strip_prefix("fuo://netease/songs/")
-            })
-            .map(|song_id| {
-                let provider = NeteaseLyricProvider;
-                let lyric = provider.query_lyric(&song_id)?;
-                let olyric = provider.get_lyric(&lyric);
-                let tlyric = provider.get_translated_lyric(&lyric);
-                set_lyric(olyric, tlyric, title, artists, window)
-            })
-            .or_else(|| {
-                get_song_id_from_player(player, |meta| {
-                    meta.url()?.strip_prefix("fuo://qqmusic/songs/")
+        let Some((song_id, provider)): Option<(String, Box<dyn LyricProvider>)> =
+            match player_name {
+                "mpv" => {
+                    tracing::warn!("local lyric files are still unsupported");
+                    None
+                }
+                "ElectronNCM" | "Qcm" => get_song_id_from_player(player, |meta| {
+                    meta.get("mpris:trackid")
+                        .and_then(mpris::MetadataValue::as_str)
+                        .and_then(|s| s.split('/').last())
                 })
                 .map(|song_id| {
-                    let provider = QQMusicLyricProvider;
-                    let lyric = provider.query_lyric(&song_id)?;
-                    let olyric = provider.get_lyric(&lyric);
-                    let tlyric = provider.get_translated_lyric(&lyric);
-                    set_lyric(olyric, tlyric, title, artists, window)
+                    (
+                        song_id,
+                        Box::new(NeteaseLyricProvider {}) as Box<dyn LyricProvider>,
+                    )
+                }),
+                "feeluown" => get_song_id_from_player(player, |meta| {
+                    meta.url()?.strip_prefix("fuo://netease/songs/")
                 })
-            }),
-            "YesPlayMusic" => {
-                get_song_id_from_player(player, |meta| meta.url()?.strip_prefix("/trackid/")).map(
-                    |song_id| {
-                        let provider = NeteaseLyricProvider;
-                        let lyric = provider.query_lyric(&song_id)?;
-                        let olyric = provider.get_lyric(&lyric);
-                        let tlyric = provider.get_translated_lyric(&lyric);
-                        set_lyric(olyric, tlyric, title, artists, window)
-                    },
-                )
-            }
+                .map(|song_id| {
+                    (
+                        song_id,
+                        Box::new(NeteaseLyricProvider) as Box<dyn LyricProvider>,
+                    )
+                })
+                .or_else(|| {
+                    get_song_id_from_player(player, |meta| {
+                        meta.url()?.strip_prefix("fuo://qqmusic/songs/")
+                    })
+                    .map(|song_id| {
+                        (
+                            song_id,
+                            Box::new(QQMusicLyricProvider {}) as Box<dyn LyricProvider>,
+                        )
+                    })
+                }),
+                "YesPlayMusic" => {
+                    get_song_id_from_player(player, |meta| meta.url()?.strip_prefix("/trackid/"))
+                        .map(|song_id| {
+                            (
+                                song_id,
+                                Box::new(NeteaseLyricProvider {}) as Box<dyn LyricProvider>,
+                            )
+                        })
+                }
 
-            _ => None,
-        }
+                _ => None,
+            };
+
+        gidle_future::spawn(async move {
+            let Ok(lyric) = provider.query_lyric(&song_id).await else {
+                return;
+            };
+            let olyric = provider.get_lyric(&lyric);
+            let tlyric = provider.get_translated_lyric(&lyric);
+            set_lyric(olyric, tlyric, title, artists, window);
+        });
+
+        Some(Ok(()))
     })
 }
 
