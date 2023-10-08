@@ -1,9 +1,7 @@
 use lrc_nom::{parse, LrcParseError};
-use std::{rc::Rc, time::Duration};
+use std::{sync::Arc, time::Duration};
 
-use crate::LYRIC_PROVIDERS;
-
-use super::{LyricLine, LyricLineOwned};
+use super::{LyricLine, LyricLineOwned, LyricProvider};
 
 pub fn lrc_iter<'a>(
     lyric_lines: impl Iterator<Item = &'a str>,
@@ -37,14 +35,11 @@ pub fn find_next_lyric<'a>(
         .last()
 }
 
-pub fn register_provider(provider_id: &str) {
-    use super::netease::NeteaseLyricProvider;
-    use super::qqmusic::QQMusicLyricProvider;
-    let providers: [Rc<dyn super::LyricProvider>; 2] =
-        [Rc::new(NeteaseLyricProvider), Rc::new(QQMusicLyricProvider)];
-    for provider in providers {
-        if provider_id == provider.unique_name() {
-            LYRIC_PROVIDERS.with_borrow_mut(|providers| providers.push(provider));
-        }
-    }
+pub fn get_provider(provider_id: &str) -> Option<Arc<dyn LyricProvider>> {
+    use super::netease::Netease;
+    use super::qqmusic::QQMusic;
+    let providers: [Arc<dyn super::LyricProvider>; 2] = [Arc::new(Netease), Arc::new(QQMusic)];
+    providers
+        .into_iter()
+        .find(|p| p.unique_name() == provider_id)
 }

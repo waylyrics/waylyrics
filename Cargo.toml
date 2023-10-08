@@ -27,9 +27,7 @@ gtk = { version = "0.6.6", package = "gtk4" }
 # MPRIS integration
 dbus = "0.9.7"
 mpris = "2.0.1"
-
-# Lyrics
-ncmapi = "0.1.13"
+ncmapi = { git = "https://github.com/waylyrics/ncmapi-rs.git", version = "0.1.13" }
 qqmusic-rs = { git = "https://github.com/waylyrics/qqmusic-rs.git", version = "0.1.0" }
 lrc-nom = "0.2.0"
 url = "2.4.1"
@@ -53,7 +51,7 @@ thiserror = "1.0.48"
 glib-macros = "0.18.2"
 
 async-trait = "0.1.73"
-tokio = { version = "1.32.0", features = ["macros", "net", "time", "rt"] }
+tokio = { version = "1.32.0", features = ["macros", "net", "time", "rt", "rt-multi-thread"] }
 reqwest = { version = "0.11.20" }
 gidle_future = "0.2.0"
 

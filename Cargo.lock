@@ -1362,8 +1362,7 @@ dependencies = [
 [[package]]
 name = "ncmapi"
 version = "0.1.13"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5cba768484265a90cce76eba04ed19276b6a806a7373b72a840095fd336e483f"
+source = "git+https://github.com/waylyrics/ncmapi-rs.git#ca3774d41ac00cdea9bb2a9b69e882280e3280b4"
 dependencies = [
  "base64 0.13.1",
  "cookie 0.15.2",

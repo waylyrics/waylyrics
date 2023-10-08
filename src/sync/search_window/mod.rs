@@ -118,8 +118,7 @@ impl Window {
         }
 
         let mut results = vec![];
-        let providers = LYRIC_PROVIDERS
-            .with_borrow(|providers| providers.iter().map(|p| p.clone()).collect::<Vec<_>>());
+        let providers = LYRIC_PROVIDERS.get().expect("lyric providers should be initialized");
         for (idx, provider) in providers.iter().enumerate() {
             let provider_id = provider.unique_name();
             let tracks = match provider.search_song(&query).await {
@@ -190,9 +189,10 @@ impl Window {
                 };
 
                 let provider_idx = result.provider_idx() as usize;
-                let Some(provider) = LYRIC_PROVIDERS.with_borrow(|providers| {
-                    providers.get(provider_idx)
-                }) else {
+                let Some(provider) = LYRIC_PROVIDERS
+                    .get()
+                    .expect("lyric providers must be initialized")
+                    .get(provider_idx) else {
                     error!("provider_idx {} is out of range", provider_idx);
                     return;
                 };

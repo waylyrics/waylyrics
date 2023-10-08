@@ -17,10 +17,10 @@ use crate::{
 use super::{Lyric, LyricOwned, LyricStore};
 
 #[derive(Clone, Copy)]
-pub struct QQMusicLyricProvider;
+pub struct QQMusic;
 
 #[async_trait::async_trait]
-impl super::LyricProvider for QQMusicLyricProvider {
+impl super::LyricProvider for QQMusic {
     fn unique_name(&self) -> &'static str {
         "QQ音乐"
     }
@@ -45,7 +45,7 @@ impl super::LyricProvider for QQMusicLyricProvider {
             SongId::Songmid(id)
         };
 
-        let Some(api) = QQMUSIC_API_CLIENT.with_borrow(|api| api.as_ref()) else {
+        let Some(Some(api)) = QQMUSIC_API_CLIENT.get() else {
             return Err(Error::ApiClientNotInit)?;
         };
 
@@ -69,7 +69,7 @@ impl super::LyricProvider for QQMusicLyricProvider {
 
         let client = Client::builder().user_agent("Waylyrics/0.1").build()?;
 
-        let Some(api) = QQMUSIC_API_CLIENT.with_borrow(|api| api.as_ref()) else {
+        let Some(Some(api)) = QQMUSIC_API_CLIENT.get() else {
             return Err(Error::ApiClientNotInit)?;
         };
 
@@ -108,7 +108,7 @@ async fn get_songmid(api: &QQMusicApi, client: &Client, songid: &str) -> Result<
     Ok(resp.data.track_info.mid)
 }
 
-impl super::LyricParse for QQMusicLyricProvider {
+impl super::LyricParse for QQMusic {
     fn get_lyric<'a>(&self, store: &'a LyricStore) -> LyricOwned {
         let lyric = store.lyric.as_deref();
         verify_lyric(lyric)

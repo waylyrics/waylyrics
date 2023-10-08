@@ -35,63 +35,58 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
         return result;
     }
 
-    let mut results: Vec<(usize, String, u8)> = vec![];
-    LYRIC_PROVIDERS.with_borrow(|providers| {
-        for (idx, provider) in providers.iter().enumerate() {
-            let provider_id = provider.unique_name();
-            let tracks =
-                match provider.search_song_detailed(album.unwrap_or_default(), &artists, title) {
-                    Ok(songs) => songs,
-                    Err(e) => {
-                        error!("{e} occurs when search {title} on {}", provider_id);
-                        continue;
-                    }
-                };
+    let providers = LYRIC_PROVIDERS
+        .get()
+        .expect("lyric providers should be initialized");
+    for (idx, provider) in providers.iter().enumerate() {
+        let provider = provider.clone();
+        let search_task = provider.search_song_detailed(album.unwrap_or_default(), &artists, title);
 
-            let length_toleration_ms = window.imp().length_toleration_ms.get();
-            if let Some((song_id, weight)) = utils::match_likely_lyric(
-                album.zip(Some(title)),
-                length,
-                &tracks,
-                length_toleration_ms,
-            ) {
-                info!("matched {song_id} on {provider_id} with weight {weight}");
-                results.push((idx, song_id.to_string(), weight));
-            }
-        }
-    });
-
-    if results.is_empty() {
-        info!("Failed searching for {artists_str} - {title}",);
-        utils::clean_lyric(window);
-        Err(crate::lyric_providers::Error::NoLyric)?;
+        // let length_toleration_ms = window.imp().length_toleration_ms.get();
+        // if let Some((song_id, weight)) = utils::match_likely_lyric(
+        //     album.zip(Some(title)),
+        //     length,
+        //     &tracks,
+        //     length_toleration_ms,
+        // ) {
+        //     info!("matched {song_id} on {provider_id} with weight {weight}");
+        //     results.push((idx, song_id.to_string(), weight));
+        // }
     }
 
-    results.sort_by_key(|(_, _, weight)| *weight);
+    // let mut results: Vec<(usize, String, u8)> = vec![];
 
-    for (platform_idx, song_id, _) in results {
-        let fetch_result = LYRIC_PROVIDERS.with_borrow(|providers| {
-            let provider = &providers[platform_idx];
-            match provider.query_lyric(&song_id) {
-                Ok(lyric) => {
-                    let olyric = provider.get_lyric(&lyric);
-                    let tlyric = provider.get_translated_lyric(&lyric);
-                    set_lyric(olyric, tlyric, title, &artists_str, window)
-                }
-                Err(e) => {
-                    error!(
-                        "{e} when get lyric for {title} on {}",
-                        provider.unique_name()
-                    );
-                    Err(crate::lyric_providers::Error::NoResult)?
-                }
-            }
-        });
-
-        if fetch_result.is_ok() {
-            return Ok(());
-        }
-    }
+    // if results.is_empty() {
+    //     info!("Failed searching for {artists_str} - {title}",);
+    //     utils::clean_lyric(window);
+    //     Err(crate::lyric_providers::Error::NoLyric)?;
+    // }
+    //
+    // results.sort_by_key(|(_, _, weight)| *weight);
+    //
+    // for (platform_idx, song_id, _) in results {
+    //     let fetch_result = LYRIC_PROVIDERS.with_borrow(|providers| {
+    //         let provider = &providers[platform_idx];
+    //         match provider.query_lyric(&song_id) {
+    //             Ok(lyric) => {
+    //                 let olyric = provider.get_lyric(&lyric);
+    //                 let tlyric = provider.get_translated_lyric(&lyric);
+    //                 set_lyric(olyric, tlyric, title, &artists_str, window)
+    //             }
+    //             Err(e) => {
+    //                 error!(
+    //                     "{e} when get lyric for {title} on {}",
+    //                     provider.unique_name()
+    //                 );
+    //                 Err(crate::lyric_providers::Error::NoResult)?
+    //             }
+    //         }
+    //     });
+    //
+    //     if fetch_result.is_ok() {
+    //         return Ok(());
+    //     }
+    // }
 
     Err(crate::lyric_providers::Error::NoResult)?
 }

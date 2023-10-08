@@ -3,6 +3,7 @@
 
 use std::path::PathBuf;
 use std::str::FromStr;
+use std::time::Duration;
 
 use gtk::prelude::*;
 use gtk::{glib, Application};
@@ -13,8 +14,8 @@ use qqmusic_rs::QQMusicApi;
 use regex::RegexSet;
 use waylyrics::app::{self, build_main_window};
 use waylyrics::config::{Config, Triggers};
-use waylyrics::lyric_providers::utils::register_provider;
-use waylyrics::{utils, EXCLUDED_REGEXES, QQMUSIC_API_CLIENT, THEME_PATH};
+use waylyrics::lyric_providers::utils::get_provider;
+use waylyrics::{utils, EXCLUDED_REGEXES, LYRIC_PROVIDERS, QQMUSIC_API_CLIENT, THEME_PATH};
 
 use waylyrics::sync::*;
 
@@ -42,6 +43,14 @@ async fn main() -> Result<glib::ExitCode> {
         .init();
 
     tracing::info!("process id: {}", std::process::id());
+
+    std::thread::spawn(|| {
+        tokio::spawn(async {
+            loop {
+                tokio::time::sleep(Duration::from_secs(114514)).await
+            }
+        })
+    });
 
     let app = Application::builder()
         .application_id(waylyrics::APP_ID)
@@ -134,9 +143,13 @@ fn build_ui(app: &Application) -> Result<()> {
         QQMUSIC_API_CLIENT.set(Some(QQMusicApi::new(base_url)));
     }
 
+    let mut providers = vec![];
     for source in lyric_search_source {
-        register_provider(&source);
+        if let Some(provider) = get_provider(&source) {
+            providers.push(provider);
+        }
     }
+    LYRIC_PROVIDERS.set(providers)?;
 
     Ok(())
 }

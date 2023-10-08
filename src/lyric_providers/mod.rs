@@ -46,7 +46,7 @@ pub struct SongInfo {
 }
 
 #[async_trait::async_trait]
-pub trait LyricProvider: LyricParse {
+pub trait LyricProvider: LyricParse + Send + Sync {
     async fn query_lyric(&self, id: &str) -> Result<LyricStore>;
     async fn search_song_detailed(
         &self,

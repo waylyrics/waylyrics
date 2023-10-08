@@ -10,10 +10,11 @@ use ncmapi::types::{LyricResp, SearchSongResp};
 
 use super::{default_search_query, Lyric, LyricOwned, LyricStore};
 
-pub struct NeteaseLyricProvider;
+#[derive(Clone, Copy)]
+pub struct Netease;
 
 #[async_trait::async_trait]
-impl super::LyricProvider for NeteaseLyricProvider {
+impl super::LyricProvider for Netease {
     fn unique_name(&self) -> &'static str {
         "网易云音乐"
     }
@@ -30,9 +31,6 @@ impl super::LyricProvider for NeteaseLyricProvider {
     async fn query_lyric(&self, id: &str) -> Result<LyricStore> {
         let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
         let api = NcmApi::new(
-            false,
-            Duration::from_secs(60 * 60),
-            Duration::from_secs(5 * 60),
             true,
             &cookie_path,
         );
@@ -54,9 +52,6 @@ impl super::LyricProvider for NeteaseLyricProvider {
 
         let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
         let api = NcmApi::new(
-            false,
-            Duration::from_secs(60 * 60),
-            Duration::from_secs(5 * 60),
             true,
             &cookie_path,
         );
@@ -98,7 +93,7 @@ impl super::LyricProvider for NeteaseLyricProvider {
     }
 }
 
-impl super::LyricParse for NeteaseLyricProvider {
+impl super::LyricParse for Netease {
     fn get_lyric(&self, store: &LyricStore) -> LyricOwned {
         let lyric = store.lyric.as_deref();
         match_lyric(lyric).into_owned()
