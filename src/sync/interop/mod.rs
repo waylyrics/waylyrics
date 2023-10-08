@@ -180,12 +180,12 @@ pub enum PlayerStatus {
 pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
     glib::timeout_add_local(interval, move || {
         let Some(app) = app.upgrade() else {
-            return Continue(false);
+            return glib::ControlFlow::Break;
         };
 
         let mut windows = app.windows();
         if windows.is_empty() {
-            return Continue(true);
+            return glib::ControlFlow::Continue;
         }
         let window: app::Window = windows.remove(0).downcast().unwrap();
 
@@ -217,6 +217,6 @@ pub fn register_mpris_sync(app: WeakRef<Application>, interval: Duration) {
             _ => (),
         }
 
-        Continue(true)
+        glib::ControlFlow::Continue
     });
 }

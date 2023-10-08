@@ -30,7 +30,7 @@ pub fn register_action_disconnect(app: &Application) {
 pub fn register_sigusr1_disconnect() {
     glib::unix_signal_add_local(libc::SIGUSR1, move || {
         PLAYER.set(None);
-        Continue(true)
+        glib::ControlFlow::Continue
     });
 }
 

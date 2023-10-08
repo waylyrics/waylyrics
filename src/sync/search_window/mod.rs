@@ -1,10 +1,13 @@
 mod imp;
 
+use std::sync::Arc;
+
 use glib::Object;
 use gtk::glib::clone;
 use gtk::subclass::prelude::*;
-use gtk::{gio, glib, ColumnViewColumn};
+use gtk::{gio, glib, ColumnViewColumn, Expression, PropertyExpression};
 use gtk::{prelude::*, ListItem};
+use tokio::task::JoinSet;
 use tracing::error;
 
 use crate::LYRIC_PROVIDERS;
@@ -12,6 +15,8 @@ use crate::LYRIC_PROVIDERS;
 use crate::app::dialog::show_dialog;
 use crate::sync::lyric::cache::update_lyric_cache;
 use crate::sync::{TrackState, LYRIC, TRACK_PLAYING_STATE};
+
+use super::utils::match_likely_lyric;
 
 glib::wrapper! {
     pub struct ResultObject(ObjectSubclass<imp::ResultObject>);
@@ -25,6 +30,7 @@ impl ResultObject {
         album: String,
         length: u64,
         provider_idx: usize,
+        provider_name: &'static str,
     ) -> Self {
         Object::builder()
             .property("title", title)
@@ -33,6 +39,7 @@ impl ResultObject {
             .property("length", length)
             .property("id", id)
             .property("provider-idx", provider_idx as u8)
+            .property("provider-name", provider_name)
             .build()
     }
 }
@@ -64,7 +71,7 @@ impl Window {
     }
 
     fn setup_results(&self) {
-        let model = gio::ListStore::new(ResultObject::static_type());
+        let model = gio::ListStore::new::<ResultObject>();
 
         self.imp().results.replace(Some(model));
 
@@ -88,19 +95,28 @@ impl Window {
         imp.result_scrolled_window.set_height_request(300);
         imp.result_scrolled_window.set_width_request(300);
 
-        imp.result_title.set_title(Some("Title"));
-        imp.result_list.append_column(&imp.result_title);
-        imp.result_title.set_expand(true);
-        imp.result_title.set_resizable(true);
+        imp.column_title.set_expand(true);
+        imp.column_singer.set_resizable(true);
+        imp.column_album.set_resizable(true);
 
-        imp.result_singer.set_title(Some("Singer"));
-        imp.result_list.append_column(&imp.result_singer);
-        imp.result_singer.set_resizable(true);
-        imp.result_album.set_title(Some("Album"));
-        imp.result_list.append_column(&imp.result_album);
-        imp.result_album.set_resizable(true);
-        imp.result_length.set_title(Some("Length"));
-        imp.result_list.append_column(&imp.result_length);
+        imp.column_title.set_title(Some("Title"));
+        imp.column_singer.set_title(Some("Singer"));
+        imp.column_album.set_title(Some("Album"));
+        imp.column_length.set_title(Some("Length"));
+        imp.column_source.set_title(Some("Source"));
+
+        imp.result_list.append_column(&imp.column_title);
+        imp.result_list.append_column(&imp.column_singer);
+        imp.result_list.append_column(&imp.column_album);
+        imp.result_list.append_column(&imp.column_length);
+        imp.result_list.append_column(&imp.column_source);
+
+        imp.column_album
+            .set_sorter(Some(&gtk::StringSorter::new(Some(PropertyExpression::new(
+                ResultObject::static_type(),
+                Expression::NONE,
+                "album",
+            )))));
 
         imp.input.set_placeholder_text(Some("Enter query..."));
         imp.input
@@ -112,20 +128,28 @@ impl Window {
 
     async fn search(&self) {
         let buffer = self.imp().input.buffer();
-        let query = buffer.text().to_string();
+        let query = Arc::new(buffer.text().to_string());
         if query.is_empty() {
             return;
         }
 
         let mut results = vec![];
-        let providers = LYRIC_PROVIDERS.get().expect("lyric providers should be initialized");
+        let mut set = JoinSet::new();
+        let providers = LYRIC_PROVIDERS
+            .get()
+            .expect("lyric providers should be initialized");
         for (idx, provider) in providers.iter().enumerate() {
+            let query = query.clone();
             let provider_id = provider.unique_name();
-            let tracks = match provider.search_song(&query).await {
+            set.spawn(async move { (provider.search_song(&query).await, provider_id, idx, query) });
+        }
+
+        while let Some(Ok((search_result, provider_name, idx, query))) = set.join_next().await {
+            let tracks = match search_result {
                 Ok(songs) => songs,
                 Err(e) => {
                     // TODO: to show errors to users in GUI
-                    error!("{e} occurs when search {query} on {}", provider_id);
+                    error!("{e} occurs when search {query} on {}", provider_name);
                     continue;
                 }
             };
@@ -137,6 +161,7 @@ impl Window {
                     track.album.unwrap_or_default(),
                     track.length.as_secs(),
                     idx,
+                    provider_name,
                 ));
             }
         }
@@ -145,9 +170,8 @@ impl Window {
             show_dialog(Some(self), "No result found.", gtk::MessageType::Error);
             return;
         }
-        for result in results {
-            self.results().append(&result);
-        }
+
+        self.results().extend_from_slice(&results);
     }
 
     fn get_selected_result(&self) -> Option<ResultObject> {
@@ -237,14 +261,15 @@ impl Window {
 
     fn setup_factory(&self) {
         let imp = self.imp();
-        connect_factory(&imp.result_title, |result| result.title(), true);
-        connect_factory(&imp.result_singer, |result| result.singer(), false);
-        connect_factory(&imp.result_album, |result| result.album(), true);
+        connect_factory(&imp.column_title, |result| result.title(), true);
+        connect_factory(&imp.column_singer, |result| result.singer(), false);
+        connect_factory(&imp.column_album, |result| result.album(), true);
         connect_factory(
-            &imp.result_length,
+            &imp.column_length,
             |result| format_length(result.length()),
             false,
         );
+        connect_factory(&imp.column_source, |result| result.provider_name(), false);
     }
 }
 
