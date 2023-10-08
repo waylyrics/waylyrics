@@ -1,5 +1,6 @@
 use std::time::{Duration, SystemTime};
 
+use anyhow::Error;
 use gtk::{
     glib::{self, WeakRef},
     prelude::*,
@@ -84,22 +85,18 @@ pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
     )
 }
 
-pub fn update_lyric(
+pub async fn update_lyric(
     track_meta: &TrackMeta,
     window: &app::Window,
     ignore_cache: bool,
-) -> Result<(), PlayerStatus> {
+) -> Result<(), Error> {
     crate::sync::utils::clean_lyric(window);
 
-    let fetch_result = if window.imp().cache_lyrics.get() {
-        cache::fetch_lyric_cached(track_meta, ignore_cache, window)
+    if window.imp().cache_lyrics.get() {
+        cache::fetch_lyric_cached(track_meta, ignore_cache, window).await?
     } else {
-        fetch::fetch_lyric(track_meta, window)
+        fetch::fetch_lyric(track_meta, window).await?
     };
-
-    if let Err(e) = fetch_result {
-        error!("lyric fetch error: {e}");
-    }
 
     reset_lyric_labels(window);
     Ok(())
@@ -131,7 +128,7 @@ pub fn sync_position(player: &Player, window: &app::Window) -> Result<(), Player
 }
 
 pub fn sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
-    PLAYER.with_borrow(|player| {
+    let meta = PLAYER.with_borrow(|player| {
         let player = player.as_ref().ok_or(PlayerStatus::Missing)?;
 
         if !player.is_running() {
@@ -150,6 +147,8 @@ pub fn sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
             .get_metadata()
             .map_err(|_| PlayerStatus::Unsupported("cannot get metadata of track playing"))?;
 
+        sync_position(player, window)?;
+
         let meta = match TrackMeta::try_from(track_meta) {
             Ok(meta) => meta,
             Err(e) => {
@@ -160,14 +159,22 @@ pub fn sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
             }
         };
 
-        if need_fetch_lyric(&meta) {
-            update_lyric(&meta, window, false)?;
-        }
+        Ok(meta)
+    })?;
+    if need_fetch_lyric(&meta) {
+        let window = gtk::prelude::ObjectExt::downgrade(window);
+        gidle_future::spawn(async move {
+            let Some(window) = window.upgrade() else {
+                return;
+            };
+            if let Err(e) = update_lyric(&meta, &window, false).await {
+                error!("{e} occurs fetching lyric")
+            }
+        });
+    }
 
-        sync_position(player, window)?;
-        refresh_lyric(window);
-        Ok(())
-    })
+    refresh_lyric(window);
+    Ok(())
 }
 
 #[derive(Debug)]

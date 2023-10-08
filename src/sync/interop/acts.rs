@@ -1,7 +1,7 @@
 use glib_macros::clone;
 use gtk::{
     gio::SimpleAction,
-    glib::{self, clone::Downgrade, VariantTy},
+    glib::{self, VariantTy},
     prelude::*,
     subclass::prelude::ObjectSubclassIsExt,
     Application,
@@ -17,6 +17,7 @@ use crate::{
         lyric::cache::update_lyric_cache,
         search_window, TrackState, LYRIC, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
     },
+    MAIN_WINDOW,
 };
 
 pub fn register_action_disconnect(app: &Application) {
@@ -63,19 +64,24 @@ pub fn register_action_search_lyric(app: &Application, wind: &app::Window, trigg
     utils::bind_shortcut("app.search-lyric", wind, trigger);
 }
 
-pub fn register_action_refetch_lyric(app: &Application, wind: &app::Window, trigger: &str) {
+pub fn register_action_refetch_lyric(app: &Application, window: &app::Window, trigger: &str) {
     let action = SimpleAction::new("refetch-lyric", None);
-    let window = Downgrade::downgrade(wind);
     action.connect_activate(move |_, _| {
         info!("cleaned current lyric");
-        TRACK_PLAYING_STATE.with_borrow(|TrackState { metainfo, .. }| {
-            let (Some(metainfo), Some(window)) = (metainfo, window.upgrade()) else {
+        let metainfo = TRACK_PLAYING_STATE
+            .with_borrow(|TrackState { metainfo, .. }| metainfo.as_ref().map(|meta| meta.clone()));
+        let Some(metainfo) = metainfo else {
+            return;
+        };
+
+        gidle_future::spawn(async move {
+            let Some(wind) = MAIN_WINDOW.with_borrow(|wind| wind.as_ref().map(|wind| wind.clone()))
+            else {
                 return;
             };
-
-            if let Err(err) = update_lyric(metainfo, &window, true) {
+            if let Err(err) = update_lyric(&metainfo, &wind, true).await {
                 show_dialog(
-                    Some(&window),
+                    Some(&wind),
                     &format!("cannot refetch lyric: {err:?}"),
                     gtk::MessageType::Error,
                 )
@@ -84,7 +90,7 @@ pub fn register_action_refetch_lyric(app: &Application, wind: &app::Window, trig
     });
     app.add_action(&action);
 
-    utils::bind_shortcut("app.refetch-lyric", wind, trigger);
+    utils::bind_shortcut("app.refetch-lyric", window, trigger);
 }
 
 pub fn register_action_remove_lyric(app: &Application, wind: &app::Window) {

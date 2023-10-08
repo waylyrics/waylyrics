@@ -4,6 +4,7 @@
 
 use std::{cell::RefCell, path::PathBuf, sync::{OnceLock, Arc}};
 
+use app::Window;
 use lyric_providers::LyricProvider;
 use qqmusic_rs::QQMusicApi;
 use regex::RegexSet;
@@ -18,8 +19,9 @@ pub const APP_ID: &str = "io.poly000.waylyrics";
 
 thread_local! {
     pub static CACHE_DIR: RefCell<String> = RefCell::new(String::new());
-    pub static THEME_PATH: RefCell<PathBuf> = RefCell::new(PathBuf::new());
+        pub static THEME_PATH: RefCell<PathBuf> = RefCell::new(PathBuf::new());
     pub static EXCLUDED_REGEXES: RefCell<RegexSet> = RefCell::new(RegexSet::empty());
+    pub static MAIN_WINDOW: RefCell<Option<Window>> = RefCell::new(None);
 }
 
 pub static CONFIG_HOME: OnceLock<String> = OnceLock::new();

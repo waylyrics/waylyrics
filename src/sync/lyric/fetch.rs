@@ -15,7 +15,9 @@ use crate::{app, LYRIC_PROVIDERS};
 
 use crate::sync::utils::{self, match_likely_lyric};
 
-pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
+pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
+    utils::clean_lyric(window);
+
     let title = Arc::new(track_meta.title.clone());
     let album = Arc::new(track_meta.album.as_ref().map(|album| album.to_owned()));
     let artists = &track_meta.artists;
@@ -63,68 +65,50 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
         });
     }
 
-    let result: anyhow::Result<_> = {
-        let artists_str = artists_str.to_string();
-        let title = title.clone();
-        std::thread::spawn(|| {
-            let handle = tokio::runtime::Builder::new_current_thread()
-                .build()
-                .expect("cannot start tokio runtime");
-            handle.block_on(async move {
-                let mut results = vec![];
-                while let Some(Ok(re)) = set.join_next().await {
-                    let Ok(Some((id, weight, idx))) = re else {
-                        continue;
-                    };
-                    results.push((id, weight, idx));
-                }
+    let artists_str = artists_str.to_string();
+    let title = title.clone();
+    let mut results = vec![];
+    while let Some(Ok(re)) = set.join_next().await {
+        let Ok(Some((id, weight, idx))) = re else {
+            continue;
+        };
+        results.push((id, weight, idx));
+    }
 
-                if results.is_empty() {
-                    info!("Failed searching for {artists_str} - {title}",);
-                    Err(crate::lyric_providers::Error::NoResult)?;
-                };
-
-                let providers = LYRIC_PROVIDERS
-                    .get()
-                    .expect("lyric providers should be initialized");
-
-                results.sort_by_key(|(_, _, weight)| *weight);
-
-                for (song_id, weight, platform_idx) in results {
-                    let provider = &providers[platform_idx];
-                    match provider.query_lyric(&song_id).await {
-                        Ok(lyric) => {
-                            let olyric = provider.get_lyric(&lyric);
-                            let tlyric = provider.get_translated_lyric(&lyric);
-
-                            info!(
-                                "fetched {song_id} from {} with weight {weight}",
-                                provider.unique_name()
-                            );
-                            return Ok((olyric, tlyric));
-                        }
-                        Err(e) => {
-                            error!(
-                                "{e} when get lyric for {title} on {}",
-                                provider.unique_name()
-                            );
-                        }
-                    };
-                }
-                Err(crate::lyric_providers::Error::NoResult)?
-            })
-        })
-        .join()
-        .unwrap()
+    if results.is_empty() {
+        info!("Failed searching for {artists_str} - {title}",);
+        Err(crate::lyric_providers::Error::NoResult)?;
     };
 
-    if let Ok((olyric, tlyric)) = result {
-        set_lyric(olyric, tlyric, &title, &artists_str, window);
-        Ok(())
-    } else {
-        utils::clean_lyric(window);
-        Err(crate::lyric_providers::Error::NoLyric)?
+    let providers = LYRIC_PROVIDERS
+        .get()
+        .expect("lyric providers should be initialized");
+
+    results.sort_by_key(|(_, _, weight)| *weight);
+
+    for (song_id, weight, platform_idx) in results {
+        let provider = &providers[platform_idx];
+        match provider.query_lyric(&song_id).await {
+            Ok(lyric) => {
+                let olyric = provider.get_lyric(&lyric);
+                let tlyric = provider.get_translated_lyric(&lyric);
+
+                info!(
+                    "fetched {song_id} from {} with weight {weight}",
+                    provider.unique_name()
+                );
+                set_lyric(olyric, tlyric, &title, &artists_str, window);
+                return Ok(());
+            }
+            Err(e) => {
+                error!(
+                    "{e} when get lyric for {title} on {}",
+                    provider.unique_name()
+                );
+            }
+        };
     }
+    Err(crate::lyric_providers::Error::NoResult)?
 }
 
 fn set_lyric(

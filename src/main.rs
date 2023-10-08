@@ -15,7 +15,7 @@ use waylyrics::app::{self, build_main_window};
 use waylyrics::config::{Config, Triggers};
 use waylyrics::lyric_providers::utils::get_provider;
 use waylyrics::{
-    utils, EXCLUDED_REGEXES, LYRIC_PROVIDERS, QQMUSIC_API_CLIENT, THEME_PATH, 
+    utils, EXCLUDED_REGEXES, LYRIC_PROVIDERS, QQMUSIC_API_CLIENT, THEME_PATH, MAIN_WINDOW, 
 };
 
 use waylyrics::sync::*;
@@ -143,6 +143,7 @@ fn build_ui(app: &Application) -> Result<()> {
         }
     }
     let _ = LYRIC_PROVIDERS.set(providers);
+    let _ = MAIN_WINDOW.set(Some(wind));
 
     Ok(())
 }
