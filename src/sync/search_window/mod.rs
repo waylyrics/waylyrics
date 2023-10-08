@@ -173,12 +173,22 @@ impl Window {
         let imp = self.imp();
         imp.input
             .connect_activate(clone!(@weak self as window => move |_| {
-                window.search();
+                let window = window.downgrade();
+                gidle_future::spawn(async move {
+                    if let Some(window) = window.upgrade() {
+                        window.search().await
+                    }
+                });
             }));
 
         imp.input
             .connect_icon_release(clone!(@weak self as window => move |_, _| {
-                window.search();
+                let window = window.downgrade();
+                gidle_future::spawn(async move {
+                    if let Some(window) = window.upgrade() {
+                        window.search().await
+                    }
+                });
             }));
 
         imp.set_button

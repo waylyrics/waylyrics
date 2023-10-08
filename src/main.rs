@@ -140,7 +140,7 @@ fn build_ui(app: &Application) -> Result<()> {
 
     if let Some(base_url) = qqmusic_api_base_url {
         let base_url = url::Url::from_str(&base_url)?;
-        QQMUSIC_API_CLIENT.set(Some(QQMusicApi::new(base_url)));
+        let _ = QQMUSIC_API_CLIENT.set(Some(QQMusicApi::new(base_url)));
     }
 
     let mut providers = vec![];
@@ -149,7 +149,7 @@ fn build_ui(app: &Application) -> Result<()> {
             providers.push(provider);
         }
     }
-    LYRIC_PROVIDERS.set(providers)?;
+    let _ = LYRIC_PROVIDERS.set(providers);
 
     Ok(())
 }

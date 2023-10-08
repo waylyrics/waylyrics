@@ -71,7 +71,7 @@ pub fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
     //             Ok(lyric) => {
     //                 let olyric = provider.get_lyric(&lyric);
     //                 let tlyric = provider.get_translated_lyric(&lyric);
-    //                 set_lyric(olyric, tlyric, title, &artists_str, window)
+    //                 Ok(set_lyric(olyric, tlyric, title, &artists_str, window))
     //             }
     //             Err(e) => {
     //                 error!(
@@ -97,7 +97,7 @@ fn set_lyric(
     title: &str,
     artists: &str,
     window: &app::Window,
-) -> Result<()> {
+) {
     debug!("original lyric: {olyric:?}");
     debug!("translated lyric: {tlyric:?}");
 
@@ -115,5 +115,4 @@ fn set_lyric(
     }
     LYRIC.set((olyric, tlyric));
 
-    Ok(())
 }
