@@ -29,11 +29,12 @@ impl super::LyricProvider for Netease {
     }
 
     async fn query_lyric(&self, id: &str) -> Result<LyricStore> {
-        let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
-        let api = NcmApi::new(
-            true,
-            &cookie_path,
-        );
+        let cookie_path = crate::CONFIG_HOME
+            .get()
+            .expect("should set CONFIG_HOME")
+            .to_owned()
+            + "ncm-cookie";
+        let api = NcmApi::new(true, &cookie_path);
         let id = id.parse()?;
         let query_result = api.lyric(id).await?;
 
@@ -50,11 +51,12 @@ impl super::LyricProvider for Netease {
     async fn search_song(&self, keyword: &str) -> Result<Vec<super::SongInfo>> {
         tracing::debug!("search keyword: {keyword}");
 
-        let cookie_path = crate::CONFIG_HOME.with_borrow(|home| home.to_owned() + "ncm-cookie");
-        let api = NcmApi::new(
-            true,
-            &cookie_path,
-        );
+        let cookie_path = crate::CONFIG_HOME
+            .get()
+            .expect("should set CONFIG_HOME")
+            .to_owned()
+            + "ncm-cookie";
+        let api = NcmApi::new(true, &cookie_path);
         let search_result = api.search(&keyword, None).await?;
         let resp: SearchSongResp = search_result.deserialize()?;
         tracing::debug!("search result: {resp:?}");

@@ -3,8 +3,8 @@ use std::time::{Duration, SystemTime};
 
 use gio::Settings;
 use glib::once_cell::sync::OnceCell;
-use glib::signal::Inhibit;
 use gtk::gio::MenuItem;
+use gtk::glib::Propagation;
 use gtk::prelude::{ObjectExt, ToVariant};
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib, ApplicationWindow, PopoverMenu};
@@ -107,14 +107,14 @@ impl WidgetImpl for Window {
 }
 impl WindowImpl for Window {
     // Save window state right before the window will be closed
-    fn close_request(&self) -> Inhibit {
+    fn close_request(&self) -> Propagation {
         // Save window size
         self.obj()
             .save_window_state()
             .expect("Failed to save window state");
 
-        // Don't inhibit the default handler
-        Inhibit(false)
+        // Don't invoke the default handler
+        Propagation::Stop
     }
 }
 impl ApplicationWindowImpl for Window {}
