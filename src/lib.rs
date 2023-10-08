@@ -26,6 +26,5 @@ pub static CONFIG_HOME: OnceLock<String> = OnceLock::new();
 
 pub static LYRIC_PROVIDERS: OnceLock<Vec<Arc<dyn LyricProvider>>> = OnceLock::new();
 pub static QQMUSIC_API_CLIENT: OnceLock<Option<QQMusicApi>> = OnceLock::new();
-pub static TOKIO_HANDLE: OnceLock<tokio::runtime::Handle> = OnceLock::new();
 
 pub const DEFAULT_TEXT: &str = "Waylyrics";

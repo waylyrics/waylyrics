@@ -3,7 +3,6 @@
 
 use std::path::PathBuf;
 use std::str::FromStr;
-use std::time::Duration;
 
 use gtk::prelude::*;
 use gtk::{glib, Application};
@@ -15,7 +14,9 @@ use regex::RegexSet;
 use waylyrics::app::{self, build_main_window};
 use waylyrics::config::{Config, Triggers};
 use waylyrics::lyric_providers::utils::get_provider;
-use waylyrics::{utils, EXCLUDED_REGEXES, LYRIC_PROVIDERS, QQMUSIC_API_CLIENT, THEME_PATH};
+use waylyrics::{
+    utils, EXCLUDED_REGEXES, LYRIC_PROVIDERS, QQMUSIC_API_CLIENT, THEME_PATH, 
+};
 
 use waylyrics::sync::*;
 
@@ -43,14 +44,6 @@ async fn main() -> Result<glib::ExitCode> {
         .init();
 
     tracing::info!("process id: {}", std::process::id());
-
-    std::thread::spawn(|| {
-        tokio::spawn(async {
-            loop {
-                tokio::time::sleep(Duration::from_secs(114514)).await
-            }
-        })
-    });
 
     let app = Application::builder()
         .application_id(waylyrics::APP_ID)
