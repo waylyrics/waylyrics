@@ -1,4 +1,6 @@
 mod window;
+use std::cell::RefCell;
+
 use gtk::{prelude::*, subclass::prelude::ObjectSubclassIsExt, Align, Application, Label};
 pub use window::Window;
 
@@ -9,6 +11,10 @@ const WINDOW_MIN_HEIGHT: i32 = 120;
 pub mod dialog;
 pub mod utils;
 
+thread_local! {
+    static REMOVE_LYRICS: RefCell<String> = RefCell::new(String::new());
+}
+
 pub fn build_main_window(
     app: &Application,
     hide_label_on_empty_text: bool,
@@ -18,7 +24,16 @@ pub fn build_main_window(
     length_toleration_ms: u128,
     lyric_align: impl Into<Align> + Copy,
 ) -> Window {
-    let window = Window::new(app, click_pass_through);
+    REMOVE_LYRICS.set(
+        if cache_lyrics {
+            "Remove lyric permanently"
+        } else {
+            "Remove lyric"
+        }
+        .to_string(),
+    );
+
+    let window = Window::new(app, click_pass_through, cache_lyrics);
 
     window.set_size_request(500, WINDOW_MIN_HEIGHT);
     window.set_title(Some(DEFAULT_TEXT));
@@ -59,7 +74,6 @@ pub fn build_main_window(
     });
 
     window.set_icon_name(Some(crate::APP_ID));
-    window.imp().cache_lyrics.set(cache_lyrics);
     window.imp().length_toleration_ms.set(length_toleration_ms);
     window
 }

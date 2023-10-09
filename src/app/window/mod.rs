@@ -16,11 +16,12 @@ glib::wrapper! {
 }
 
 impl Window {
-    pub fn new(app: &Application, clickthrough: bool) -> Self {
+    pub fn new(app: &Application, clickthrough: bool, cache_lyrics: bool) -> Self {
         let window: Self = Object::builder().property("application", app).build();
         let imp = window.imp();
         window.set_titlebar(Some(&imp.headerbar));
         imp.clickthrough.set(clickthrough);
+        imp.cache_lyrics.set(cache_lyrics);
         window.set_widget_name("main-window");
         window
     }

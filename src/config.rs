@@ -19,11 +19,13 @@ pub struct Config {
     pub lyric_align: Align,
     pub lyric_update_interval: String,
     pub length_toleration: String,
+    /// note: persistenced lyric offset depends on this
     pub cache_lyrics: bool,
     pub click_pass_through: bool,
     pub hide_label_on_empty_text: bool,
     pub theme: String,
     pub enable_filter_regex: bool,
+    /// inspired by LyricX's filter [list](https://github.com/ddddxxx/LyricsX/blob/c16b6a413dda7bc0b793b897522e0c4ee0ffc716/LyricsX/Supporting%20Files/UserDefaults.plist#L31-L62)
     pub filter_regexies: Vec<String>,
     pub triggers: Triggers,
     pub qqmusic_api_base_url: Option<String>,
@@ -63,10 +65,8 @@ impl Default for Config {
             click_pass_through: true,
             hide_label_on_empty_text: true,
             theme: "default".into(),
-            // note: persistenced lyric offset settings depends on this
             cache_lyrics: true,
             enable_filter_regex: false,
-            // inspired by LyricX's filter [list](https://github.com/ddddxxx/LyricsX/blob/c16b6a413dda7bc0b793b897522e0c4ee0ffc716/LyricsX/Supporting%20Files/UserDefaults.plist#L31-L62)
             filter_regexies: vec![
                 "^作词".into(),
                 "^作詞".into(),

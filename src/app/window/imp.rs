@@ -10,6 +10,7 @@ use gtk::subclass::prelude::*;
 use gtk::{gio, glib, ApplicationWindow, PopoverMenu};
 
 use crate::app::utils::set_click_pass_through;
+use crate::app::REMOVE_LYRICS;
 use crate::sync::list_avaliable_players;
 
 #[derive(Default)]
@@ -50,8 +51,7 @@ impl ObjectImpl for Window {
         let reload_theme = MenuItem::new(Some("Reload theme"), Some("app.reload-theme"));
         let search_lyric = MenuItem::new(Some("Search lyric"), Some("app.search-lyric"));
         let refetch_lyric = MenuItem::new(Some("Refetch lyric"), Some("app.refetch-lyric"));
-        let remove_lyric =
-            MenuItem::new(Some("Remove lyric permanently"), Some("app.remove-lyric"));
+        let remove_lyric = MenuItem::new(Some(&REMOVE_LYRICS.take()), Some("app.remove-lyric"));
 
         let popover = PopoverMenu::builder()
             .accessible_role(gtk::AccessibleRole::MenuItemRadio)
