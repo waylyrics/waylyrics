@@ -1,5 +1,5 @@
 mod window;
-use std::cell::RefCell;
+use std::cell::Cell;
 
 use gtk::{prelude::*, subclass::prelude::ObjectSubclassIsExt, Align, Application, Label};
 pub use window::Window;
@@ -12,7 +12,7 @@ pub mod dialog;
 pub mod utils;
 
 thread_local! {
-    static REMOVE_LYRICS: RefCell<String> = RefCell::new(String::new());
+    static REMOVE_LYRICS: Cell<String> = Cell::new(String::new());
 }
 
 pub fn build_main_window(
