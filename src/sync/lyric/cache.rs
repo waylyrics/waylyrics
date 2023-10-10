@@ -3,7 +3,7 @@ use std::path::PathBuf;
 
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use serde::{Deserialize, Serialize};
-use tracing::{error, info};
+use tracing::{error, info, debug};
 
 use crate::sync::TrackMeta;
 use crate::sync::{lyric::fetch::fetch_lyric, LYRIC};
@@ -17,6 +17,7 @@ pub fn get_cache_path(track_meta: &TrackMeta) -> PathBuf {
     let artists = &track_meta.artists;
     let length = track_meta.length;
 
+    debug!("get_cache_path: {title} {artists:?} {album:?} {length:?}");
     let digest = md5::compute(format!("{title}-{artists:?}-{album:?}-{length:?}"));
 
     let cache_dir =
