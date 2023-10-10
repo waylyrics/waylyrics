@@ -67,18 +67,26 @@ pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
     TRACK_PLAYING_STATE.with_borrow_mut(
         |TrackState {
              metainfo,
-             paused,
+             paused: _,
              cache_path,
          }| {
             let track_meta_playing = metainfo.as_ref().cloned();
             trace!("got track_id: {track_meta:#?}");
 
-            let need = track_meta_playing.is_none()
-                || track_meta_playing.as_ref().is_some_and(|p| p != track_meta);
+            // workarounds for issue [#109](https://github.com/waylyrics/waylyrics/issues/109)
+            // skip comparing length
+            let need = !track_meta_playing.is_some_and(|p| {
+                TrackMeta { length: None, ..p }
+                    == TrackMeta {
+                        length: None,
+                        ..track_meta.clone()
+                    }
+            });
 
-            *metainfo = Some(track_meta.clone());
-            *paused = false;
-            *cache_path = Some(get_cache_path(track_meta));
+            if need {
+                *metainfo = Some(track_meta.clone());
+                *cache_path = Some(get_cache_path(track_meta));
+            }
             need
         },
     )
@@ -160,6 +168,7 @@ pub fn sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
 
         Ok(meta)
     })?;
+
     if need_fetch_lyric(&meta) {
         let window = gtk::prelude::ObjectExt::downgrade(window);
         gidle_future::spawn(async move {
