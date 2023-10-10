@@ -226,6 +226,15 @@
 <a href="#226" id="226">226</a>
 <a href="#227" id="227">227</a>
 <a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::time::{Duration, SystemTime};
 
 <span class="kw">use </span>anyhow::Error;
@@ -295,18 +304,26 @@
     TRACK_PLAYING_STATE.with_borrow_mut(
         |TrackState {
              metainfo,
-             paused,
+             paused: <span class="kw">_</span>,
              cache_path,
          }| {
             <span class="kw">let </span>track_meta_playing = metainfo.as_ref().cloned();
             <span class="macro">trace!</span>(<span class="string">&quot;got track_id: {track_meta:#?}&quot;</span>);
 
-            <span class="kw">let </span>need = track_meta_playing.is_none()
-                || track_meta_playing.as_ref().is_some_and(|p| p != track_meta);
+            <span class="comment">// workarounds for issue [#109](https://github.com/waylyrics/waylyrics/issues/109)
+            // skip comparing length
+            </span><span class="kw">let </span>need = !track_meta_playing.is_some_and(|p| {
+                TrackMeta { length: <span class="prelude-val">None</span>, ..p }
+                    == TrackMeta {
+                        length: <span class="prelude-val">None</span>,
+                        ..track_meta.clone()
+                    }
+            });
 
-            <span class="kw-2">*</span>metainfo = <span class="prelude-val">Some</span>(track_meta.clone());
-            <span class="kw-2">*</span>paused = <span class="bool-val">false</span>;
-            <span class="kw-2">*</span>cache_path = <span class="prelude-val">Some</span>(get_cache_path(track_meta));
+            <span class="kw">if </span>need {
+                <span class="kw-2">*</span>metainfo = <span class="prelude-val">Some</span>(track_meta.clone());
+                <span class="kw-2">*</span>cache_path = <span class="prelude-val">Some</span>(get_cache_path(track_meta));
+            }
             need
         },
     )
@@ -388,6 +405,7 @@
 
         <span class="prelude-val">Ok</span>(meta)
     })<span class="question-mark">?</span>;
+
     <span class="kw">if </span>need_fetch_lyric(<span class="kw-2">&amp;</span>meta) {
         <span class="kw">let </span>window = gtk::prelude::ObjectExt::downgrade(window);
         gidle_future::spawn(<span class="kw">async move </span>{

@@ -103,12 +103,13 @@
 <a href="#103" id="103">103</a>
 <a href="#104" id="104">104</a>
 <a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Result;
 <span class="kw">use </span>std::path::PathBuf;
 
 <span class="kw">use </span>gtk::subclass::prelude::ObjectSubclassIsExt;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
-<span class="kw">use </span>tracing::{error, info, debug};
+<span class="kw">use </span>tracing::{debug, error, info};
 
 <span class="kw">use </span><span class="kw">crate</span>::sync::TrackMeta;
 <span class="kw">use </span><span class="kw">crate</span>::sync::{lyric::fetch::fetch_lyric, LYRIC};
@@ -122,8 +123,9 @@
     <span class="kw">let </span>artists = <span class="kw-2">&amp;</span>track_meta.artists;
     <span class="kw">let </span>length = track_meta.length;
 
-    <span class="macro">debug!</span>(<span class="string">&quot;get_cache_path: {title} {artists:?} {album:?} {length:?}&quot;</span>);
-    <span class="kw">let </span>digest = md5::compute(<span class="macro">format!</span>(<span class="string">&quot;{title}-{artists:?}-{album:?}-{length:?}&quot;</span>));
+    <span class="kw">let </span>cache_key = <span class="macro">format!</span>(<span class="string">&quot;{title}-{artists:?}-{album:?}-{length:?}&quot;</span>);
+    <span class="macro">debug!</span>(<span class="string">&quot;get_cache_path: received {cache_key}&quot;</span>);
+    <span class="kw">let </span>digest = md5::compute(<span class="kw-2">&amp;</span>cache_key);
 
     <span class="kw">let </span>cache_dir =
         CACHE_DIR.with_borrow(|cache_home| PathBuf::from(cache_home).join(md5_cache_dir(digest)));
