@@ -11,6 +11,7 @@ BuildRequires:  libgraphene-devel
 BuildRequires:  gtk4-devel
 BuildRequires:  openssl-devel
 BuildRequires:  dbus-1-devel
+BuildRequires:  mimalloc-devel
 
 %define debug_package %{nil}
 
