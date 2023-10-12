@@ -33,15 +33,21 @@ use utils::{
 
 #[tokio::main]
 async fn main() -> Result<glib::ExitCode> {
-    Registry::default()
+    #[cfg(feature = "tokio-debug")]
+    let console_layer = console_subscriber::spawn();
+
+    let tracing_registry = Registry::default()
         .with(
             EnvFilter::builder()
                 .with_default_directive(LevelFilter::INFO.into())
                 .from_env()?,
         )
         .with(fmt::Layer::new())
-        .with(tracing_journald::layer()?)
-        .init();
+        .with(tracing_journald::layer()?);
+    #[cfg(feature = "tokio-debug")]
+    tracing_registry.with(console_layer).init();
+    #[cfg(not(feature = "tokio-debug"))]
+    tracing_registry.init();
 
     tracing::info!("process id: {}", std::process::id());
 

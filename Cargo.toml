@@ -63,7 +63,14 @@ tokio = { version = "1.33.0", features = [
 reqwest = { version = "0.11.20" }
 gidle_future = "0.2.0"
 
+# debugging (optional)
+console-subscriber = { version = "0.2.0", optional = true }
+
 [features]
 mimalloc = ["dep:mimalloc"]
 vendored = ["dbus/vendored"]
 default = ["mimalloc"]
+
+# read https://github.com/tokio-rs/console#instrumenting-your-program first before using this feature.
+# RUSTFLAGS="--cfg tokio_unstable" is required for debugging with tokio-console.
+tokio-debug = ["dep:console-subscriber", "tokio/tracing"]
