@@ -33,19 +33,19 @@ check this [PR](https://github.com/NixOS/nixpkgs/pull/231984) for an outdated ex
 ## Debian-based
 
 ```bash
-sudo apt-get install libssl-dev libgtk-4-dev libdbus-1-dev
+sudo apt-get install libssl-dev libgtk-4-dev libdbus-1-dev libmimalloc-dev
 ```
 
 ## Arch-based
 
 ```bash
-paru -S gtk4 libxcb
+paru -S gtk4 libxcb mimalloc
 ```
 
 ## openSUSE/RHEL/Fedora..
 
 ```
-cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel
+cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel
 ```
 
 # Build

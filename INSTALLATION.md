@@ -33,21 +33,20 @@ Archlinuxcn也有 [Waylyrics-git](https://github.com/archlinuxcn/repo/tree/maste
 ## Debian-based
 
 ```bash
-sudo apt-get install libssl-dev libgtk-4-dev libdbus-1-dev
+sudo apt-get install libssl-dev libgtk-4-dev libdbus-1-dev libmimalloc-dev
 ```
 
 ## Arch-based
 
 ```bash
-paru -S gtk4 libxcb
+paru -S gtk4 libxcb mimalloc
 ```
 
 ## openSUSE/RHEL/Fedora..
 
 ```
-cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel
+cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel
 ```
-
 # 编译
 
 ```bash
