@@ -179,3 +179,11 @@ fn init_dirs() -> Result<(PathBuf, PathBuf)> {
 
     Ok((config_path, user_theme_dir))
 }
+
+#[cfg(feature = "mimalloc")]
+mod _alloc {
+    use mimalloc::MiMalloc;
+
+    #[global_allocator]
+    static GLOBAL: MiMalloc = MiMalloc;
+}
