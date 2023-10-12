@@ -305,6 +305,7 @@
 <a href="#305" id="305">305</a>
 <a href="#306" id="306">306</a>
 <a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>imp;
 
 <span class="kw">use </span>std::sync::Arc;
@@ -464,8 +465,9 @@
             }
         }
         <span class="self">self</span>.results().remove_all();
+
         <span class="kw">if </span>results.is_empty() {
-            show_dialog(<span class="prelude-val">Some</span>(<span class="self">self</span>), <span class="string">&quot;No result found.&quot;</span>, gtk::MessageType::Error);
+            show_dialog(<span class="prelude-val">Some</span>(<span class="self">self</span>), <span class="string">&quot;No result was found.&quot;</span>, gtk::MessageType::Error);
             <span class="kw">return</span>;
         }
 
