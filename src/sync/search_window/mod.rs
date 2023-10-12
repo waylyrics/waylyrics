@@ -157,8 +157,9 @@ impl Window {
             }
         }
         self.results().remove_all();
+
         if results.is_empty() {
-            show_dialog(Some(self), "No result found.", gtk::MessageType::Error);
+            show_dialog(Some(self), "No result was found.", gtk::MessageType::Error);
             return;
         }
 
