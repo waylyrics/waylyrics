@@ -95,14 +95,23 @@ Qcm, Feeluown-netease, ElectronNCM, YesPlayMusic，可以直接拿歌曲id
 
 [YesPlayMusicOSD]: https://github.com/shih-liang/YesPlayMusicOSD
 [waybar-netease-music-lyrics]: https://github.com/kangxiaoju/waybar-netease-music-lyrics
+[lx-music-desktop]: https://github.com/lyswhut/lx-music-desktop
+[Sunamu]: https://github.com/NyaomiDEV/Sunamu
+[lyricsSeeker]: https://github.com/BruceZhang1993/LyricsSeeker
+[caraoke-plasmoid]: https://github.com/Copay/caraoke-plasmoid
+[desktop-lyric]: https://github.com/tuberry/desktop-lyric
 
 Sway用户可以看看 [waybar-netease-music-lyrics].
 
-[YesPlayMusicOSD] 也有不错的歌词支持
+[YesPlayMusicOSD] 也有不错的歌词支持，[lx-music-desktop] 多来源且带有桌面歌词支持
 
-BruceZhang1993's [lyricsSeeker](https://github.com/BruceZhang1993/LyricsSeeker) is still WIP, but it may have better-looking and better integration with KDE.
+[Sunamu] 可以启动服务器或电子app，它的歌词显示效果更好，并且比waylyrics的功能更多
 
-Copay's [caraoke-plasmoid](https://github.com/Copay/caraoke-plasmoid) is currently Plasma-only, though it is easy to remove plasmoid components
+如果你是 GNOME 用户，你可以看看 [desktop-lyric]
+
+BruceZhang1993's [lyricsSeeker] is still WIP, but it may have better-looking and better integration with KDE.
+
+Copay's [caraoke-plasmoid] is currently Plasma-only, though it is easy to remove plasmoid components
 
 ## Credit
 

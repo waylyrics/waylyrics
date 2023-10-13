@@ -93,14 +93,23 @@ Current approach my seems dirty:
 
 [YesPlayMusicOSD]: https://github.com/shih-liang/YesPlayMusicOSD
 [waybar-netease-music-lyrics]: https://github.com/kangxiaoju/waybar-netease-music-lyrics
+[lx-music-desktop]: https://github.com/lyswhut/lx-music-desktop
+[Sunamu]: https://github.com/NyaomiDEV/Sunamu
+[lyricsSeeker]: https://github.com/BruceZhang1993/LyricsSeeker
+[caraoke-plasmoid]: https://github.com/Copay/caraoke-plasmoid
+[desktop-lyric]: https://github.com/tuberry/desktop-lyric
 
 For Sway users, you may want use [waybar-netease-music-lyrics].
 
-[YesPlayMusicOSD] have great lyrics support
+[YesPlayMusicOSD] and [lx-music-desktop] has great lyrics support
 
-BruceZhang1993's [lyricsSeeker](https://github.com/BruceZhang1993/LyricsSeeker) is still WIP, but it may have better-looking and better integration with KDE.
+[Sunamu] could start web-server/launch electron app depends on your choice, and it has good-looking and it's much more feature rich than waylyrics.
 
-Copay's [caraoke-plasmoid](https://github.com/Copay/caraoke-plasmoid) is currently Plasma-only, though it is easy to remove plasmoid components
+BruceZhang1993's [lyricsSeeker] is still WIP, but it may have better-looking and better integration with KDE.
+
+Copay's [caraoke-plasmoid] is currently Plasma-only, though it is easy to remove plasmoid components
+
+If you are using GNOME I will suggest you [desktop-lyric].
 
 ## Credit
 
