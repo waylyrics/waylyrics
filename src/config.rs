@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::lyric_providers::{netease::Netease, LyricProvider};
+
 #[derive(Deserialize, Serialize, Clone, Copy)]
 #[serde(tag = "type")]
 pub enum Align {
@@ -97,7 +99,7 @@ impl Default for Config {
             lyric_align: Align::Center,
             triggers: Default::default(),
             qqmusic_api_base_url: None,
-            lyric_search_source: vec!["网易云音乐".into()],
+            lyric_search_source: vec![Netease.unique_name().into()],
         }
     }
 }
