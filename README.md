@@ -13,7 +13,12 @@
   - [依赖](#依赖)
     - [推荐的播放器](#推荐的播放器)
       - [在线](#在线)
+        - [Qt](#qt)
+        - [Electron](#electron)
       - [本地](#本地)
+        - [GTK+](#gtk)
+        - [原生](#原生)
+        - [Qt](#qt-1)
     - [无法使用的播放器](#无法使用的播放器)
   - [目录](#目录)
   - [实现](#实现)
@@ -42,18 +47,33 @@ SIGUSR2: 开关GTK CSD
 
 #### 在线
 
-- [Qcm](https://github.com/hypengw/Qcm)
-- [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
-- [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
-- [FeelUOwn](https://github.com/feeluown/FeelUOwn/), 3.9.12+
-- [Telegram](https://t.me/Music163Bot)
-- [youtube-music](https://github.com/th-ch/youtube-music), 歌多，有mv
+> Qcm, Feeluown-{netease, qqmusic}, ElectronNCM, YesPlayMusic，可以直接拿歌曲id
 
-Qcm, Feeluown-netease, ElectronNCM, YesPlayMusic，可以直接拿歌曲id
+##### Qt
+
+- [FeelUOwn](https://github.com/feeluown/FeelUOwn/), 3.9.12+
+- [Qcm](https://github.com/hypengw/Qcm)
+- [Telegram](https://t.me/Music163Bot)
+
+##### Electron
+
+- [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
+- [lx-music-desktop](https://github.com/lyswhut/lx-music-desktop)
+- [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
+- [youtube-music](https://github.com/th-ch/youtube-music), 歌多，有mv
 
 #### 本地
 
-- [mpv-mpris](https://github.com/hoyon/mpv-mpris)
+##### GTK+
+
+- [amberol](https://gitlab.gnome.org/World/amberol)
+
+##### 原生
+
+- mpv + [mpv-mpris](https://github.com/hoyon/mpv-mpris)
+
+##### Qt
+
 - [VLC](https://www.videolan.org)
 
 ### 无法使用的播放器

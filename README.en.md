@@ -13,7 +13,12 @@ Simple universal on screen lyrics made with GTK4 and ❤️.
   - [Requirement](#requirement)
     - [Recommended Players](#recommended-players)
       - [online](#online)
+        - [Qt](#qt)
+        - [Electron](#electron)
       - [local](#local)
+        - [GTK+](#gtk)
+        - [Native](#native)
+        - [Qt](#qt-1)
     - [MPRIS-unfriendly Players](#mpris-unfriendly-players)
   - [Directories](#directories)
   - [Approach](#approach)
@@ -43,18 +48,34 @@ SIGUSR2: switch gtk decoration on/off
 
 #### online
 
+> For Qcm, Feeluown-{netease, qqmusic}, ElectronNCM, YesPlayMusic, we could get song id directly
+
+##### Qt
+
 - [Qcm](https://github.com/hypengw/Qcm)
-- [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
-- [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
 - [FeelUOwn](https://github.com/feeluown/FeelUOwn/), with the latest code
 - [Telegram](https://t.me/Music163Bot)
+
+##### Electron
+
+- [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
+- [lx-music-desktop](https://github.com/lyswhut/lx-music-desktop)
+- [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
 - [youtube-music](https://github.com/th-ch/youtube-music), has lots of songs and MV support
 
-For Qcm, Feeluown-netease, ElectronNCM, YesPlayMusic, we could get song id directly
 
 #### local
 
-- [mpv-mpris](https://github.com/hoyon/mpv-mpris)
+##### GTK+
+
+- [amberol](https://gitlab.gnome.org/World/amberol)
+
+##### Native
+
+- mpv + [mpv-mpris](https://github.com/hoyon/mpv-mpris)
+
+##### Qt
+
 - [VLC](https://www.videolan.org)
 
 ### MPRIS-unfriendly Players
