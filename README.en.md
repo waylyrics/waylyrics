@@ -48,6 +48,7 @@ SIGUSR2: switch gtk decoration on/off
 - [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
 - [FeelUOwn](https://github.com/feeluown/FeelUOwn/), with the latest code
 - [Telegram](https://t.me/Music163Bot)
+- [youtube-music](https://github.com/th-ch/youtube-music), has lots of songs and MV support
 
 For Qcm, Feeluown-netease, ElectronNCM, YesPlayMusic, we could get song id directly
 

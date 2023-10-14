@@ -47,6 +47,7 @@ SIGUSR2: 开关GTK CSD
 - [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
 - [FeelUOwn](https://github.com/feeluown/FeelUOwn/), 3.9.12+
 - [Telegram](https://t.me/Music163Bot)
+- [youtube-music](https://github.com/th-ch/youtube-music), 歌多，有mv
 
 Qcm, Feeluown-netease, ElectronNCM, YesPlayMusic，可以直接拿歌曲id
 
