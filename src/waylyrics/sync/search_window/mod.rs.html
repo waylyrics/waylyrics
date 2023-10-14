@@ -306,6 +306,9 @@
 <a href="#306" id="306">306</a>
 <a href="#307" id="307">307</a>
 <a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>imp;
 
 <span class="kw">use </span>std::sync::Arc;
@@ -316,7 +319,7 @@
 <span class="kw">use </span>gtk::{gio, glib, ColumnViewColumn};
 <span class="kw">use </span>gtk::{prelude::<span class="kw-2">*</span>, ListItem};
 <span class="kw">use </span>tokio::task::JoinSet;
-<span class="kw">use </span>tracing::error;
+<span class="kw">use </span>tracing::{error, info};
 
 <span class="kw">use </span><span class="kw">crate</span>::LYRIC_PROVIDERS;
 
@@ -530,6 +533,9 @@
                     <span class="macro">error!</span>(<span class="string">&quot;provider_idx {} is out of range&quot;</span>, provider_idx);
                     <span class="kw">return</span>;
                 };
+                
+                <span class="macro">info!</span>(<span class="string">&quot;selected {} from {}&quot;</span>, result.id(), provider.unique_name());
+                
                 gidle_future::spawn(<span class="kw">async move </span>{
                     <span class="kw">let </span>song_id = result.id();
                     <span class="kw">match </span>provider.query_lyric(<span class="kw-2">&amp;</span>song_id).<span class="kw">await </span>{
