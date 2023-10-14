@@ -8,7 +8,7 @@ use gtk::subclass::prelude::*;
 use gtk::{gio, glib, ColumnViewColumn};
 use gtk::{prelude::*, ListItem};
 use tokio::task::JoinSet;
-use tracing::error;
+use tracing::{error, info};
 
 use crate::LYRIC_PROVIDERS;
 
@@ -222,6 +222,9 @@ impl Window {
                     error!("provider_idx {} is out of range", provider_idx);
                     return;
                 };
+                
+                info!("selected {} from {}", result.id(), provider.unique_name());
+                
                 gidle_future::spawn(async move {
                     let song_id = result.id();
                     match provider.query_lyric(&song_id).await {
