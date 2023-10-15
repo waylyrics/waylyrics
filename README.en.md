@@ -13,10 +13,11 @@ Simple universal on screen lyrics made with GTK4 and ❤️.
   - [Requirement](#requirement)
     - [Recommended Players](#recommended-players)
       - [online](#online)
+        - [GTK+](#gtk)
         - [Qt](#qt)
         - [Electron](#electron)
       - [local](#local)
-        - [GTK+](#gtk)
+        - [GTK+](#gtk-1)
         - [Native](#native)
         - [Qt](#qt-1)
     - [MPRIS-unfriendly Players](#mpris-unfriendly-players)
@@ -49,6 +50,10 @@ SIGUSR2: switch gtk decoration on/off
 #### online
 
 > For Qcm, Feeluown-{netease, qqmusic}, ElectronNCM, YesPlayMusic, we could get song id directly
+
+##### GTK+
+
+- [netease-cloud-music-gtk](https://github.com/waylyrics/netease-cloud-music-gtk)
 
 ##### Qt
 
@@ -85,12 +90,11 @@ SIGUSR2: switch gtk decoration on/off
 [youtube-music]: https://github.com/th-ch/youtube-music
 
 
-| Player                    | OSD | issue                                     |
-| ------------------------- | --- | ----------------------------------------- |
-| [netease-cloud-music-gtk] | X   | gives 0 position                          |
-| Firefox                   | X   | do not provide position call              |
-| qqmusic                   | O   | no info other than title/artist avaliable |
-| [flutter-netease-music]   | X   | no mpris support                          |
+| Player                  | OSD | issue                        |
+| ----------------------- | --- | ---------------------------- |
+| Firefox                 | X   | do not provide position call |
+| qqmusic                 | O   | position stays on 0          |
+| [flutter-netease-music] | X   | no mpris support             |
 
 ## Directories
 

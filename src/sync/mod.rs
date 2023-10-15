@@ -17,7 +17,7 @@ pub use lyric::scroll::register_lyric_display;
 /// A struct from metadata in mpris::TrackID to avoid track_id and title unwrapping
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct TrackMeta {
-    pub track_id: mpris::TrackID,
+    pub track_id: Option<mpris::TrackID>,
     pub title: String,
     pub album: Option<String>,
     pub artists: Option<Vec<String>>,

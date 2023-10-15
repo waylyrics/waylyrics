@@ -13,10 +13,11 @@
   - [依赖](#依赖)
     - [推荐的播放器](#推荐的播放器)
       - [在线](#在线)
+        - [GTK+](#gtk)
         - [Qt](#qt)
         - [Electron](#electron)
       - [本地](#本地)
-        - [GTK+](#gtk)
+        - [GTK+](#gtk-1)
         - [原生](#原生)
         - [Qt](#qt-1)
     - [无法使用的播放器](#无法使用的播放器)
@@ -48,6 +49,10 @@ SIGUSR2: 开关GTK CSD
 #### 在线
 
 > Qcm, Feeluown-{netease, qqmusic}, ElectronNCM, YesPlayMusic，可以直接拿歌曲id
+
+##### GTK+
+
+- [netease-cloud-music-gtk](https://github.com/waylyrics/netease-cloud-music-gtk)
 
 ##### Qt
 
@@ -83,12 +88,11 @@ SIGUSR2: 开关GTK CSD
 [youtube-music]: https://github.com/th-ch/youtube-music
 
 
-| Player                    | OSD | issue              |
-| ------------------------- | --- | ------------------ |
-| [netease-cloud-music-gtk] | X   | 播放位置固定给0    |
-| Firefox                   | X   | 不提供播放位置调用 |
-| qqmusic                   | O   | 什么都不给         |
-| [flutter-netease-music]   | X   | 完全不支持mpris    |
+| Player                  | OSD | issue              |
+| ----------------------- | --- | ------------------ |
+| Firefox                 | X   | 不提供播放位置调用 |
+| qqmusic                 | O   | 位置一直为0        |
+| [flutter-netease-music] | X   | 完全不支持mpris    |
 
 ## 目录
 

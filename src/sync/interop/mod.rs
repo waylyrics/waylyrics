@@ -32,10 +32,7 @@ impl TryFrom<Metadata> for TrackMeta {
     type Error = PlayerStatus;
 
     fn try_from(meta: Metadata) -> Result<Self, Self::Error> {
-        let track_id = meta
-            .track_id()
-            .ok_or(())
-            .map_err(|_| PlayerStatus::Unsupported("cannot get track id"))?;
+        let track_id = meta.track_id();
         let title = meta
             .title()
             .ok_or(())
