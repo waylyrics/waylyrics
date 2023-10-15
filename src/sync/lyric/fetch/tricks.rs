@@ -27,7 +27,7 @@ pub fn get_accurate_lyric(
                 tracing::warn!("local lyric files are still unsupported");
                 None
             }
-            "ElectronNCM" | "Qcm" => get_song_id_from_player(player, |meta| {
+            "ElectronNCM" | "NeteaseCloudMusicGtk" | "Qcm" => get_song_id_from_player(player, |meta| {
                 meta.get("mpris:trackid")
                     .and_then(mpris::MetadataValue::as_str)
                     .and_then(|s| s.split('/').last())
