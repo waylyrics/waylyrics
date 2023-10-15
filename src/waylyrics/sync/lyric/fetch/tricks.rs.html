@@ -111,7 +111,7 @@
                 <span class="macro">tracing::warn!</span>(<span class="string">&quot;local lyric files are still unsupported&quot;</span>);
                 <span class="prelude-val">None
             </span>}
-            <span class="string">&quot;ElectronNCM&quot; </span>| <span class="string">&quot;Qcm&quot; </span>=&gt; get_song_id_from_player(player, |meta| {
+            <span class="string">&quot;ElectronNCM&quot; </span>| <span class="string">&quot;NeteaseCloudMusicGtk&quot; </span>| <span class="string">&quot;Qcm&quot; </span>=&gt; get_song_id_from_player(player, |meta| {
                 meta.get(<span class="string">&quot;mpris:trackid&quot;</span>)
                     .and_then(mpris::MetadataValue::as_str)
                     .and_then(|s| s.split(<span class="string">&#39;/&#39;</span>).last())
