@@ -5,7 +5,7 @@
 
 Simple universal on screen lyrics made with GTK4 and ❤️.
 
-![](https://github.com/poly000/waylyrics/assets/34085039/43037cb4-9a07-4e77-b112-1408365199e2)
+![](https://github.com/waylyrics/waylyrics/assets/34085039/dd7d9236-b2ae-47da-b4a3-e19a7d10e31b)
 
 - [Waylyrics](#waylyrics)
   - [Build/Install](#buildinstall)
