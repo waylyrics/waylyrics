@@ -58,6 +58,13 @@ impl super::LyricProvider for QQMusic {
         let resp: QueryLyricResp =
             serde_json::from_slice(client.get(url).send().await?.bytes().await?.as_ref())?;
 
+        if resp.data.code == -1901 {
+            return Ok(LyricStore {
+                lyric: None,
+                tlyric: None,
+            });
+        }
+
         Ok(LyricStore {
             lyric: Some(resp.data.lyric),
             tlyric: Some(resp.data.trans),
