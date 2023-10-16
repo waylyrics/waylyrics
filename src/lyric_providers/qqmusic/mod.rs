@@ -27,11 +27,11 @@ impl super::LyricProvider for QQMusic {
 
     async fn search_song_detailed(
         &self,
-        _album: &str,
-        artists: &[&str],
+        album: &str,
+        _artists: &[&str],
         title: &str,
     ) -> Result<Vec<SongInfo>> {
-        let keyword = default_search_query("", artists, title);
+        let keyword = default_search_query(album, &[], title);
         self.search_song(&keyword).await
     }
 
