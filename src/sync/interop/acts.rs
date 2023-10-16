@@ -75,10 +75,10 @@ pub fn register_action_refetch_lyric(app: &Application, window: &app::Window, tr
         };
 
         gidle_future::spawn(async move {
-            let Some(wind) = MAIN_WINDOW.with_borrow(|wind| wind.as_ref().cloned())
-            else {
+            let Some(wind) = MAIN_WINDOW.with_borrow(|wind| wind.as_ref().cloned()) else {
                 return;
             };
+            reset_lyric_labels(&wind);
             if let Err(err) = update_lyric(&metainfo, &wind, true).await {
                 show_dialog(
                     Some(&wind),

@@ -113,7 +113,6 @@ pub async fn update_lyric(
     };
 
     drop(_gaurd);
-    reset_lyric_labels(window);
     Ok(())
 }
 
@@ -183,6 +182,7 @@ pub fn sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
             let Some(window) = window.upgrade() else {
                 return;
             };
+            reset_lyric_labels(&window);
             if let Err(e) = update_lyric(&meta, &window, false).await {
                 error!("{e} occurs fetching lyric")
             }
