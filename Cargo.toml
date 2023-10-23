@@ -35,7 +35,7 @@ lrc-nom = "0.2.0"
 url = "2.4.1"
 
 # logging
-tracing = "0.1.39"
+tracing = "0.1.40"
 tracing-journald = "0.3.0"
 tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
 
