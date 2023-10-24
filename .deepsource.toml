@@ -4,4 +4,4 @@ version = 1
 name = "rust"
 
   [analyzers.meta]
-  msrv = "stable"
+  msrv = "nightly"
