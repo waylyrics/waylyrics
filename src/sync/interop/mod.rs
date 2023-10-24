@@ -66,11 +66,7 @@ pub fn list_avaliable_players() -> Vec<Player> {
 
 pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
     TRACK_PLAYING_STATE.with_borrow_mut(
-        |TrackState {
-             metainfo,
-             paused: _,
-             cache_path,
-         }| {
+        |TrackState { metainfo, cache_path, .. }| {
             let track_meta_playing = metainfo.as_ref().cloned();
             trace!("got track_id: {track_meta:#?}");
 
