@@ -44,7 +44,7 @@ md5 = "0.7.0"
 
 # utils
 regex = "1.10.2"
-libc = "0.2.148"
+libc = "0.2.150"
 xdg = "2.5.2"
 
 # error handling
