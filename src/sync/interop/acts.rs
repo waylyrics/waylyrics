@@ -17,7 +17,7 @@ use crate::{
         lyric::cache::update_lyric_cache,
         search_window, TrackState, LYRIC, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
     },
-    MAIN_WINDOW,
+    MAIN_WINDOW, glib_spawn,
 };
 
 pub fn register_action_disconnect(app: &Application) {
@@ -74,7 +74,7 @@ pub fn register_action_refetch_lyric(app: &Application, window: &app::Window, tr
             return;
         };
 
-        gidle_future::spawn(async move {
+        glib_spawn!(async move {
             let Some(wind) = MAIN_WINDOW.with_borrow(|wind| wind.as_ref().cloned()) else {
                 return;
             };

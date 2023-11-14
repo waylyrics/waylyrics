@@ -10,6 +10,7 @@ use std::{
 
 use app::Window;
 use lyric_providers::LyricProvider;
+use once_cell::sync::Lazy;
 use qqmusic_rs::QQMusicApi;
 use regex::RegexSet;
 
@@ -34,3 +35,20 @@ pub static LYRIC_PROVIDERS: OnceLock<Vec<Arc<dyn LyricProvider>>> = OnceLock::ne
 pub static QQMUSIC_API_CLIENT: OnceLock<Option<QQMusicApi>> = OnceLock::new();
 
 pub const DEFAULT_TEXT: &str = "Waylyrics";
+
+pub static TOKIO_RUNTIME: Lazy<tokio::runtime::Runtime> = Lazy::new(|| tokio::runtime::Runtime::new().unwrap());
+
+#[macro_export]
+macro_rules! glib_spawn {
+    ($future: expr) => {
+        gtk::glib::MainContext::default().spawn_local($future)
+    }
+}
+
+/// Used with functions requiring reqwest.
+#[macro_export]
+macro_rules! tokio_spawn {
+    ($future: expr) => {
+        $crate::TOKIO_RUNTIME.spawn($future)
+    };
+}

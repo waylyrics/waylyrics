@@ -1,9 +1,9 @@
-use crate::lyric_providers::netease::Netease;
+use crate::{lyric_providers::netease::Netease};
 use crate::lyric_providers::qqmusic::QQMusic;
 
 use crate::sync::PLAYER;
 
-use crate::app;
+use crate::{app, glib_spawn};
 use crate::lyric_providers::LyricProvider;
 use anyhow::Result;
 use gtk::glib::clone::Downgrade;
@@ -56,7 +56,7 @@ pub fn get_accurate_lyric(
         let title = title.to_owned();
         let artists = artists.to_owned();
         let window = window.downgrade();
-        gidle_future::spawn(async move {
+        glib_spawn!(async move {
             let Ok(lyric) = provider.query_lyric(&song_id).await else {
                 return;
             };
