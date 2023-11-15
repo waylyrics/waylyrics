@@ -56,6 +56,7 @@ pub fn get_accurate_lyric(
         let title = title.to_owned();
         let artists = artists.to_owned();
         let window = window.downgrade();
+        tracing::debug!("spawned query from get_accurate_lyric");
         gidle_future::spawn(async move {
             let Ok(lyric) = provider.query_lyric(&song_id).await else {
                 return;

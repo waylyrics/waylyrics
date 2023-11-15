@@ -74,6 +74,7 @@ pub fn register_action_refetch_lyric(app: &Application, window: &app::Window, tr
             return;
         };
 
+        tracing::debug!("spawned update_lyric from refetch-lyric action");
         gidle_future::spawn(async move {
             let Some(wind) = MAIN_WINDOW.with_borrow(|wind| wind.as_ref().cloned()) else {
                 return;

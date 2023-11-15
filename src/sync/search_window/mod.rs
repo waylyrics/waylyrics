@@ -190,6 +190,7 @@ impl Window {
         imp.input
             .connect_activate(clone!(@weak self as window => move |_| {
                 let window = window.downgrade();
+                tracing::debug!("spawned window.search() from search button");
                 gidle_future::spawn(async move {
                     if let Some(window) = window.upgrade() {
                         window.search().await
@@ -200,6 +201,7 @@ impl Window {
         imp.input
             .connect_icon_release(clone!(@weak self as window => move |_, _| {
                 let window = window.downgrade();
+                tracing::debug!("spawned window.search() from search icon release");
                 gidle_future::spawn(async move {
                     if let Some(window) = window.upgrade() {
                         window.search().await
@@ -225,6 +227,7 @@ impl Window {
                 
                 info!("selected {} from {}", result.id(), provider.unique_name());
                 
+                tracing::debug!("spawned query_lyric from set lyric button");
                 gidle_future::spawn(async move {
                     let song_id = result.id();
                     match provider.query_lyric(&song_id).await {
