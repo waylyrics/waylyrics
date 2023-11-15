@@ -114,6 +114,17 @@
 <a href="#114" id="114">114</a>
 <a href="#115" id="115">115</a>
 <a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>serde::{Deserialize, Serialize};
 
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{netease::Netease, LyricProvider};
@@ -128,6 +139,15 @@
     <span class="doccomment">/// (default)
     </span>Center,
     Fill,
+}
+
+<span class="attr">#[derive(Deserialize, Serialize, Clone, Copy, Default)]
+#[serde(rename_all = <span class="string">&quot;snake_case&quot;</span>)]
+</span><span class="kw">pub enum </span>LyricDisplay {
+    <span class="attr">#[default]
+    </span>ShowBoth,
+    Origin,
+    PreferTranslation,
 }
 
 <span class="attr">#[derive(Deserialize, Serialize)]
@@ -149,6 +169,7 @@
     <span class="kw">pub </span>qqmusic_api_base_url: <span class="prelude-ty">Option</span>&lt;String&gt;,
     <span class="doccomment">/// avaliable options: 网易云音乐, QQ音乐
     </span><span class="kw">pub </span>lyric_search_source: Vec&lt;String&gt;,
+    <span class="kw">pub </span>lyric_display_mode: LyricDisplay,
 }
 
 <span class="doccomment">/// check [GTK+&#39;s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
@@ -216,6 +237,7 @@
             triggers: Default::default(),
             qqmusic_api_base_url: <span class="prelude-val">None</span>,
             lyric_search_source: <span class="macro">vec!</span>[Netease.unique_name().into()],
+            lyric_display_mode: Default::default(),
         }
     }
 }

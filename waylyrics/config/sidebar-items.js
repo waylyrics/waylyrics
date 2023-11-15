@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Align"],"struct":["Config","Triggers"]};
+window.SIDEBAR_ITEMS = {"enum":["Align","LyricDisplay"],"struct":["Config","Triggers"]};
