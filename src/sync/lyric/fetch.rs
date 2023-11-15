@@ -11,7 +11,7 @@ use tracing::{debug, error, info};
 
 use crate::lyric_providers::LyricOwned;
 use crate::sync::{TrackMeta, LYRIC};
-use crate::{app, LYRIC_PROVIDERS};
+use crate::{app, LYRIC_PROVIDERS, tokio_spawn};
 
 use crate::sync::utils::{self, match_likely_lyric};
 
@@ -36,44 +36,48 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
     let providers = LYRIC_PROVIDERS
         .get()
         .expect("lyric providers should be initialized");
-    let mut set = JoinSet::new();
 
     let artists = Arc::new(artists.as_ref().unwrap_or(&vec![]).clone());
 
     let length_toleration_ms = window.imp().length_toleration_ms.get();
-    for (idx, provider) in providers.iter().enumerate() {
+
+    let (mut results, artists_str, title) = tokio_spawn!(async move {
+        let mut set = JoinSet::new();
+        for (idx, provider) in providers.iter().enumerate() {
+            let title = title.clone();
+            let provider = provider.clone();
+            let artists = artists.clone();
+            let album = album.clone();
+
+            set.spawn(async move {
+                let artists = artists.iter().map(|s| s.as_str()).collect::<Vec<&str>>();
+                let album = album.as_deref();
+                let search_result = provider
+                    .search_song_detailed(album.unwrap_or_default(), &artists, &title)
+                    .await;
+                search_result.map(|songs| {
+                    match_likely_lyric(
+                        album.zip(Some(&title)),
+                        length,
+                        &songs,
+                        length_toleration_ms,
+                    )
+                    .map(|(id, weight)| (id.to_owned(), weight, idx))
+                })
+            });
+        }
+
+        let artists_str = artists_str.to_string();
         let title = title.clone();
-        let provider = provider.clone();
-        let artists = artists.clone();
-        let album = album.clone();
-
-        set.spawn(async move {
-            let artists = artists.iter().map(|s| s.as_str()).collect::<Vec<&str>>();
-            let album = album.as_deref();
-            let search_result = provider
-                .search_song_detailed(album.unwrap_or_default(), &artists, &title)
-                .await;
-            search_result.map(|songs| {
-                match_likely_lyric(
-                    album.zip(Some(&title)),
-                    length,
-                    &songs,
-                    length_toleration_ms,
-                )
-                .map(|(id, weight)| (id.to_owned(), weight, idx))
-            })
-        });
-    }
-
-    let artists_str = artists_str.to_string();
-    let title = title.clone();
-    let mut results = vec![];
-    while let Some(Ok(re)) = set.join_next().await {
-        let Ok(Some((id, weight, idx))) = re else {
-            continue;
-        };
-        results.push((id, weight, idx));
-    }
+        let mut results = vec![];
+        while let Some(Ok(re)) = set.join_next().await {
+            let Ok(Some((id, weight, idx))) = re else {
+                continue;
+            };
+            results.push((id, weight, idx));
+        }
+        (results, artists_str, title)
+    }).await?;
 
     if results.is_empty() {
         info!("Failed searching for {artists_str} - {title}",);

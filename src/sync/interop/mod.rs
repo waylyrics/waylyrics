@@ -21,7 +21,7 @@ use crate::{
         lyric::{cache, fetch, scroll::refresh_lyric},
         utils, TrackMeta, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
     },
-    utils::reset_lyric_labels,
+    utils::reset_lyric_labels, glib_spawn,
 };
 
 use crate::sync::TrackState;
@@ -175,7 +175,7 @@ pub fn sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
     if need_fetch_lyric(&meta) {
         let window = gtk::prelude::ObjectExt::downgrade(window);
         tracing::debug!("spawned update_lyric from sync_track");
-        gidle_future::spawn(async move {
+        glib_spawn!(async move {
             let Some(window) = window.upgrade() else {
                 return;
             };

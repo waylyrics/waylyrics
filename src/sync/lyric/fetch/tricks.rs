@@ -3,8 +3,8 @@ use crate::lyric_providers::qqmusic::QQMusic;
 
 use crate::sync::PLAYER;
 
-use crate::app;
 use crate::lyric_providers::LyricProvider;
+use crate::{app, glib_spawn};
 use anyhow::Result;
 use gtk::glib::clone::Downgrade;
 use mpris::{Metadata, Player};
@@ -27,12 +27,14 @@ pub fn get_accurate_lyric(
                 tracing::warn!("local lyric files are still unsupported");
                 None
             }
-            "ElectronNCM" | "NeteaseCloudMusicGtk" | "Qcm" => get_song_id_from_player(player, |meta| {
-                meta.get("mpris:trackid")
-                    .and_then(mpris::MetadataValue::as_str)
-                    .and_then(|s| s.split('/').last())
-            })
-            .map(|song_id| (song_id, Box::new(Netease) as _)),
+            "ElectronNCM" | "NeteaseCloudMusicGtk" | "Qcm" => {
+                get_song_id_from_player(player, |meta| {
+                    meta.get("mpris:trackid")
+                        .and_then(mpris::MetadataValue::as_str)
+                        .and_then(|s| s.split('/').last())
+                })
+                .map(|song_id| (song_id, Box::new(Netease) as _))
+            }
             "feeluown" => get_song_id_from_player(player, |meta| {
                 meta.url()?.strip_prefix("fuo://netease/songs/")
             })
@@ -57,7 +59,7 @@ pub fn get_accurate_lyric(
         let artists = artists.to_owned();
         let window = window.downgrade();
         tracing::debug!("spawned query from get_accurate_lyric");
-        gidle_future::spawn(async move {
+        glib_spawn!(async move {
             let Ok(lyric) = provider.query_lyric(&song_id).await else {
                 return;
             };

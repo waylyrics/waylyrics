@@ -10,7 +10,7 @@ use gtk::{prelude::*, ListItem};
 use tokio::task::JoinSet;
 use tracing::{error, info};
 
-use crate::LYRIC_PROVIDERS;
+use crate::{LYRIC_PROVIDERS, glib_spawn, tokio_spawn};
 
 use crate::app::dialog::show_dialog;
 use crate::sync::lyric::cache::update_lyric_cache;
@@ -125,37 +125,45 @@ impl Window {
         }
 
         let mut results = vec![];
-        let mut set = JoinSet::new();
         let providers = LYRIC_PROVIDERS
             .get()
             .expect("lyric providers should be initialized");
-        for (idx, provider) in providers.iter().enumerate() {
-            let query = query.clone();
-            let provider_id = provider.unique_name();
-            set.spawn(async move { (provider.search_song(&query).await, provider_id, idx, query) });
-        }
-
-        while let Some(Ok((search_result, provider_name, idx, query))) = set.join_next().await {
-            let tracks = match search_result {
-                Ok(songs) => songs,
-                Err(e) => {
-                    // TODO: to show errors to users in GUI
-                    error!("{e} occurs when search {query} on {}", provider_name);
-                    continue;
-                }
-            };
-            for track in tracks {
-                results.push(ResultObject::new(
-                    track.id,
-                    track.title,
-                    track.singer,
-                    track.album.unwrap_or_default(),
-                    track.length.as_secs(),
-                    idx,
-                    provider_name,
-                ));
+        let results = tokio_spawn!(async move {
+            let mut set = JoinSet::new();
+            for (idx, provider) in providers.iter().enumerate() {
+                let query = query.clone();
+                let provider_id = provider.unique_name();
+                set.spawn(async move { (provider.search_song(&query).await, provider_id, idx, query) });
             }
-        }
+
+            while let Some(Ok((search_result, provider_name, idx, query))) = set.join_next().await {
+                let tracks = match search_result {
+                    Ok(songs) => songs,
+                    Err(e) => {
+                        // TODO: to show errors to users in GUI
+                        error!("{e} occurs when search {query} on {}", provider_name);
+                        continue;
+                    }
+                };
+                for track in tracks {
+                    // ResultObject contains RefCell, so it cannot be used inside tokio_spawn!()
+                    results.push((track, idx, provider_name));
+                }
+            }
+            results
+        }).await.expect("Tokio runtime failure");
+
+        let results: Vec<ResultObject> = results.into_iter().map(|(track, idx, provider_name)| {
+            ResultObject::new(
+                track.id,
+                track.title,
+                track.singer,
+                track.album.unwrap_or_default(),
+                track.length.as_secs(),
+                idx,
+                provider_name,
+            )
+        }).collect();
         self.results().remove_all();
 
         if results.is_empty() {
@@ -191,7 +199,7 @@ impl Window {
             .connect_activate(clone!(@weak self as window => move |_| {
                 let window = window.downgrade();
                 tracing::debug!("spawned window.search() from search button");
-                gidle_future::spawn(async move {
+                glib_spawn!(async move {
                     if let Some(window) = window.upgrade() {
                         window.search().await
                     }
@@ -202,7 +210,7 @@ impl Window {
             .connect_icon_release(clone!(@weak self as window => move |_, _| {
                 let window = window.downgrade();
                 tracing::debug!("spawned window.search() from search icon release");
-                gidle_future::spawn(async move {
+                glib_spawn!(async move {
                     if let Some(window) = window.upgrade() {
                         window.search().await
                     }
@@ -228,7 +236,7 @@ impl Window {
                 info!("selected {} from {}", result.id(), provider.unique_name());
                 
                 tracing::debug!("spawned query_lyric from set lyric button");
-                gidle_future::spawn(async move {
+                glib_spawn!(async move {
                     let song_id = result.id();
                     match provider.query_lyric(&song_id).await {
                         Ok(lyric) => {
