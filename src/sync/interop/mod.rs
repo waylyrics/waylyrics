@@ -174,7 +174,7 @@ pub fn sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
 
     if need_fetch_lyric(&meta) {
         let window = gtk::prelude::ObjectExt::downgrade(window);
-        tracing::debug!("spawned update_lyric from sync_track")?
+        tracing::debug!("spawned update_lyric from sync_track");
         gidle_future::spawn(async move {
             let Some(window) = window.upgrade() else {
                 return;
