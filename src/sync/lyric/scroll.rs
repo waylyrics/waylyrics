@@ -6,6 +6,7 @@ use gtk::{glib, prelude::*};
 use gtk::{glib::WeakRef, Application};
 
 use crate::app::{self, get_label};
+use crate::config::LyricDisplay;
 use crate::lyric_providers::{LyricLineOwned, LyricOwned};
 
 use crate::sync::{TrackState, LYRIC, TRACK_PLAYING_STATE};
@@ -35,6 +36,33 @@ pub fn register_lyric_display(app: WeakRef<Application>, interval: Duration) {
 
         ControlFlow::Continue
     });
+}
+
+fn set_lyric_with_mode(
+    window: &app::Window,
+    next_translation: Option<&LyricLineOwned>,
+    next_origin: Option<&LyricLineOwned>,
+) {
+    match window.imp().lyric_display_mode.get() {
+        LyricDisplay::ShowBoth => {
+            if next_translation.is_some() {
+                set_lyric(window, next_translation, "above", true);
+                set_lyric(window, next_origin, "below", false);
+            } else {
+                set_lyric(window, next_origin, "above", false);
+            }
+        }
+        LyricDisplay::Origin => {
+            set_lyric(window, next_origin, "above", false);
+        }
+        LyricDisplay::PreferTranslation => {
+            if next_translation.is_none() {
+                set_lyric(window, next_origin, "above", false);
+            } else {
+                set_lyric(window, next_translation, "above", true);
+            }
+        }
+    }
 }
 
 fn set_lyric(
@@ -72,13 +100,12 @@ pub fn refresh_lyric(window: &app::Window) {
                         crate::lyric_providers::utils::find_next_lyric(&elapsed, translation_lyric);
                     let next_origin =
                         crate::lyric_providers::utils::find_next_lyric(&elapsed, origin_lyric);
-                    set_lyric(window, next_translation, "above", true);
-                    set_lyric(window, next_origin, "below", false);
+                    set_lyric_with_mode(window, next_translation, next_origin);
                 }
                 (LyricOwned::LineTimestamp(origin_lyric), _) => {
                     let next_origin =
                         crate::lyric_providers::utils::find_next_lyric(&elapsed, origin_lyric);
-                    set_lyric(window, next_origin, "above", false);
+                    set_lyric_with_mode(window, None, next_origin);
                 }
                 _ => (),
             }

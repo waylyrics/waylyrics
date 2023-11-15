@@ -4,7 +4,7 @@ use std::cell::Cell;
 use gtk::{prelude::*, subclass::prelude::ObjectSubclassIsExt, Align, Application, Label};
 pub use window::Window;
 
-use crate::{app::utils::set_click_pass_through, DEFAULT_TEXT};
+use crate::{app::utils::set_click_pass_through, DEFAULT_TEXT, config::LyricDisplay};
 
 const WINDOW_MIN_HEIGHT: i32 = 120;
 
@@ -23,6 +23,7 @@ pub fn build_main_window(
     cache_lyrics: bool,
     length_toleration_ms: u128,
     lyric_align: impl Into<Align> + Copy,
+    lyric_display_mode: LyricDisplay,
 ) -> Window {
     REMOVE_LYRICS.set(
         if cache_lyrics {
@@ -75,6 +76,7 @@ pub fn build_main_window(
 
     window.set_icon_name(Some(crate::APP_ID));
     window.imp().length_toleration_ms.set(length_toleration_ms);
+    window.imp().lyric_display_mode.set(lyric_display_mode);
     window
 }
 

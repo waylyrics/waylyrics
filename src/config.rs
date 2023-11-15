@@ -14,6 +14,15 @@ pub enum Align {
     Fill,
 }
 
+#[derive(Deserialize, Serialize, Clone, Copy, Default)]
+#[serde(rename_all = "snake_case")]
+pub enum LyricDisplay {
+    #[default]
+    ShowBoth,
+    Origin,
+    PreferTranslation,
+}
+
 #[derive(Deserialize, Serialize)]
 #[serde(rename_all = "kebab-case", default)]
 pub struct Config {
@@ -33,6 +42,7 @@ pub struct Config {
     pub qqmusic_api_base_url: Option<String>,
     /// avaliable options: 网易云音乐, QQ音乐
     pub lyric_search_source: Vec<String>,
+    pub lyric_display_mode: LyricDisplay,
 }
 
 /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
@@ -100,6 +110,7 @@ impl Default for Config {
             triggers: Default::default(),
             qqmusic_api_base_url: None,
             lyric_search_source: vec![Netease.unique_name().into()],
+            lyric_display_mode: Default::default(),
         }
     }
 }

@@ -11,12 +11,14 @@ use gtk::{gio, glib, ApplicationWindow, PopoverMenu};
 
 use crate::app::utils::set_click_pass_through;
 use crate::app::REMOVE_LYRICS;
+use crate::config::LyricDisplay;
 use crate::sync::list_avaliable_players;
 
 #[derive(Default)]
 pub struct Window {
     pub settings: OnceCell<Settings>,
     pub cache_lyrics: Cell<bool>,
+    pub lyric_display_mode: Cell<LyricDisplay>,
     pub lyric_start: Cell<Option<SystemTime>>,
     pub lyric_playing: [Cell<Option<Duration>>; 2],
     pub lyric_offset_ms: Cell<i64>,

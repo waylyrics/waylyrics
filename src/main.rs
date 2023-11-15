@@ -84,6 +84,7 @@ fn build_ui(app: &Application) -> Result<()> {
             },
         qqmusic_api_base_url,
         lyric_search_source,
+        lyric_display_mode,
     } = config;
 
     let mpris_sync_interval = parse_time(&mpris_sync_interval)?;
@@ -112,7 +113,9 @@ fn build_ui(app: &Application) -> Result<()> {
         cache_lyrics,
         parse_time(length_toleration)?.as_millis(),
         lyric_align,
+        lyric_display_mode,
     );
+
 
     register_mpris_sync(ObjectExt::downgrade(app), mpris_sync_interval);
     register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
