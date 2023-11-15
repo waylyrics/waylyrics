@@ -107,10 +107,10 @@ impl Default for Config {
                 "^アニメ".into(),
             ],
             lyric_align: Align::Center,
-            triggers: Default::default(),
+            triggers: Triggers::default(),
             qqmusic_api_base_url: None,
             lyric_search_source: vec![Netease.unique_name().into()],
-            lyric_display_mode: Default::default(),
+            lyric_display_mode: LyricDisplay::default(),
         }
     }
 }
