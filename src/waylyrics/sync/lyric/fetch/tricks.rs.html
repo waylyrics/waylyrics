@@ -83,13 +83,15 @@
 <a href="#83" id="83">83</a>
 <a href="#84" id="84">84</a>
 <a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::lyric_providers::netease::Netease;
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::qqmusic::QQMusic;
 
 <span class="kw">use </span><span class="kw">crate</span>::sync::PLAYER;
 
-<span class="kw">use </span><span class="kw">crate</span>::app;
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::LyricProvider;
+<span class="kw">use crate</span>::{app, glib_spawn};
 <span class="kw">use </span>anyhow::Result;
 <span class="kw">use </span>gtk::glib::clone::Downgrade;
 <span class="kw">use </span>mpris::{Metadata, Player};
@@ -112,12 +114,14 @@
                 <span class="macro">tracing::warn!</span>(<span class="string">&quot;local lyric files are still unsupported&quot;</span>);
                 <span class="prelude-val">None
             </span>}
-            <span class="string">&quot;ElectronNCM&quot; </span>| <span class="string">&quot;NeteaseCloudMusicGtk&quot; </span>| <span class="string">&quot;Qcm&quot; </span>=&gt; get_song_id_from_player(player, |meta| {
-                meta.get(<span class="string">&quot;mpris:trackid&quot;</span>)
-                    .and_then(mpris::MetadataValue::as_str)
-                    .and_then(|s| s.split(<span class="string">&#39;/&#39;</span>).last())
-            })
-            .map(|song_id| (song_id, Box::new(Netease) <span class="kw">as _</span>)),
+            <span class="string">&quot;ElectronNCM&quot; </span>| <span class="string">&quot;NeteaseCloudMusicGtk&quot; </span>| <span class="string">&quot;Qcm&quot; </span>=&gt; {
+                get_song_id_from_player(player, |meta| {
+                    meta.get(<span class="string">&quot;mpris:trackid&quot;</span>)
+                        .and_then(mpris::MetadataValue::as_str)
+                        .and_then(|s| s.split(<span class="string">&#39;/&#39;</span>).last())
+                })
+                .map(|song_id| (song_id, Box::new(Netease) <span class="kw">as _</span>))
+            }
             <span class="string">&quot;feeluown&quot; </span>=&gt; get_song_id_from_player(player, |meta| {
                 meta.url()<span class="question-mark">?</span>.strip_prefix(<span class="string">&quot;fuo://netease/songs/&quot;</span>)
             })
@@ -142,7 +146,7 @@
         <span class="kw">let </span>artists = artists.to_owned();
         <span class="kw">let </span>window = window.downgrade();
         <span class="macro">tracing::debug!</span>(<span class="string">&quot;spawned query from get_accurate_lyric&quot;</span>);
-        gidle_future::spawn(<span class="kw">async move </span>{
+        <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
             <span class="kw">let </span><span class="prelude-val">Ok</span>(lyric) = provider.query_lyric(<span class="kw-2">&amp;</span>song_id).<span class="kw">await else </span>{
                 <span class="kw">return</span>;
             };

@@ -135,6 +135,10 @@
 <a href="#135" id="135">135</a>
 <a href="#136" id="136">136</a>
 <a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>tricks;
 
 <span class="kw">use </span>anyhow::Result;
@@ -148,7 +152,7 @@
 
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::LyricOwned;
 <span class="kw">use </span><span class="kw">crate</span>::sync::{TrackMeta, LYRIC};
-<span class="kw">use crate</span>::{app, LYRIC_PROVIDERS};
+<span class="kw">use crate</span>::{app, LYRIC_PROVIDERS, tokio_spawn};
 
 <span class="kw">use </span><span class="kw">crate</span>::sync::utils::{<span class="self">self</span>, match_likely_lyric};
 
@@ -173,44 +177,48 @@
     <span class="kw">let </span>providers = LYRIC_PROVIDERS
         .get()
         .expect(<span class="string">&quot;lyric providers should be initialized&quot;</span>);
-    <span class="kw">let </span><span class="kw-2">mut </span>set = JoinSet::new();
 
     <span class="kw">let </span>artists = Arc::new(artists.as_ref().unwrap_or(<span class="kw-2">&amp;</span><span class="macro">vec!</span>[]).clone());
 
     <span class="kw">let </span>length_toleration_ms = window.imp().length_toleration_ms.get();
-    <span class="kw">for </span>(idx, provider) <span class="kw">in </span>providers.iter().enumerate() {
+
+    <span class="kw">let </span>(<span class="kw-2">mut </span>results, artists_str, title) = <span class="macro">tokio_spawn!</span>(<span class="kw">async move </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>set = JoinSet::new();
+        <span class="kw">for </span>(idx, provider) <span class="kw">in </span>providers.iter().enumerate() {
+            <span class="kw">let </span>title = title.clone();
+            <span class="kw">let </span>provider = provider.clone();
+            <span class="kw">let </span>artists = artists.clone();
+            <span class="kw">let </span>album = album.clone();
+
+            set.spawn(<span class="kw">async move </span>{
+                <span class="kw">let </span>artists = artists.iter().map(|s| s.as_str()).collect::&lt;Vec&lt;<span class="kw-2">&amp;</span>str&gt;&gt;();
+                <span class="kw">let </span>album = album.as_deref();
+                <span class="kw">let </span>search_result = provider
+                    .search_song_detailed(album.unwrap_or_default(), <span class="kw-2">&amp;</span>artists, <span class="kw-2">&amp;</span>title)
+                    .<span class="kw">await</span>;
+                search_result.map(|songs| {
+                    match_likely_lyric(
+                        album.zip(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>title)),
+                        length,
+                        <span class="kw-2">&amp;</span>songs,
+                        length_toleration_ms,
+                    )
+                    .map(|(id, weight)| (id.to_owned(), weight, idx))
+                })
+            });
+        }
+
+        <span class="kw">let </span>artists_str = artists_str.to_string();
         <span class="kw">let </span>title = title.clone();
-        <span class="kw">let </span>provider = provider.clone();
-        <span class="kw">let </span>artists = artists.clone();
-        <span class="kw">let </span>album = album.clone();
-
-        set.spawn(<span class="kw">async move </span>{
-            <span class="kw">let </span>artists = artists.iter().map(|s| s.as_str()).collect::&lt;Vec&lt;<span class="kw-2">&amp;</span>str&gt;&gt;();
-            <span class="kw">let </span>album = album.as_deref();
-            <span class="kw">let </span>search_result = provider
-                .search_song_detailed(album.unwrap_or_default(), <span class="kw-2">&amp;</span>artists, <span class="kw-2">&amp;</span>title)
-                .<span class="kw">await</span>;
-            search_result.map(|songs| {
-                match_likely_lyric(
-                    album.zip(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>title)),
-                    length,
-                    <span class="kw-2">&amp;</span>songs,
-                    length_toleration_ms,
-                )
-                .map(|(id, weight)| (id.to_owned(), weight, idx))
-            })
-        });
-    }
-
-    <span class="kw">let </span>artists_str = artists_str.to_string();
-    <span class="kw">let </span>title = title.clone();
-    <span class="kw">let </span><span class="kw-2">mut </span>results = <span class="macro">vec!</span>[];
-    <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(re)) = set.join_next().<span class="kw">await </span>{
-        <span class="kw">let </span><span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>((id, weight, idx))) = re <span class="kw">else </span>{
-            <span class="kw">continue</span>;
-        };
-        results.push((id, weight, idx));
-    }
+        <span class="kw">let </span><span class="kw-2">mut </span>results = <span class="macro">vec!</span>[];
+        <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(re)) = set.join_next().<span class="kw">await </span>{
+            <span class="kw">let </span><span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>((id, weight, idx))) = re <span class="kw">else </span>{
+                <span class="kw">continue</span>;
+            };
+            results.push((id, weight, idx));
+        }
+        (results, artists_str, title)
+    }).<span class="kw">await</span><span class="question-mark">?</span>;
 
     <span class="kw">if </span>results.is_empty() {
         <span class="macro">info!</span>(<span class="string">&quot;Failed searching for {artists_str} - {title}&quot;</span>,);

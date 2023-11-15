@@ -154,7 +154,7 @@
         lyric::cache::update_lyric_cache,
         search_window, TrackState, LYRIC, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
     },
-    MAIN_WINDOW,
+    MAIN_WINDOW, glib_spawn,
 };
 
 <span class="kw">pub fn </span>register_action_disconnect(app: <span class="kw-2">&amp;</span>Application) {
@@ -212,7 +212,7 @@
         };
 
         <span class="macro">tracing::debug!</span>(<span class="string">&quot;spawned update_lyric from refetch-lyric action&quot;</span>);
-        gidle_future::spawn(<span class="kw">async move </span>{
+        <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
             <span class="kw">let </span><span class="prelude-val">Some</span>(wind) = MAIN_WINDOW.with_borrow(|wind| wind.as_ref().cloned()) <span class="kw">else </span>{
                 <span class="kw">return</span>;
             };

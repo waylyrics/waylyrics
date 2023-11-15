@@ -263,7 +263,7 @@
         lyric::{cache, fetch, scroll::refresh_lyric},
         utils, TrackMeta, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
     },
-    utils::reset_lyric_labels,
+    utils::reset_lyric_labels, glib_spawn,
 };
 
 <span class="kw">use </span><span class="kw">crate</span>::sync::TrackState;
@@ -417,7 +417,7 @@
     <span class="kw">if </span>need_fetch_lyric(<span class="kw-2">&amp;</span>meta) {
         <span class="kw">let </span>window = gtk::prelude::ObjectExt::downgrade(window);
         <span class="macro">tracing::debug!</span>(<span class="string">&quot;spawned update_lyric from sync_track&quot;</span>);
-        gidle_future::spawn(<span class="kw">async move </span>{
+        <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
             <span class="kw">let </span><span class="prelude-val">Some</span>(window) = window.upgrade() <span class="kw">else </span>{
                 <span class="kw">return</span>;
             };

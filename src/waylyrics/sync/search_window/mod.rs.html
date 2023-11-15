@@ -312,6 +312,14 @@
 <a href="#312" id="312">312</a>
 <a href="#313" id="313">313</a>
 <a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>imp;
 
 <span class="kw">use </span>std::sync::Arc;
@@ -324,7 +332,7 @@
 <span class="kw">use </span>tokio::task::JoinSet;
 <span class="kw">use </span>tracing::{error, info};
 
-<span class="kw">use </span><span class="kw">crate</span>::LYRIC_PROVIDERS;
+<span class="kw">use crate</span>::{LYRIC_PROVIDERS, glib_spawn, tokio_spawn};
 
 <span class="kw">use </span><span class="kw">crate</span>::app::dialog::show_dialog;
 <span class="kw">use </span><span class="kw">crate</span>::sync::lyric::cache::update_lyric_cache;
@@ -439,37 +447,45 @@
         }
 
         <span class="kw">let </span><span class="kw-2">mut </span>results = <span class="macro">vec!</span>[];
-        <span class="kw">let </span><span class="kw-2">mut </span>set = JoinSet::new();
         <span class="kw">let </span>providers = LYRIC_PROVIDERS
             .get()
             .expect(<span class="string">&quot;lyric providers should be initialized&quot;</span>);
-        <span class="kw">for </span>(idx, provider) <span class="kw">in </span>providers.iter().enumerate() {
-            <span class="kw">let </span>query = query.clone();
-            <span class="kw">let </span>provider_id = provider.unique_name();
-            set.spawn(<span class="kw">async move </span>{ (provider.search_song(<span class="kw-2">&amp;</span>query).<span class="kw">await</span>, provider_id, idx, query) });
-        }
-
-        <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>((search_result, provider_name, idx, query))) = set.join_next().<span class="kw">await </span>{
-            <span class="kw">let </span>tracks = <span class="kw">match </span>search_result {
-                <span class="prelude-val">Ok</span>(songs) =&gt; songs,
-                <span class="prelude-val">Err</span>(e) =&gt; {
-                    <span class="comment">// TODO: to show errors to users in GUI
-                    </span><span class="macro">error!</span>(<span class="string">&quot;{e} occurs when search {query} on {}&quot;</span>, provider_name);
-                    <span class="kw">continue</span>;
-                }
-            };
-            <span class="kw">for </span>track <span class="kw">in </span>tracks {
-                results.push(ResultObject::new(
-                    track.id,
-                    track.title,
-                    track.singer,
-                    track.album.unwrap_or_default(),
-                    track.length.as_secs(),
-                    idx,
-                    provider_name,
-                ));
+        <span class="kw">let </span>results = <span class="macro">tokio_spawn!</span>(<span class="kw">async move </span>{
+            <span class="kw">let </span><span class="kw-2">mut </span>set = JoinSet::new();
+            <span class="kw">for </span>(idx, provider) <span class="kw">in </span>providers.iter().enumerate() {
+                <span class="kw">let </span>query = query.clone();
+                <span class="kw">let </span>provider_id = provider.unique_name();
+                set.spawn(<span class="kw">async move </span>{ (provider.search_song(<span class="kw-2">&amp;</span>query).<span class="kw">await</span>, provider_id, idx, query) });
             }
-        }
+
+            <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>((search_result, provider_name, idx, query))) = set.join_next().<span class="kw">await </span>{
+                <span class="kw">let </span>tracks = <span class="kw">match </span>search_result {
+                    <span class="prelude-val">Ok</span>(songs) =&gt; songs,
+                    <span class="prelude-val">Err</span>(e) =&gt; {
+                        <span class="comment">// TODO: to show errors to users in GUI
+                        </span><span class="macro">error!</span>(<span class="string">&quot;{e} occurs when search {query} on {}&quot;</span>, provider_name);
+                        <span class="kw">continue</span>;
+                    }
+                };
+                <span class="kw">for </span>track <span class="kw">in </span>tracks {
+                    <span class="comment">// ResultObject contains RefCell, so it cannot be used inside tokio_spawn!()
+                    </span>results.push((track, idx, provider_name));
+                }
+            }
+            results
+        }).<span class="kw">await</span>.expect(<span class="string">&quot;Tokio runtime failure&quot;</span>);
+
+        <span class="kw">let </span>results: Vec&lt;ResultObject&gt; = results.into_iter().map(|(track, idx, provider_name)| {
+            ResultObject::new(
+                track.id,
+                track.title,
+                track.singer,
+                track.album.unwrap_or_default(),
+                track.length.as_secs(),
+                idx,
+                provider_name,
+            )
+        }).collect();
         <span class="self">self</span>.results().remove_all();
 
         <span class="kw">if </span>results.is_empty() {
@@ -505,7 +521,7 @@
             .connect_activate(<span class="macro">clone!</span>(@weak <span class="self">self </span><span class="kw">as </span>window =&gt; <span class="kw">move </span>|<span class="kw">_</span>| {
                 <span class="kw">let </span>window = window.downgrade();
                 <span class="macro">tracing::debug!</span>(<span class="string">&quot;spawned window.search() from search button&quot;</span>);
-                gidle_future::spawn(<span class="kw">async move </span>{
+                <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
                     <span class="kw">if let </span><span class="prelude-val">Some</span>(window) = window.upgrade() {
                         window.search().<span class="kw">await
                     </span>}
@@ -516,7 +532,7 @@
             .connect_icon_release(<span class="macro">clone!</span>(@weak <span class="self">self </span><span class="kw">as </span>window =&gt; <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
                 <span class="kw">let </span>window = window.downgrade();
                 <span class="macro">tracing::debug!</span>(<span class="string">&quot;spawned window.search() from search icon release&quot;</span>);
-                gidle_future::spawn(<span class="kw">async move </span>{
+                <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
                     <span class="kw">if let </span><span class="prelude-val">Some</span>(window) = window.upgrade() {
                         window.search().<span class="kw">await
                     </span>}
@@ -542,7 +558,7 @@
                 <span class="macro">info!</span>(<span class="string">&quot;selected {} from {}&quot;</span>, result.id(), provider.unique_name());
                 
                 <span class="macro">tracing::debug!</span>(<span class="string">&quot;spawned query_lyric from set lyric button&quot;</span>);
-                gidle_future::spawn(<span class="kw">async move </span>{
+                <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
                     <span class="kw">let </span>song_id = result.id();
                     <span class="kw">match </span>provider.query_lyric(<span class="kw-2">&amp;</span>song_id).<span class="kw">await </span>{
                         <span class="prelude-val">Ok</span>(lyric) =&gt; {
