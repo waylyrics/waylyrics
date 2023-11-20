@@ -37,7 +37,7 @@ url = "2.4.1"
 # logging
 tracing = "0.1.40"
 tracing-journald = "0.3.0"
-tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 
 # cache
 md5 = "0.7.0"
