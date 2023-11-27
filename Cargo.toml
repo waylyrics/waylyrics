@@ -32,7 +32,7 @@ mpris = "2.0.1"
 ncmapi = { git = "https://github.com/waylyrics/ncmapi-rs.git", rev = "394e9c2" }
 qqmusic-rs = { git = "https://github.com/waylyrics/qqmusic-rs.git", rev = "402558f" }
 lrc-nom = "0.2.0"
-url = "2.4.1"
+url = "2.5.0"
 
 # logging
 tracing = "0.1.40"
