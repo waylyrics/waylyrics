@@ -52,7 +52,7 @@ SIGUSR2: 开关GTK CSD
 
 ##### GTK+
 
-- [netease-cloud-music-gtk](https://github.com/waylyrics/netease-cloud-music-gtk)
+- [netease-cloud-music-gtk](https://github.com/gmg137/netease-cloud-music-gtk)
 
 ##### Qt
 

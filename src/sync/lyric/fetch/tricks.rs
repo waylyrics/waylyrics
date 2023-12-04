@@ -21,37 +21,39 @@ pub fn get_accurate_lyric(
             .as_ref()
             .expect("player not exists in lyric fetching");
         let player_name = player.identity();
-        let Some((song_id, provider)): Option<(String, Box<dyn LyricProvider>)> = (match player_name
-        {
-            "mpv" => {
-                tracing::warn!("local lyric files are still unsupported");
-                None
-            }
-            "ElectronNCM" | "NeteaseCloudMusicGtk" | "Qcm" => {
-                get_song_id_from_player(player, |meta| {
-                    meta.get("mpris:trackid")
-                        .and_then(mpris::MetadataValue::as_str)
-                        .and_then(|s| s.split('/').last())
+        let player_bus_name = player.bus_name_player_name_part();
+        let Some((song_id, provider)): Option<(String, Box<dyn LyricProvider>)> =
+            (match (player_name, player_bus_name) {
+                ("mpv", _) => {
+                    tracing::warn!("local lyric files are still unsupported");
+                    None
+                }
+                ("ElectronNCM" | "Qcm", _) | (_, "NeteaseCloudMusicGtk") => {
+                    get_song_id_from_player(player, |meta| {
+                        meta.get("mpris:trackid")
+                            .and_then(mpris::MetadataValue::as_str)
+                            .and_then(|s| s.split('/').last())
+                    })
+                    .map(|song_id| (song_id, Box::new(Netease) as _))
+                }
+                ("feeluown", _) => get_song_id_from_player(player, |meta| {
+                    meta.url()?.strip_prefix("fuo://netease/songs/")
                 })
                 .map(|song_id| (song_id, Box::new(Netease) as _))
-            }
-            "feeluown" => get_song_id_from_player(player, |meta| {
-                meta.url()?.strip_prefix("fuo://netease/songs/")
-            })
-            .map(|song_id| (song_id, Box::new(Netease) as _))
-            .or_else(|| {
-                get_song_id_from_player(player, |meta| {
-                    meta.url()?.strip_prefix("fuo://qqmusic/songs/")
-                })
-                .map(|song_id| (song_id, Box::new(QQMusic) as _))
-            }),
-            "YesPlayMusic" => {
-                get_song_id_from_player(player, |meta| meta.url()?.strip_prefix("/trackid/"))
-                    .map(|song_id| (song_id, Box::new(Netease) as _))
-            }
+                .or_else(|| {
+                    get_song_id_from_player(player, |meta| {
+                        meta.url()?.strip_prefix("fuo://qqmusic/songs/")
+                    })
+                    .map(|song_id| (song_id, Box::new(QQMusic) as _))
+                }),
+                ("YesPlayMusic", _) => {
+                    get_song_id_from_player(player, |meta| meta.url()?.strip_prefix("/trackid/"))
+                        .map(|song_id| (song_id, Box::new(Netease) as _))
+                }
 
-            _ => None,
-        }) else {
+                _ => None,
+            })
+        else {
             return None;
         };
 
