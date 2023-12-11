@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/config.rs`."><title>config.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-c67e44d78ab2db17.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="waylyrics" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (0e2dac837 2023-12-04)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/config.rs`."><title>config.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="waylyrics" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (d86d65bbc 2023-12-10)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../static.files/storage-bc37acceda91d44a.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -130,7 +130,7 @@
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{netease::Netease, LyricProvider};
 
 <span class="attr">#[derive(Deserialize, Serialize, Clone, Copy)]
-#[serde(tag = <span class="string">&quot;type&quot;</span>)]
+#[serde(tag = <span class="string">"type"</span>)]
 </span><span class="kw">pub enum </span>Align {
     <span class="doccomment">/// left align
     </span>Start,
@@ -142,7 +142,7 @@
 }
 
 <span class="attr">#[derive(Deserialize, Serialize, Clone, Copy, Default)]
-#[serde(rename_all = <span class="string">&quot;snake_case&quot;</span>)]
+#[serde(rename_all = <span class="string">"snake_case"</span>)]
 </span><span class="kw">pub enum </span>LyricDisplay {
     <span class="attr">#[default]
     </span>ShowBoth,
@@ -151,7 +151,7 @@
 }
 
 <span class="attr">#[derive(Deserialize, Serialize)]
-#[serde(rename_all = <span class="string">&quot;kebab-case&quot;</span>, default)]
+#[serde(rename_all = <span class="string">"kebab-case"</span>, default)]
 </span><span class="kw">pub struct </span>Config {
     <span class="kw">pub </span>mpris_sync_interval: String,
     <span class="kw">pub </span>lyric_align: Align,
@@ -163,7 +163,7 @@
     <span class="kw">pub </span>hide_label_on_empty_text: bool,
     <span class="kw">pub </span>theme: String,
     <span class="kw">pub </span>enable_filter_regex: bool,
-    <span class="doccomment">/// inspired by LyricX&#39;s filter [list](https://github.com/ddddxxx/LyricsX/blob/c16b6a413dda7bc0b793b897522e0c4ee0ffc716/LyricsX/Supporting%20Files/UserDefaults.plist#L31-L62)
+    <span class="doccomment">/// inspired by LyricX's filter [list](https://github.com/ddddxxx/LyricsX/blob/c16b6a413dda7bc0b793b897522e0c4ee0ffc716/LyricsX/Supporting%20Files/UserDefaults.plist#L31-L62)
     </span><span class="kw">pub </span>filter_regexies: Vec&lt;String&gt;,
     <span class="kw">pub </span>triggers: Triggers,
     <span class="kw">pub </span>qqmusic_api_base_url: <span class="prelude-ty">Option</span>&lt;String&gt;,
@@ -172,7 +172,7 @@
     <span class="kw">pub </span>lyric_display_mode: LyricDisplay,
 }
 
-<span class="doccomment">/// check [GTK+&#39;s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
+<span class="doccomment">/// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
 </span><span class="attr">#[derive(Deserialize, Serialize)]
 #[serde(default)]
 </span><span class="kw">pub struct </span>Triggers {
@@ -186,11 +186,11 @@
 <span class="kw">impl </span>Default <span class="kw">for </span>Triggers {
     <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
-            switch_decoration: <span class="string">&quot;&lt;Control&gt;d&quot;</span>.into(),
-            reload_theme: <span class="string">&quot;&lt;Control&gt;&lt;Shift&gt;t&quot;</span>.into(),
-            search_lyric: <span class="string">&quot;&lt;Control&gt;s&quot;</span>.into(),
-            reload_lyric: <span class="string">&quot;&lt;Alt&gt;&lt;Shift&gt;l&quot;</span>.into(),
-            switch_passthrough: <span class="string">&quot;&lt;Alt&gt;p&quot;</span>.into(),
+            switch_decoration: <span class="string">"&lt;Control&gt;d"</span>.into(),
+            reload_theme: <span class="string">"&lt;Control&gt;&lt;Shift&gt;t"</span>.into(),
+            search_lyric: <span class="string">"&lt;Control&gt;s"</span>.into(),
+            reload_lyric: <span class="string">"&lt;Alt&gt;&lt;Shift&gt;l"</span>.into(),
+            switch_passthrough: <span class="string">"&lt;Alt&gt;p"</span>.into(),
         }
     }
 }
@@ -198,40 +198,40 @@
 <span class="kw">impl </span>Default <span class="kw">for </span>Config {
     <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
-            mpris_sync_interval: <span class="string">&quot;2s&quot;</span>.to_owned(),
-            lyric_update_interval: <span class="string">&quot;20ms&quot;</span>.to_owned(),
-            length_toleration: <span class="string">&quot;2s&quot;</span>.to_owned(),
+            mpris_sync_interval: <span class="string">"2s"</span>.to_owned(),
+            lyric_update_interval: <span class="string">"20ms"</span>.to_owned(),
+            length_toleration: <span class="string">"2s"</span>.to_owned(),
             click_pass_through: <span class="bool-val">true</span>,
             hide_label_on_empty_text: <span class="bool-val">true</span>,
-            theme: <span class="string">&quot;default&quot;</span>.into(),
+            theme: <span class="string">"default"</span>.into(),
             cache_lyrics: <span class="bool-val">true</span>,
             enable_filter_regex: <span class="bool-val">false</span>,
             filter_regexies: <span class="macro">vec!</span>[
-                <span class="string">&quot;^作词&quot;</span>.into(),
-                <span class="string">&quot;^作詞&quot;</span>.into(),
-                <span class="string">&quot;^作曲&quot;</span>.into(),
-                <span class="string">&quot;^編曲&quot;</span>.into(),
-                <span class="string">&quot;^编曲&quot;</span>.into(),
-                <span class="string">&quot;^収録&quot;</span>.into(),
-                <span class="string">&quot;^收录&quot;</span>.into(),
-                <span class="string">&quot;^演唱&quot;</span>.into(),
-                <span class="string">&quot;^歌手&quot;</span>.into(),
-                <span class="string">&quot;^歌曲&quot;</span>.into(),
-                <span class="string">&quot;^制作&quot;</span>.into(),
-                <span class="string">&quot;^製作&quot;</span>.into(),
-                <span class="string">&quot;^歌词&quot;</span>.into(),
-                <span class="string">&quot;^歌詞&quot;</span>.into(),
-                <span class="string">&quot;^翻譯&quot;</span>.into(),
-                <span class="string">&quot;^翻译&quot;</span>.into(),
-                <span class="string">&quot;^插曲&quot;</span>.into(),
-                <span class="string">&quot;^插入歌&quot;</span>.into(),
-                <span class="string">&quot;^主题歌&quot;</span>.into(),
-                <span class="string">&quot;^主題歌&quot;</span>.into(),
-                <span class="string">&quot;^片頭曲&quot;</span>.into(),
-                <span class="string">&quot;^片头曲&quot;</span>.into(),
-                <span class="string">&quot;^片尾曲&quot;</span>.into(),
-                <span class="string">&quot;^SoundTrack&quot;</span>.into(),
-                <span class="string">&quot;^アニメ&quot;</span>.into(),
+                <span class="string">"^作词"</span>.into(),
+                <span class="string">"^作詞"</span>.into(),
+                <span class="string">"^作曲"</span>.into(),
+                <span class="string">"^編曲"</span>.into(),
+                <span class="string">"^编曲"</span>.into(),
+                <span class="string">"^収録"</span>.into(),
+                <span class="string">"^收录"</span>.into(),
+                <span class="string">"^演唱"</span>.into(),
+                <span class="string">"^歌手"</span>.into(),
+                <span class="string">"^歌曲"</span>.into(),
+                <span class="string">"^制作"</span>.into(),
+                <span class="string">"^製作"</span>.into(),
+                <span class="string">"^歌词"</span>.into(),
+                <span class="string">"^歌詞"</span>.into(),
+                <span class="string">"^翻譯"</span>.into(),
+                <span class="string">"^翻译"</span>.into(),
+                <span class="string">"^插曲"</span>.into(),
+                <span class="string">"^插入歌"</span>.into(),
+                <span class="string">"^主题歌"</span>.into(),
+                <span class="string">"^主題歌"</span>.into(),
+                <span class="string">"^片頭曲"</span>.into(),
+                <span class="string">"^片头曲"</span>.into(),
+                <span class="string">"^片尾曲"</span>.into(),
+                <span class="string">"^SoundTrack"</span>.into(),
+                <span class="string">"^アニメ"</span>.into(),
             ],
             lyric_align: Align::Center,
             triggers: Triggers::default(),

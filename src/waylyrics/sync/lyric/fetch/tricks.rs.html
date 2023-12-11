@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/sync/lyric/fetch/tricks.rs`."><title>tricks.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../../static.files/rustdoc-c67e44d78ab2db17.css"><meta name="rustdoc-vars" data-root-path="../../../../../" data-static-root-path="../../../../../static.files/" data-current-crate="waylyrics" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (0e2dac837 2023-12-04)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../../../src-files.js"></script><script defer src="../../../../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/sync/lyric/fetch/tricks.rs`."><title>tricks.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../../../../../" data-static-root-path="../../../../../static.files/" data-current-crate="waylyrics" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (d86d65bbc 2023-12-10)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../../../../static.files/storage-bc37acceda91d44a.js"></script><script defer src="../../../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../../../src-files.js"></script><script defer src="../../../../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -108,35 +108,35 @@
     PLAYER.with_borrow(|player| {
         <span class="kw">let </span>player = player
             .as_ref()
-            .expect(<span class="string">&quot;player not exists in lyric fetching&quot;</span>);
+            .expect(<span class="string">"player not exists in lyric fetching"</span>);
         <span class="kw">let </span>player_name = player.identity();
         <span class="kw">let </span>player_bus_name = player.bus_name_player_name_part();
         <span class="kw">let </span><span class="prelude-val">Some</span>((song_id, provider)): <span class="prelude-ty">Option</span>&lt;(String, Box&lt;<span class="kw">dyn </span>LyricProvider&gt;)&gt; =
             (<span class="kw">match </span>(player_name, player_bus_name) {
-                (<span class="string">&quot;mpv&quot;</span>, <span class="kw">_</span>) =&gt; {
-                    <span class="macro">tracing::warn!</span>(<span class="string">&quot;local lyric files are still unsupported&quot;</span>);
+                (<span class="string">"mpv"</span>, <span class="kw">_</span>) =&gt; {
+                    <span class="macro">tracing::warn!</span>(<span class="string">"local lyric files are still unsupported"</span>);
                     <span class="prelude-val">None
                 </span>}
-                (<span class="string">&quot;ElectronNCM&quot; </span>| <span class="string">&quot;Qcm&quot;</span>, <span class="kw">_</span>) | (<span class="kw">_</span>, <span class="string">&quot;NeteaseCloudMusicGtk&quot;</span>) =&gt; {
+                (<span class="string">"ElectronNCM" </span>| <span class="string">"Qcm"</span>, <span class="kw">_</span>) | (<span class="kw">_</span>, <span class="string">"NeteaseCloudMusicGtk"</span>) =&gt; {
                     get_song_id_from_player(player, |meta| {
-                        meta.get(<span class="string">&quot;mpris:trackid&quot;</span>)
+                        meta.get(<span class="string">"mpris:trackid"</span>)
                             .and_then(mpris::MetadataValue::as_str)
-                            .and_then(|s| s.split(<span class="string">&#39;/&#39;</span>).last())
+                            .and_then(|s| s.split(<span class="string">'/'</span>).last())
                     })
                     .map(|song_id| (song_id, Box::new(Netease) <span class="kw">as _</span>))
                 }
-                (<span class="string">&quot;feeluown&quot;</span>, <span class="kw">_</span>) =&gt; get_song_id_from_player(player, |meta| {
-                    meta.url()<span class="question-mark">?</span>.strip_prefix(<span class="string">&quot;fuo://netease/songs/&quot;</span>)
+                (<span class="string">"feeluown"</span>, <span class="kw">_</span>) =&gt; get_song_id_from_player(player, |meta| {
+                    meta.url()<span class="question-mark">?</span>.strip_prefix(<span class="string">"fuo://netease/songs/"</span>)
                 })
                 .map(|song_id| (song_id, Box::new(Netease) <span class="kw">as _</span>))
                 .or_else(|| {
                     get_song_id_from_player(player, |meta| {
-                        meta.url()<span class="question-mark">?</span>.strip_prefix(<span class="string">&quot;fuo://qqmusic/songs/&quot;</span>)
+                        meta.url()<span class="question-mark">?</span>.strip_prefix(<span class="string">"fuo://qqmusic/songs/"</span>)
                     })
                     .map(|song_id| (song_id, Box::new(QQMusic) <span class="kw">as _</span>))
                 }),
-                (<span class="string">&quot;YesPlayMusic&quot;</span>, <span class="kw">_</span>) =&gt; {
-                    get_song_id_from_player(player, |meta| meta.url()<span class="question-mark">?</span>.strip_prefix(<span class="string">&quot;/trackid/&quot;</span>))
+                (<span class="string">"YesPlayMusic"</span>, <span class="kw">_</span>) =&gt; {
+                    get_song_id_from_player(player, |meta| meta.url()<span class="question-mark">?</span>.strip_prefix(<span class="string">"/trackid/"</span>))
                         .map(|song_id| (song_id, Box::new(Netease) <span class="kw">as _</span>))
                 }
 
@@ -149,7 +149,7 @@
         <span class="kw">let </span>title = title.to_owned();
         <span class="kw">let </span>artists = artists.to_owned();
         <span class="kw">let </span>window = window.downgrade();
-        <span class="macro">tracing::debug!</span>(<span class="string">&quot;spawned query from get_accurate_lyric&quot;</span>);
+        <span class="macro">tracing::debug!</span>(<span class="string">"spawned query from get_accurate_lyric"</span>);
         <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
             <span class="kw">let </span><span class="prelude-val">Ok</span>(lyric) = provider.query_lyric(<span class="kw-2">&amp;</span>song_id).<span class="kw">await else </span>{
                 <span class="kw">return</span>;
@@ -169,7 +169,7 @@
 
 <span class="kw">fn </span>get_song_id_from_player(
     player: <span class="kw-2">&amp;</span>Player,
-    extract_field: <span class="kw">impl for</span>&lt;<span class="lifetime">&#39;a</span>&gt; FnOnce(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Metadata) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>str&gt;,
+    extract_field: <span class="kw">impl for</span>&lt;<span class="lifetime">'a</span>&gt; FnOnce(<span class="kw-2">&amp;</span><span class="lifetime">'a </span>Metadata) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">'a </span>str&gt;,
 ) -&gt; <span class="prelude-ty">Option</span>&lt;String&gt; {
     player
         .get_metadata()

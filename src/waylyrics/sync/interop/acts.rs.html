@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/sync/interop/acts.rs`."><title>acts.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-c67e44d78ab2db17.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="waylyrics" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (0e2dac837 2023-12-04)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/sync/interop/acts.rs`."><title>acts.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="waylyrics" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (d86d65bbc 2023-12-10)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../../../static.files/storage-bc37acceda91d44a.js"></script><script defer src="../../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -158,7 +158,7 @@
 };
 
 <span class="kw">pub fn </span>register_action_disconnect(app: <span class="kw-2">&amp;</span>Application) {
-    <span class="kw">let </span>action = SimpleAction::new(<span class="string">&quot;disconnect&quot;</span>, <span class="prelude-val">None</span>);
+    <span class="kw">let </span>action = SimpleAction::new(<span class="string">"disconnect"</span>, <span class="prelude-val">None</span>);
     action.connect_activate(|<span class="kw">_</span>, <span class="kw">_</span>| {
         PLAYER.set(<span class="prelude-val">None</span>);
     });
@@ -174,7 +174,7 @@
 
 <span class="comment">// TODO: code cleanup
 </span><span class="kw">pub fn </span>register_action_search_lyric(app: <span class="kw-2">&amp;</span>Application, wind: <span class="kw-2">&amp;</span>app::Window, trigger: <span class="kw-2">&amp;</span>str) {
-    <span class="kw">let </span>action = SimpleAction::new(<span class="string">&quot;search-lyric&quot;</span>, <span class="prelude-val">None</span>);
+    <span class="kw">let </span>action = SimpleAction::new(<span class="string">"search-lyric"</span>, <span class="prelude-val">None</span>);
     <span class="kw">let </span>cache_lyrics = wind.imp().cache_lyrics.get();
     action.connect_activate(<span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
         <span class="comment">// Get current playing track
@@ -198,20 +198,20 @@
     });
     app.add_action(<span class="kw-2">&amp;</span>action);
 
-    utils::bind_shortcut(<span class="string">&quot;app.search-lyric&quot;</span>, wind, trigger);
+    utils::bind_shortcut(<span class="string">"app.search-lyric"</span>, wind, trigger);
 }
 
 <span class="kw">pub fn </span>register_action_refetch_lyric(app: <span class="kw-2">&amp;</span>Application, window: <span class="kw-2">&amp;</span>app::Window, trigger: <span class="kw-2">&amp;</span>str) {
-    <span class="kw">let </span>action = SimpleAction::new(<span class="string">&quot;refetch-lyric&quot;</span>, <span class="prelude-val">None</span>);
+    <span class="kw">let </span>action = SimpleAction::new(<span class="string">"refetch-lyric"</span>, <span class="prelude-val">None</span>);
     action.connect_activate(<span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
-        <span class="macro">info!</span>(<span class="string">&quot;cleaned current lyric&quot;</span>);
+        <span class="macro">info!</span>(<span class="string">"cleaned current lyric"</span>);
         <span class="kw">let </span>metainfo = TRACK_PLAYING_STATE
             .with_borrow(|TrackState { metainfo, .. }| metainfo.as_ref().cloned());
         <span class="kw">let </span><span class="prelude-val">Some</span>(metainfo) = metainfo <span class="kw">else </span>{
             <span class="kw">return</span>;
         };
 
-        <span class="macro">tracing::debug!</span>(<span class="string">&quot;spawned update_lyric from refetch-lyric action&quot;</span>);
+        <span class="macro">tracing::debug!</span>(<span class="string">"spawned update_lyric from refetch-lyric action"</span>);
         <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
             <span class="kw">let </span><span class="prelude-val">Some</span>(wind) = MAIN_WINDOW.with_borrow(|wind| wind.as_ref().cloned()) <span class="kw">else </span>{
                 <span class="kw">return</span>;
@@ -220,7 +220,7 @@
             <span class="kw">if let </span><span class="prelude-val">Err</span>(err) = update_lyric(<span class="kw-2">&amp;</span>metainfo, <span class="kw-2">&amp;</span>wind, <span class="bool-val">true</span>).<span class="kw">await </span>{
                 show_dialog(
                     <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>wind),
-                    <span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">&quot;cannot refetch lyric: {err:?}&quot;</span>),
+                    <span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">"cannot refetch lyric: {err:?}"</span>),
                     gtk::MessageType::Error,
                 )
             }
@@ -228,11 +228,11 @@
     });
     app.add_action(<span class="kw-2">&amp;</span>action);
 
-    utils::bind_shortcut(<span class="string">&quot;app.refetch-lyric&quot;</span>, window, trigger);
+    utils::bind_shortcut(<span class="string">"app.refetch-lyric"</span>, window, trigger);
 }
 
 <span class="kw">pub fn </span>register_action_remove_lyric(app: <span class="kw-2">&amp;</span>Application, wind: <span class="kw-2">&amp;</span>app::Window) {
-    <span class="kw">let </span>action = SimpleAction::new(<span class="string">&quot;remove-lyric&quot;</span>, <span class="prelude-val">None</span>);
+    <span class="kw">let </span>action = SimpleAction::new(<span class="string">"remove-lyric"</span>, <span class="prelude-val">None</span>);
     <span class="kw">let </span>cache_lyrics = wind.imp().cache_lyrics.get();
     action.connect_activate(<span class="macro">clone!</span>(@weak wind <span class="kw">as </span>window =&gt; <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
         <span class="comment">// Clear current lyric
@@ -250,23 +250,23 @@
         }
         <span class="comment">// Remove current lyric inside window
         </span>reset_lyric_labels(<span class="kw-2">&amp;</span>window);
-        <span class="macro">info!</span>(<span class="string">&quot;removed lyric&quot;</span>);
+        <span class="macro">info!</span>(<span class="string">"removed lyric"</span>);
     }));
     app.add_action(<span class="kw-2">&amp;</span>action);
 }
 
 <span class="kw">pub fn </span>register_action_connect(app: <span class="kw-2">&amp;</span>Application) {
-    <span class="kw">let </span>connect = SimpleAction::new(<span class="string">&quot;connect&quot;</span>, <span class="prelude-val">Some</span>(VariantTy::STRING));
+    <span class="kw">let </span>connect = SimpleAction::new(<span class="string">"connect"</span>, <span class="prelude-val">Some</span>(VariantTy::STRING));
     connect.connect_activate(|<span class="kw">_</span>, player_id| {
         <span class="kw">let </span><span class="prelude-val">Some</span>(player_id) = player_id.and_then(|p| p.str()) <span class="kw">else </span>{
-            <span class="macro">warn!</span>(<span class="string">&quot;did not received string paramter for action \&#39;app.connect\&#39;&quot;</span>);
+            <span class="macro">warn!</span>(<span class="string">"did not received string paramter for action \'app.connect\'"</span>);
             <span class="kw">return</span>;
         };
         PLAYER_FINDER.with_borrow(|player_finder| {
             <span class="kw">if let </span><span class="prelude-val">Ok</span>(player) = player_finder.find_by_name(player_id) {
                 PLAYER.set(<span class="prelude-val">Some</span>(player));
             } <span class="kw">else </span>{
-                <span class="macro">error!</span>(<span class="string">&quot;cannot connect to: {player_id}&quot;</span>);
+                <span class="macro">error!</span>(<span class="string">"cannot connect to: {player_id}"</span>);
             }
         });
     });

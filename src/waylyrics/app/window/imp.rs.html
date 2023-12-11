@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/app/window/imp.rs`."><title>imp.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-c67e44d78ab2db17.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="waylyrics" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (0e2dac837 2023-12-04)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/app/window/imp.rs`."><title>imp.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="waylyrics" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (d86d65bbc 2023-12-10)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../../../static.files/storage-bc37acceda91d44a.js"></script><script defer src="../../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -155,7 +155,7 @@
 
 <span class="attr">#[glib::object_subclass]
 </span><span class="kw">impl </span>ObjectSubclass <span class="kw">for </span>Window {
-    <span class="kw">const </span>NAME: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str = <span class="string">&quot;GtkAppWindowSaveState&quot;</span>;
+    <span class="kw">const </span>NAME: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str = <span class="string">"GtkAppWindowSaveState"</span>;
     <span class="kw">type </span>Type = <span class="kw">super</span>::Window;
     <span class="kw">type </span>ParentType = ApplicationWindow;
 }
@@ -167,21 +167,21 @@
         obj.setup_settings();
         obj.load_window_state();
 
-        <span class="self">self</span>.headerbar.set_decoration_layout(<span class="prelude-val">Some</span>(<span class="string">&quot;menu:close&quot;</span>));
-        <span class="self">self</span>.menubutton.set_icon_name(<span class="string">&quot;open-menu-symbolic&quot;</span>);
+        <span class="self">self</span>.headerbar.set_decoration_layout(<span class="prelude-val">Some</span>(<span class="string">"menu:close"</span>));
+        <span class="self">self</span>.menubutton.set_icon_name(<span class="string">"open-menu-symbolic"</span>);
 
-        <span class="kw">let </span>hide_decoration = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">&quot;Hide Decoration&quot;</span>), <span class="prelude-val">Some</span>(<span class="string">&quot;win.switch-decoration&quot;</span>));
-        <span class="kw">let </span>passthrough = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">&quot;Switch Passthrough&quot;</span>), <span class="prelude-val">Some</span>(<span class="string">&quot;win.switch-passthrough&quot;</span>));
-        <span class="kw">let </span>reload_theme = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">&quot;Reload theme&quot;</span>), <span class="prelude-val">Some</span>(<span class="string">&quot;app.reload-theme&quot;</span>));
-        <span class="kw">let </span>search_lyric = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">&quot;Search lyric&quot;</span>), <span class="prelude-val">Some</span>(<span class="string">&quot;app.search-lyric&quot;</span>));
-        <span class="kw">let </span>refetch_lyric = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">&quot;Refetch lyric&quot;</span>), <span class="prelude-val">Some</span>(<span class="string">&quot;app.refetch-lyric&quot;</span>));
-        <span class="kw">let </span>remove_lyric = MenuItem::new(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>REMOVE_LYRICS.take()), <span class="prelude-val">Some</span>(<span class="string">&quot;app.remove-lyric&quot;</span>));
+        <span class="kw">let </span>hide_decoration = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">"Hide Decoration"</span>), <span class="prelude-val">Some</span>(<span class="string">"win.switch-decoration"</span>));
+        <span class="kw">let </span>passthrough = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">"Switch Passthrough"</span>), <span class="prelude-val">Some</span>(<span class="string">"win.switch-passthrough"</span>));
+        <span class="kw">let </span>reload_theme = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">"Reload theme"</span>), <span class="prelude-val">Some</span>(<span class="string">"app.reload-theme"</span>));
+        <span class="kw">let </span>search_lyric = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">"Search lyric"</span>), <span class="prelude-val">Some</span>(<span class="string">"app.search-lyric"</span>));
+        <span class="kw">let </span>refetch_lyric = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">"Refetch lyric"</span>), <span class="prelude-val">Some</span>(<span class="string">"app.refetch-lyric"</span>));
+        <span class="kw">let </span>remove_lyric = MenuItem::new(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>REMOVE_LYRICS.take()), <span class="prelude-val">Some</span>(<span class="string">"app.remove-lyric"</span>));
 
         <span class="kw">let </span>popover = PopoverMenu::builder()
             .accessible_role(gtk::AccessibleRole::MenuItemRadio)
             .build();
         <span class="self">self</span>.menu
-            .append_submenu(<span class="prelude-val">Some</span>(<span class="string">&quot;Switch players&quot;</span>), <span class="kw-2">&amp;</span><span class="self">self</span>.submenu);
+            .append_submenu(<span class="prelude-val">Some</span>(<span class="string">"Switch players"</span>), <span class="kw-2">&amp;</span><span class="self">self</span>.submenu);
         <span class="self">self</span>.menu.append_item(<span class="kw-2">&amp;</span>passthrough);
         <span class="self">self</span>.menu.append_item(<span class="kw-2">&amp;</span>hide_decoration);
         <span class="self">self</span>.menu.append_item(<span class="kw-2">&amp;</span>reload_theme);
@@ -192,7 +192,7 @@
 
         <span class="kw">let </span>_submenu = <span class="self">self</span>.submenu.downgrade();
         popover.connect_visible_submenu_notify(<span class="kw">move </span>|sub| {
-            <span class="kw">if </span><span class="prelude-val">Some</span>(<span class="string">&quot;Switch players&quot;</span>) != sub.visible_submenu().as_deref() {
+            <span class="kw">if </span><span class="prelude-val">Some</span>(<span class="string">"Switch players"</span>) != sub.visible_submenu().as_deref() {
                 <span class="kw">return</span>;
             }
             <span class="kw">let </span><span class="prelude-val">Some</span>(menu) = _submenu.upgrade() <span class="kw">else </span>{
@@ -203,14 +203,14 @@
             <span class="kw">let </span>section = gio::Menu::new();
             <span class="kw">let </span>players = list_avaliable_players();
             <span class="kw">if </span>!players.is_empty() {
-                <span class="kw">let </span>disconnect = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">&quot;Disconnect&quot;</span>), <span class="prelude-val">Some</span>(<span class="string">&quot;app.disconnect&quot;</span>));
+                <span class="kw">let </span>disconnect = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">"Disconnect"</span>), <span class="prelude-val">Some</span>(<span class="string">"app.disconnect"</span>));
                 menu.append_item(<span class="kw-2">&amp;</span>disconnect);
             }
 
             <span class="kw">for </span>player <span class="kw">in </span>players {
                 <span class="kw">let </span>item = MenuItem::new(<span class="prelude-val">Some</span>(player.identity()), <span class="prelude-val">None</span>);
                 item.set_action_and_target_value(
-                    <span class="prelude-val">Some</span>(<span class="string">&quot;app.connect&quot;</span>),
+                    <span class="prelude-val">Some</span>(<span class="string">"app.connect"</span>),
                     <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>ToVariant::to_variant(player.identity())),
                 );
                 section.append_item(<span class="kw-2">&amp;</span>item);
@@ -235,9 +235,9 @@
         <span class="comment">// Save window size
         </span><span class="self">self</span>.obj()
             .save_window_state()
-            .expect(<span class="string">&quot;Failed to save window state&quot;</span>);
+            .expect(<span class="string">"Failed to save window state"</span>);
 
-        <span class="comment">// Don&#39;t invoke the default handler
+        <span class="comment">// Don't invoke the default handler
         </span>Propagation::Proceed
     }
 }

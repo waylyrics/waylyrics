@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/sync/search_window/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-c67e44d78ab2db17.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="waylyrics" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (0e2dac837 2023-12-04)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/sync/search_window/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-e883e87179a81222.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="waylyrics" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (d86d65bbc 2023-12-10)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../../../static.files/storage-bc37acceda91d44a.js"></script><script defer src="../../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -350,16 +350,16 @@
         album: String,
         length: u64,
         provider_idx: usize,
-        provider_name: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str,
+        provider_name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str,
     ) -&gt; <span class="self">Self </span>{
         Object::builder()
-            .property(<span class="string">&quot;title&quot;</span>, title)
-            .property(<span class="string">&quot;singer&quot;</span>, singer)
-            .property(<span class="string">&quot;album&quot;</span>, album)
-            .property(<span class="string">&quot;length&quot;</span>, length)
-            .property(<span class="string">&quot;id&quot;</span>, id)
-            .property(<span class="string">&quot;provider-idx&quot;</span>, provider_idx <span class="kw">as </span>u8)
-            .property(<span class="string">&quot;provider-name&quot;</span>, provider_name)
+            .property(<span class="string">"title"</span>, title)
+            .property(<span class="string">"singer"</span>, singer)
+            .property(<span class="string">"album"</span>, album)
+            .property(<span class="string">"length"</span>, length)
+            .property(<span class="string">"id"</span>, id)
+            .property(<span class="string">"provider-idx"</span>, provider_idx <span class="kw">as </span>u8)
+            .property(<span class="string">"provider-name"</span>, provider_name)
             .build()
     }
 }
@@ -374,7 +374,7 @@
 <span class="kw">impl </span>Window {
     <span class="kw">pub fn </span>new(query_default: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;, use_cache: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>window: <span class="self">Self </span>= Object::builder().build();
-        window.set_title(<span class="prelude-val">Some</span>(<span class="string">&quot;Search lyric&quot;</span>));
+        window.set_title(<span class="prelude-val">Some</span>(<span class="string">"Search lyric"</span>));
         <span class="kw">if let </span><span class="prelude-val">Some</span>(query) = query_default {
             window.imp().input.buffer().set_text(query);
         }
@@ -387,7 +387,7 @@
             .results
             .borrow()
             .clone()
-            .expect(<span class="string">&quot;Could not get results&quot;</span>)
+            .expect(<span class="string">"Could not get results"</span>)
     }
 
     <span class="kw">fn </span>setup_results(<span class="kw-2">&amp;</span><span class="self">self</span>) {
@@ -403,7 +403,7 @@
         <span class="kw">let </span>imp = <span class="self">self</span>.imp();
 
         imp.vbox
-            .set_properties(<span class="kw-2">&amp;</span>[(<span class="string">&quot;orientation&quot;</span>, <span class="kw-2">&amp;</span>gtk::Orientation::Vertical)]);
+            .set_properties(<span class="kw-2">&amp;</span>[(<span class="string">"orientation"</span>, <span class="kw-2">&amp;</span>gtk::Orientation::Vertical)]);
         imp.vbox.append(<span class="kw-2">&amp;</span>imp.input);
         imp.vbox.append(<span class="kw-2">&amp;</span>imp.result_scrolled_window);
         imp.vbox.append(<span class="kw-2">&amp;</span>imp.set_button);
@@ -419,11 +419,11 @@
         imp.column_singer.set_resizable(<span class="bool-val">true</span>);
         imp.column_album.set_resizable(<span class="bool-val">true</span>);
 
-        imp.column_title.set_title(<span class="prelude-val">Some</span>(<span class="string">&quot;Title&quot;</span>));
-        imp.column_singer.set_title(<span class="prelude-val">Some</span>(<span class="string">&quot;Singer&quot;</span>));
-        imp.column_album.set_title(<span class="prelude-val">Some</span>(<span class="string">&quot;Album&quot;</span>));
-        imp.column_length.set_title(<span class="prelude-val">Some</span>(<span class="string">&quot;Length&quot;</span>));
-        imp.column_source.set_title(<span class="prelude-val">Some</span>(<span class="string">&quot;Source&quot;</span>));
+        imp.column_title.set_title(<span class="prelude-val">Some</span>(<span class="string">"Title"</span>));
+        imp.column_singer.set_title(<span class="prelude-val">Some</span>(<span class="string">"Singer"</span>));
+        imp.column_album.set_title(<span class="prelude-val">Some</span>(<span class="string">"Album"</span>));
+        imp.column_length.set_title(<span class="prelude-val">Some</span>(<span class="string">"Length"</span>));
+        imp.column_source.set_title(<span class="prelude-val">Some</span>(<span class="string">"Source"</span>));
 
         imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.column_title);
         imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.column_singer);
@@ -431,10 +431,10 @@
         imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.column_length);
         imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.column_source);
 
-        imp.input.set_placeholder_text(<span class="prelude-val">Some</span>(<span class="string">&quot;Enter query...&quot;</span>));
+        imp.input.set_placeholder_text(<span class="prelude-val">Some</span>(<span class="string">"Enter query..."</span>));
         imp.input
-            .set_secondary_icon_name(<span class="prelude-val">Some</span>(<span class="string">&quot;system-search-symbolic&quot;</span>));
-        imp.set_button.set_label(<span class="string">&quot;Set as lyric&quot;</span>);
+            .set_secondary_icon_name(<span class="prelude-val">Some</span>(<span class="string">"system-search-symbolic"</span>));
+        imp.set_button.set_label(<span class="string">"Set as lyric"</span>);
 
         <span class="self">self</span>.set_child(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>imp.vbox));
     }
@@ -449,7 +449,7 @@
         <span class="kw">let </span><span class="kw-2">mut </span>results = <span class="macro">vec!</span>[];
         <span class="kw">let </span>providers = LYRIC_PROVIDERS
             .get()
-            .expect(<span class="string">&quot;lyric providers should be initialized&quot;</span>);
+            .expect(<span class="string">"lyric providers should be initialized"</span>);
         <span class="kw">let </span>results = <span class="macro">tokio_spawn!</span>(<span class="kw">async move </span>{
             <span class="kw">let </span><span class="kw-2">mut </span>set = JoinSet::new();
             <span class="kw">for </span>(idx, provider) <span class="kw">in </span>providers.iter().enumerate() {
@@ -463,7 +463,7 @@
                     <span class="prelude-val">Ok</span>(songs) =&gt; songs,
                     <span class="prelude-val">Err</span>(e) =&gt; {
                         <span class="comment">// TODO: to show errors to users in GUI
-                        </span><span class="macro">error!</span>(<span class="string">&quot;{e} occurs when search {query} on {}&quot;</span>, provider_name);
+                        </span><span class="macro">error!</span>(<span class="string">"{e} occurs when search {query} on {}"</span>, provider_name);
                         <span class="kw">continue</span>;
                     }
                 };
@@ -473,7 +473,7 @@
                 }
             }
             results
-        }).<span class="kw">await</span>.expect(<span class="string">&quot;Tokio runtime failure&quot;</span>);
+        }).<span class="kw">await</span>.expect(<span class="string">"Tokio runtime failure"</span>);
 
         <span class="kw">let </span>results: Vec&lt;ResultObject&gt; = results.into_iter().map(|(track, idx, provider_name)| {
             ResultObject::new(
@@ -489,7 +489,7 @@
         <span class="self">self</span>.results().remove_all();
 
         <span class="kw">if </span>results.is_empty() {
-            show_dialog(<span class="prelude-val">Some</span>(<span class="self">self</span>), <span class="string">&quot;No result was found.&quot;</span>, gtk::MessageType::Error);
+            show_dialog(<span class="prelude-val">Some</span>(<span class="self">self</span>), <span class="string">"No result was found."</span>, gtk::MessageType::Error);
             <span class="kw">return</span>;
         }
 
@@ -502,7 +502,7 @@
             .result_list
             .model()
             .and_downcast::&lt;gtk::SingleSelection&gt;()
-            .expect(<span class="string">&quot;Needs to be SingleSelection&quot;</span>);
+            .expect(<span class="string">"Needs to be SingleSelection"</span>);
         <span class="kw">let </span>selected = selection_model.selected();
         <span class="kw">if </span>selected == gtk::INVALID_LIST_POSITION {
             <span class="kw">return </span><span class="prelude-val">None</span>;
@@ -511,7 +511,7 @@
             </span>.results()
             .item(selected)
             .and_downcast::&lt;ResultObject&gt;()
-            .expect(<span class="string">&quot;Needs to be ResultObject&quot;</span>);
+            .expect(<span class="string">"Needs to be ResultObject"</span>);
         <span class="prelude-val">Some</span>(result)
     }
 
@@ -520,7 +520,7 @@
         imp.input
             .connect_activate(<span class="macro">clone!</span>(@weak <span class="self">self </span><span class="kw">as </span>window =&gt; <span class="kw">move </span>|<span class="kw">_</span>| {
                 <span class="kw">let </span>window = window.downgrade();
-                <span class="macro">tracing::debug!</span>(<span class="string">&quot;spawned window.search() from search button&quot;</span>);
+                <span class="macro">tracing::debug!</span>(<span class="string">"spawned window.search() from search button"</span>);
                 <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
                     <span class="kw">if let </span><span class="prelude-val">Some</span>(window) = window.upgrade() {
                         window.search().<span class="kw">await
@@ -531,7 +531,7 @@
         imp.input
             .connect_icon_release(<span class="macro">clone!</span>(@weak <span class="self">self </span><span class="kw">as </span>window =&gt; <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
                 <span class="kw">let </span>window = window.downgrade();
-                <span class="macro">tracing::debug!</span>(<span class="string">&quot;spawned window.search() from search icon release&quot;</span>);
+                <span class="macro">tracing::debug!</span>(<span class="string">"spawned window.search() from search icon release"</span>);
                 <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
                     <span class="kw">if let </span><span class="prelude-val">Some</span>(window) = window.upgrade() {
                         window.search().<span class="kw">await
@@ -549,15 +549,15 @@
                 <span class="kw">let </span>provider_idx = result.provider_idx() <span class="kw">as </span>usize;
                 <span class="kw">let </span><span class="prelude-val">Some</span>(provider) = LYRIC_PROVIDERS
                     .get()
-                    .expect(<span class="string">&quot;lyric providers must be initialized&quot;</span>)
+                    .expect(<span class="string">"lyric providers must be initialized"</span>)
                     .get(provider_idx) <span class="kw">else </span>{
-                    <span class="macro">error!</span>(<span class="string">&quot;provider_idx {} is out of range&quot;</span>, provider_idx);
+                    <span class="macro">error!</span>(<span class="string">"provider_idx {} is out of range"</span>, provider_idx);
                     <span class="kw">return</span>;
                 };
                 
-                <span class="macro">info!</span>(<span class="string">&quot;selected {} from {}&quot;</span>, result.id(), provider.unique_name());
+                <span class="macro">info!</span>(<span class="string">"selected {} from {}"</span>, result.id(), provider.unique_name());
                 
-                <span class="macro">tracing::debug!</span>(<span class="string">&quot;spawned query_lyric from set lyric button&quot;</span>);
+                <span class="macro">tracing::debug!</span>(<span class="string">"spawned query_lyric from set lyric button"</span>);
                 <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
                     <span class="kw">let </span>song_id = result.id();
                     <span class="kw">match </span>provider.query_lyric(<span class="kw-2">&amp;</span>song_id).<span class="kw">await </span>{
@@ -578,7 +578,7 @@
                             }
                         },
                         <span class="prelude-val">Err</span>(e) =&gt; {
-                            <span class="kw">let </span>error_msg = <span class="macro">format!</span>(<span class="string">&quot;{e} when getting lyric.&quot;</span>);
+                            <span class="kw">let </span>error_msg = <span class="macro">format!</span>(<span class="string">"{e} when getting lyric."</span>);
                             <span class="macro">error!</span>(error_msg);
                             show_dialog(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>window), <span class="kw-2">&amp;</span>error_msg, gtk::MessageType::Error);
                         }
@@ -603,7 +603,7 @@
 
 <span class="kw">fn </span>connect_factory(
     column: <span class="kw-2">&amp;</span>ColumnViewColumn,
-    get_field: <span class="kw">impl </span><span class="lifetime">&#39;static </span>+ Fn(ResultObject) -&gt; String,
+    get_field: <span class="kw">impl </span><span class="lifetime">'static </span>+ Fn(ResultObject) -&gt; String,
     wrap: bool,
 ) {
     <span class="kw">let </span>factory = gtk::SignalListItemFactory::new();
@@ -614,22 +614,22 @@
         label.set_wrap_mode(gtk::pango::WrapMode::Word);
         list_item
             .downcast_ref::&lt;ListItem&gt;()
-            .expect(<span class="string">&quot;Needs to be ListItem&quot;</span>)
+            .expect(<span class="string">"Needs to be ListItem"</span>)
             .set_child(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>label));
     });
     factory.connect_bind(<span class="kw">move </span>|<span class="kw">_</span>, list_item| {
         <span class="kw">let </span>result_object = list_item
             .downcast_ref::&lt;ListItem&gt;()
-            .expect(<span class="string">&quot;Needs to be ListItem&quot;</span>)
+            .expect(<span class="string">"Needs to be ListItem"</span>)
             .item()
             .and_downcast::&lt;ResultObject&gt;()
-            .expect(<span class="string">&quot;Needs to be ResultObject&quot;</span>);
+            .expect(<span class="string">"Needs to be ResultObject"</span>);
         <span class="kw">let </span>label = list_item
             .downcast_ref::&lt;ListItem&gt;()
-            .expect(<span class="string">&quot;Needs to be ListItem&quot;</span>)
+            .expect(<span class="string">"Needs to be ListItem"</span>)
             .child()
             .and_downcast::&lt;gtk::Label&gt;()
-            .expect(<span class="string">&quot;Needs to be Label&quot;</span>);
+            .expect(<span class="string">"Needs to be Label"</span>);
 
         label.set_label(<span class="kw-2">&amp;</span>get_field(result_object));
     });
@@ -640,6 +640,6 @@
 <span class="kw">fn </span>format_length(length: u64) -&gt; String {
     <span class="kw">let </span>min = length / <span class="number">60</span>;
     <span class="kw">let </span>sec = length % <span class="number">60</span>;
-    <span class="macro">format!</span>(<span class="string">&quot;{min:02}:{sec:02}&quot;</span>)
+    <span class="macro">format!</span>(<span class="string">"{min:02}:{sec:02}"</span>)
 }
 </code></pre></div></section></main></body></html>
