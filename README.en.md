@@ -49,7 +49,7 @@ SIGUSR2: switch gtk decoration on/off
 
 #### online
 
-> For Qcm, Feeluown-{netease, qqmusic}, ElectronNCM, YesPlayMusic, we could get song id directly
+> For Qcm, Feeluown-{netease, qqmusic}, ElectronNCM, YesPlayMusic(OSD), we could get song id directly
 
 ##### GTK+
 

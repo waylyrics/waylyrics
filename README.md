@@ -48,7 +48,7 @@ SIGUSR2: 开关GTK CSD
 
 #### 在线
 
-> Qcm, Feeluown-{netease, qqmusic}, ElectronNCM, YesPlayMusic，可以直接拿歌曲id
+> Qcm, Feeluown-{netease, qqmusic}, ElectronNCM, YesPlayMusic(OSD)，可以直接拿歌曲id
 
 ##### GTK+
 
