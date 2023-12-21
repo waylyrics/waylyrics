@@ -67,7 +67,6 @@ pub fn register_action_search_lyric(app: &Application, wind: &app::Window, trigg
 pub fn register_action_refetch_lyric(app: &Application, window: &app::Window, trigger: &str) {
     let action = SimpleAction::new("refetch-lyric", None);
     action.connect_activate(move |_, _| {
-        info!("cleaned current lyric");
         let metainfo = TRACK_PLAYING_STATE
             .with_borrow(|TrackState { metainfo, .. }| metainfo.as_ref().cloned());
         let Some(metainfo) = metainfo else {
