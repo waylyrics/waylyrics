@@ -78,7 +78,7 @@ fn build_ui(app: &Application) -> Result<()> {
                 switch_decoration,
                 reload_theme,
                 search_lyric,
-                reload_lyric,
+                refetch_lyric,
                 switch_passthrough,
             },
         qqmusic_api_base_url,
@@ -115,7 +115,6 @@ fn build_ui(app: &Application) -> Result<()> {
         lyric_display_mode,
     );
 
-
     register_mpris_sync(ObjectExt::downgrade(app), mpris_sync_interval);
     register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
     register_action_connect(app);
@@ -127,7 +126,7 @@ fn build_ui(app: &Application) -> Result<()> {
     register_action_reload_theme(app, &wind, &reload_theme);
     register_action_search_lyric(app, &wind, &search_lyric);
     register_action_remove_lyric(app, &wind);
-    register_action_refetch_lyric(app, &wind, &reload_lyric);
+    register_action_refetch_lyric(app, &wind, &refetch_lyric);
 
     if enable_filter_regex {
         EXCLUDED_REGEXES.set(RegexSet::new(&filter_regexies)?);

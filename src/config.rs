@@ -56,7 +56,7 @@ pub struct Triggers {
     /// manually search lyric
     pub search_lyric: String,
     /// try to refetch lyric
-    pub reload_lyric: String,
+    pub refetch_lyric: String,
     /// whether to allow mouse click-through
     pub switch_passthrough: String,
 }
@@ -67,7 +67,7 @@ impl Default for Triggers {
             switch_decoration: "<Control>d".into(),
             reload_theme: "<Control><Shift>t".into(),
             search_lyric: "<Control>s".into(),
-            reload_lyric: "<Alt><Shift>l".into(),
+            refetch_lyric: "<Alt><Shift>l".into(),
             switch_passthrough: "<Alt>p".into(),
         }
     }
