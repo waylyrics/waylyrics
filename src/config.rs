@@ -49,10 +49,15 @@ pub struct Config {
 #[derive(Deserialize, Serialize)]
 #[serde(default)]
 pub struct Triggers {
+    /// whether to show GTK+ CSD
     pub switch_decoration: String,
+    /// reapply current theme file
     pub reload_theme: String,
+    /// manually search lyric
     pub search_lyric: String,
+    /// try to refetch lyric
     pub reload_lyric: String,
+    /// whether to allow mouse click-through
     pub switch_passthrough: String,
 }
 
