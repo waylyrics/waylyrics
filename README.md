@@ -41,8 +41,8 @@ SIGUSR2: 开关GTK CSD
 
 ## 依赖
 
-- 播放器需正确支持MPRIS，独一无二的TrackID也是必需的。
-- 你的wm需要允许你手动设置窗口置顶
+- 播放器需至少在MPRIS提供 Position，Metadata(有title)，PlaybackStatus
+- 需要你的wm允许你设置窗口置顶
 
 ### 推荐的播放器
 

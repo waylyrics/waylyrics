@@ -41,8 +41,8 @@ SIGUSR2: switch gtk decoration on/off
 
 ## Requirement
 
-- A player supports MPRIS well, especially should made TrackID unique between songs
-- In particular, a wm allows you set windows as top-level one's.
+- A player at least supports MPRIS PlaybackStatus, Position and Metadata(with title)
+- In particular, a wm allows you set windows as top-level
 
 ### Recommended Players
 
