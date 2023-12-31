@@ -32,6 +32,7 @@ export RUSTC_BOOTSTRAP=1
 export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 cargo install --path . --root=%{buildroot}%{_prefix}
 
+install -Dm644 "io.poly000.waylyrics.desktop" -t %{buildroot}/usr/share/applications/
 install -d %{buildroot}/usr/share/waylyrics
 
 install -d %{buildroot}/usr/share/glib-2.0/schemas/
@@ -45,6 +46,7 @@ rm %{buildroot}/usr/.crates.toml %{buildroot}/usr/.crates2.json
 
 %files
 %{_bindir}/waylyrics
+/usr/share/applications/io.poly000.waylyrics.desktop
 /usr/share/waylyrics/
 /usr/share/glib-2.0/schemas/io.poly000.waylyrics.gschema.xml
 
