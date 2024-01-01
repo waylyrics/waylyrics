@@ -49,7 +49,7 @@ xdg = "2.5.2"
 
 # error handling
 anyhow = "1.0.78"
-thiserror = "1.0.51"
+thiserror = "1.0.53"
 glib-macros = "0.18.5"
 
 async-trait = "0.1.75"
