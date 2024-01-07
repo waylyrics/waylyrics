@@ -118,17 +118,20 @@ SIGUSR2: 开关GTK CSD
 
 ## 替代品
 
-[YesPlayMusicOSD]: https://github.com/shih-liang/YesPlayMusicOSD
 [waybar-netease-music-lyrics]: https://github.com/kangxiaoju/waybar-netease-music-lyrics
-[lx-music-desktop]: https://github.com/lyswhut/lx-music-desktop
+[lx-music-desktop（似了）]: https://github.com/lyswhut/lx-music-desktop
 [Sunamu]: https://github.com/NyaomiDEV/Sunamu
 [lyricsSeeker]: https://github.com/BruceZhang1993/LyricsSeeker
 [caraoke-plasmoid]: https://github.com/Copay/caraoke-plasmoid
 [desktop-lyric]: https://github.com/tuberry/desktop-lyric
+[可道歌词]: https://www.autolyric.com/
+[Lyricify]: https://github.com/WXRIW/Lyricify-App
+
+### Linux
 
 Sway用户可以看看 [waybar-netease-music-lyrics].
 
-[YesPlayMusicOSD] 也有不错的歌词支持，[lx-music-desktop] 多来源且带有桌面歌词支持
+[lx-music-desktop（似了）] 多来源且带有桌面歌词支持
 
 [Sunamu] 可以启动服务器或电子app，它的歌词显示效果更好，并且比waylyrics的功能更多
 
@@ -137,6 +140,12 @@ Sway用户可以看看 [waybar-netease-music-lyrics].
 BruceZhang1993's [lyricsSeeker] is still WIP, but it may have better-looking and better integration with KDE.
 
 Copay's [caraoke-plasmoid] is currently Plasma-only, though it is easy to remove plasmoid components
+
+### Windows
+
+[可道歌词] 只支持一些本地播放器
+
+[Lyricify] 支持一些在线播放器，4版只支持 Spotify
 
 ## Credit
 

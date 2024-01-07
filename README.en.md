@@ -118,15 +118,19 @@ Current approach my seems dirty:
 
 [YesPlayMusicOSD]: https://github.com/shih-liang/YesPlayMusicOSD
 [waybar-netease-music-lyrics]: https://github.com/kangxiaoju/waybar-netease-music-lyrics
-[lx-music-desktop]: https://github.com/lyswhut/lx-music-desktop
+[lx-music-desktop (dead)]: https://github.com/lyswhut/lx-music-desktop
 [Sunamu]: https://github.com/NyaomiDEV/Sunamu
 [lyricsSeeker]: https://github.com/BruceZhang1993/LyricsSeeker
 [caraoke-plasmoid]: https://github.com/Copay/caraoke-plasmoid
 [desktop-lyric]: https://github.com/tuberry/desktop-lyric
+[autolyric]: https://www.autolyric.com/
+[Lyricify]: https://github.com/WXRIW/Lyricify-App
+
+### Linux
 
 For Sway users, you may want use [waybar-netease-music-lyrics].
 
-[YesPlayMusicOSD] and [lx-music-desktop] has great lyrics support
+[lx-music-desktop (dead)] has great lyrics support
 
 [Sunamu] could start web-server/launch electron app depends on your choice, and it has good-looking and it's much more feature rich than waylyrics.
 
@@ -135,6 +139,12 @@ BruceZhang1993's [lyricsSeeker] is still WIP, but it may have better-looking and
 Copay's [caraoke-plasmoid] is currently Plasma-only, though it is easy to remove plasmoid components
 
 If you are using GNOME I will suggest you [desktop-lyric].
+
+### Windows
+
+[autolyric] supports few of local players
+
+[Lyricify] supports spotify only, while it's Version 3 supports way more online players
 
 ## Credit
 
