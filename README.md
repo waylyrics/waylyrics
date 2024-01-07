@@ -119,7 +119,7 @@ SIGUSR2: 开关GTK CSD
 ## 替代品
 
 [waybar-netease-music-lyrics]: https://github.com/kangxiaoju/waybar-netease-music-lyrics
-[lx-music-desktop（似了）]: https://github.com/lyswhut/lx-music-desktop
+[lx-music-desktop]: https://github.com/lyswhut/lx-music-desktop
 [Sunamu]: https://github.com/NyaomiDEV/Sunamu
 [lyricsSeeker]: https://github.com/BruceZhang1993/LyricsSeeker
 [caraoke-plasmoid]: https://github.com/Copay/caraoke-plasmoid
@@ -131,7 +131,7 @@ SIGUSR2: 开关GTK CSD
 
 Sway用户可以看看 [waybar-netease-music-lyrics].
 
-[lx-music-desktop（似了）] 多来源且带有桌面歌词支持
+[lx-music-desktop] 多来源且带有桌面歌词支持
 
 [Sunamu] 可以启动服务器或电子app，它的歌词显示效果更好，并且比waylyrics的功能更多
 
