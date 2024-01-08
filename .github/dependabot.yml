@@ -10,7 +10,7 @@ updates:
     schedule:
       interval: "monthly"
       
-groups:
-  serde:
-    patterns:
-      "serde*"
+    groups:
+      serde:
+        patterns:
+        - "serde*"
