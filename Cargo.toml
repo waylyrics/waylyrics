@@ -48,7 +48,7 @@ libc = "0.2.152"
 xdg = "2.5.2"
 
 # error handling
-anyhow = "1.0.78"
+anyhow = "1.0.79"
 thiserror = "1.0.56"
 glib-macros = "0.18.5"
 
