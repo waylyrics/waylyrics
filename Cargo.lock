@@ -344,6 +344,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "dbus-dummy"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "22d24c4c449e488b022f58a19817ffcedc637d67237076068da883e0fc8f7159"
+
+[[package]]
 name = "deranged"
 version = "0.3.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1045,6 +1051,7 @@ version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "06085512b750d640299b79be4bad3d2fa90a9c00b1fd9e1b46364f66f0485c72"
 dependencies = [
+ "cc",
  "pkg-config",
 ]
 
@@ -2651,6 +2658,7 @@ dependencies = [
  "anyhow",
  "async-trait",
  "dbus",
+ "dbus-dummy",
  "glib-macros",
  "gtk4",
  "libc",

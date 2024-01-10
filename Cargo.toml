@@ -64,12 +64,12 @@ once_cell = "1.19.0"
 [features]
 mimalloc = ["dep:mimalloc"]
 default = ["mimalloc"]
+vendored = ["dbus/vendored"]
 
 [target.'cfg(unix)'.dependencies]
 # MPRIS integration
 dbus = "0.9.7"
 mpris = "2.0.1"
 
-# Not working
-# [target.'cfg(unix)'.features]
-# vendored = ["dbus/vendored"]
+[target.'cfg(windows)'.dependencies]
+dbus = { version = "0.1.0", package = "dbus-dummy" }
