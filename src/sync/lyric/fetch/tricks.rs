@@ -1,3 +1,4 @@
+use std::ffi::OsStr;
 use std::fs;
 use std::path::PathBuf;
 
@@ -53,4 +54,58 @@ pub fn get_lyric_hint_from_player(
 
         _ => None,
     }
+}
+
+/// replace file extension with .lrc
+/// 
+/// `music_path` should be valid file if it's not empty
+///
+/// ```rust
+/// use std::path::PathBuf;
+/// use waylyrics::sync::lyric::fetch::tricks::get_lyric_path;
+///
+/// // do not assert file extension length > 3
+/// assert_eq!(get_lyric_path(PathBuf::from("/xxx/yyy/test.ts")),
+///             Some(PathBuf::from("/xxx/yyy/test.lrc")));
+///
+/// // neither = 3
+/// assert_eq!(get_lyric_path(PathBuf::from("xxx/yyy/test.m3u8")),
+///             Some(PathBuf::from("xxx/yyy/test.lrc")));
+///
+/// // relative path
+/// assert_eq!(get_lyric_path(PathBuf::from("../test.m3u8")),
+///             Some(PathBuf::from("../test.lrc")));
+///
+/// // non-ASCII path
+/// assert_eq!(get_lyric_path(PathBuf::from("/测试/试试/你好.诶木皮散")),
+///             Some(PathBuf::from("/测试/试试/你好.lrc")));
+///
+/// // empty string
+/// assert_eq!(get_lyric_path(PathBuf::from("")),
+///             None);
+/// ```
+pub fn get_lyric_path(music_path: PathBuf) -> Option<PathBuf> {
+    let file_name_part = music_path.iter().last();
+
+    let Some(file_name) = file_name_part else {
+        None?
+    };
+
+    let file_name = file_name.as_encoded_bytes();
+
+    file_name
+        .iter()
+        .enumerate()
+        .rev()
+        .find(|&(_, ch)| ch == &b'.')
+        .map(|(last_dot_pos, _)| {
+            let mut lrc_file_name = file_name.split_at(last_dot_pos + 1).0.to_vec();
+            lrc_file_name.extend_from_slice("lrc".as_bytes());
+            let lrc_file_name = unsafe { OsStr::from_encoded_bytes_unchecked(&lrc_file_name) };
+
+            music_path
+                .parent()
+                .map(|music_dir| music_dir.join(lrc_file_name))
+        })
+        .flatten()
 }

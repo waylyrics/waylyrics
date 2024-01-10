@@ -1,4 +1,4 @@
-mod tricks;
+pub mod tricks;
 
 use anyhow::Result;
 use std::borrow::Cow;

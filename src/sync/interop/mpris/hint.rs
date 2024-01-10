@@ -1,4 +1,3 @@
-use std::ffi::OsStr;
 use std::path::PathBuf;
 
 use mpris::{Metadata, Player};
@@ -8,6 +7,7 @@ use crate::lyric_providers::qqmusic::QQMusic;
 
 use crate::sync::interop::mpris::PLAYER;
 use crate::sync::lyric::fetch::LyricHint;
+use crate::sync::lyric::fetch::tricks::get_lyric_path;
 
 pub fn hint_from_player() -> Option<LyricHint> {
     PLAYER.with_borrow(|player| {
@@ -77,28 +77,4 @@ fn get_field_from_player(
         .get_metadata()
         .ok()
         .and_then(|metadata| extract_field(&metadata).map(|s| s.to_owned()))
-}
-
-fn get_lyric_path(music_path: PathBuf) -> Option<PathBuf> {
-    if !music_path.is_file() {
-        // invalid music file path
-        return None;
-    }
-
-    let file_name = music_path.iter().last().unwrap().as_encoded_bytes();
-    file_name
-        .iter()
-        .enumerate()
-        .rev()
-        .find(|&(_, ch)| ch == &b'.')
-        .map(|(last_dot_pos, _)| {
-            let mut lrc_file_name = file_name.split_at(last_dot_pos + 1).0.to_vec();
-            lrc_file_name.extend_from_slice("lrc".as_bytes());
-            let lrc_file_name = unsafe { OsStr::from_encoded_bytes_unchecked(&lrc_file_name) };
-
-            music_path
-                .parent()
-                .map(|music_dir| music_dir.join(lrc_file_name))
-        })
-        .flatten()
 }
