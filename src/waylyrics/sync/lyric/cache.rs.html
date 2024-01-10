@@ -109,9 +109,9 @@
 </pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Result;
 <span class="kw">use </span>std::path::PathBuf;
 
+<span class="kw">use </span><span class="kw">crate</span>::log::{debug, error, info};
 <span class="kw">use </span>gtk::subclass::prelude::ObjectSubclassIsExt;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
-<span class="kw">use </span><span class="kw">crate</span>::log::{debug, error, info};
 
 <span class="kw">use </span><span class="kw">crate</span>::sync::TrackMeta;
 <span class="kw">use </span><span class="kw">crate</span>::sync::{lyric::fetch::fetch_lyric, LYRIC};

@@ -87,7 +87,7 @@
                 })
                 .map(|song| (song, <span class="number">1</span>))
         })
-        .or(search_result.get(<span class="number">0</span>).map(|song| (song, <span class="number">2</span>)))
+        .or(search_result.first().map(|song| (song, <span class="number">2</span>)))
         .map(|(song, weight)| (song.id.as_str(), weight))
 }
 </code></pre></div></section></main></body></html>
