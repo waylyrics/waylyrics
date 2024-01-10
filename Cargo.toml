@@ -22,17 +22,15 @@ rust_decimal = { version = "1.33.1", default-features = false, features = [
     "std",
 ] }
 rust_decimal_macros = "1.33.1"
+url = "2.5.0"
 
 # ui
 gtk = { version = "0.7.3", package = "gtk4" }
 
-# MPRIS integration
-dbus = "0.9.7"
-mpris = "2.0.1"
+# lyric providers + parse
 ncmapi = { git = "https://github.com/waylyrics/ncmapi-rs.git", rev = "394e9c2" }
 qqmusic-rs = { git = "https://github.com/waylyrics/qqmusic-rs.git", rev = "402558f" }
 lrc-nom = "0.2.0"
-url = "2.5.0"
 
 # logging
 tracing = "0.1.40"
@@ -65,5 +63,13 @@ once_cell = "1.19.0"
 
 [features]
 mimalloc = ["dep:mimalloc"]
-vendored = ["dbus/vendored"]
 default = ["mimalloc"]
+
+[target.'cfg(unix)'.dependencies]
+# MPRIS integration
+dbus = "0.9.7"
+mpris = "2.0.1"
+
+# Not working
+# [target.'cfg(unix)'.features]
+# vendored = ["dbus/vendored"]
