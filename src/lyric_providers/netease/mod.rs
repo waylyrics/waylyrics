@@ -50,7 +50,8 @@ impl super::LyricProvider for Netease {
                 lyric: lyric_resp.lrc.map(|l| l.lyric),
                 tlyric: lyric_resp.tlyric.map(|l| l.lyric),
             })
-        }).await?
+        })
+        .await?
     }
 
     async fn search_song(&self, keyword: &str) -> Result<Vec<super::SongInfo>> {
@@ -75,13 +76,13 @@ impl super::LyricProvider for Netease {
                 .iter()
                 .map(
                     |Song {
-                        name,
-                        id,
-                        artists,
-                        duration,
-                        album: Album { name: album, .. },
-                        ..
-                    }| super::SongInfo {
+                         name,
+                         id,
+                         artists,
+                         duration,
+                         album: Album { name: album, .. },
+                         ..
+                     }| super::SongInfo {
                         id: id.to_string(),
                         title: name.into(),
                         album: album.clone(),
@@ -99,7 +100,8 @@ impl super::LyricProvider for Netease {
                     },
                 )
                 .collect())
-        }).await?
+        })
+        .await?
     }
 }
 
@@ -119,7 +121,7 @@ fn match_lyric(lyric: Option<&str>) -> Lyric<'_> {
     match lyric {
         Some("") | None => super::Lyric::None,
         Some(lyric) => {
-            if let Ok(parsed) = super::utils::lrc_iter(lyric.split('\n')) {
+            if let Ok(parsed) = super::utils::lrc_iter(lyric.lines()) {
                 Lyric::LineTimestamp(parsed)
             } else {
                 Lyric::NoTimestamp

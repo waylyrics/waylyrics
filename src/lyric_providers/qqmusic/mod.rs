@@ -11,7 +11,7 @@ use reqwest::Client;
 
 use crate::{
     lyric_providers::{default_search_query, SongInfo},
-    QQMUSIC_API_CLIENT, tokio_spawn,
+    tokio_spawn, QQMUSIC_API_CLIENT,
 };
 
 use super::{Lyric, LyricOwned, LyricStore};
@@ -71,7 +71,8 @@ impl super::LyricProvider for QQMusic {
                 lyric: Some(resp.data.lyric),
                 tlyric: Some(resp.data.trans),
             })
-        }).await?
+        })
+        .await?
     }
 
     async fn search_song(&self, keyword: &str) -> Result<Vec<SongInfo>> {
@@ -110,7 +111,8 @@ impl super::LyricProvider for QQMusic {
                     length: Duration::from_secs(song.interval as _),
                 })
                 .collect())
-        }).await?
+        })
+        .await?
     }
 }
 
@@ -144,7 +146,7 @@ fn verify_lyric(lyric: Option<&str>) -> LyricOwned {
                 .replace("&quot;", "\"")
                 .replace("&apos;", "\'");
 
-            if let Ok(parsed) = super::utils::lrc_iter(lyric.split('\n')) {
+            if let Ok(parsed) = super::utils::lrc_iter(lyric.lines()) {
                 Lyric::LineTimestamp(parsed).into_owned()
             } else {
                 LyricOwned::NoTimestamp

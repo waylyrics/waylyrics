@@ -1,9 +1,9 @@
 use anyhow::Result;
 use std::path::PathBuf;
 
+use crate::log::{debug, error, info};
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use serde::{Deserialize, Serialize};
-use crate::log::{debug, error, info};
 
 use crate::sync::TrackMeta;
 use crate::sync::{lyric::fetch::fetch_lyric, LYRIC};

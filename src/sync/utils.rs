@@ -40,6 +40,6 @@ pub fn match_likely_lyric<'a>(
                 })
                 .map(|song| (song, 1))
         })
-        .or(search_result.get(0).map(|song| (song, 2)))
+        .or(search_result.first().map(|song| (song, 2)))
         .map(|(song, weight)| (song.id.as_str(), weight))
 }
