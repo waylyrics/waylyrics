@@ -3,7 +3,7 @@ use std::path::PathBuf;
 
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use serde::{Deserialize, Serialize};
-use tracing::{debug, error, info};
+use crate::log::{debug, error, info};
 
 use crate::sync::TrackMeta;
 use crate::sync::{lyric::fetch::fetch_lyric, LYRIC};

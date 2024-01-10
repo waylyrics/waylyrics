@@ -5,15 +5,17 @@ use std::borrow::Cow;
 use std::sync::Arc;
 use tokio::task::JoinSet;
 
+use crate::log::{debug, error, info};
 use gtk::prelude::*;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
-use tracing::{debug, error, info};
 
 use crate::lyric_providers::LyricOwned;
 use crate::sync::{TrackMeta, LYRIC};
-use crate::{app, LYRIC_PROVIDERS, tokio_spawn};
+use crate::{app, tokio_spawn, LYRIC_PROVIDERS};
 
 use crate::sync::utils::{self, match_likely_lyric};
+
+pub(crate) use tricks::LyricHint;
 
 pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
     utils::clean_lyric(window);
@@ -28,7 +30,7 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
         .map(|s| Cow::Owned(s.join(",")))
         .unwrap_or(Cow::Borrowed("Unknown"));
 
-    if let Some(result) = tricks::get_accurate_lyric(&title, &artists_str, window) {
+    if let Some(result) = tricks::get_lyric_hint_from_player(&title, &artists_str, window) {
         info!("fetched lyric directly");
         return result;
     }
@@ -77,7 +79,8 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
             results.push((id, weight, idx));
         }
         (results, artists_str, title)
-    }).await?;
+    })
+    .await?;
 
     if results.is_empty() {
         info!("Failed searching for {artists_str} - {title}",);

@@ -1,3 +1,4 @@
+use crate::log::{info, warn};
 use glib_macros::clone;
 use gtk::{
     gio::SimpleAction,
@@ -6,31 +7,34 @@ use gtk::{
     subclass::prelude::ObjectSubclassIsExt,
     Application,
 };
-use tracing::{error, info, warn};
 mod utils;
 
 use crate::{
     app::{self, dialog::show_dialog},
+    glib_spawn,
     lyric_providers::{default_search_query, LyricOwned},
     sync::{
-        interop::{reset_lyric_labels, update_lyric},
+        interop::{clean_player, update_lyric},
         lyric::cache::update_lyric_cache,
-        search_window, TrackState, LYRIC, PLAYER, PLAYER_FINDER, TRACK_PLAYING_STATE,
+        search_window, TrackState, LYRIC, TRACK_PLAYING_STATE,
     },
-    MAIN_WINDOW, glib_spawn,
+    utils::reset_lyric_labels,
+    MAIN_WINDOW,
 };
+
+use crate::sync::interop::connect_player_with_id;
 
 pub fn register_action_disconnect(app: &Application) {
     let action = SimpleAction::new("disconnect", None);
     action.connect_activate(|_, _| {
-        PLAYER.set(None);
+        clean_player();
     });
     app.add_action(&action);
 }
 
 pub fn register_sigusr1_disconnect() {
     glib::unix_signal_add_local(libc::SIGUSR1, move || {
-        PLAYER.set(None);
+        clean_player();
         glib::ControlFlow::Continue
     });
 }
@@ -73,7 +77,7 @@ pub fn register_action_refetch_lyric(app: &Application, window: &app::Window, tr
             return;
         };
 
-        tracing::debug!("spawned update_lyric from refetch-lyric action");
+        crate::log::debug!("spawned update_lyric from refetch-lyric action");
         glib_spawn!(async move {
             let Some(wind) = MAIN_WINDOW.with_borrow(|wind| wind.as_ref().cloned()) else {
                 return;
@@ -124,13 +128,8 @@ pub fn register_action_connect(app: &Application) {
             warn!("did not received string paramter for action \'app.connect\'");
             return;
         };
-        PLAYER_FINDER.with_borrow(|player_finder| {
-            if let Ok(player) = player_finder.find_by_name(player_id) {
-                PLAYER.set(Some(player));
-            } else {
-                error!("cannot connect to: {player_id}");
-            }
-        });
+
+        connect_player_with_id(player_id)
     });
     app.add_action(&connect);
 }

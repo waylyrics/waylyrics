@@ -1,90 +1,45 @@
-use crate::lyric_providers::netease::Netease;
-use crate::lyric_providers::qqmusic::QQMusic;
-
-use crate::sync::PLAYER;
-
 use crate::lyric_providers::LyricProvider;
+use crate::sync::interop::hint_from_player;
+use crate::sync::lyric::fetch::set_lyric;
 use crate::{app, glib_spawn};
 use anyhow::Result;
 use gtk::glib::clone::Downgrade;
-use mpris::{Metadata, Player};
 
-use crate::sync::lyric::fetch::set_lyric;
+pub enum LyricHint {
+    SongId {
+        song_id: String,
+        provider: Box<dyn LyricProvider>,
+    },
+}
 
-pub fn get_accurate_lyric(
+pub fn get_lyric_hint_from_player(
     title: &str,
     artists: &str,
     window: &app::Window,
 ) -> Option<Result<(), anyhow::Error>> {
-    PLAYER.with_borrow(|player| {
-        let player = player
-            .as_ref()
-            .expect("player not exists in lyric fetching");
-        let player_name = player.identity();
-        let player_bus_name = player.bus_name().strip_prefix("org.mpris.MediaPlayer2.").unwrap();
-        let Some((song_id, provider)): Option<(String, Box<dyn LyricProvider>)> =
-            (match (player_name, player_bus_name) {
-                ("mpv", _) => {
-                    tracing::warn!("local lyric files are still unsupported");
-                    None
-                }
-                ("ElectronNCM" | "Qcm", _)
-                | (_, "com.gitee.gmg137.NeteaseCloudMusicGtk4" | "NeteaseCloudMusicGtk4") => {
-                    get_song_id_from_player(player, |meta| {
-                        meta.get("mpris:trackid")
-                            .and_then(mpris::MetadataValue::as_str)
-                            .and_then(|s| s.split('/').last())
-                    })
-                    .map(|song_id| (song_id, Box::new(Netease) as _))
-                }
-                ("feeluown", _) => get_song_id_from_player(player, |meta| {
-                    meta.url()?.strip_prefix("fuo://netease/songs/")
-                })
-                .map(|song_id| (song_id, Box::new(Netease) as _))
-                .or_else(|| {
-                    get_song_id_from_player(player, |meta| {
-                        meta.url()?.strip_prefix("fuo://qqmusic/songs/")
-                    })
-                    .map(|song_id| (song_id, Box::new(QQMusic) as _))
-                }),
-                ("YesPlayMusic", _) => {
-                    get_song_id_from_player(player, |meta| meta.url()?.strip_prefix("/trackid/"))
-                        .map(|song_id| (song_id, Box::new(Netease) as _))
-                }
+    let hint_from_player: Option<LyricHint> = hint_from_player();
+    match hint_from_player {
+        Some(LyricHint::SongId { song_id, provider }) => {
+            let title = title.to_owned();
+            let artists = artists.to_owned();
+            let window = window.downgrade();
+            crate::log::debug!("spawned query from get_accurate_lyric");
+            glib_spawn!(async move {
+                let Ok(lyric) = provider.query_lyric(&song_id).await else {
+                    return;
+                };
+                let olyric = provider.get_lyric(&lyric);
+                let tlyric = provider.get_translated_lyric(&lyric);
+                let Some(window) = window.upgrade() else {
+                    return;
+                };
 
-                _ => None,
-            })
-        else {
-            return None;
-        };
+                set_lyric(olyric, tlyric, &title, &artists, &window);
+            });
 
-        let title = title.to_owned();
-        let artists = artists.to_owned();
-        let window = window.downgrade();
-        tracing::debug!("spawned query from get_accurate_lyric");
-        glib_spawn!(async move {
-            let Ok(lyric) = provider.query_lyric(&song_id).await else {
-                return;
-            };
-            let olyric = provider.get_lyric(&lyric);
-            let tlyric = provider.get_translated_lyric(&lyric);
-            let Some(window) = window.upgrade() else {
-                return;
-            };
+            return Some(Ok(()));
+        }
 
-            set_lyric(olyric, tlyric, &title, &artists, &window);
-        });
-
-        Some(Ok(()))
-    })
-}
-
-fn get_song_id_from_player(
-    player: &Player,
-    extract_field: impl for<'a> FnOnce(&'a Metadata) -> Option<&'a str>,
-) -> Option<String> {
-    player
-        .get_metadata()
-        .ok()
-        .and_then(|metadata| extract_field(&metadata).map(|s| s.to_owned()))
+        _ => None,
+    }
 }

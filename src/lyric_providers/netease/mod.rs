@@ -44,7 +44,7 @@ impl super::LyricProvider for Netease {
 
             let lyric_resp: LyricResp = query_result.deserialize()?;
 
-            tracing::debug!("lyric query result: {lyric_resp:?}");
+            crate::log::debug!("lyric query result: {lyric_resp:?}");
 
             Ok(LyricStore {
                 lyric: lyric_resp.lrc.map(|l| l.lyric),
@@ -56,7 +56,7 @@ impl super::LyricProvider for Netease {
     async fn search_song(&self, keyword: &str) -> Result<Vec<super::SongInfo>> {
         let keyword = keyword.to_owned();
         tokio_spawn!(async move {
-            tracing::debug!("search keyword: {keyword}");
+            crate::log::debug!("search keyword: {keyword}");
 
             let cookie_path = crate::CONFIG_HOME
                 .get()
@@ -66,7 +66,7 @@ impl super::LyricProvider for Netease {
             let api = NcmApi::new(true, &cookie_path);
             let search_result = api.search(&keyword, None).await?;
             let resp: SearchSongResp = search_result.deserialize()?;
-            tracing::debug!("search result: {resp:?}");
+            crate::log::debug!("search result: {resp:?}");
 
             Ok(resp
                 .result

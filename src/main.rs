@@ -18,6 +18,7 @@ use waylyrics::{
     utils, EXCLUDED_REGEXES, LYRIC_PROVIDERS, MAIN_WINDOW, QQMUSIC_API_CLIENT, THEME_PATH,
 };
 
+use waylyrics::log;
 use waylyrics::sync::*;
 
 use tracing_subscriber::filter::{EnvFilter, LevelFilter};
@@ -42,7 +43,7 @@ fn main() -> Result<glib::ExitCode> {
         .with(tracing_journald::layer()?)
         .init();
 
-    tracing::info!("process id: {}", std::process::id());
+    log::info!("process id: {}", std::process::id());
 
     let app = Application::builder()
         .application_id(waylyrics::APP_ID)
@@ -58,12 +59,12 @@ fn build_ui(app: &Application) -> Result<()> {
 
     let (config_path, theme_dir) = init_dirs()?;
 
-    tracing::debug!("config path: {:?}", config_path);
+    log::debug!("config path: {:?}", config_path);
     let config = std::fs::read_to_string(&config_path)?;
     let config: Config = toml::from_str(&config).unwrap();
     std::fs::write(&config_path, toml::to_string(&config)?)?;
     let Config {
-        mpris_sync_interval,
+        player_sync_interval,
         lyric_update_interval,
         click_pass_through,
         hide_label_on_empty_text,
@@ -86,7 +87,7 @@ fn build_ui(app: &Application) -> Result<()> {
         lyric_display_mode,
     } = config;
 
-    let mpris_sync_interval = parse_time(&mpris_sync_interval)?;
+    let player_sync_interval = parse_time(&player_sync_interval)?;
     let lyric_update_interval = parse_time(&lyric_update_interval)?;
 
     let theme_file_name = format!("{theme}.css");
@@ -99,7 +100,7 @@ fn build_ui(app: &Application) -> Result<()> {
         global_theme
     };
 
-    tracing::debug!("theme path: {:?}", theme_path);
+    log::debug!("theme path: {:?}", theme_path);
     let css_style = std::fs::read_to_string(&theme_path)?;
     app::utils::merge_css(&css_style);
     THEME_PATH.set(theme_path);
@@ -115,7 +116,7 @@ fn build_ui(app: &Application) -> Result<()> {
         lyric_display_mode,
     );
 
-    register_mpris_sync(ObjectExt::downgrade(app), mpris_sync_interval);
+    register_sync_task(ObjectExt::downgrade(app), player_sync_interval);
     register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
     register_action_connect(app);
     register_action_disconnect(app);

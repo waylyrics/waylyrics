@@ -8,7 +8,7 @@ use gtk::subclass::prelude::*;
 use gtk::{gio, glib, ColumnViewColumn};
 use gtk::{prelude::*, ListItem};
 use tokio::task::JoinSet;
-use tracing::{error, info};
+use crate::log::{error, info};
 
 use crate::{LYRIC_PROVIDERS, glib_spawn, tokio_spawn};
 
@@ -198,7 +198,7 @@ impl Window {
         imp.input
             .connect_activate(clone!(@weak self as window => move |_| {
                 let window = window.downgrade();
-                tracing::debug!("spawned window.search() from search button");
+                crate::log::debug!("spawned window.search() from search button");
                 glib_spawn!(async move {
                     if let Some(window) = window.upgrade() {
                         window.search().await
@@ -209,7 +209,7 @@ impl Window {
         imp.input
             .connect_icon_release(clone!(@weak self as window => move |_, _| {
                 let window = window.downgrade();
-                tracing::debug!("spawned window.search() from search icon release");
+                crate::log::debug!("spawned window.search() from search icon release");
                 glib_spawn!(async move {
                     if let Some(window) = window.upgrade() {
                         window.search().await
@@ -235,7 +235,7 @@ impl Window {
                 
                 info!("selected {} from {}", result.id(), provider.unique_name());
                 
-                tracing::debug!("spawned query_lyric from set lyric button");
+                crate::log::debug!("spawned query_lyric from set lyric button");
                 glib_spawn!(async move {
                     let song_id = result.id();
                     match provider.query_lyric(&song_id).await {

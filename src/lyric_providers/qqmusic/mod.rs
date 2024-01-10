@@ -77,7 +77,7 @@ impl super::LyricProvider for QQMusic {
     async fn search_song(&self, keyword: &str) -> Result<Vec<SongInfo>> {
         let keyword = keyword.to_owned();
         tokio_spawn!(async move {
-            tracing::debug!("search keyword: {keyword}");
+            crate::log::debug!("search keyword: {keyword}");
 
             let client = Client::builder().user_agent("Waylyrics/0.1").build()?;
 

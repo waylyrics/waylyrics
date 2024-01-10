@@ -26,7 +26,7 @@ pub enum LyricDisplay {
 #[derive(Deserialize, Serialize)]
 #[serde(rename_all = "kebab-case", default)]
 pub struct Config {
-    pub mpris_sync_interval: String,
+    pub player_sync_interval: String,
     pub lyric_align: Align,
     pub lyric_update_interval: String,
     pub length_toleration: String,
@@ -76,7 +76,7 @@ impl Default for Triggers {
 impl Default for Config {
     fn default() -> Self {
         Self {
-            mpris_sync_interval: "2s".to_owned(),
+            player_sync_interval: "2s".to_owned(),
             lyric_update_interval: "20ms".to_owned(),
             length_toleration: "2s".to_owned(),
             click_pass_through: true,

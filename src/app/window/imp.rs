@@ -12,7 +12,7 @@ use gtk::{gio, glib, ApplicationWindow, PopoverMenu};
 use crate::app::utils::set_click_pass_through;
 use crate::app::REMOVE_LYRICS;
 use crate::config::LyricDisplay;
-use crate::sync::list_avaliable_players;
+use crate::sync::list_player_names;
 
 #[derive(Default)]
 pub struct Window {
@@ -79,17 +79,17 @@ impl ObjectImpl for Window {
             menu.remove_all();
 
             let section = gio::Menu::new();
-            let players = list_avaliable_players();
+            let players = list_player_names();
             if !players.is_empty() {
                 let disconnect = MenuItem::new(Some("Disconnect"), Some("app.disconnect"));
                 menu.append_item(&disconnect);
             }
 
             for player in players {
-                let item = MenuItem::new(Some(player.identity()), None);
+                let item = MenuItem::new(Some(&player.player_name), None);
                 item.set_action_and_target_value(
                     Some("app.connect"),
-                    Some(&ToVariant::to_variant(player.identity())),
+                    Some(&ToVariant::to_variant(&player.inner_id)),
                 );
                 section.append_item(&item);
             }

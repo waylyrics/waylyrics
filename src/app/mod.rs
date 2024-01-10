@@ -4,7 +4,7 @@ use std::cell::Cell;
 use gtk::{prelude::*, subclass::prelude::ObjectSubclassIsExt, Align, Application, Label};
 pub use window::Window;
 
-use crate::{app::utils::set_click_pass_through, DEFAULT_TEXT, config::LyricDisplay};
+use crate::{app::utils::set_click_pass_through, config::LyricDisplay, DEFAULT_TEXT};
 
 const WINDOW_MIN_HEIGHT: i32 = 120;
 
@@ -69,7 +69,7 @@ pub fn build_main_window(
     window.set_child(Some(&verical_box));
 
     window.connect_decorated_notify(|window| {
-        tracing::debug!("triggered decorated signal");
+        crate::log::debug!("triggered decorated signal");
         let clickthrough = window.imp().clickthrough.get();
         set_click_pass_through(window, clickthrough)
     });

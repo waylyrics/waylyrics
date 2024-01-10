@@ -15,6 +15,7 @@ use regex::RegexSet;
 
 pub mod app;
 pub mod config;
+pub mod log;
 pub mod lyric_providers;
 pub mod sync;
 pub mod utils;
@@ -35,13 +36,14 @@ pub static QQMUSIC_API_CLIENT: OnceLock<Option<QQMusicApi>> = OnceLock::new();
 
 pub const DEFAULT_TEXT: &str = "Waylyrics";
 
-pub static TOKIO_RUNTIME: Lazy<tokio::runtime::Runtime> = Lazy::new(|| tokio::runtime::Runtime::new().unwrap());
+pub static TOKIO_RUNTIME: Lazy<tokio::runtime::Runtime> =
+    Lazy::new(|| tokio::runtime::Runtime::new().unwrap());
 
 #[macro_export]
 macro_rules! glib_spawn {
     ($future: expr) => {
         gtk::glib::MainContext::default().spawn_local($future)
-    }
+    };
 }
 
 /// Used with functions requiring reqwest.
