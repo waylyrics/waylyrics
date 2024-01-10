@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["get_song_id_from_player","hint_from_player"]};

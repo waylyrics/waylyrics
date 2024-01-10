@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["get_accurate_lyric","get_song_id_from_player"]};
+window.SIDEBAR_ITEMS = {"enum":["LyricHint"],"fn":["get_lyric_hint_from_player"]};

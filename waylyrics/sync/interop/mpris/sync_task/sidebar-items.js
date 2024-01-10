@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["need_fetch_lyric","register_sync_task","sync_position","sync_track"]};
