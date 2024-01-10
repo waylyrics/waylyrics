@@ -69,7 +69,7 @@ pub fn list_player_names() -> Vec<PlayerId> {
         .iter()
         .map(|p| PlayerId {
             player_name: p.identity().to_owned(),
-            inner_id: p.bus_name().to_owned(),
+            inner_id: p.identity().to_owned(),
         })
         .collect()
 }
