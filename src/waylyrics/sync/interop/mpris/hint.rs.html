@@ -74,13 +74,22 @@
 <a href="#72" id="72">72</a>
 <a href="#73" id="73">73</a>
 <a href="#74" id="74">74</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>mpris::{Metadata, Player};
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::path::PathBuf;
+
+<span class="kw">use </span>mpris::{Metadata, Player};
 
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::netease::Netease;
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::qqmusic::QQMusic;
 
 <span class="kw">use </span><span class="kw">crate</span>::sync::interop::mpris::PLAYER;
 <span class="kw">use </span><span class="kw">crate</span>::sync::lyric::fetch::LyricHint;
+<span class="kw">use </span><span class="kw">crate</span>::sync::lyric::fetch::tricks::get_lyric_path;
 
 <span class="kw">pub fn </span>hint_from_player() -&gt; <span class="prelude-ty">Option</span>&lt;LyricHint&gt; {
     PLAYER.with_borrow(|player| {
@@ -94,13 +103,9 @@
             .unwrap();
 
         <span class="kw">match </span>(player_name, player_bus_name) {
-            (<span class="string">"mpv"</span>, <span class="kw">_</span>) =&gt; {
-                <span class="macro">crate::log::warn!</span>(<span class="string">"local lyric files are still unsupported"</span>);
-                <span class="prelude-val">None
-            </span>}
             (<span class="string">"ElectronNCM" </span>| <span class="string">"Qcm"</span>, <span class="kw">_</span>)
             | (<span class="kw">_</span>, <span class="string">"com.gitee.gmg137.NeteaseCloudMusicGtk4" </span>| <span class="string">"NeteaseCloudMusicGtk4"</span>) =&gt; {
-                get_song_id_from_player(player, |meta| {
+                get_field_from_player(player, |meta| {
                     meta.get(<span class="string">"mpris:trackid"</span>)
                         .and_then(mpris::MetadataValue::as_str)
                         .and_then(|s| s.split(<span class="string">'/'</span>).last())
@@ -110,7 +115,7 @@
                     provider: Box::new(Netease) <span class="kw">as _</span>,
                 })
             }
-            (<span class="string">"feeluown"</span>, <span class="kw">_</span>) =&gt; get_song_id_from_player(player, |meta| {
+            (<span class="string">"feeluown"</span>, <span class="kw">_</span>) =&gt; get_field_from_player(player, |meta| {
                 meta.url()<span class="question-mark">?</span>.strip_prefix(<span class="string">"fuo://netease/songs/"</span>)
             })
             .map(|song_id| LyricHint::SongId {
@@ -118,7 +123,7 @@
                 provider: Box::new(Netease) <span class="kw">as _</span>,
             })
             .or_else(|| {
-                get_song_id_from_player(player, |meta| {
+                get_field_from_player(player, |meta| {
                     meta.url()<span class="question-mark">?</span>.strip_prefix(<span class="string">"fuo://qqmusic/songs/"</span>)
                 })
                 .map(|song_id| LyricHint::SongId {
@@ -127,19 +132,26 @@
                 })
             }),
             (<span class="string">"YesPlayMusic"</span>, <span class="kw">_</span>) =&gt; {
-                get_song_id_from_player(player, |meta| meta.url()<span class="question-mark">?</span>.strip_prefix(<span class="string">"/trackid/"</span>)).map(
+                get_field_from_player(player, |meta| meta.url()<span class="question-mark">?</span>.strip_prefix(<span class="string">"/trackid/"</span>)).map(
                     |song_id| LyricHint::SongId {
                         song_id,
                         provider: Box::new(Netease) <span class="kw">as _</span>,
                     },
                 )
             }
-            <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
+            <span class="kw">_ </span>=&gt; get_field_from_player(player, |meta| meta.url()<span class="question-mark">?</span>.strip_prefix(<span class="string">"file://"</span>))
+                .and_then(|music_path| {
+                    <span class="kw">let </span>music_path = PathBuf::from(music_path);
+
+                    <span class="kw">let </span>lyric_path = get_lyric_path(music_path);
+
+                    lyric_path.map(|lyric_path| LyricHint::File(lyric_path))
+                }),
         }
     })
 }
 
-<span class="kw">fn </span>get_song_id_from_player(
+<span class="kw">fn </span>get_field_from_player(
     player: <span class="kw-2">&amp;</span>Player,
     extract_field: <span class="kw">impl for</span>&lt;<span class="lifetime">'a</span>&gt; FnOnce(<span class="kw-2">&amp;</span><span class="lifetime">'a </span>Metadata) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">'a </span>str&gt;,
 ) -&gt; <span class="prelude-ty">Option</span>&lt;String&gt; {
