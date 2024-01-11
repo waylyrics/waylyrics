@@ -166,7 +166,7 @@
 <span class="kw">pub async fn </span>fetch_lyric(track_meta: <span class="kw-2">&amp;</span>TrackMeta, window: <span class="kw-2">&amp;</span>app::Window) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
     utils::clean_lyric(window);
 
-    <span class="kw">let </span>title = Arc::new(track_meta.title.clone());
+    <span class="kw">let </span>title = Arc::new(track_meta.title.as_deref().unwrap_or(<span class="string">"Unknown"</span>).to_owned());
     <span class="kw">let </span>album = Arc::new(track_meta.album.as_ref().map(|album| album.to_owned()));
     <span class="kw">let </span>artists = <span class="kw-2">&amp;</span>track_meta.artists;
     <span class="kw">let </span>length = track_meta.length;

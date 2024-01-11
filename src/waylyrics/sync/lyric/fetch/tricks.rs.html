@@ -111,21 +111,45 @@
 <a href="#109" id="109">109</a>
 <a href="#110" id="110">110</a>
 <a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::ffi::OsStr;
 <span class="kw">use </span>std::fs;
 <span class="kw">use </span>std::path::PathBuf;
 
-<span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{Lyric, LyricProvider};
+<span class="kw">use </span><span class="kw">crate</span>::log::debug;
+<span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{provider_fmt, Lyric, LyricOwned, LyricProvider};
 <span class="kw">use </span><span class="kw">crate</span>::sync::interop::hint_from_player;
 <span class="kw">use </span><span class="kw">crate</span>::sync::lyric::fetch::set_lyric;
 <span class="kw">use crate</span>::{app, glib_spawn};
+
 <span class="kw">use </span>anyhow::Result;
+<span class="kw">use </span>derivative::Derivative;
 <span class="kw">use </span>gtk::glib::clone::Downgrade;
 
-<span class="kw">pub enum </span>LyricHint {
+<span class="attr">#[derive(Derivative)]
+#[derivative(Debug)]
+</span><span class="kw">pub enum </span>LyricHint {
     SongId {
         song_id: String,
-        provider: Box&lt;<span class="kw">dyn </span>LyricProvider&gt;,
+        <span class="attr">#[derivative(Debug(format_with = <span class="string">"provider_fmt"</span>))]
+        </span>provider: Box&lt;<span class="kw">dyn </span>LyricProvider&gt;,
     },
     File(PathBuf),
 }
@@ -136,6 +160,9 @@
     window: <span class="kw-2">&amp;</span>app::Window,
 ) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="prelude-ty">Result</span>&lt;(), anyhow::Error&gt;&gt; {
     <span class="kw">let </span>hint_from_player: <span class="prelude-ty">Option</span>&lt;LyricHint&gt; = hint_from_player();
+
+    <span class="macro">debug!</span>(<span class="string">"got player hint: {:?}"</span>, hint_from_player);
+
     <span class="kw">let </span>title = title.to_owned();
     <span class="kw">let </span>artists = artists.to_owned();
     <span class="kw">let </span>window = window.downgrade();
@@ -155,22 +182,31 @@
                 set_lyric(olyric, tlyric, <span class="kw-2">&amp;</span>title, <span class="kw-2">&amp;</span>artists, <span class="kw-2">&amp;</span>window);
             });
 
-            <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(()));
+            <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(()))
         }
         <span class="prelude-val">Some</span>(LyricHint::File(path)) =&gt; fs::read_to_string(path)
+            .ok()
             .and_then(|lyric| {
-                <span class="prelude-val">Ok</span>(<span class="kw">crate</span>::lyric_providers::utils::lrc_iter(lyric.lines())
-                    .and_then(|lyrics| <span class="prelude-val">Ok</span>(Lyric::LineTimestamp(lyrics).into_owned())))
+                <span class="kw">crate</span>::lyric_providers::utils::lrc_iter(lyric.lines())
+                    .and_then(|lyrics| <span class="prelude-val">Ok</span>(Lyric::LineTimestamp(lyrics).into_owned()))
+                    .ok()
             })
-            .and_then(|<span class="kw">_</span>| <span class="prelude-val">Ok</span>(<span class="prelude-val">Ok</span>(())))
-            .ok(),
+            .and_then(|lyric| {
+                <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(window) = window.upgrade() {
+                        set_lyric(lyric, LyricOwned::None, <span class="kw-2">&amp;</span>title, <span class="kw-2">&amp;</span>artists, <span class="kw-2">&amp;</span>window);
+                    }
+                });
+
+                <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(()))
+            }),
 
         <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
     }
 }
 
 <span class="doccomment">/// replace file extension with .lrc
-/// 
+///
 /// `music_path` should be valid file if it's not empty
 ///
 /// ```rust

@@ -106,10 +106,24 @@
 <a href="#104" id="104">104</a>
 <a href="#105" id="105">105</a>
 <a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Result;
 <span class="kw">use </span>std::path::PathBuf;
 
-<span class="kw">use </span><span class="kw">crate</span>::log::{debug, error, info};
+<span class="kw">use </span><span class="kw">crate</span>::log::{debug, error, info, warn};
 <span class="kw">use </span>gtk::subclass::prelude::ObjectSubclassIsExt;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 
@@ -119,19 +133,26 @@
 
 <span class="doccomment">/// This will not create cache dir for you -- you should create it yourself.
 /// Note that window.imp().cache_lyrics controls whether to cache lyrics.
-</span><span class="kw">pub fn </span>get_cache_path(track_meta: <span class="kw-2">&amp;</span>TrackMeta) -&gt; PathBuf {
-    <span class="kw">let </span>title = <span class="kw-2">&amp;</span>track_meta.title;
-    <span class="kw">let </span>album = <span class="kw-2">&amp;</span>track_meta.album;
-    <span class="kw">let </span>artists = <span class="kw-2">&amp;</span>track_meta.artists;
-    <span class="kw">let </span>length = track_meta.length;
+</span><span class="kw">pub fn </span>get_cache_path(track_meta: <span class="kw-2">&amp;</span>TrackMeta) -&gt; <span class="prelude-ty">Option</span>&lt;PathBuf&gt; {
+    <span class="kw">match </span>track_meta {
+        TrackMeta {
+            title: <span class="prelude-val">Some</span>(title),
+            album,
+            artists,
+            length,
+            ..
+        } =&gt; {
+            <span class="kw">let </span>cache_key = <span class="macro">format!</span>(<span class="string">"{title}-{artists:?}-{album:?}-{length:?}"</span>);
+            <span class="macro">debug!</span>(<span class="string">"get_cache_path: received {cache_key}"</span>);
+            <span class="kw">let </span>digest = md5::compute(<span class="kw-2">&amp;</span>cache_key);
 
-    <span class="kw">let </span>cache_key = <span class="macro">format!</span>(<span class="string">"{title}-{artists:?}-{album:?}-{length:?}"</span>);
-    <span class="macro">debug!</span>(<span class="string">"get_cache_path: received {cache_key}"</span>);
-    <span class="kw">let </span>digest = md5::compute(<span class="kw-2">&amp;</span>cache_key);
+            <span class="kw">let </span>cache_dir = CACHE_DIR
+                .with_borrow(|cache_home| PathBuf::from(cache_home).join(md5_cache_dir(digest)));
+            <span class="prelude-val">Some</span>(cache_dir.join(<span class="macro">format!</span>(<span class="string">"{digest:x}.json"</span>)))
+        }
 
-    <span class="kw">let </span>cache_dir =
-        CACHE_DIR.with_borrow(|cache_home| PathBuf::from(cache_home).join(md5_cache_dir(digest)));
-    cache_dir.join(<span class="macro">format!</span>(<span class="string">"{digest:x}.json"</span>))
+        <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
+    }
 }
 
 <span class="kw">pub async fn </span>fetch_lyric_cached(
@@ -139,8 +160,15 @@
     ignore_cache: bool,
     window: <span class="kw-2">&amp;</span>app::Window,
 ) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
-    <span class="kw">let </span>cache_path = get_cache_path(track_meta);
-    <span class="macro">info!</span>(<span class="string">"cache_path for {}: {cache_path:?}"</span>, track_meta.title);
+    <span class="kw">let </span><span class="prelude-val">Some</span>(cache_path) = get_cache_path(track_meta) <span class="kw">else </span>{
+        <span class="macro">warn!</span>(<span class="string">"cannot cache lyric due to missing metadata"</span>);
+        <span class="kw">return </span>fetch_lyric(track_meta, window).<span class="kw">await</span>;
+    };
+
+    <span class="macro">info!</span>(
+        <span class="string">"cache_path for {}: {cache_path:?}"</span>,
+        track_meta.title.as_deref().unwrap_or(<span class="string">"Unknown Title"</span>)
+    );
 
     <span class="kw">if </span>!ignore_cache {
         <span class="kw">if let </span><span class="prelude-val">Ok</span>(lyric) = std::fs::read_to_string(<span class="kw-2">&amp;</span>cache_path) {
