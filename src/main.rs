@@ -74,14 +74,7 @@ fn build_ui(app: &Application) -> Result<()> {
         filter_regexies,
         ref length_toleration,
         lyric_align,
-        triggers:
-            Triggers {
-                switch_decoration,
-                reload_theme,
-                search_lyric,
-                refetch_lyric,
-                switch_passthrough,
-            },
+        triggers,
         qqmusic_api_base_url,
         lyric_search_source,
         lyric_display_mode,
@@ -118,16 +111,7 @@ fn build_ui(app: &Application) -> Result<()> {
 
     register_sync_task(ObjectExt::downgrade(app), player_sync_interval);
     register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
-    register_action_connect(app);
-    register_action_disconnect(app);
-    register_sigusr1_disconnect();
-    register_sigusr2_decoration(ObjectExt::downgrade(app));
-    register_action_switch_decoration(&wind, &switch_decoration);
-    register_action_switch_passthrough(&wind, &switch_passthrough);
-    register_action_reload_theme(app, &wind, &reload_theme);
-    register_action_search_lyric(app, &wind, &search_lyric);
-    register_action_remove_lyric(app, &wind);
-    register_action_refetch_lyric(app, &wind, &refetch_lyric);
+    register_actions(app, &wind, triggers);
 
     if enable_filter_regex {
         EXCLUDED_REGEXES.set(RegexSet::new(&filter_regexies)?);
@@ -138,16 +122,45 @@ fn build_ui(app: &Application) -> Result<()> {
         let _ = QQMUSIC_API_CLIENT.set(Some(QQMusicApi::new(base_url)));
     }
 
+    setup_providers(lyric_search_source);
+
+    MAIN_WINDOW.set(Some(wind));
+
+    Ok(())
+}
+
+fn register_actions(
+    app: &Application,
+    wind: &app::Window,
+    Triggers {
+        switch_decoration,
+        switch_passthrough,
+        reload_theme,
+        search_lyric,
+        refetch_lyric,
+    }: Triggers,
+) {
+    register_action_connect(app);
+    register_action_disconnect(app);
+    register_action_switch_decoration(&wind, &switch_decoration);
+    register_action_switch_passthrough(&wind, &switch_passthrough);
+    register_action_reload_theme(app, &wind, &reload_theme);
+    register_action_search_lyric(app, &wind, &search_lyric);
+    register_action_remove_lyric(app, &wind);
+    register_action_refetch_lyric(app, &wind, &refetch_lyric);
+
+    register_sigusr1_disconnect();
+    register_sigusr2_decoration(ObjectExt::downgrade(app));
+}
+
+fn setup_providers(providers_enabled: Vec<String>) {
     let mut providers = vec![];
-    for source in lyric_search_source {
+    for source in providers_enabled {
         if let Some(provider) = get_provider(&source) {
             providers.push(provider);
         }
     }
     let _ = LYRIC_PROVIDERS.set(providers);
-    MAIN_WINDOW.set(Some(wind));
-
-    Ok(())
 }
 
 fn init_dirs() -> Result<(PathBuf, PathBuf)> {
