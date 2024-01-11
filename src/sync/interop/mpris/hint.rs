@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::str::FromStr;
 
 use mpris::{Metadata, Player};
 
@@ -6,8 +6,8 @@ use crate::lyric_providers::netease::Netease;
 use crate::lyric_providers::qqmusic::QQMusic;
 
 use crate::sync::interop::mpris::PLAYER;
-use crate::sync::lyric::fetch::LyricHint;
 use crate::sync::lyric::fetch::tricks::get_lyric_path;
+use crate::sync::lyric::fetch::LyricHint;
 
 pub fn hint_from_player() -> Option<LyricHint> {
     PLAYER.with_borrow(|player| {
@@ -57,14 +57,17 @@ pub fn hint_from_player() -> Option<LyricHint> {
                     },
                 )
             }
-            _ => get_field_from_player(player, |meta| meta.url()?.strip_prefix("file://"))
-                .and_then(|music_path| {
-                    let music_path = PathBuf::from(music_path);
-
-                    let lyric_path = get_lyric_path(music_path);
-
-                    lyric_path.map(|lyric_path| LyricHint::File(lyric_path))
-                }),
+            _ => {
+                get_field_from_player(player, |meta| meta.url()).and_then(|meta_url| match meta_url
+                {
+                    _ if meta_url.starts_with("file://") => url::Url::from_str(&meta_url)
+                        .ok()
+                        .and_then(|music_uri| music_uri.to_file_path().ok())
+                        .and_then(|music_path| get_lyric_path(music_path))
+                        .map(|lrc_path| LyricHint::File(lrc_path)),
+                    _ => None,
+                })
+            }
         }
     })
 }

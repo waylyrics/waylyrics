@@ -20,7 +20,7 @@ pub(crate) use tricks::LyricHint;
 pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
     utils::clean_lyric(window);
 
-    let title = Arc::new(track_meta.title.clone());
+    let title = Arc::new(track_meta.title.as_deref().unwrap_or("Unknown").to_owned());
     let album = Arc::new(track_meta.album.as_ref().map(|album| album.to_owned()));
     let artists = &track_meta.artists;
     let length = track_meta.length;

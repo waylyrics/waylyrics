@@ -2,16 +2,22 @@ use std::ffi::OsStr;
 use std::fs;
 use std::path::PathBuf;
 
-use crate::lyric_providers::{Lyric, LyricProvider};
+use crate::log::debug;
+use crate::lyric_providers::{provider_fmt, Lyric, LyricOwned, LyricProvider};
 use crate::sync::interop::hint_from_player;
 use crate::sync::lyric::fetch::set_lyric;
 use crate::{app, glib_spawn};
+
 use anyhow::Result;
+use derivative::Derivative;
 use gtk::glib::clone::Downgrade;
 
+#[derive(Derivative)]
+#[derivative(Debug)]
 pub enum LyricHint {
     SongId {
         song_id: String,
+        #[derivative(Debug(format_with = "provider_fmt"))]
         provider: Box<dyn LyricProvider>,
     },
     File(PathBuf),
@@ -23,6 +29,9 @@ pub fn get_lyric_hint_from_player(
     window: &app::Window,
 ) -> Option<Result<(), anyhow::Error>> {
     let hint_from_player: Option<LyricHint> = hint_from_player();
+
+    debug!("got player hint: {:?}", hint_from_player);
+
     let title = title.to_owned();
     let artists = artists.to_owned();
     let window = window.downgrade();
@@ -42,22 +51,31 @@ pub fn get_lyric_hint_from_player(
                 set_lyric(olyric, tlyric, &title, &artists, &window);
             });
 
-            return Some(Ok(()));
+            Some(Ok(()))
         }
         Some(LyricHint::File(path)) => fs::read_to_string(path)
+            .ok()
             .and_then(|lyric| {
-                Ok(crate::lyric_providers::utils::lrc_iter(lyric.lines())
-                    .and_then(|lyrics| Ok(Lyric::LineTimestamp(lyrics).into_owned())))
+                crate::lyric_providers::utils::lrc_iter(lyric.lines())
+                    .and_then(|lyrics| Ok(Lyric::LineTimestamp(lyrics).into_owned()))
+                    .ok()
             })
-            .and_then(|_| Ok(Ok(())))
-            .ok(),
+            .and_then(|lyric| {
+                glib_spawn!(async move {
+                    if let Some(window) = window.upgrade() {
+                        set_lyric(lyric, LyricOwned::None, &title, &artists, &window);
+                    }
+                });
+
+                Some(Ok(()))
+            }),
 
         _ => None,
     }
 }
 
 /// replace file extension with .lrc
-/// 
+///
 /// `music_path` should be valid file if it's not empty
 ///
 /// ```rust

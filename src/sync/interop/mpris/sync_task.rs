@@ -169,7 +169,7 @@ fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
 
             if need {
                 *metainfo = Some(track_meta.clone());
-                *cache_path = Some(get_cache_path(track_meta));
+                *cache_path = get_cache_path(track_meta);
             }
             need
         },

@@ -55,7 +55,7 @@ pub fn register_action_search_lyric(app: &Application, wind: &app::Window, trigg
                 default_search_query(
                     track.album.as_deref().unwrap_or_default(),
                     &artists,
-                    &track.title,
+                    &track.title.as_deref().unwrap_or("Unknown"),
                 )
             })
         });

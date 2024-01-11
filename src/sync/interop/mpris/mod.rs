@@ -94,11 +94,7 @@ impl TryFrom<Metadata> for TrackMeta {
 
     fn try_from(meta: Metadata) -> Result<Self, Self::Error> {
         let track_id = meta.track_id();
-        let title = meta
-            .title()
-            .ok_or(())
-            .map_err(|_| PlayerStatus::Unsupported("cannot get title"))?
-            .to_string();
+        let title = meta.title().map(str::to_string);
         let album = meta.album_name().map(ToOwned::to_owned);
         let artists: Option<Vec<_>> = meta
             .artists()

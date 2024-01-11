@@ -4,7 +4,7 @@ use anyhow::Result;
 pub mod netease;
 pub mod qqmusic;
 
-use std::time::Duration;
+use std::{fmt::Debug, time::Duration};
 
 use serde::{Deserialize, Serialize};
 
@@ -61,6 +61,13 @@ pub trait LyricProvider: LyricParse + Send + Sync {
 pub trait LyricParse {
     fn get_lyric(&self, store: &LyricStore) -> LyricOwned;
     fn get_translated_lyric(&self, store: &LyricStore) -> LyricOwned;
+}
+
+pub fn provider_fmt(
+    p: impl AsRef<dyn LyricProvider>,
+    f: &mut std::fmt::Formatter<'_>,
+) -> std::fmt::Result {
+    f.write_str(p.as_ref().unique_name())
 }
 
 impl<'a> Lyric<'a> {

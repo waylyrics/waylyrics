@@ -16,7 +16,7 @@ pub use lyric::scroll::register_lyric_display;
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct TrackMeta {
     pub unique_song_id: Option<String>,
-    pub title: String,
+    pub title: Option<String>,
     pub album: Option<String>,
     pub artists: Option<Vec<String>>,
     pub length: Option<Duration>,

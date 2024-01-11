@@ -356,6 +356,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f2696e8a945f658fd14dc3b87242e6b80cd0f36ff04ea560fa39082368847946"
 
 [[package]]
+name = "derivative"
+version = "2.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fcc3dd5e9e9c0b295d6e1e4d811fb6f157d5ffd784b8d202fc62eac8035a770b"
+dependencies = [
+ "proc-macro2",
+ "quote 1.0.35",
+ "syn 1.0.109",
+]
+
+[[package]]
 name = "derive_is_enum_variant"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2659,6 +2670,7 @@ dependencies = [
  "async-trait",
  "dbus",
  "dbus-dummy",
+ "derivative",
  "glib-macros",
  "gtk4",
  "libc",
