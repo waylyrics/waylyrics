@@ -2,11 +2,11 @@ use std::ffi::OsStr;
 use std::fs;
 use std::path::PathBuf;
 
-use crate::log::debug;
+use crate::log::{debug, warn};
 use crate::lyric_providers::{provider_fmt, Lyric, LyricOwned, LyricProvider};
 use crate::sync::interop::hint_from_player;
 use crate::sync::lyric::fetch::set_lyric;
-use crate::{app, glib_spawn};
+use crate::{app, glib_spawn, LYRIC_PROVIDERS};
 
 use anyhow::Result;
 use derivative::Derivative;
@@ -37,6 +37,18 @@ pub fn get_lyric_hint_from_player(
     let window = window.downgrade();
     match hint_from_player {
         Some(LyricHint::SongId { song_id, provider }) => {
+            if !LYRIC_PROVIDERS.get().iter().any(|&providers| {
+                providers
+                    .iter()
+                    .any(|pro| pro.unique_name() == provider.unique_name())
+            }) {
+                warn!(
+                    "provider {} suggrested by hint is not configured, skipping SongId hint",
+                    provider.unique_name()
+                );
+                return None;
+            }
+
             crate::log::debug!("spawned query from get_accurate_lyric");
             glib_spawn!(async move {
                 let Ok(lyric) = provider.query_lyric(&song_id).await else {
