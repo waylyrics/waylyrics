@@ -78,7 +78,7 @@ pub async fn get_lyric_hint_from_player() -> Option<LyricHintResult> {
 ///
 /// ```rust
 /// use std::path::PathBuf;
-/// use waylyrics::sync::lyric::fetch::tricks::get_lyric_path;
+/// use waylyrics::sync::lyric::fetch::tricks::get_lrc_path as get_lyric_path;
 ///
 /// // do not assert file extension length > 3
 /// assert_eq!(get_lyric_path(PathBuf::from("/xxx/yyy/test.ts")),
