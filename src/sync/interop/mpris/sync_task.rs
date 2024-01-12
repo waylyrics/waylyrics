@@ -73,22 +73,19 @@ fn sync_position(player: &Player, window: &app::Window) -> Result<(), PlayerStat
     let position = player
         .get_position()
         .map_err(|_| PlayerStatus::Unsupported("cannot get playback position"))?;
-    let mut start = SystemTime::now()
+    let start = SystemTime::now()
         .checked_sub(position)
         .ok_or(PlayerStatus::Unsupported(
             "Position is greater than SystemTime",
         ))?;
 
     let offset = window.imp().lyric_offset_ms.get();
-    if offset.is_negative() {
-        start = start
-            .checked_sub(Duration::from_millis(offset.unsigned_abs()))
-            .expect("infinite offset time");
+    let start = if offset.is_negative() {
+        start.checked_sub(Duration::from_millis(offset.unsigned_abs()))
     } else {
-        start = start
-            .checked_add(Duration::from_millis(offset as _))
-            .expect("infinite offset time");
+        start.checked_add(Duration::from_millis(offset as _))
     }
+    .expect("infinite offset time");
 
     window.imp().lyric_start.set(Some(start));
     Ok(())
