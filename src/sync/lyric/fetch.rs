@@ -17,6 +17,8 @@ use crate::sync::utils::{self, match_likely_lyric};
 
 pub(crate) use tricks::LyricHint;
 
+use self::tricks::LyricHintResult;
+
 pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result<()> {
     utils::clean_lyric(window);
 
@@ -30,9 +32,12 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
         .map(|s| Cow::Owned(s.join(",")))
         .unwrap_or(Cow::Borrowed("Unknown"));
 
-    if let Some(result) = tricks::get_lyric_hint_from_player(&title, &artists_str, window) {
-        info!("fetched lyric directly");
-        return result;
+    match tricks::get_lyric_hint_from_player().await {
+        Some(LyricHintResult::Lyric { olyric, tlyric }) => {
+            set_lyric(olyric, tlyric, &title, &artists_str, window);
+            return Ok(());
+        }
+        _ => (),
     }
 
     let providers = LYRIC_PROVIDERS

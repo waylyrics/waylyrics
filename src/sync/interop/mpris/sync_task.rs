@@ -6,7 +6,10 @@ use gtk::{
     Application,
 };
 
-use crate::log::{error, info, trace};
+use crate::{
+    log::{error, info, trace},
+    sync::lyric::fetch::LyricHint,
+};
 use mpris::{PlaybackStatus, Player, ProgressTracker};
 
 use crate::sync::interop::PlayerStatus;
@@ -24,6 +27,8 @@ use crate::{
     sync::{utils, TrackMeta, TrackState, TRACK_PLAYING_STATE},
     utils::reset_lyric_labels,
 };
+
+use super::hint_from_player;
 
 pub fn register_sync_task(app: WeakRef<Application>, interval: Duration) {
     glib::timeout_add_local(interval, move || {
@@ -107,12 +112,15 @@ fn sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
         if progress_tick.progress.playback_status() != PlaybackStatus::Playing {
             return Err(PlayerStatus::Paused);
         }
-        let track_meta = player
-            .get_metadata()
-            .map_err(|_| PlayerStatus::Unsupported("cannot get metadata of track playing"))?;
 
         sync_position(player, window)?;
 
+        if let Some(LyricHint::Metadata(meta)) = hint_from_player() {
+            return Ok(meta);
+        }
+        let track_meta = player
+            .get_metadata()
+            .map_err(|_| PlayerStatus::Unsupported("cannot get metadata of the track playing"))?;
         let meta = match TrackMeta::try_from(track_meta) {
             Ok(meta) => meta,
             Err(e) => {

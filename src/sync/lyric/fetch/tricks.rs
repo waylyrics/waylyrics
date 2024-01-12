@@ -5,12 +5,10 @@ use std::path::PathBuf;
 use crate::log::{debug, warn};
 use crate::lyric_providers::{provider_fmt, Lyric, LyricOwned, LyricProvider};
 use crate::sync::interop::hint_from_player;
-use crate::sync::lyric::fetch::set_lyric;
-use crate::{app, glib_spawn, LYRIC_PROVIDERS};
+use crate::sync::TrackMeta;
+use crate::LYRIC_PROVIDERS;
 
-use anyhow::Result;
 use derivative::Derivative;
-use gtk::glib::clone::Downgrade;
 
 #[derive(Derivative)]
 #[derivative(Debug)]
@@ -20,21 +18,23 @@ pub enum LyricHint {
         #[derivative(Debug(format_with = "provider_fmt"))]
         provider: Box<dyn LyricProvider>,
     },
-    File(PathBuf),
+    LyricFile(PathBuf),
+    Metadata(TrackMeta),
 }
 
-pub fn get_lyric_hint_from_player(
-    title: &str,
-    artists: &str,
-    window: &app::Window,
-) -> Option<Result<(), anyhow::Error>> {
+pub enum LyricHintResult {
+    Lyric {
+        olyric: LyricOwned,
+        tlyric: LyricOwned,
+    },
+    Metadata(TrackMeta),
+}
+
+pub async fn get_lyric_hint_from_player() -> Option<LyricHintResult> {
     let hint_from_player: Option<LyricHint> = hint_from_player();
 
     debug!("got player hint: {:?}", hint_from_player);
 
-    let title = title.to_owned();
-    let artists = artists.to_owned();
-    let window = window.downgrade();
     match hint_from_player {
         Some(LyricHint::SongId { song_id, provider }) => {
             if !LYRIC_PROVIDERS.get().iter().any(|&providers| {
@@ -50,22 +50,19 @@ pub fn get_lyric_hint_from_player(
             }
 
             crate::log::debug!("spawned query from get_accurate_lyric");
-            glib_spawn!(async move {
-                let Ok(lyric) = provider.query_lyric(&song_id).await else {
-                    return;
-                };
-                let olyric = provider.get_lyric(&lyric);
-                let tlyric = provider.get_translated_lyric(&lyric);
-                let Some(window) = window.upgrade() else {
-                    return;
-                };
 
-                set_lyric(olyric, tlyric, &title, &artists, &window);
-            });
+            let Ok(lyric) = provider.query_lyric(&song_id).await else {
+                None?
+            };
+            let olyric = provider.get_lyric(&lyric);
+            let tlyric = provider.get_translated_lyric(&lyric);
 
-            Some(Ok(()))
+            Some(LyricHintResult::Lyric {
+                olyric: olyric,
+                tlyric: tlyric,
+            })
         }
-        Some(LyricHint::File(path)) => fs::read_to_string(path)
+        Some(LyricHint::LyricFile(path)) => fs::read_to_string(path)
             .ok()
             .and_then(|lyric| {
                 crate::lyric_providers::utils::lrc_iter(lyric.lines())
@@ -73,14 +70,12 @@ pub fn get_lyric_hint_from_player(
                     .ok()
             })
             .and_then(|lyric| {
-                glib_spawn!(async move {
-                    if let Some(window) = window.upgrade() {
-                        set_lyric(lyric, LyricOwned::None, &title, &artists, &window);
-                    }
-                });
-
-                Some(Ok(()))
+                Some(LyricHintResult::Lyric {
+                    olyric: lyric,
+                    tlyric: LyricOwned::None,
+                })
             }),
+        Some(LyricHint::Metadata(meta)) => Some(LyricHintResult::Metadata(meta)),
 
         _ => None,
     }

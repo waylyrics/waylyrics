@@ -60,11 +60,20 @@ pub fn hint_from_player() -> Option<LyricHint> {
             _ => {
                 get_field_from_player(player, |meta| meta.url()).and_then(|meta_url| match meta_url
                 {
-                    _ if meta_url.starts_with("file://") => url::Url::from_str(&meta_url)
-                        .ok()
-                        .and_then(|music_uri| music_uri.to_file_path().ok())
-                        .and_then(|music_path| get_lyric_path(music_path))
-                        .map(|lrc_path| LyricHint::File(lrc_path)),
+                    _ if meta_url.starts_with("file://") => {
+                        let music_path = url::Url::from_str(&meta_url)
+                            .ok()
+                            .and_then(|music_uri| music_uri.to_file_path().ok())?;
+                        if let Some(lrc_path) = get_lyric_path(music_path)
+                            .filter(|lrc_path| lrc_path.exists())
+                            .map(|lrc_path| LyricHint::LyricFile(lrc_path))
+                        {
+                            return Some(lrc_path);
+                        } else {
+                            // todo: music metadata
+                            None
+                        }
+                    }
                     _ => None,
                 })
             }
