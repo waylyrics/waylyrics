@@ -75,7 +75,7 @@ pub fn list_player_names() -> Vec<PlayerId> {
 }
 
 thread_local! {
-    static PLAYER: RefCell<Option<Player>> = RefCell::new(None);
+    static PLAYER: RefCell<Option<Player>> = const { RefCell::new(None) };
     static PLAYER_FINDER: RefCell<PlayerFinder> = RefCell::new(PlayerFinder::new().unwrap());
 }
 

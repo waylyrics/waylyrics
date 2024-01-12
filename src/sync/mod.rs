@@ -30,7 +30,7 @@ pub struct TrackState {
 }
 
 thread_local! {
-    static LYRIC: RefCell<(LyricOwned, LyricOwned)> = RefCell::new((LyricOwned::None, LyricOwned::None));
+    static LYRIC: RefCell<(LyricOwned, LyricOwned)> = const { RefCell::new((LyricOwned::None, LyricOwned::None)) };
     /// A global variable that contains current playing state (excluding lyrics)
     /// including: track_id, paused, cache_path
     static TRACK_PLAYING_STATE: RefCell<TrackState> = RefCell::new(Default::default());

@@ -12,7 +12,7 @@ pub mod dialog;
 pub mod utils;
 
 thread_local! {
-    static REMOVE_LYRICS: Cell<String> = Cell::new(String::new());
+    static REMOVE_LYRICS: Cell<String> = const { Cell::new(String::new()) };
 }
 
 pub fn build_main_window(
