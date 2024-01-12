@@ -189,7 +189,7 @@
 }
 
 <span class="macro">thread_local! </span>{
-    <span class="kw">static </span>PLAYER: RefCell&lt;<span class="prelude-ty">Option</span>&lt;Player&gt;&gt; = RefCell::new(<span class="prelude-val">None</span>);
+    <span class="kw">static </span>PLAYER: RefCell&lt;<span class="prelude-ty">Option</span>&lt;Player&gt;&gt; = <span class="kw">const </span>{ RefCell::new(<span class="prelude-val">None</span>) };
     <span class="kw">static </span>PLAYER_FINDER: RefCell&lt;PlayerFinder&gt; = RefCell::new(PlayerFinder::new().unwrap());
 }
 

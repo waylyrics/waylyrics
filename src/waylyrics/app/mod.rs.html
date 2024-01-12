@@ -106,7 +106,7 @@
 <span class="kw">pub mod </span>utils;
 
 <span class="macro">thread_local! </span>{
-    <span class="kw">static </span>REMOVE_LYRICS: Cell&lt;String&gt; = Cell::new(String::new());
+    <span class="kw">static </span>REMOVE_LYRICS: Cell&lt;String&gt; = <span class="kw">const </span>{ Cell::new(String::new()) };
 }
 
 <span class="kw">pub fn </span>build_main_window(

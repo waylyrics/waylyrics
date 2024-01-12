@@ -80,10 +80,10 @@
 <span class="kw">pub const </span>APP_ID: <span class="kw-2">&amp;</span>str = <span class="string">"io.poly000.waylyrics"</span>;
 
 <span class="macro">thread_local! </span>{
-    <span class="kw">pub static </span>CACHE_DIR: RefCell&lt;String&gt; = RefCell::new(String::new());
+    <span class="kw">pub static </span>CACHE_DIR: RefCell&lt;String&gt; = <span class="kw">const </span>{ RefCell::new(String::new()) };
     <span class="kw">pub static </span>THEME_PATH: RefCell&lt;PathBuf&gt; = RefCell::new(PathBuf::new());
     <span class="kw">pub static </span>EXCLUDED_REGEXES: RefCell&lt;RegexSet&gt; = RefCell::new(RegexSet::empty());
-    <span class="kw">pub static </span>MAIN_WINDOW: RefCell&lt;<span class="prelude-ty">Option</span>&lt;Window&gt;&gt; = RefCell::new(<span class="prelude-val">None</span>);
+    <span class="kw">pub static </span>MAIN_WINDOW: RefCell&lt;<span class="prelude-ty">Option</span>&lt;Window&gt;&gt; = <span class="kw">const </span>{ RefCell::new(<span class="prelude-val">None</span>) };
 }
 
 <span class="kw">pub static </span>CONFIG_HOME: OnceLock&lt;String&gt; = OnceLock::new();
