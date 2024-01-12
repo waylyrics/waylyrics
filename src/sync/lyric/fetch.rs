@@ -35,6 +35,7 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
     if let Some(LyricHintResult::Lyric { olyric, tlyric }) =
         tricks::get_lyric_hint_from_player().await
     {
+        info!("fetched lyrics by player hint");
         set_lyric(olyric, tlyric, &title, &artists_str, window);
         return Ok(());
     }
