@@ -3,7 +3,7 @@
 <p><code>music_path</code> should be valid file if it’s not empty</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::path::PathBuf;
-<span class="kw">use </span>waylyrics::sync::lyric::fetch::tricks::get_lyric_path;
+<span class="kw">use </span>waylyrics::sync::lyric::fetch::tricks::get_lrc_path <span class="kw">as </span>get_lyric_path;
 
 <span class="comment">// do not assert file extension length &gt; 3
 </span><span class="macro">assert_eq!</span>(get_lyric_path(PathBuf::from(<span class="string">"/xxx/yyy/test.ts"</span>)),
