@@ -144,6 +144,10 @@
 <a href="#142" id="142">142</a>
 <a href="#143" id="143">143</a>
 <a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>tricks;
 
 <span class="kw">use </span>anyhow::Result;
@@ -163,6 +167,8 @@
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>tricks::LyricHint;
 
+<span class="kw">use </span><span class="self">self</span>::tricks::LyricHintResult;
+
 <span class="kw">pub async fn </span>fetch_lyric(track_meta: <span class="kw-2">&amp;</span>TrackMeta, window: <span class="kw-2">&amp;</span>app::Window) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
     utils::clean_lyric(window);
 
@@ -176,9 +182,11 @@
         .map(|s| Cow::Owned(s.join(<span class="string">","</span>)))
         .unwrap_or(Cow::Borrowed(<span class="string">"Unknown"</span>));
 
-    <span class="kw">if let </span><span class="prelude-val">Some</span>(result) = tricks::get_lyric_hint_from_player(<span class="kw-2">&amp;</span>title, <span class="kw-2">&amp;</span>artists_str, window) {
-        <span class="macro">info!</span>(<span class="string">"fetched lyric directly"</span>);
-        <span class="kw">return </span>result;
+    <span class="kw">if let </span><span class="prelude-val">Some</span>(LyricHintResult::Lyric { olyric, tlyric }) =
+        tricks::get_lyric_hint_from_player().<span class="kw">await
+    </span>{
+        set_lyric(olyric, tlyric, <span class="kw-2">&amp;</span>title, <span class="kw-2">&amp;</span>artists_str, window);
+        <span class="kw">return </span><span class="prelude-val">Ok</span>(());
     }
 
     <span class="kw">let </span>providers = LYRIC_PROVIDERS

@@ -120,27 +120,6 @@
 <a href="#118" id="118">118</a>
 <a href="#119" id="119">119</a>
 <a href="#120" id="120">120</a>
-<a href="#121" id="121">121</a>
-<a href="#122" id="122">122</a>
-<a href="#123" id="123">123</a>
-<a href="#124" id="124">124</a>
-<a href="#125" id="125">125</a>
-<a href="#126" id="126">126</a>
-<a href="#127" id="127">127</a>
-<a href="#128" id="128">128</a>
-<a href="#129" id="129">129</a>
-<a href="#130" id="130">130</a>
-<a href="#131" id="131">131</a>
-<a href="#132" id="132">132</a>
-<a href="#133" id="133">133</a>
-<a href="#134" id="134">134</a>
-<a href="#135" id="135">135</a>
-<a href="#136" id="136">136</a>
-<a href="#137" id="137">137</a>
-<a href="#138" id="138">138</a>
-<a href="#139" id="139">139</a>
-<a href="#140" id="140">140</a>
-<a href="#141" id="141">141</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::ffi::OsStr;
 <span class="kw">use </span>std::fs;
 <span class="kw">use </span>std::path::PathBuf;
@@ -148,12 +127,10 @@
 <span class="kw">use </span><span class="kw">crate</span>::log::{debug, warn};
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{provider_fmt, Lyric, LyricOwned, LyricProvider};
 <span class="kw">use </span><span class="kw">crate</span>::sync::interop::hint_from_player;
-<span class="kw">use </span><span class="kw">crate</span>::sync::lyric::fetch::set_lyric;
-<span class="kw">use crate</span>::{app, glib_spawn, LYRIC_PROVIDERS};
+<span class="kw">use </span><span class="kw">crate</span>::sync::TrackMeta;
+<span class="kw">use </span><span class="kw">crate</span>::LYRIC_PROVIDERS;
 
-<span class="kw">use </span>anyhow::Result;
 <span class="kw">use </span>derivative::Derivative;
-<span class="kw">use </span>gtk::glib::clone::Downgrade;
 
 <span class="attr">#[derive(Derivative)]
 #[derivative(Debug)]
@@ -163,21 +140,22 @@
         <span class="attr">#[derivative(Debug(format_with = <span class="string">"provider_fmt"</span>))]
         </span>provider: Box&lt;<span class="kw">dyn </span>LyricProvider&gt;,
     },
-    File(PathBuf),
+    LyricFile(PathBuf),
+    Metadata(TrackMeta),
 }
 
-<span class="kw">pub fn </span>get_lyric_hint_from_player(
-    title: <span class="kw-2">&amp;</span>str,
-    artists: <span class="kw-2">&amp;</span>str,
-    window: <span class="kw-2">&amp;</span>app::Window,
-) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="prelude-ty">Result</span>&lt;(), anyhow::Error&gt;&gt; {
+<span class="kw">pub enum </span>LyricHintResult {
+    Lyric {
+        olyric: LyricOwned,
+        tlyric: LyricOwned,
+    },
+}
+
+<span class="kw">pub async fn </span>get_lyric_hint_from_player() -&gt; <span class="prelude-ty">Option</span>&lt;LyricHintResult&gt; {
     <span class="kw">let </span>hint_from_player: <span class="prelude-ty">Option</span>&lt;LyricHint&gt; = hint_from_player();
 
     <span class="macro">debug!</span>(<span class="string">"got player hint: {:?}"</span>, hint_from_player);
 
-    <span class="kw">let </span>title = title.to_owned();
-    <span class="kw">let </span>artists = artists.to_owned();
-    <span class="kw">let </span>window = window.downgrade();
     <span class="kw">match </span>hint_from_player {
         <span class="prelude-val">Some</span>(LyricHint::SongId { song_id, provider }) =&gt; {
             <span class="kw">if </span>!LYRIC_PROVIDERS.get().iter().any(|<span class="kw-2">&amp;</span>providers| {
@@ -193,36 +171,23 @@
             }
 
             <span class="macro">crate::log::debug!</span>(<span class="string">"spawned query from get_accurate_lyric"</span>);
-            <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
-                <span class="kw">let </span><span class="prelude-val">Ok</span>(lyric) = provider.query_lyric(<span class="kw-2">&amp;</span>song_id).<span class="kw">await else </span>{
-                    <span class="kw">return</span>;
-                };
-                <span class="kw">let </span>olyric = provider.get_lyric(<span class="kw-2">&amp;</span>lyric);
-                <span class="kw">let </span>tlyric = provider.get_translated_lyric(<span class="kw-2">&amp;</span>lyric);
-                <span class="kw">let </span><span class="prelude-val">Some</span>(window) = window.upgrade() <span class="kw">else </span>{
-                    <span class="kw">return</span>;
-                };
 
-                set_lyric(olyric, tlyric, <span class="kw-2">&amp;</span>title, <span class="kw-2">&amp;</span>artists, <span class="kw-2">&amp;</span>window);
-            });
+            <span class="kw">let </span>lyric = provider.query_lyric(<span class="kw-2">&amp;</span>song_id).<span class="kw">await</span>.ok()<span class="question-mark">?</span>;
+            <span class="kw">let </span>olyric = provider.get_lyric(<span class="kw-2">&amp;</span>lyric);
+            <span class="kw">let </span>tlyric = provider.get_translated_lyric(<span class="kw-2">&amp;</span>lyric);
 
-            <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(()))
+            <span class="prelude-val">Some</span>(LyricHintResult::Lyric { olyric, tlyric })
         }
-        <span class="prelude-val">Some</span>(LyricHint::File(path)) =&gt; fs::read_to_string(path)
+        <span class="prelude-val">Some</span>(LyricHint::LyricFile(path)) =&gt; fs::read_to_string(path)
             .ok()
             .and_then(|lyric| {
                 <span class="kw">crate</span>::lyric_providers::utils::lrc_iter(lyric.lines())
-                    .and_then(|lyrics| <span class="prelude-val">Ok</span>(Lyric::LineTimestamp(lyrics).into_owned()))
+                    .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
                     .ok()
             })
-            .and_then(|lyric| {
-                <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
-                    <span class="kw">if let </span><span class="prelude-val">Some</span>(window) = window.upgrade() {
-                        set_lyric(lyric, LyricOwned::None, <span class="kw-2">&amp;</span>title, <span class="kw-2">&amp;</span>artists, <span class="kw-2">&amp;</span>window);
-                    }
-                });
-
-                <span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(()))
+            .map(|lyric| LyricHintResult::Lyric {
+                olyric: lyric,
+                tlyric: LyricOwned::None,
             }),
 
         <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
@@ -257,21 +222,15 @@
 /// assert_eq!(get_lyric_path(PathBuf::from("")),
 ///             None);
 /// ```
-</span><span class="kw">pub fn </span>get_lyric_path(music_path: PathBuf) -&gt; <span class="prelude-ty">Option</span>&lt;PathBuf&gt; {
-    <span class="kw">let </span>file_name_part = music_path.iter().last();
-
-    <span class="kw">let </span><span class="prelude-val">Some</span>(file_name) = file_name_part <span class="kw">else </span>{
-        <span class="prelude-val">None</span><span class="question-mark">?
-    </span>};
-
-    <span class="kw">let </span>file_name = file_name.as_encoded_bytes();
+</span><span class="kw">pub fn </span>get_lrc_path(music_path: PathBuf) -&gt; <span class="prelude-ty">Option</span>&lt;PathBuf&gt; {
+    <span class="kw">let </span>file_name = music_path.iter().last()<span class="question-mark">?</span>.as_encoded_bytes();
 
     file_name
         .iter()
         .enumerate()
         .rev()
         .find(|<span class="kw-2">&amp;</span>(<span class="kw">_</span>, ch)| ch == <span class="kw-2">&amp;</span><span class="string">b'.'</span>)
-        .map(|(last_dot_pos, <span class="kw">_</span>)| {
+        .and_then(|(last_dot_pos, <span class="kw">_</span>)| {
             <span class="kw">let </span><span class="kw-2">mut </span>lrc_file_name = file_name.split_at(last_dot_pos + <span class="number">1</span>).<span class="number">0</span>.to_vec();
             lrc_file_name.extend_from_slice(<span class="string">"lrc"</span>.as_bytes());
             <span class="kw">let </span>lrc_file_name = <span class="kw">unsafe </span>{ OsStr::from_encoded_bytes_unchecked(<span class="kw-2">&amp;</span>lrc_file_name) };
@@ -280,6 +239,5 @@
                 .parent()
                 .map(|music_dir| music_dir.join(lrc_file_name))
         })
-        .flatten()
 }
 </code></pre></div></section></main></body></html>

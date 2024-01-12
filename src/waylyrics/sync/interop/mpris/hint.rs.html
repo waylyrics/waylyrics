@@ -83,6 +83,9 @@
 <a href="#81" id="81">81</a>
 <a href="#82" id="82">82</a>
 <a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::str::FromStr;
 
 <span class="kw">use </span>mpris::{Metadata, Player};
@@ -91,7 +94,7 @@
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::qqmusic::QQMusic;
 
 <span class="kw">use </span><span class="kw">crate</span>::sync::interop::mpris::PLAYER;
-<span class="kw">use </span><span class="kw">crate</span>::sync::lyric::fetch::tricks::get_lyric_path;
+<span class="kw">use </span><span class="kw">crate</span>::sync::lyric::fetch::tricks::get_lrc_path;
 <span class="kw">use </span><span class="kw">crate</span>::sync::lyric::fetch::LyricHint;
 
 <span class="kw">pub fn </span>hint_from_player() -&gt; <span class="prelude-ty">Option</span>&lt;LyricHint&gt; {
@@ -145,11 +148,14 @@
             <span class="kw">_ </span>=&gt; {
                 get_field_from_player(player, |meta| meta.url()).and_then(|meta_url| <span class="kw">match </span>meta_url
                 {
-                    <span class="kw">_ if </span>meta_url.starts_with(<span class="string">"file://"</span>) =&gt; url::Url::from_str(<span class="kw-2">&amp;</span>meta_url)
-                        .ok()
-                        .and_then(|music_uri| music_uri.to_file_path().ok())
-                        .and_then(|music_path| get_lyric_path(music_path))
-                        .map(|lrc_path| LyricHint::File(lrc_path)),
+                    <span class="kw">_ if </span>meta_url.starts_with(<span class="string">"file://"</span>) =&gt; {
+                        <span class="kw">let </span>music_path = url::Url::from_str(<span class="kw-2">&amp;</span>meta_url)
+                            .ok()
+                            .and_then(|music_uri| music_uri.to_file_path().ok())<span class="question-mark">?</span>;
+                        get_lrc_path(music_path)
+                            .filter(|lyric_path| lyric_path.exists())
+                            .map(LyricHint::LyricFile)
+                    }
                     <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
                 })
             }
