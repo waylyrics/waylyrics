@@ -142,12 +142,12 @@ fn register_actions(
 ) {
     register_action_connect(app);
     register_action_disconnect(app);
-    register_action_switch_decoration(&wind, &switch_decoration);
-    register_action_switch_passthrough(&wind, &switch_passthrough);
-    register_action_reload_theme(app, &wind, &reload_theme);
-    register_action_search_lyric(app, &wind, &search_lyric);
-    register_action_remove_lyric(app, &wind);
-    register_action_refetch_lyric(app, &wind, &refetch_lyric);
+    register_action_switch_decoration(wind, &switch_decoration);
+    register_action_switch_passthrough(wind, &switch_passthrough);
+    register_action_reload_theme(app, wind, &reload_theme);
+    register_action_search_lyric(app, wind, &search_lyric);
+    register_action_remove_lyric(app, wind);
+    register_action_refetch_lyric(app, wind, &refetch_lyric);
 
     register_sigusr1_disconnect();
     register_sigusr2_decoration(ObjectExt::downgrade(app));

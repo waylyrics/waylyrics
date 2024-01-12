@@ -27,7 +27,6 @@ pub enum LyricHintResult {
         olyric: LyricOwned,
         tlyric: LyricOwned,
     },
-    Metadata(TrackMeta),
 }
 
 pub async fn get_lyric_hint_from_player() -> Option<LyricHintResult> {
@@ -51,31 +50,23 @@ pub async fn get_lyric_hint_from_player() -> Option<LyricHintResult> {
 
             crate::log::debug!("spawned query from get_accurate_lyric");
 
-            let Ok(lyric) = provider.query_lyric(&song_id).await else {
-                None?
-            };
+            let lyric = provider.query_lyric(&song_id).await.ok()?;
             let olyric = provider.get_lyric(&lyric);
             let tlyric = provider.get_translated_lyric(&lyric);
 
-            Some(LyricHintResult::Lyric {
-                olyric: olyric,
-                tlyric: tlyric,
-            })
+            Some(LyricHintResult::Lyric { olyric, tlyric })
         }
         Some(LyricHint::LyricFile(path)) => fs::read_to_string(path)
             .ok()
             .and_then(|lyric| {
                 crate::lyric_providers::utils::lrc_iter(lyric.lines())
-                    .and_then(|lyrics| Ok(Lyric::LineTimestamp(lyrics).into_owned()))
+                    .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
                     .ok()
             })
-            .and_then(|lyric| {
-                Some(LyricHintResult::Lyric {
-                    olyric: lyric,
-                    tlyric: LyricOwned::None,
-                })
+            .map(|lyric| LyricHintResult::Lyric {
+                olyric: lyric,
+                tlyric: LyricOwned::None,
             }),
-        Some(LyricHint::Metadata(meta)) => Some(LyricHintResult::Metadata(meta)),
 
         _ => None,
     }
@@ -109,21 +100,15 @@ pub async fn get_lyric_hint_from_player() -> Option<LyricHintResult> {
 /// assert_eq!(get_lyric_path(PathBuf::from("")),
 ///             None);
 /// ```
-pub fn get_lyric_path(music_path: PathBuf) -> Option<PathBuf> {
-    let file_name_part = music_path.iter().last();
-
-    let Some(file_name) = file_name_part else {
-        None?
-    };
-
-    let file_name = file_name.as_encoded_bytes();
+pub fn get_lrc_path(music_path: PathBuf) -> Option<PathBuf> {
+    let file_name = music_path.iter().last()?.as_encoded_bytes();
 
     file_name
         .iter()
         .enumerate()
         .rev()
         .find(|&(_, ch)| ch == &b'.')
-        .map(|(last_dot_pos, _)| {
+        .and_then(|(last_dot_pos, _)| {
             let mut lrc_file_name = file_name.split_at(last_dot_pos + 1).0.to_vec();
             lrc_file_name.extend_from_slice("lrc".as_bytes());
             let lrc_file_name = unsafe { OsStr::from_encoded_bytes_unchecked(&lrc_file_name) };
@@ -132,5 +117,4 @@ pub fn get_lyric_path(music_path: PathBuf) -> Option<PathBuf> {
                 .parent()
                 .map(|music_dir| music_dir.join(lrc_file_name))
         })
-        .flatten()
 }

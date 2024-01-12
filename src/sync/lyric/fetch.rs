@@ -32,12 +32,11 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
         .map(|s| Cow::Owned(s.join(",")))
         .unwrap_or(Cow::Borrowed("Unknown"));
 
-    match tricks::get_lyric_hint_from_player().await {
-        Some(LyricHintResult::Lyric { olyric, tlyric }) => {
-            set_lyric(olyric, tlyric, &title, &artists_str, window);
-            return Ok(());
-        }
-        _ => (),
+    if let Some(LyricHintResult::Lyric { olyric, tlyric }) =
+        tricks::get_lyric_hint_from_player().await
+    {
+        set_lyric(olyric, tlyric, &title, &artists_str, window);
+        return Ok(());
     }
 
     let providers = LYRIC_PROVIDERS

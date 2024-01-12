@@ -6,7 +6,7 @@ use crate::lyric_providers::netease::Netease;
 use crate::lyric_providers::qqmusic::QQMusic;
 
 use crate::sync::interop::mpris::PLAYER;
-use crate::sync::lyric::fetch::tricks::get_lyric_path;
+use crate::sync::lyric::fetch::tricks::get_lrc_path;
 use crate::sync::lyric::fetch::LyricHint;
 
 pub fn hint_from_player() -> Option<LyricHint> {
@@ -64,15 +64,9 @@ pub fn hint_from_player() -> Option<LyricHint> {
                         let music_path = url::Url::from_str(&meta_url)
                             .ok()
                             .and_then(|music_uri| music_uri.to_file_path().ok())?;
-                        if let Some(lrc_path) = get_lyric_path(music_path)
-                            .filter(|lrc_path| lrc_path.exists())
-                            .map(|lrc_path| LyricHint::LyricFile(lrc_path))
-                        {
-                            return Some(lrc_path);
-                        } else {
-                            // todo: music metadata
-                            None
-                        }
+                        get_lrc_path(music_path)
+                            .filter(|lyric_path| lyric_path.exists())
+                            .map(LyricHint::LyricFile)
                     }
                     _ => None,
                 })
