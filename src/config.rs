@@ -77,7 +77,7 @@ impl Default for Config {
     fn default() -> Self {
         Self {
             player_sync_interval: "2s".to_owned(),
-            lyric_update_interval: "20ms".to_owned(),
+            lyric_update_interval: "50ms".to_owned(),
             length_toleration: "2s".to_owned(),
             click_pass_through: true,
             hide_label_on_empty_text: true,
