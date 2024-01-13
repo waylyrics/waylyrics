@@ -6,7 +6,7 @@ License:        MIT
 Group:          Productivity
 Url:            https://github.com/waylyrics/waylyrics
 Source0:        https://github.com/waylyrics/waylyrics/archive/master.tar.gz
-BuildRequires:  cargo
+BuildRequires:  cargo >= 1.73.0
 BuildRequires:  libgraphene-devel
 BuildRequires:  gtk4-devel
 BuildRequires:  openssl-devel
@@ -23,12 +23,10 @@ Simple universal on screen lyrics made with GTK4 and love.
 cargo --version
 
 %build
-export RUSTC_BOOTSTRAP=1
 export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 cargo build --release --locked --target-dir target
 
 %install
-export RUSTC_BOOTSTRAP=1
 export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 cargo install --path . --root=%{buildroot}%{_prefix}
 
