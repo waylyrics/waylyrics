@@ -1,6 +1,3 @@
-#![allow(stable_features)]
-#![feature(local_key_cell_methods)]
-
 use std::path::PathBuf;
 use std::str::FromStr;
 

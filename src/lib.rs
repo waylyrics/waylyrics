@@ -1,6 +1,3 @@
-#![allow(stable_features)]
-#![feature(local_key_cell_methods)]
-
 use std::{
     cell::RefCell,
     path::PathBuf,

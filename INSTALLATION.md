@@ -55,10 +55,9 @@ export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 
 ## 使用 stable 工具链
 
-* note: 你的 rustc 需要在 1.70+
+* note: 你的 rustc 需要在 1.73+
 
 ```bash
-export RUSTC_BOOTSTRAP=1
 cargo build --release --locked --target-dir target
 ```
 
