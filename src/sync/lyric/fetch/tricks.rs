@@ -2,7 +2,7 @@ use std::ffi::OsStr;
 use std::fs;
 use std::path::PathBuf;
 
-use crate::log::{debug, warn};
+use crate::log::{debug, error, warn};
 use crate::lyric_providers::{provider_fmt, Lyric, LyricOwned, LyricProvider};
 use crate::sync::interop::hint_from_player;
 use crate::sync::TrackMeta;
@@ -57,10 +57,12 @@ pub async fn get_lyric_hint_from_player() -> Option<LyricHintResult> {
             Some(LyricHintResult::Lyric { olyric, tlyric })
         }
         Some(LyricHint::LyricFile(path)) => fs::read_to_string(path)
+            .map_err(|e| error!("cannot read lyric from hint: {e}"))
             .ok()
             .and_then(|lyric| {
                 crate::lyric_providers::utils::lrc_iter(lyric.lines())
                     .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
+                    .map_err(|e| error!("cannot parse lyric from hint: {e}"))
                     .ok()
             })
             .map(|lyric| LyricHintResult::Lyric {
