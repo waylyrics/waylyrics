@@ -45,6 +45,7 @@
 <a href="#43" id="43">43</a>
 <a href="#44" id="44">44</a>
 <a href="#45" id="45">45</a>
+<a href="#46" id="46">46</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>lrc_nom::{parse, LrcParseError};
 <span class="kw">use </span>std::{sync::Arc, time::Duration};
 
@@ -64,7 +65,8 @@
         })
         .collect();
     <span class="comment">// handling malformed LRC timestamp by sorting them here
-    </span>lrc_vec.sort_by(|left, right| left.start_time.cmp(<span class="kw-2">&amp;</span>right.start_time));
+    </span>lrc_vec.sort_by_key(|line| line.start_time);
+    
     <span class="prelude-val">Ok</span>(lrc_vec)
 }
 
