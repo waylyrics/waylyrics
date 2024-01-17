@@ -59,6 +59,7 @@ pub async fn get_lyric_hint_from_player() -> Option<LyricHintResult> {
         Some(LyricHint::LyricFile(path)) => fs::read_to_string(path)
             .map_err(|e| error!("cannot read lyric from hint: {e}"))
             .ok()
+            .map(|s| s.trim_start_matches('\u{feff}'))
             .and_then(|lyric| {
                 crate::lyric_providers::utils::lrc_iter(lyric.lines())
                     .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
