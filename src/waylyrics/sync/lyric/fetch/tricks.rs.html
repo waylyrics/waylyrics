@@ -123,6 +123,7 @@
 <a href="#121" id="121">121</a>
 <a href="#122" id="122">122</a>
 <a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::ffi::OsStr;
 <span class="kw">use </span>std::fs;
 <span class="kw">use </span>std::path::PathBuf;
@@ -184,12 +185,13 @@
         <span class="prelude-val">Some</span>(LyricHint::LyricFile(path)) =&gt; fs::read_to_string(path)
             .map_err(|e| <span class="macro">error!</span>(<span class="string">"cannot read lyric from hint: {e}"</span>))
             .ok()
-            .map(|s| s.trim_start_matches(<span class="string">'\u{feff}'</span>))
             .and_then(|lyric| {
-                <span class="kw">crate</span>::lyric_providers::utils::lrc_iter(lyric.lines())
-                    .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
-                    .map_err(|e| <span class="macro">error!</span>(<span class="string">"cannot parse lyric from hint: {e}"</span>))
-                    .ok()
+                <span class="kw">crate</span>::lyric_providers::utils::lrc_iter(
+                    lyric.trim_start_matches(<span class="string">'\u{feff}'</span>).lines(),
+                )
+                .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
+                .map_err(|e| <span class="macro">error!</span>(<span class="string">"cannot parse lyric from hint: {e}"</span>))
+                .ok()
             })
             .map(|lyric| LyricHintResult::Lyric {
                 olyric: lyric,
