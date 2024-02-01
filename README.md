@@ -22,14 +22,15 @@
         - [Qt](#qt-1)
     - [无法使用的播放器](#无法使用的播放器)
   - [目录](#目录)
-  - [实现](#实现)
   - [替代品](#替代品)
+    - [Linux](#linux)
+    - [Windows](#windows)
   - [Credit](#credit)
   - [License](#license)
 
 ## 构建/安装
 
-详阅 [INSTALLATION.md](INSTALLATION.md)
+详阅 [INSTALLATION.md](doc/INSTALLATION.md)
 
 ## 用法
 
@@ -104,17 +105,6 @@ SIGUSR2: 开关GTK CSD
 # waylyrics 会首先尝试在这里加载主题，找不到的话就从全局模板目录找
 ~/.local/share/waylyrics/_themes/...
 ```
-
-## 实现
-
-目前的实现比较脏：
-
-1. 连接最可能对的那个播放器，只有它没了才会断开
-2. 每2s刷新歌曲状态，20ms刷新歌词
-3. 如果不能直接拿id，匹配策略是：
-    1. 长度匹配的结果优先
-    2. 没的话就用搜索的第一个结果
-    3. todo: 允许用户手动选择歌词匹配结果（因为推荐直接拿id所以咕咕了，虽然也有Spotify用户存在）
 
 ## 替代品
 

@@ -22,14 +22,15 @@ Simple universal on screen lyrics made with GTK4 and ❤️.
         - [Qt](#qt-1)
     - [MPRIS-unfriendly Players](#mpris-unfriendly-players)
   - [Directories](#directories)
-  - [Approach](#approach)
   - [Alternatives](#alternatives)
+    - [Linux](#linux)
+    - [Windows](#windows)
   - [Credit](#credit)
   - [License](#license)
 
 ## Build/Install
 
-Check [INSTALLATION.en.md](INSTALLATION.en.md)
+Check [INSTALLATION.en.md](doc/INSTALLATION.en.md)
 
 ## Usage
 
@@ -105,14 +106,6 @@ Typically,
 # waylyrics will first try load theme here, if not exists, load from global template.
 ~/.local/share/waylyrics/_themes/...
 ```
-
-## Approach
-
-Current approach my seems dirty:
-
-1. get the likely actived player when none is connnected, and disconnect from one only if it's not avaliable more
-2. keep sync with 2s interval and 20ms refresh for lyrics
-3. use the length-matched result (or first result if former is not found) of `search_song` and sync START in each run, fetch lyric only when needed
 
 ## Alternatives
 

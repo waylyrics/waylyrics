@@ -1,5 +1,5 @@
-- [issues](#issues)
-- [pull request](#pull_request)
+- [Creating issues](#creating-issues)
+- [Pull request](#pull-request)
 
 ## Creating issues
 
@@ -7,7 +7,7 @@
 - If you want to propose a new feature, feel free to describe your idea and the motivation behind it.
 - We'd like to accept issues in English or Chinese to accommodate the majority of users for easier communication.
 
-# Pull request
+## Pull request
 
 There are numerous of suggestions for pull request of Waylyrics:
 
