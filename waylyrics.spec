@@ -3,7 +3,7 @@ Version:        {{{ git_repo_version }}}
 Release:        0
 Summary:        Simple universal on screen lyrics made with GTK4 and love.
 License:        MIT
-Group:          Productivity
+Group:          Productivity/Multimedia/Sound/Utilities
 Url:            https://github.com/waylyrics/waylyrics
 Source0:        https://github.com/waylyrics/waylyrics/archive/master.tar.gz
 BuildRequires:  cargo >= 1.73.0
