@@ -33,8 +33,7 @@ cargo install --path . --root=%{buildroot}%{_prefix}
 install -Dm644 "io.poly000.waylyrics.desktop" -t %{buildroot}%{_datadir}/applications/
 install -d %{buildroot}%{_datadir}/waylyrics
 
-install -d %{buildroot}%{_datadir}/glib-2.0/schemas/
-install -dm644 io.poly000.waylyrics.gschema.xml %{buildroot}%{_datadir}/glib-2.0/schemas/
+install -Dm644 io.poly000.waylyrics.gschema.xml %{buildroot}%{_datadir}/glib-2.0/schemas/
 
 cp -r themes %{buildroot}%{_datadir}/waylyrics/
 
