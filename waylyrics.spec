@@ -23,20 +23,20 @@ Simple universal on screen lyrics made with GTK4 and love.
 cargo --version
 
 %build
-export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
+export WAYLYRICS_THEME_PRESETS_DIR=%{_datadir}/waylyrics/themes
 cargo build --release --locked --target-dir target
 
 %install
-export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
+export WAYLYRICS_THEME_PRESETS_DIR=%{_datadir}/waylyrics/themes
 cargo install --path . --root=%{buildroot}%{_prefix}
 
-install -Dm644 "io.poly000.waylyrics.desktop" -t %{buildroot}/usr/share/applications/
-install -d %{buildroot}/usr/share/waylyrics
+install -Dm644 "io.poly000.waylyrics.desktop" -t %{buildroot}%{_datadir}/applications/
+install -d %{buildroot}%{_datadir}/waylyrics
 
-install -d %{buildroot}/usr/share/glib-2.0/schemas/
-install -m644 io.poly000.waylyrics.gschema.xml %{buildroot}/usr/share/glib-2.0/schemas/
+install -d %{buildroot}%{_datadir}/glib-2.0/schemas/
+install -dm644 io.poly000.waylyrics.gschema.xml %{buildroot}%{_datadir}/glib-2.0/schemas/
 
-cp -r themes %{buildroot}/usr/share/waylyrics/
+cp -r themes %{buildroot}%{_datadir}/waylyrics/
 
 rm %{buildroot}/usr/.crates.toml %{buildroot}/usr/.crates2.json
 
@@ -44,9 +44,9 @@ rm %{buildroot}/usr/.crates.toml %{buildroot}/usr/.crates2.json
 
 %files
 %{_bindir}/waylyrics
-/usr/share/applications/io.poly000.waylyrics.desktop
-/usr/share/waylyrics/
-/usr/share/glib-2.0/schemas/io.poly000.waylyrics.gschema.xml
+%{_datadir}/applications/io.poly000.waylyrics.desktop
+%{_datadir}/waylyrics/
+%{_datadir}/glib-2.0/schemas/io.poly000.waylyrics.gschema.xml
 
 %changelog
 {{{ git_repo_changelog }}}
