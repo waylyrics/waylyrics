@@ -41,7 +41,7 @@ tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 md5 = "0.7.0"
 
 # utils
-regex = "1.10.2"
+regex = "1.10.3"
 libc = "0.2.152"
 xdg = "2.5.2"
 
