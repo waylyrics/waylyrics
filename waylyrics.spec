@@ -42,6 +42,8 @@ rm %{buildroot}/usr/.crates.toml %{buildroot}/usr/.crates2.json
 %check
 
 %files
+%license LICENSE
+%doc README.md
 %{_bindir}/waylyrics
 %{_datadir}/applications/io.poly000.waylyrics.desktop
 %{_datadir}/waylyrics/
