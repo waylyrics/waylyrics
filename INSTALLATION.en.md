@@ -45,7 +45,7 @@ paru -S gtk4 libxcb mimalloc
 ## openSUSE/RHEL/Fedora..
 
 ```
-cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel
+cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pango-devel
 ```
 
 # Build
