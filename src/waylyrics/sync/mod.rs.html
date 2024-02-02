@@ -44,6 +44,7 @@
 <a href="#42" id="42">42</a>
 <a href="#43" id="43">43</a>
 <a href="#44" id="44">44</a>
+<a href="#45" id="45">45</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::RefCell;
 <span class="kw">use </span>std::path::PathBuf;
 <span class="kw">use </span>std::time::Duration;
@@ -82,7 +83,8 @@
     </span><span class="kw">static </span>TRACK_PLAYING_STATE: RefCell&lt;TrackState&gt; = RefCell::new(Default::default());
 }
 
-<span class="kw">pub use </span>interop::acts::{
+<span class="kw">mod </span>acts;
+<span class="kw">pub use </span>acts::{
     register_action_connect, register_action_disconnect, register_action_refetch_lyric,
     register_action_remove_lyric, register_action_search_lyric, register_sigusr1_disconnect,
 };

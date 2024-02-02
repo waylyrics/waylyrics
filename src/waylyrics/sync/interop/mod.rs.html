@@ -28,16 +28,13 @@
 <a href="#26" id="26">26</a>
 <a href="#27" id="27">27</a>
 <a href="#28" id="28">28</a>
-<a href="#29" id="29">29</a>
-<a href="#30" id="30">30</a>
-</pre></div><pre class="rust"><code><span class="kw">pub mod </span>acts;
+</pre></div><pre class="rust"><code><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>common;
 
 <span class="attr">#[cfg(unix)]
 </span><span class="kw">mod </span>mpris;
 <span class="attr">#[cfg(unix)]
 </span><span class="kw">pub use </span>mpris::{
     clean_player, connect_player_with_id, hint_from_player, list_player_names, register_sync_task,
-    update_lyric,
 };
 
 <span class="attr">#[cfg(target_os = <span class="string">"windows"</span>)]
@@ -45,7 +42,6 @@
 <span class="attr">#[cfg(target_os = <span class="string">"windows"</span>)]
 </span><span class="kw">pub use </span>smtc::{
     clean_player, connect_player_with_id, hint_from_player, list_player_names, register_sync_task,
-    update_lyric,
 };
 
 <span class="attr">#[derive(Debug)]

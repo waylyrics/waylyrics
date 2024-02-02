@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["PlayerStatus"],"mod":["acts","mpris"],"struct":["PlayerId"]};
+window.SIDEBAR_ITEMS = {"enum":["PlayerStatus"],"mod":["common","mpris"],"struct":["PlayerId"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["PLAYER","PLAYER_FINDER"],"fn":["clean_player","connect_player_with_id","find_players","list_player_names","update_lyric"],"mod":["hint","sync_task"]};
+window.SIDEBAR_ITEMS = {"constant":["PLAYER","PLAYER_FINDER"],"fn":["clean_player","connect_player_with_id","find_players","list_player_names"],"mod":["hint","sync_task"]};
