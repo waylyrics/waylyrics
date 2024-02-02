@@ -44,13 +44,17 @@ md5 = "0.7.0"
 regex = "1.10.3"
 libc = "0.2.153"
 xdg = "2.5.2"
+once_cell = "1.19.0"
+derivative = "2.2.0"
 
 # error handling
 anyhow = "1.0.79"
 thiserror = "1.0.56"
 glib-macros = "0.18.5"
 
+# networking
 async-trait = "0.1.77"
+openssl = "0.10.60"
 tokio = { version = "1.35.1", features = [
     "macros",
     "net",
@@ -59,13 +63,11 @@ tokio = { version = "1.35.1", features = [
     "rt-multi-thread",
 ] }
 reqwest = { version = "0.11.23" }
-once_cell = "1.19.0"
-derivative = "2.2.0"
 
 [features]
 mimalloc = ["dep:mimalloc"]
 default = ["mimalloc"]
-vendored = ["dbus/vendored"]
+vendored = ["dbus/vendored", "openssl/vendored"]
 
 [target.'cfg(unix)'.dependencies]
 # MPRIS integration
