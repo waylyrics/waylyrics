@@ -1,16 +1,17 @@
 
 - [通过包管理器安装](#通过包管理器安装)
   - [Arch-based](#arch-based)
+  - [openSUSE (Leap \>= 15.5)](#opensuse-leap--155)
   - [NixOS](#nixos)
 - [安装构建依赖](#安装构建依赖)
   - [Debian-based](#debian-based)
   - [Arch-based](#arch-based-1)
-  - [openSUSE/RHEL/Fedora..](#opensuserhelfedora)
+  - [其他RPM系发行版：](#其他rpm系发行版)
 - [编译](#编译)
   - [使用 stable 工具链](#使用-stable-工具链)
   - [使用 nightly 工具链](#使用-nightly-工具链)
   - [编译Schema](#编译schema)
-  - [Packging example](#packging-example)
+  - [打包](#打包)
 
 可以在 [Actions](https://github.com/waylyrics/waylyrics/actions/workflows/smoketest.yml) 下载发布
 
@@ -23,6 +24,12 @@ paru -S aur/waylyrics-git
 ```
 
 Archlinuxcn也有 [Waylyrics-git](https://github.com/archlinuxcn/repo/tree/master/archlinuxcn/waylyrics-git) 的打包
+
+## openSUSE (Leap >= 15.5)
+
+```bash
+sudo zypper install waylyrics
+```
 
 ## NixOS
 
@@ -42,11 +49,14 @@ sudo apt-get install libssl-dev libgtk-4-dev libdbus-1-dev libmimalloc-dev
 paru -S gtk4 libxcb mimalloc
 ```
 
-## openSUSE/RHEL/Fedora..
+## 其他RPM系发行版：
+
+请安装如下依赖：
 
 ```
 cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pango-devel
 ```
+
 # 编译
 
 ```bash
@@ -79,9 +89,9 @@ cp io.poly000.waylyrics.gschema.xml ~/.local/share/glib-2.0/schemas/
 glib-compile-schemas ~/.local/share/glib-2.0/schemas/
 ```
 
-## Packging example
+## 打包
 
-An example packaging script:
+打包脚本样例：
 
 ```bash
 sudo install -m644 io.poly000.waylyrics.gschema.xml /usr/share/glib-2.0/schemas/

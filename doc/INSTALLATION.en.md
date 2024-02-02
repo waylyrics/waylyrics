@@ -1,11 +1,12 @@
 
 - [Install with package manager](#install-with-package-manager)
   - [Arch-based](#arch-based)
+  - [openSUSE (Leap \>= 15.5)](#opensuse-leap--155)
   - [NixOS](#nixos)
 - [Prepare Dependencies](#prepare-dependencies)
   - [Debian-based](#debian-based)
   - [Arch-based](#arch-based-1)
-  - [openSUSE/RHEL/Fedora..](#opensuserhelfedora)
+  - [Other RPM-based disturbution](#other-rpm-based-disturbution)
 - [Build](#build)
   - [With stable toolchain](#with-stable-toolchain)
   - [With nightly toolchain](#with-nightly-toolchain)
@@ -22,7 +23,13 @@ Releases are avaliable in [Actions](https://github.com/waylyrics/waylyrics/actio
 paru -S aur/waylyrics-git
 ```
 
-[Waylyrics-git](https://github.com/archlinuxcn/repo/tree/master/archlinuxcn/waylyrics-git) is also avaliable in archlinuxcn.
+[Waylyrics-git](https://github.com/archlinuxcn/repo/tree/master/archlinuxcn/waylyrics-git) is also avaliable on archlinuxcn.
+
+## openSUSE (Leap >= 15.5)
+
+```bash
+sudo zypper install waylyrics
+```
 
 ## NixOS
 
@@ -42,7 +49,9 @@ sudo apt-get install libssl-dev libgtk-4-dev libdbus-1-dev libmimalloc-dev
 paru -S gtk4 libxcb mimalloc
 ```
 
-## openSUSE/RHEL/Fedora..
+## Other RPM-based disturbution
+
+Please install dependencies in below:
 
 ```
 cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pango-devel
