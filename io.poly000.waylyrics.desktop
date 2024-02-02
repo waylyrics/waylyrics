@@ -12,11 +12,6 @@ Categories=Audio;AudioVideo;GTK;Player;
 Actions=Launch;Search;ToggleClickPassthrough;ToggleGTKDecoration;RefetchLyric;ReloadTheme;RemoveLyric;
 Keywords=desktop lyric;
 
-[Desktop Action Launch]
-Name=Launch waylyrics
-Name[zh]=启动 waylyrics
-Exec=waylyrics
-
 [Desktop Action Search]
 Name=Search lyric
 Name[zh]=搜索歌词
