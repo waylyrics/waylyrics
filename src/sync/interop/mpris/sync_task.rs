@@ -17,7 +17,8 @@ use crate::sync::interop::PlayerStatus;
 use crate::{
     glib_spawn,
     sync::{
-        interop::mpris::{update_lyric, PLAYER, PLAYER_FINDER},
+        interop::common::update_lyric,
+        interop::mpris::{PLAYER, PLAYER_FINDER},
         lyric::{cache::get_cache_path, scroll::refresh_lyric},
     },
 };

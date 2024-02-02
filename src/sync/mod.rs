@@ -36,7 +36,8 @@ thread_local! {
     static TRACK_PLAYING_STATE: RefCell<TrackState> = RefCell::new(Default::default());
 }
 
-pub use interop::acts::{
+mod acts;
+pub use acts::{
     register_action_connect, register_action_disconnect, register_action_refetch_lyric,
     register_action_remove_lyric, register_action_search_lyric, register_sigusr1_disconnect,
 };

@@ -2679,7 +2679,6 @@ dependencies = [
  "mimalloc",
  "mpris",
  "ncmapi",
- "once_cell",
  "openssl",
  "qqmusic-rs",
  "regex",

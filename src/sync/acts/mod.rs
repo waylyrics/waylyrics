@@ -14,8 +14,7 @@ use crate::{
     glib_spawn,
     lyric_providers::{default_search_query, LyricOwned},
     sync::{
-        interop::{clean_player, update_lyric},
-        lyric::cache::update_lyric_cache,
+        interop::clean_player, interop::common::update_lyric, lyric::cache::update_lyric_cache,
         search_window, TrackState, LYRIC, TRACK_PLAYING_STATE,
     },
     utils::reset_lyric_labels,
