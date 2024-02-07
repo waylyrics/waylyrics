@@ -78,6 +78,11 @@
 <a href="#76" id="76">76</a>
 <a href="#77" id="77">77</a>
 <a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::EXCLUDED_REGEXES;
 
 <span class="kw">use </span>gtk::{
@@ -116,7 +121,12 @@
     }
 }
 
-<span class="kw">pub fn </span>merge_css(css: <span class="kw-2">&amp;</span>str) {
+<span class="doccomment">/// set css style for waylyrics
+/// As said in [GTK+ doc], gtk constructs style from the lower priority ones to the upper ones,
+/// We set priority as `STYLE_PROVIDER_PRIORITY + 1` to override user theme
+///
+/// [GTK+ doc]: https://docs.gtk.org/gtk4/type_func.StyleContext.add_provider_for_display.html#parameters
+</span><span class="kw">pub fn </span>merge_css(css: <span class="kw-2">&amp;</span>str) {
     <span class="kw">use </span>gtk::gdk::Display <span class="kw">as </span>GdkDisplay;
 
     <span class="kw">let </span>css_provider = gtk::CssProvider::new();
@@ -125,7 +135,7 @@
     gtk::style_context_add_provider_for_display(
         <span class="kw-2">&amp;</span>GdkDisplay::default().expect(<span class="string">"Could not connect to a display."</span>),
         <span class="kw-2">&amp;</span>css_provider,
-        gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
+        gtk::STYLE_PROVIDER_PRIORITY_USER + <span class="number">1</span>,
     );
 }
 
