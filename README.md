@@ -120,13 +120,13 @@ SIGUSR2: 开关GTK CSD
 
 ### Linux
 
-| 名称                          | 技术栈      | 桌面支持   | 播放器支持               | 备注                                            |
-| ----------------------------- | ----------- | ---------- | ------------------------ | ----------------------------------------------- |
-| [waybar-netease-music-lyrics] | bash        | Sway       | 网易云音乐任何播放器[^0] |
-| [Sunamu]                      | Electron/TS | X/Xwayland | MPRIS                    | 可以启动服务器或电子app，歌词显示效果好，功能全 |
-| [desktop-lyric]               | JavaScript  | GNOME      | MPRIS                    |
-| [lyricsSeeker]                | Python+QML  | Plasma     |                          | WIP                                             |
-| [caraoke-plasmoid]            | QML         | Plasma     | MPRIS                    |                                                 |
+| 名称                          | 技术栈      | 桌面支持   | 播放器支持 | 备注 |
+| ----------------------------- | ----------- | ---------- | ---------- | ---- |
+| [waybar-netease-music-lyrics] | bash        | Sway       | NCM[^0]    |      |
+| [Sunamu]                      | Electron/TS | X/Xwayland | MPRIS      |      |
+| [desktop-lyric]               | JavaScript  | GNOME      | MPRIS      |      |
+| [lyricsSeeker]                | Python+QML  | Plasma     |            | WIP  |
+| [caraoke-plasmoid]            | QML         | Plasma     | MPRIS      |      |
 
 [^0]: https://github.com/kangxiaoju/waybar-netease-music-lyrics/blob/f84810fe1628ca38fa36d88506152d88cf0e77e4/song.sh#L41-L59
 
