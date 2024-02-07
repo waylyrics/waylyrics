@@ -46,6 +46,7 @@
 <a href="#44" id="44">44</a>
 <a href="#45" id="45">45</a>
 <a href="#46" id="46">46</a>
+<a href="#47" id="47">47</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>lrc_nom::{parse, LrcParseError};
 <span class="kw">use </span>std::{sync::Arc, time::Duration};
 
@@ -54,7 +55,8 @@
 <span class="kw">pub fn </span>lrc_iter&lt;<span class="lifetime">'a</span>&gt;(
     lyric_lines: <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span>str&gt;,
 ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;LyricLine&lt;<span class="lifetime">'a</span>&gt;&gt;, LrcParseError&gt; {
-    <span class="kw">let </span><span class="kw-2">mut </span>lrc_vec: Vec&lt;<span class="kw">_</span>&gt; = parse(lyric_lines)<span class="question-mark">?
+    <span class="kw">let </span>filtered_lines = lyric_lines.filter(|l| l.starts_with(<span class="string">"["</span>));
+    <span class="kw">let </span><span class="kw-2">mut </span>lrc_vec: Vec&lt;<span class="kw">_</span>&gt; = parse(filtered_lines)<span class="question-mark">?
         </span>.into_iter()
         .filter_map(|lrc_item| <span class="kw">match </span>lrc_item {
             lrc_nom::LrcItem::Metadata(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
