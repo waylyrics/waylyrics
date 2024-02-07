@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/sync/search_window/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="waylyrics" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.0-nightly (11f32b73e 2024-01-31)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/sync/search_window/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="waylyrics" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0-nightly (256b6fb19 2024-02-06)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
     <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../../../waylyrics/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -322,23 +322,27 @@
 <a href="#320" id="320">320</a>
 <a href="#321" id="321">321</a>
 <a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>imp;
 
 <span class="kw">use </span>std::sync::Arc;
 
+<span class="kw">use </span><span class="kw">crate</span>::log::{error, info};
 <span class="kw">use </span>glib::Object;
 <span class="kw">use </span>gtk::glib::clone;
 <span class="kw">use </span>gtk::subclass::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>gtk::{gio, glib, ColumnViewColumn};
 <span class="kw">use </span>gtk::{prelude::<span class="kw-2">*</span>, ListItem};
 <span class="kw">use </span>tokio::task::JoinSet;
-<span class="kw">use </span><span class="kw">crate</span>::log::{error, info};
 
-<span class="kw">use crate</span>::{LYRIC_PROVIDERS, glib_spawn, tokio_spawn};
+<span class="kw">use crate</span>::{glib_spawn, tokio_spawn, LYRIC_PROVIDERS};
 
 <span class="kw">use </span><span class="kw">crate</span>::app::dialog::show_dialog;
 <span class="kw">use </span><span class="kw">crate</span>::sync::lyric::cache::update_lyric_cache;
-<span class="kw">use </span><span class="kw">crate</span>::sync::{TrackState, LYRIC, TRACK_PLAYING_STATE};
+<span class="kw">use </span><span class="kw">crate</span>::sync::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
 
 <span class="macro">glib::wrapper! </span>{
     <span class="kw">pub struct </span>ResultObject(ObjectSubclass&lt;imp::ResultObject&gt;);
@@ -457,7 +461,9 @@
             <span class="kw">for </span>(idx, provider) <span class="kw">in </span>providers.iter().enumerate() {
                 <span class="kw">let </span>query = query.clone();
                 <span class="kw">let </span>provider_id = provider.unique_name();
-                set.spawn(<span class="kw">async move </span>{ (provider.search_song(<span class="kw-2">&amp;</span>query).<span class="kw">await</span>, provider_id, idx, query) });
+                set.spawn(
+                    <span class="kw">async move </span>{ (provider.search_song(<span class="kw-2">&amp;</span>query).<span class="kw">await</span>, provider_id, idx, query) },
+                );
             }
 
             <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>((search_result, provider_name, idx, query))) = set.join_next().<span class="kw">await </span>{
@@ -475,19 +481,24 @@
                 }
             }
             results
-        }).<span class="kw">await</span>.expect(<span class="string">"Tokio runtime failure"</span>);
+        })
+        .<span class="kw">await
+        </span>.expect(<span class="string">"Tokio runtime failure"</span>);
 
-        <span class="kw">let </span>results: Vec&lt;ResultObject&gt; = results.into_iter().map(|(track, idx, provider_name)| {
-            ResultObject::new(
-                track.id,
-                track.title,
-                track.singer,
-                track.album.unwrap_or_default(),
-                track.length.as_secs(),
-                idx,
-                provider_name,
-            )
-        }).collect();
+        <span class="kw">let </span>results: Vec&lt;ResultObject&gt; = results
+            .into_iter()
+            .map(|(track, idx, provider_name)| {
+                ResultObject::new(
+                    track.id,
+                    track.title,
+                    track.singer,
+                    track.album.unwrap_or_default(),
+                    track.length.as_secs(),
+                    idx,
+                    provider_name,
+                )
+            })
+            .collect();
         <span class="self">self</span>.results().remove_all();
 
         <span class="kw">if </span>results.is_empty() {
@@ -556,20 +567,17 @@
                     <span class="macro">error!</span>(<span class="string">"provider_idx {} is out of range"</span>, provider_idx);
                     <span class="kw">return</span>;
                 };
-                
+
                 <span class="macro">info!</span>(<span class="string">"selected {} from {}"</span>, result.id(), provider.unique_name());
-                
+
                 <span class="macro">crate::log::debug!</span>(<span class="string">"spawned query_lyric from set lyric button"</span>);
                 <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
                     <span class="kw">let </span>song_id = result.id();
                     <span class="kw">match </span>provider.query_lyric(<span class="kw-2">&amp;</span>song_id).<span class="kw">await </span>{
                         <span class="prelude-val">Ok</span>(lyric) =&gt; {
-                            <span class="kw">let </span>olyric = provider.get_lyric(<span class="kw-2">&amp;</span>lyric);
-                            <span class="kw">let </span>tlyric = provider.get_translated_lyric(<span class="kw-2">&amp;</span>lyric);
-                            LYRIC.with_borrow_mut(|(origin, translation)| {
-                                <span class="kw-2">*</span>origin = olyric;
-                                <span class="kw-2">*</span>translation = tlyric;
-                            });
+                            <span class="kw">let </span>origin = provider.get_lyric(<span class="kw-2">&amp;</span>lyric);
+                            <span class="kw">let </span>translation = provider.get_translated_lyric(<span class="kw-2">&amp;</span>lyric);
+                            LYRIC.set(LyricState{ origin, translation });
 
                             <span class="kw">if </span>window.imp().use_cache.get() {
                                 TRACK_PLAYING_STATE.with_borrow(|TrackState {cache_path, ..}| {

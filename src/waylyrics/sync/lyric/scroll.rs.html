@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/sync/lyric/scroll.rs`."><title>scroll.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="waylyrics" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.0-nightly (11f32b73e 2024-01-31)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/sync/lyric/scroll.rs`."><title>scroll.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="waylyrics" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0-nightly (256b6fb19 2024-02-06)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
     <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../../../waylyrics/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -125,7 +125,7 @@
 <span class="kw">use </span><span class="kw">crate</span>::config::LyricDisplay;
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{LyricLineOwned, LyricOwned};
 
-<span class="kw">use </span><span class="kw">crate</span>::sync::{TrackState, LYRIC, TRACK_PLAYING_STATE};
+<span class="kw">use </span><span class="kw">crate</span>::sync::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
 
 <span class="kw">pub fn </span>register_lyric_display(app: WeakRef&lt;Application&gt;, interval: Duration) {
     glib::timeout_add_local(interval, <span class="kw">move </span>|| {
@@ -156,76 +156,76 @@
 
 <span class="kw">fn </span>set_lyric_with_mode(
     window: <span class="kw-2">&amp;</span>app::Window,
-    next_translation: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>LyricLineOwned&gt;,
-    next_origin: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>LyricLineOwned&gt;,
+    translation: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>LyricLineOwned&gt;,
+    origin: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>LyricLineOwned&gt;,
 ) {
     <span class="kw">match </span>window.imp().lyric_display_mode.get() {
         LyricDisplay::ShowBoth =&gt; {
-            <span class="kw">if </span>next_translation.is_some() {
-                set_lyric(window, next_translation, <span class="string">"above"</span>, <span class="bool-val">true</span>);
-                set_lyric(window, next_origin, <span class="string">"below"</span>, <span class="bool-val">false</span>);
+            <span class="kw">if </span>translation.is_some() {
+                set_lyric(window, translation, <span class="string">"above"</span>);
+                set_lyric(window, origin, <span class="string">"below"</span>);
             } <span class="kw">else </span>{
-                set_lyric(window, next_origin, <span class="string">"above"</span>, <span class="bool-val">false</span>);
+                set_lyric(window, origin, <span class="string">"above"</span>);
             }
         }
         LyricDisplay::Origin =&gt; {
-            set_lyric(window, next_origin, <span class="string">"above"</span>, <span class="bool-val">false</span>);
+            set_lyric(window, origin, <span class="string">"above"</span>);
         }
         LyricDisplay::PreferTranslation =&gt; {
-            <span class="kw">if </span>next_translation.is_none() {
-                set_lyric(window, next_origin, <span class="string">"above"</span>, <span class="bool-val">false</span>);
+            <span class="kw">if </span>translation.is_none() {
+                set_lyric(window, origin, <span class="string">"above"</span>);
             } <span class="kw">else </span>{
-                set_lyric(window, next_translation, <span class="string">"above"</span>, <span class="bool-val">true</span>);
+                set_lyric(window, translation, <span class="string">"above"</span>);
             }
         }
     }
 }
 
-<span class="kw">fn </span>set_lyric(
-    window: <span class="kw-2">&amp;</span>app::Window,
-    next_text: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>LyricLineOwned&gt;,
-    position: <span class="kw-2">&amp;</span>str,
-    translation: bool,
-) {
-    <span class="kw">let </span>status = <span class="kw-2">&amp;</span>window.imp().lyric_playing[translation <span class="kw">as </span>usize];
-    <span class="kw">if let </span><span class="prelude-val">Some</span>(LyricLineOwned { text, start_time }) = next_text {
+<span class="kw">fn </span>set_lyric(window: <span class="kw-2">&amp;</span>app::Window, text: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>LyricLineOwned&gt;, position: <span class="kw-2">&amp;</span>str) {
+    <span class="kw">if let </span><span class="prelude-val">Some</span>(LyricLineOwned { text, .. }) = text {
         <span class="kw">let </span>text = text.trim();
-        <span class="kw">if </span>status.get().is_some_and(|time| <span class="kw-2">&amp;</span>time == start_time) {
-            <span class="kw">return</span>;
-        }
-
-        status.set(<span class="prelude-val">Some</span>(<span class="kw-2">*</span>start_time));
         get_label(window, position).set_label(text);
     } <span class="kw">else </span>{
-        status.set(<span class="prelude-val">None</span>);
         get_label(window, position).set_label(<span class="string">""</span>);
     }
 }
 
 <span class="kw">pub fn </span>refresh_lyric(window: <span class="kw-2">&amp;</span>app::Window) {
-    LYRIC.with_borrow(|(origin, translation)| {
-        <span class="kw">let </span>system_time = window.imp().lyric_start.get().unwrap();
-        <span class="kw">let </span>elapsed = system_time.elapsed().ok();
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(elapsed) = elapsed {
+    LYRIC.with_borrow(
+        |LyricState {
+             origin,
+             translation,
+         }| {
+            <span class="kw">let </span>system_time = window.imp().lyric_start.get().unwrap();
+            <span class="kw">let </span>elapsed = system_time.elapsed().ok();
+            <span class="kw">let </span><span class="prelude-val">Some</span>(elapsed) = elapsed <span class="kw">else </span>{
+                <span class="kw">return</span>;
+            };
             <span class="kw">match </span>(origin, translation) {
                 (
                     LyricOwned::LineTimestamp(origin_lyric),
                     LyricOwned::LineTimestamp(translation_lyric),
                 ) =&gt; {
-                    <span class="kw">let </span>next_translation =
-                        <span class="kw">crate</span>::lyric_providers::utils::find_next_lyric(<span class="kw-2">&amp;</span>elapsed, translation_lyric);
-                    <span class="kw">let </span>next_origin =
-                        <span class="kw">crate</span>::lyric_providers::utils::find_next_lyric(<span class="kw-2">&amp;</span>elapsed, origin_lyric);
-                    set_lyric_with_mode(window, next_translation, next_origin);
+                    <span class="kw">let </span>translation = <span class="kw">crate</span>::lyric_providers::utils::find_next_lyric(
+                        <span class="kw-2">&amp;</span>elapsed,
+                        translation_lyric,
+                    );
+                    <span class="kw">let </span>origin = <span class="kw">crate</span>::lyric_providers::utils::find_next_lyric(
+                        <span class="kw-2">&amp;</span>elapsed,
+                        origin_lyric,
+                    );
+                    set_lyric_with_mode(window, translation, origin);
                 }
                 (LyricOwned::LineTimestamp(origin_lyric), <span class="kw">_</span>) =&gt; {
-                    <span class="kw">let </span>next_origin =
-                        <span class="kw">crate</span>::lyric_providers::utils::find_next_lyric(<span class="kw-2">&amp;</span>elapsed, origin_lyric);
-                    set_lyric_with_mode(window, <span class="prelude-val">None</span>, next_origin);
+                    <span class="kw">let </span>origin = <span class="kw">crate</span>::lyric_providers::utils::find_next_lyric(
+                        <span class="kw-2">&amp;</span>elapsed,
+                        origin_lyric,
+                    );
+                    set_lyric_with_mode(window, <span class="prelude-val">None</span>, origin);
                 }
                 <span class="kw">_ </span>=&gt; (),
             }
-        }
-    });
+        },
+    );
 }
 </code></pre></div></section></main></body></html>
