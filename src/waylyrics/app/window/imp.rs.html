@@ -121,7 +121,6 @@
 <a href="#119" id="119">119</a>
 <a href="#120" id="120">120</a>
 <a href="#121" id="121">121</a>
-<a href="#122" id="122">122</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::Cell;
 <span class="kw">use </span>std::time::SystemTime;
 
@@ -144,7 +143,6 @@
     <span class="kw">pub </span>cache_lyrics: Cell&lt;bool&gt;,
     <span class="kw">pub </span>lyric_display_mode: Cell&lt;LyricDisplay&gt;,
     <span class="kw">pub </span>lyric_start: Cell&lt;<span class="prelude-ty">Option</span>&lt;SystemTime&gt;&gt;,
-    <span class="kw">pub </span>last_played_lyric_index: [Cell&lt;<span class="prelude-ty">Option</span>&lt;usize&gt;&gt;; <span class="number">2</span>],
     <span class="kw">pub </span>lyric_offset_ms: Cell&lt;i64&gt;,
     <span class="kw">pub </span>length_toleration_ms: Cell&lt;u128&gt;,
 
