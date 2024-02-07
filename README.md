@@ -68,7 +68,7 @@ SIGUSR2: 开关GTK CSD
 - [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
 - [lx-music-desktop](https://github.com/lyswhut/lx-music-desktop)
 - [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
-- [youtube-music](https://github.com/th-ch/youtube-music), 歌多，有mv
+- [youtube-music](https://github.com/th-ch/youtube-music), 启用 Shortcut 插件
 
 #### 本地
 

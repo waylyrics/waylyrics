@@ -68,7 +68,7 @@ SIGUSR2: switch gtk decoration on/off
 - [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
 - [lx-music-desktop](https://github.com/lyswhut/lx-music-desktop)
 - [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
-- [youtube-music](https://github.com/th-ch/youtube-music), has lots of songs and MV support
+- [youtube-music](https://github.com/th-ch/youtube-music), enable ShortCut plugin
 
 
 #### local
