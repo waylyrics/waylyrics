@@ -36,6 +36,11 @@ pub fn set_click_pass_through(window: &window::Window, enabled: bool) {
     }
 }
 
+/// set css style for waylyrics
+/// As said in [GTK+ doc], gtk constructs style from the lower priority ones to the upper ones,
+/// We set priority as `STYLE_PROVIDER_PRIORITY + 1` to override user theme
+///
+/// [GTK+ doc]: https://docs.gtk.org/gtk4/type_func.StyleContext.add_provider_for_display.html#parameters
 pub fn merge_css(css: &str) {
     use gtk::gdk::Display as GdkDisplay;
 
@@ -45,7 +50,7 @@ pub fn merge_css(css: &str) {
     gtk::style_context_add_provider_for_display(
         &GdkDisplay::default().expect("Could not connect to a display."),
         &css_provider,
-        gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
+        gtk::STYLE_PROVIDER_PRIORITY_USER + 1,
     );
 }
 
