@@ -15,14 +15,10 @@ pub fn hint_from_player() -> Option<LyricHint> {
             .as_ref()
             .expect("player not exists in lyric fetching");
         let player_name = player.identity();
-        let player_bus_name = player
-            .bus_name()
-            .strip_prefix("org.mpris.MediaPlayer2.")
-            .unwrap();
+        let player_bus_name = player.bus_name_player_name_part();
 
         match (player_name, player_bus_name) {
-            ("ElectronNCM" | "Qcm" | "musicfox", _)
-            | (_, "com.gitee.gmg137.NeteaseCloudMusicGtk4" | "NeteaseCloudMusicGtk4") => {
+            ("ElectronNCM" | "Qcm" | "musicfox", _) | (_, "NeteaseCloudMusicGtk4") => {
                 get_field_from_player(player, |meta| {
                     meta.get("mpris:trackid")
                         .and_then(mpris::MetadataValue::as_str)
