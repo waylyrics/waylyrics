@@ -8,8 +8,6 @@ use super::LYRIC;
 
 pub fn clean_lyric(window: &app::Window) {
     LYRIC.set(Default::default());
-    window.imp().last_played_lyric_index[0].set(None);
-    window.imp().last_played_lyric_index[1].set(None);
     window.imp().lyric_offset_ms.set(0);
 }
 
