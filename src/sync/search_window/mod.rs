@@ -2,15 +2,15 @@ mod imp;
 
 use std::sync::Arc;
 
+use crate::log::{error, info};
 use glib::Object;
 use gtk::glib::clone;
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib, ColumnViewColumn};
 use gtk::{prelude::*, ListItem};
 use tokio::task::JoinSet;
-use crate::log::{error, info};
 
-use crate::{LYRIC_PROVIDERS, glib_spawn, tokio_spawn};
+use crate::{glib_spawn, tokio_spawn, LYRIC_PROVIDERS};
 
 use crate::app::dialog::show_dialog;
 use crate::sync::lyric::cache::update_lyric_cache;
@@ -133,7 +133,9 @@ impl Window {
             for (idx, provider) in providers.iter().enumerate() {
                 let query = query.clone();
                 let provider_id = provider.unique_name();
-                set.spawn(async move { (provider.search_song(&query).await, provider_id, idx, query) });
+                set.spawn(
+                    async move { (provider.search_song(&query).await, provider_id, idx, query) },
+                );
             }
 
             while let Some(Ok((search_result, provider_name, idx, query))) = set.join_next().await {
@@ -151,19 +153,24 @@ impl Window {
                 }
             }
             results
-        }).await.expect("Tokio runtime failure");
+        })
+        .await
+        .expect("Tokio runtime failure");
 
-        let results: Vec<ResultObject> = results.into_iter().map(|(track, idx, provider_name)| {
-            ResultObject::new(
-                track.id,
-                track.title,
-                track.singer,
-                track.album.unwrap_or_default(),
-                track.length.as_secs(),
-                idx,
-                provider_name,
-            )
-        }).collect();
+        let results: Vec<ResultObject> = results
+            .into_iter()
+            .map(|(track, idx, provider_name)| {
+                ResultObject::new(
+                    track.id,
+                    track.title,
+                    track.singer,
+                    track.album.unwrap_or_default(),
+                    track.length.as_secs(),
+                    idx,
+                    provider_name,
+                )
+            })
+            .collect();
         self.results().remove_all();
 
         if results.is_empty() {
@@ -232,9 +239,9 @@ impl Window {
                     error!("provider_idx {} is out of range", provider_idx);
                     return;
                 };
-                
+
                 info!("selected {} from {}", result.id(), provider.unique_name());
-                
+
                 crate::log::debug!("spawned query_lyric from set lyric button");
                 glib_spawn!(async move {
                     let song_id = result.id();
@@ -242,10 +249,7 @@ impl Window {
                         Ok(lyric) => {
                             let olyric = provider.get_lyric(&lyric);
                             let tlyric = provider.get_translated_lyric(&lyric);
-                            LYRIC.with_borrow_mut(|(origin, translation)| {
-                                *origin = olyric;
-                                *translation = tlyric;
-                            });
+                            LYRIC.set((olyric, tlyric));
 
                             if window.imp().use_cache.get() {
                                 TRACK_PLAYING_STATE.with_borrow(|TrackState {cache_path, ..}| {
