@@ -5,8 +5,8 @@ use crate::log::{debug, error, info, warn};
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use serde::{Deserialize, Serialize};
 
-use crate::sync::TrackMeta;
 use crate::sync::{lyric::fetch::fetch_lyric, LYRIC};
+use crate::sync::{LyricState, TrackMeta};
 use crate::{app, lyric_providers::LyricOwned, CACHE_DIR};
 
 /// This will not create cache dir for you -- you should create it yourself.
@@ -53,11 +53,14 @@ pub async fn fetch_lyric_cached(
             let cached_lyric: Result<LyricCache, _> = serde_json::from_str(&lyric);
             match cached_lyric {
                 Ok(LyricCache {
-                    olyric,
-                    tlyric,
+                    olyric: origin,
+                    tlyric: translation,
                     offset,
                 }) => {
-                    LYRIC.set((olyric, tlyric));
+                    LYRIC.set(LyricState {
+                        origin,
+                        translation,
+                    });
                     window.imp().lyric_offset_ms.set(offset);
                     info!("set offset: {offset}ms");
                     return Ok(());
@@ -82,26 +85,31 @@ pub fn update_lyric_cache(cache_path: &PathBuf) {
         return;
     }
 
-    LYRIC.with_borrow(|(olyric, tlyric)| {
-        if (&LyricOwned::None, &LyricOwned::None) == (olyric, tlyric) {
-            return;
-        }
+    LYRIC.with_borrow(
+        |LyricState {
+             origin,
+             translation,
+         }| {
+            if (&LyricOwned::None, &LyricOwned::None) == (origin, translation) {
+                return;
+            }
 
-        let Err(e) = std::fs::write(
-            cache_path,
-            serde_json::to_string(&LyricCache {
-                olyric: olyric.clone(),
-                tlyric: tlyric.clone(),
-                offset: 0,
-            })
-            .expect("cannot serialize lyrics!"),
-        ) else {
-            info!("cached to {cache_path:?}");
-            return;
-        };
+            let Err(e) = std::fs::write(
+                cache_path,
+                serde_json::to_string(&LyricCache {
+                    olyric: origin.clone(),
+                    tlyric: translation.clone(),
+                    offset: 0,
+                })
+                .expect("cannot serialize lyrics!"),
+            ) else {
+                info!("cached to {cache_path:?}");
+                return;
+            };
 
-        error!("cannot write cache {cache_path:?}: {e}");
-    });
+            error!("cannot write cache {cache_path:?}: {e}");
+        },
+    );
 }
 
 #[derive(Deserialize, Serialize)]

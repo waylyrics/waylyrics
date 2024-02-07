@@ -29,8 +29,14 @@ pub struct TrackState {
     pub cache_path: Option<PathBuf>,
 }
 
+#[derive(Clone, Default)]
+pub struct LyricState {
+    pub origin: LyricOwned,
+    pub translation: LyricOwned,
+}
+
 thread_local! {
-    static LYRIC: RefCell<(LyricOwned, LyricOwned)> = const { RefCell::new((LyricOwned::None, LyricOwned::None)) };
+    static LYRIC: RefCell<LyricState> = const { RefCell::new(LyricState { origin: LyricOwned::None, translation: LyricOwned::None }) };
     /// A global variable that contains current playing state (excluding lyrics)
     /// including: track_id, paused, cache_path
     static TRACK_PLAYING_STATE: RefCell<TrackState> = RefCell::new(Default::default());

@@ -1,4 +1,7 @@
-use crate::log::{info, warn};
+use crate::{
+    log::{info, warn},
+    sync::LyricState,
+};
 use glib_macros::clone;
 use gtk::{
     gio::SimpleAction,
@@ -101,10 +104,9 @@ pub fn register_action_remove_lyric(app: &Application, wind: &app::Window) {
     let cache_lyrics = wind.imp().cache_lyrics.get();
     action.connect_activate(clone!(@weak wind as window => move |_, _| {
         // Clear current lyric
-        LYRIC.with_borrow_mut(|(origin, translation)| {
-            *origin = LyricOwned::LineTimestamp(vec![]);
-            *translation = LyricOwned::None;
-        });
+        let origin = LyricOwned::LineTimestamp(vec![]);
+        let translation = LyricOwned::None;
+        LYRIC.set(LyricState{ origin, translation });
         // Update cache
         if cache_lyrics {
             TRACK_PLAYING_STATE.with_borrow(|TrackState{ cache_path, ..}| {

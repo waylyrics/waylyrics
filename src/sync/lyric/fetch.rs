@@ -10,7 +10,7 @@ use gtk::prelude::*;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 
 use crate::lyric_providers::LyricOwned;
-use crate::sync::{TrackMeta, LYRIC};
+use crate::sync::{LyricState, TrackMeta, LYRIC};
 use crate::{app, tokio_spawn, LYRIC_PROVIDERS};
 
 use crate::sync::utils::{self, match_likely_lyric};
@@ -124,26 +124,29 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
 }
 
 fn set_lyric(
-    olyric: LyricOwned,
-    tlyric: LyricOwned,
+    origin: LyricOwned,
+    translation: LyricOwned,
     title: &str,
     artists: &str,
     window: &app::Window,
 ) {
-    debug!("original lyric: {olyric:?}");
-    debug!("translated lyric: {tlyric:?}");
+    debug!("original lyric: {origin:?}");
+    debug!("translated lyric: {translation:?}");
 
     // show info to user if original lyric is empty or no timestamp
-    match &olyric {
+    match &origin {
         LyricOwned::LineTimestamp(_) => (),
         _ => {
             info!("No lyric for {} - {title}", artists,);
         }
     }
 
-    if !matches!(tlyric, LyricOwned::LineTimestamp(_)) {
+    if !matches!(translation, LyricOwned::LineTimestamp(_)) {
         info!("No translated lyric for {} - {title}", artists,);
         app::get_label(window, "below").set_visible(false);
     }
-    LYRIC.set((olyric, tlyric));
+    LYRIC.set(LyricState {
+        origin,
+        translation,
+    });
 }

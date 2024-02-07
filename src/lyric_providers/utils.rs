@@ -18,7 +18,7 @@ pub fn lrc_iter<'a>(
         .collect();
     // handling malformed LRC timestamp by sorting them here
     lrc_vec.sort_by_key(|line| line.start_time);
-    
+
     Ok(lrc_vec)
 }
 

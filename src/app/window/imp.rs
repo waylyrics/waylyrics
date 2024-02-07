@@ -1,5 +1,5 @@
 use std::cell::Cell;
-use std::time::{Duration, SystemTime};
+use std::time::SystemTime;
 
 use gio::Settings;
 use glib::once_cell::sync::OnceCell;
@@ -20,7 +20,7 @@ pub struct Window {
     pub cache_lyrics: Cell<bool>,
     pub lyric_display_mode: Cell<LyricDisplay>,
     pub lyric_start: Cell<Option<SystemTime>>,
-    pub lyric_playing: [Cell<Option<Duration>>; 2],
+    pub last_played_lyric_index: [Cell<Option<usize>>; 2],
     pub lyric_offset_ms: Cell<i64>,
     pub length_toleration_ms: Cell<u128>,
 

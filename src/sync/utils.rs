@@ -2,17 +2,14 @@ use std::time::Duration;
 
 use gtk::subclass::prelude::*;
 
-use crate::{
-    app,
-    lyric_providers::{LyricOwned, SongInfo},
-};
+use crate::{app, lyric_providers::SongInfo};
 
 use super::LYRIC;
 
 pub fn clean_lyric(window: &app::Window) {
-    LYRIC.set((LyricOwned::None, LyricOwned::None));
-    window.imp().lyric_playing[0].set(None);
-    window.imp().lyric_playing[1].set(None);
+    LYRIC.set(Default::default());
+    window.imp().last_played_lyric_index[0].set(None);
+    window.imp().last_played_lyric_index[1].set(None);
     window.imp().lyric_offset_ms.set(0);
 }
 
