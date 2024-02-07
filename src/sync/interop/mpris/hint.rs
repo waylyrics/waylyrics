@@ -21,7 +21,7 @@ pub fn hint_from_player() -> Option<LyricHint> {
             .unwrap();
 
         match (player_name, player_bus_name) {
-            ("ElectronNCM" | "Qcm", _)
+            ("ElectronNCM" | "Qcm" | "musicfox", _)
             | (_, "com.gitee.gmg137.NeteaseCloudMusicGtk4" | "NeteaseCloudMusicGtk4") => {
                 get_field_from_player(player, |meta| {
                     meta.get("mpris:trackid")
