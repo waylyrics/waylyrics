@@ -20,7 +20,7 @@ Simple desktop lyrics made with GTK4 and ❤️.
         - [GTK+](#gtk-1)
         - [Native](#native)
         - [Qt](#qt-1)
-    - [MPRIS-unfriendly Players](#mpris-unfriendly-players)
+    - [Players with bad MPRIS support](#players-with-bad-mpris-support)
   - [Directories](#directories)
   - [Alternatives](#alternatives)
     - [Linux](#linux)
@@ -85,7 +85,7 @@ SIGUSR2: switch gtk decoration on/off
 
 - [VLC](https://www.videolan.org)
 
-### MPRIS-unfriendly Players
+### Players with bad MPRIS support
 
 [netease-cloud-music-gtk]: https://github.com/gmg137/netease-cloud-music-gtk
 [flutter-netease-music]: https://github.com/boyan01/flutter-netease-music
@@ -111,35 +111,32 @@ Typically,
 
 ## Alternatives
 
-[YesPlayMusicOSD]: https://github.com/shih-liang/YesPlayMusicOSD
 [waybar-netease-music-lyrics]: https://github.com/kangxiaoju/waybar-netease-music-lyrics
-[lx-music-desktop]: https://github.com/lyswhut/lx-music-desktop
 [Sunamu]: https://github.com/NyaomiDEV/Sunamu
 [lyricsSeeker]: https://github.com/BruceZhang1993/LyricsSeeker
 [caraoke-plasmoid]: https://github.com/Copay/caraoke-plasmoid
 [desktop-lyric]: https://github.com/tuberry/desktop-lyric
-[autolyric]: https://www.autolyric.com/
+[AutoLyric]: https://www.autolyric.com/
 [Lyricify]: https://github.com/WXRIW/Lyricify-App
 
 ### Linux
 
-For Sway users, you may want use [waybar-netease-music-lyrics].
+| Name                          | Stack       | DE/WM      | Player Support           | #                                               |
+| ----------------------------- | ----------- | ---------- | ------------------------ | ----------------------------------------------- |
+| [waybar-netease-music-lyrics] | bash        | Sway       | 网易云音乐任何播放器[^0] |
+| [Sunamu]                      | Electron/TS | X/Xwayland | MPRIS                    | 可以启动服务器或电子app，歌词显示效果好，功能全 |
+| [desktop-lyric]               | JavaScript  | GNOME      | MPRIS                    |
+| [lyricsSeeker]                | Python+QML  | Plasma     |                          | WIP                                             |
+| [caraoke-plasmoid]            | QML         | Plasma     | MPRIS                    |                                                 |
 
-[lx-music-desktop] has great lyrics support
-
-[Sunamu] could start web-server/launch electron app depends on your choice, and it has good-looking and it's much more feature rich than waylyrics.
-
-BruceZhang1993's [lyricsSeeker] is still WIP, but it may have better-looking and better integration with KDE.
-
-Copay's [caraoke-plasmoid] is currently Plasma-only, though it is easy to remove plasmoid components
-
-If you are using GNOME I will suggest you [desktop-lyric].
+[^0]: https://github.com/kangxiaoju/waybar-netease-music-lyrics/blob/f84810fe1628ca38fa36d88506152d88cf0e77e4/song.sh#L41-L59
 
 ### Windows
 
-[autolyric] supports few of local players
-
-[Lyricify] supports spotify only, while it's Version 3 supports way more online players
+| Name        | Stack                | Player Support                                                                                      | #   |
+| ----------- | -------------------- | --------------------------------------------------------------------------------------------------- | --- |
+| [AutoLyric] | Unknown              | Windows Media Player<br>Foobar2000<br>AIMP<br>Winamp                                                |     |
+| [Lyricify]  | UWP/C#(4+)<br>C#(3-) | Spotify<br>iTunes<br>Apple Music<br>Music Center<br>QQ Music<br>Netease Cloud Music<br>YesPlayMusic |     |
 
 ## Credit
 

@@ -111,7 +111,6 @@ SIGUSR2: 开关GTK CSD
 ## 替代品
 
 [waybar-netease-music-lyrics]: https://github.com/kangxiaoju/waybar-netease-music-lyrics
-[lx-music-desktop]: https://github.com/lyswhut/lx-music-desktop
 [Sunamu]: https://github.com/NyaomiDEV/Sunamu
 [lyricsSeeker]: https://github.com/BruceZhang1993/LyricsSeeker
 [caraoke-plasmoid]: https://github.com/Copay/caraoke-plasmoid
@@ -121,23 +120,22 @@ SIGUSR2: 开关GTK CSD
 
 ### Linux
 
-Sway用户可以看看 [waybar-netease-music-lyrics].
+| 名称                          | 技术栈      | 桌面支持   | 播放器支持               | 备注                                            |
+| ----------------------------- | ----------- | ---------- | ------------------------ | ----------------------------------------------- |
+| [waybar-netease-music-lyrics] | bash        | Sway       | 网易云音乐任何播放器[^0] |
+| [Sunamu]                      | Electron/TS | X/Xwayland | MPRIS                    | 可以启动服务器或电子app，歌词显示效果好，功能全 |
+| [desktop-lyric]               | JavaScript  | GNOME      | MPRIS                    |
+| [lyricsSeeker]                | Python+QML  | Plasma     |                          | WIP                                             |
+| [caraoke-plasmoid]            | QML         | Plasma     | MPRIS                    |                                                 |
 
-[lx-music-desktop] 多来源且带有桌面歌词支持
-
-[Sunamu] 可以启动服务器或电子app，它的歌词显示效果更好，并且比waylyrics的功能更多
-
-如果你是 GNOME 用户，你可以看看 [desktop-lyric]
-
-BruceZhang1993's [lyricsSeeker] is still WIP, but it may have better-looking and better integration with KDE.
-
-Copay's [caraoke-plasmoid] is currently Plasma-only, though it is easy to remove plasmoid components
+[^0]: https://github.com/kangxiaoju/waybar-netease-music-lyrics/blob/f84810fe1628ca38fa36d88506152d88cf0e77e4/song.sh#L41-L59
 
 ### Windows
 
-[可道歌词] 只支持一些本地播放器
-
-[Lyricify] 支持一些在线播放器，4版只支持 Spotify
+| 名称       | 技术栈               | 播放器支持                                                                                          | 备注 |
+| ---------- | -------------------- | --------------------------------------------------------------------------------------------------- | ---- |
+| [可道歌词] | Unknown              | Windows Media Player<br>Foobar2000<br>AIMP<br>Winamp                                                |      |
+| [Lyricify] | UWP/C#(4+)<br>C#(3-) | Spotify<br>iTunes<br>Apple Music<br>Music Center<br>QQ Music<br>Netease Cloud Music<br>YesPlayMusic |      |
 
 ## Credit
 
