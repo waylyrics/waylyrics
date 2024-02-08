@@ -52,8 +52,6 @@ SIGUSR2: switch gtk decoration on/off
 
 #### online
 
-> For Qcm, Feeluown-{netease, qqmusic}, ElectronNCM, YesPlayMusic(OSD), we could get song id directly
-
 ##### GTK+
 
 - [netease-cloud-music-gtk](https://github.com/gmg137/netease-cloud-music-gtk)
@@ -67,7 +65,6 @@ SIGUSR2: switch gtk decoration on/off
 ##### Electron
 
 - [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
-- [lx-music-desktop](https://github.com/lyswhut/lx-music-desktop)
 - [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
 - [youtube-music](https://github.com/th-ch/youtube-music), enable ShortCut plugin
 
@@ -91,7 +88,6 @@ SIGUSR2: switch gtk decoration on/off
 
 ### Players with bad MPRIS support
 
-[netease-cloud-music-gtk]: https://github.com/gmg137/netease-cloud-music-gtk
 [flutter-netease-music]: https://github.com/boyan01/flutter-netease-music
 [youtube-music]: https://github.com/th-ch/youtube-music
 

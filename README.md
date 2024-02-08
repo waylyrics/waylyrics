@@ -52,8 +52,6 @@ SIGUSR2: 开关GTK CSD
 
 #### 在线
 
-> Qcm, Feeluown-{netease, qqmusic}, ElectronNCM, YesPlayMusic(OSD)，可以直接拿歌曲id
-
 ##### GTK+
 
 - [netease-cloud-music-gtk](https://github.com/gmg137/netease-cloud-music-gtk)
@@ -67,7 +65,6 @@ SIGUSR2: 开关GTK CSD
 ##### Electron
 
 - [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
-- [lx-music-desktop](https://github.com/lyswhut/lx-music-desktop)
 - [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
 - [youtube-music](https://github.com/th-ch/youtube-music), 启用 Shortcut 插件
 
@@ -91,7 +88,6 @@ SIGUSR2: 开关GTK CSD
 
 ### 无法使用的播放器
 
-[netease-cloud-music-gtk]: https://github.com/gmg137/netease-cloud-music-gtk
 [flutter-netease-music]: https://github.com/boyan01/flutter-netease-music
 [youtube-music]: https://github.com/th-ch/youtube-music
 
