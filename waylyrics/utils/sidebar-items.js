@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["ParseError"],"fn":["init_dirs","parse_time","register_action_reload_theme","register_action_switch_decoration","register_action_switch_passthrough","register_sigusr2_decoration","reset_lyric_labels"]};
+window.SIDEBAR_ITEMS = {"enum":["ParseError"],"fn":["init_dirs","parse_time","register_action_reload_theme","register_action_switch_decoration","register_action_switch_passthrough","reset_lyric_labels"]};
