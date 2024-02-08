@@ -12,7 +12,7 @@ pub fn lrc_iter<'a>(
         .filter_map(|lrc_item| match lrc_item {
             lrc_nom::LrcItem::Metadata(_) => None,
             lrc_nom::LrcItem::Lyric(lyric, timestamp) => Some(LyricLine {
-                text: lyric,
+                text: lyric.trim(),
                 start_time: Duration::from_millis(timestamp as _),
             }),
         })

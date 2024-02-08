@@ -75,19 +75,21 @@ impl<'a> Lyric<'a> {
         match self {
             Lyric::None => LyricOwned::None,
             Lyric::NoTimestamp => LyricOwned::NoTimestamp,
-            Lyric::LineTimestamp(line) => LyricOwned::LineTimestamp(
-                line.into_iter()
-                    .map(
-                        |LyricLine {
-                             text,
-                             start_time: time,
-                         }| LyricLineOwned {
-                            text: text.into(),
-                            start_time: time,
-                        },
-                    )
+            Lyric::LineTimestamp(lyrics) => LyricOwned::LineTimestamp(
+                lyrics
+                    .into_iter()
+                    .map(|l| LyricLine::<'_>::into_owned(l))
                     .collect(),
             ),
+        }
+    }
+}
+
+impl<'a> LyricLine<'a> {
+    pub fn into_owned(Self { text, start_time }: Self) -> LyricLineOwned {
+        LyricLineOwned {
+            text: text.into(),
+            start_time,
         }
     }
 }
