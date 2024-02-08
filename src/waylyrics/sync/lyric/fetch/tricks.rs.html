@@ -100,30 +100,6 @@
 <a href="#98" id="98">98</a>
 <a href="#99" id="99">99</a>
 <a href="#100" id="100">100</a>
-<a href="#101" id="101">101</a>
-<a href="#102" id="102">102</a>
-<a href="#103" id="103">103</a>
-<a href="#104" id="104">104</a>
-<a href="#105" id="105">105</a>
-<a href="#106" id="106">106</a>
-<a href="#107" id="107">107</a>
-<a href="#108" id="108">108</a>
-<a href="#109" id="109">109</a>
-<a href="#110" id="110">110</a>
-<a href="#111" id="111">111</a>
-<a href="#112" id="112">112</a>
-<a href="#113" id="113">113</a>
-<a href="#114" id="114">114</a>
-<a href="#115" id="115">115</a>
-<a href="#116" id="116">116</a>
-<a href="#117" id="117">117</a>
-<a href="#118" id="118">118</a>
-<a href="#119" id="119">119</a>
-<a href="#120" id="120">120</a>
-<a href="#121" id="121">121</a>
-<a href="#122" id="122">122</a>
-<a href="#123" id="123">123</a>
-<a href="#124" id="124">124</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::ffi::OsStr;
 <span class="kw">use </span>std::fs;
 <span class="kw">use </span>std::path::PathBuf;
@@ -177,8 +153,8 @@
             <span class="macro">crate::log::debug!</span>(<span class="string">"spawned query from get_accurate_lyric"</span>);
 
             <span class="kw">let </span>lyric = provider.query_lyric(<span class="kw-2">&amp;</span>song_id).<span class="kw">await</span>.ok()<span class="question-mark">?</span>;
-            <span class="kw">let </span>olyric = provider.get_lyric(<span class="kw-2">&amp;</span>lyric);
-            <span class="kw">let </span>tlyric = provider.get_translated_lyric(<span class="kw-2">&amp;</span>lyric);
+            <span class="kw">let </span>olyric = provider.parse_lyric(<span class="kw-2">&amp;</span>lyric);
+            <span class="kw">let </span>tlyric = provider.parse_translated_lyric(<span class="kw-2">&amp;</span>lyric);
 
             <span class="prelude-val">Some</span>(LyricHintResult::Lyric { olyric, tlyric })
         }
@@ -206,30 +182,6 @@
 ///
 /// `music_path` should be valid file if it's not empty
 ///
-/// ```rust
-/// use std::path::PathBuf;
-/// use waylyrics::sync::lyric::fetch::tricks::get_lrc_path as get_lyric_path;
-///
-/// // do not assert file extension length &gt; 3
-/// assert_eq!(get_lyric_path(PathBuf::from("/xxx/yyy/test.ts")),
-///             Some(PathBuf::from("/xxx/yyy/test.lrc")));
-///
-/// // neither = 3
-/// assert_eq!(get_lyric_path(PathBuf::from("xxx/yyy/test.m3u8")),
-///             Some(PathBuf::from("xxx/yyy/test.lrc")));
-///
-/// // relative path
-/// assert_eq!(get_lyric_path(PathBuf::from("../test.m3u8")),
-///             Some(PathBuf::from("../test.lrc")));
-///
-/// // non-ASCII path
-/// assert_eq!(get_lyric_path(PathBuf::from("/测试/试试/你好.诶木皮散")),
-///             Some(PathBuf::from("/测试/试试/你好.lrc")));
-///
-/// // empty string
-/// assert_eq!(get_lyric_path(PathBuf::from("")),
-///             None);
-/// ```
 </span><span class="kw">pub fn </span>get_lrc_path(music_path: PathBuf) -&gt; <span class="prelude-ty">Option</span>&lt;PathBuf&gt; {
     <span class="kw">let </span>file_name = music_path.iter().last()<span class="question-mark">?</span>.as_encoded_bytes();
 

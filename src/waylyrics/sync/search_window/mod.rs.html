@@ -575,8 +575,8 @@
                     <span class="kw">let </span>song_id = result.id();
                     <span class="kw">match </span>provider.query_lyric(<span class="kw-2">&amp;</span>song_id).<span class="kw">await </span>{
                         <span class="prelude-val">Ok</span>(lyric) =&gt; {
-                            <span class="kw">let </span>origin = provider.get_lyric(<span class="kw-2">&amp;</span>lyric);
-                            <span class="kw">let </span>translation = provider.get_translated_lyric(<span class="kw-2">&amp;</span>lyric);
+                            <span class="kw">let </span>origin = provider.parse_lyric(<span class="kw-2">&amp;</span>lyric);
+                            <span class="kw">let </span>translation = provider.parse_translated_lyric(<span class="kw-2">&amp;</span>lyric);
                             LYRIC.set(LyricState{ origin, translation });
 
                             <span class="kw">if </span>window.imp().use_cache.get() {

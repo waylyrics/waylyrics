@@ -175,8 +175,8 @@
 }
 
 <span class="kw">pub trait </span>LyricParse {
-    <span class="kw">fn </span>get_lyric(<span class="kw-2">&amp;</span><span class="self">self</span>, store: <span class="kw-2">&amp;</span>LyricStore) -&gt; LyricOwned;
-    <span class="kw">fn </span>get_translated_lyric(<span class="kw-2">&amp;</span><span class="self">self</span>, store: <span class="kw-2">&amp;</span>LyricStore) -&gt; LyricOwned;
+    <span class="kw">fn </span>parse_lyric(<span class="kw-2">&amp;</span><span class="self">self</span>, store: <span class="kw-2">&amp;</span>LyricStore) -&gt; LyricOwned;
+    <span class="kw">fn </span>parse_translated_lyric(<span class="kw-2">&amp;</span><span class="self">self</span>, store: <span class="kw-2">&amp;</span>LyricStore) -&gt; LyricOwned;
 }
 
 <span class="kw">pub fn </span>provider_fmt(
