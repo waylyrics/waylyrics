@@ -2,8 +2,8 @@
 mod lrc {
     use std::time::Duration;
 
+    use crate::lyric_providers::{utils::lrc_iter, LyricLine, LyricLineOwned};
     use anyhow::Result;
-    use waylyrics::lyric_providers::{utils::lrc_iter, LyricLine, LyricLineOwned};
 
     #[test]
     fn simple_lrc_sorted_with_time() -> Result<()> {

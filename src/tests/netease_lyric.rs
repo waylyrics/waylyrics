@@ -1,7 +1,7 @@
 use std::time::Duration;
 
-use waylyrics::lyric_providers::netease::Netease;
-use waylyrics::lyric_providers::{LyricLineOwned, LyricOwned, LyricParse, LyricProvider};
+use crate::lyric_providers::netease::Netease;
+use crate::lyric_providers::{LyricLineOwned, LyricOwned, LyricParse, LyricProvider};
 
 use anyhow::Result;
 

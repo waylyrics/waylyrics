@@ -46,3 +46,6 @@ macro_rules! tokio_spawn {
         $crate::TOKIO_RUNTIME.spawn($future)
     };
 }
+
+#[cfg(test)]
+mod tests;
