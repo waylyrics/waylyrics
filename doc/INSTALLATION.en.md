@@ -1,4 +1,5 @@
 
+- [Download pre-built executable](#download-pre-built-executable)
 - [Install with package manager](#install-with-package-manager)
   - [Arch-based](#arch-based)
   - [openSUSE (Leap \>= 15.5)](#opensuse-leap--155)
@@ -14,6 +15,16 @@
   - [Packging example](#packging-example)
 
 Releases are avaliable in [Actions](https://github.com/waylyrics/waylyrics/actions/workflows/smoketest.yml)
+
+# Download pre-built executable
+
+[builds]: https://github.com/waylyrics/waylyrics/actions/workflows/test.yml
+
+We provide builds in [github action][builds].
+
+Note that these build sets `WAYLYRICS_THEME_PRESETS_DIR` as `/usr/share/waylyrics/themes`,
+
+You could place themes to `${XDG_DATA_HOME}/_themes/`, waylyrics will try this first.
 
 # Install with package manager
 
@@ -59,7 +70,7 @@ cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pan
 
 # Build
 
-waylyrics will load themes from here, unless they were overridden by `${XDG_DATA_HOME}/_theme/<name>.css` 
+waylyrics will load themes from here, unless they were overridden by `${XDG_DATA_HOME}/_themes/<name>.css` 
 
 ```bash
 export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes

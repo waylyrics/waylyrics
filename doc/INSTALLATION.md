@@ -1,4 +1,5 @@
 
+- [下载预编译二进制](#下载预编译二进制)
 - [通过包管理器安装](#通过包管理器安装)
   - [Arch-based](#arch-based)
   - [openSUSE (Leap \>= 15.5)](#opensuse-leap--155)
@@ -14,6 +15,16 @@
   - [打包](#打包)
 
 可以在 [Actions](https://github.com/waylyrics/waylyrics/actions/workflows/smoketest.yml) 下载发布
+
+# 下载预编译二进制
+
+[builds]: https://github.com/waylyrics/waylyrics/actions/workflows/test.yml
+
+我们在 [github action][builds] 提供下载。
+
+这些构建将 `WAYLYRICS_THEME_PRESETS_DIR` 设置为 `/usr/share/waylyrics/themes`，
+
+你可以把主题放在 `${XDG_DATA_HOME}/_themes/`，waylyrics 会先尝试从这里加载。
 
 # 通过包管理器安装
 
@@ -59,7 +70,7 @@ cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pan
 
 # 编译
 
-waylyrics 会从该位置加载主题，除非被 `${XDG_DATA_HOME}/_theme/<name>.css` 覆盖
+waylyrics 会从该位置加载主题，除非被 `${XDG_DATA_HOME}/_themes/<name>.css` 覆盖
 
 ```bash
 export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
