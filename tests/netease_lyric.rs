@@ -5,6 +5,7 @@ use waylyrics::lyric_providers::{LyricLineOwned, LyricOwned, LyricParse, LyricPr
 
 use anyhow::Result;
 
+/// This test cannot be run from offline environment!
 #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
 async fn get_netease_lyric() -> Result<()> {
     let provider = Netease;
