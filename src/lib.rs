@@ -7,7 +7,6 @@ use std::{
 use app::Window;
 use gtk::glib::once_cell::sync::Lazy;
 use lyric_providers::LyricProvider;
-use qqmusic_rs::QQMusicApi;
 use regex::RegexSet;
 
 pub mod app;
@@ -27,7 +26,6 @@ thread_local! {
 }
 
 pub static LYRIC_PROVIDERS: OnceLock<Vec<Arc<dyn LyricProvider>>> = OnceLock::new();
-pub static QQMUSIC_API_CLIENT: OnceLock<Option<QQMusicApi>> = OnceLock::new();
 
 pub const DEFAULT_TEXT: &str = "Waylyrics";
 

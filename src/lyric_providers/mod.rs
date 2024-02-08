@@ -56,6 +56,7 @@ pub trait LyricProvider: LyricParse + Send + Sync {
     ) -> Result<Vec<SongInfo>>;
     async fn search_song(&self, keyword: &str) -> Result<Vec<SongInfo>>;
     fn unique_name(&self) -> &'static str;
+    fn init(self, config: &str) -> Result<()>;
 }
 
 pub trait LyricParse {

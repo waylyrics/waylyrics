@@ -17,9 +17,14 @@ pub struct Netease;
 
 #[async_trait::async_trait]
 impl super::LyricProvider for Netease {
+    fn init(self, _config: &str) -> Result<()> {
+        Ok(())
+    }
+
     fn unique_name(&self) -> &'static str {
         "网易云音乐"
     }
+
     async fn search_song_detailed(
         &self,
         album: &str,

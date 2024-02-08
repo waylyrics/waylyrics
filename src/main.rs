@@ -1,20 +1,18 @@
 use std::path::PathBuf;
-use std::str::FromStr;
 
 use gtk::prelude::*;
 use gtk::{glib, Application};
 
 use anyhow::Result;
 
-use qqmusic_rs::QQMusicApi;
 use regex::RegexSet;
 use waylyrics::app::{self, build_main_window};
 use waylyrics::config::{Config, Triggers};
+use waylyrics::lyric_providers::qqmusic::QQMusic;
 use waylyrics::lyric_providers::utils::get_provider;
+use waylyrics::lyric_providers::LyricProvider;
 use waylyrics::utils::init_dirs;
-use waylyrics::{
-    utils, EXCLUDED_REGEXES, LYRIC_PROVIDERS, MAIN_WINDOW, QQMUSIC_API_CLIENT, THEME_PATH,
-};
+use waylyrics::{utils, EXCLUDED_REGEXES, LYRIC_PROVIDERS, MAIN_WINDOW, THEME_PATH};
 
 use waylyrics::log;
 use waylyrics::sync::*;
@@ -116,8 +114,7 @@ fn build_ui(app: &Application) -> Result<()> {
     }
 
     if let Some(base_url) = qqmusic_api_base_url {
-        let base_url = url::Url::from_str(&base_url)?;
-        let _ = QQMUSIC_API_CLIENT.set(Some(QQMusicApi::new(base_url)));
+        QQMusic.init(&base_url)?;
     }
 
     setup_providers(lyric_search_source);

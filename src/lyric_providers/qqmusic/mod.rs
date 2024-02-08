@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{sync::OnceLock, time::Duration};
 
 use anyhow::Result;
 use qqmusic_rs::{
@@ -8,10 +8,11 @@ use qqmusic_rs::{
     QQMusicApi, SongId,
 };
 use reqwest::Client;
+use url::Url;
 
 use crate::{
     lyric_providers::{default_search_query, SongInfo},
-    tokio_spawn, QQMUSIC_API_CLIENT,
+    tokio_spawn,
 };
 
 use super::{Lyric, LyricOwned, LyricStore};
@@ -21,6 +22,14 @@ pub struct QQMusic;
 
 #[async_trait::async_trait]
 impl super::LyricProvider for QQMusic {
+    fn init(self, base_url: &str) -> Result<()> {
+        let base_url: Url = base_url.parse()?;
+        QQMUSIC_API_CLIENT
+            .set(Some(QQMusicApi::new(base_url)))
+            .expect_err("QQMusicApi could only be init once");
+        Ok(())
+    }
+
     fn unique_name(&self) -> &'static str {
         "QQ音乐"
     }
@@ -162,3 +171,5 @@ pub enum Error {
     #[error("Not implemented")]
     NotImplemented,
 }
+
+pub static QQMUSIC_API_CLIENT: OnceLock<Option<QQMusicApi>> = OnceLock::new();
