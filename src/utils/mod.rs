@@ -5,9 +5,11 @@ use gtk::{
     prelude::*, subclass::prelude::*, Application, NamedAction, Shortcut, ShortcutController,
     ShortcutTrigger,
 };
+use std::path::PathBuf;
 use std::time::Duration;
 
 use crate::app::{get_label, utils::set_click_pass_through, Window};
+use crate::config::Config;
 use crate::DEFAULT_TEXT;
 
 pub fn reset_lyric_labels(window: &Window) {
@@ -105,6 +107,7 @@ pub fn register_action_reload_theme(app: &Application, wind: &Window, trigger: &
     controller.add_shortcut(shortcut);
     wind.add_controller(controller);
 }
+
 pub fn register_action_switch_passthrough(wind: &Window, trigger: &str) {
     let action = SimpleAction::new("switch-passthrough", None);
     let _wind = Window::downgrade(wind);
@@ -126,4 +129,36 @@ pub fn register_action_switch_passthrough(wind: &Window, trigger: &str) {
     controller.set_scope(gtk::ShortcutScope::Global);
     controller.add_shortcut(shortcut);
     wind.add_controller(controller);
+}
+
+pub fn init_dirs() -> Result<(PathBuf, PathBuf)> {
+    let xdg_dirs = xdg::BaseDirectories::with_prefix("waylyrics")?;
+    let config_home = xdg_dirs.get_config_home();
+    let cache_dir = xdg_dirs.get_cache_home();
+    let _ = crate::CONFIG_HOME.set(
+        config_home
+            .to_str()
+            .expect("xdg config home is not valid UTF-8")
+            .into(),
+    );
+    crate::CACHE_DIR.set(
+        cache_dir
+            .to_str()
+            .expect("xdg config home is not valid UTF-8")
+            .into(),
+    );
+
+    std::fs::create_dir_all(&config_home)?;
+    std::fs::create_dir_all(&cache_dir)?;
+    let config_path = config_home.join("config.toml");
+    let user_theme_dir = xdg_dirs.get_data_home().join("_themes");
+
+    if !config_path.exists() {
+        std::fs::write(&config_path, toml::to_string(&Config::default())?)?;
+    }
+    if !user_theme_dir.exists() {
+        std::fs::create_dir_all(&user_theme_dir)?;
+    }
+
+    Ok((config_path, user_theme_dir))
 }
