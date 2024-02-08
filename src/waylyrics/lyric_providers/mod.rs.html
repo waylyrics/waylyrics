@@ -110,6 +110,8 @@
 <a href="#108" id="108">108</a>
 <a href="#109" id="109">109</a>
 <a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>utils;
 <span class="kw">use </span>anyhow::Result;
 
@@ -187,19 +189,21 @@
         <span class="kw">match </span><span class="self">self </span>{
             Lyric::None =&gt; LyricOwned::None,
             Lyric::NoTimestamp =&gt; LyricOwned::NoTimestamp,
-            Lyric::LineTimestamp(line) =&gt; LyricOwned::LineTimestamp(
-                line.into_iter()
-                    .map(
-                        |LyricLine {
-                             text,
-                             start_time: time,
-                         }| LyricLineOwned {
-                            text: text.into(),
-                            start_time: time,
-                        },
-                    )
+            Lyric::LineTimestamp(lyrics) =&gt; LyricOwned::LineTimestamp(
+                lyrics
+                    .into_iter()
+                    .map(|l| LyricLine::&lt;<span class="lifetime">'_</span>&gt;::into_owned(l))
                     .collect(),
             ),
+        }
+    }
+}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; LyricLine&lt;<span class="lifetime">'a</span>&gt; {
+    <span class="kw">pub fn </span>into_owned(<span class="self">Self </span>{ text, start_time }: <span class="self">Self</span>) -&gt; LyricLineOwned {
+        LyricLineOwned {
+            text: text.into(),
+            start_time,
         }
     }
 }
