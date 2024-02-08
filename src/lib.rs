@@ -26,8 +26,6 @@ thread_local! {
     pub static MAIN_WINDOW: RefCell<Option<Window>> = const { RefCell::new(None) };
 }
 
-pub static CONFIG_HOME: OnceLock<String> = OnceLock::new();
-
 pub static LYRIC_PROVIDERS: OnceLock<Vec<Arc<dyn LyricProvider>>> = OnceLock::new();
 pub static QQMUSIC_API_CLIENT: OnceLock<Option<QQMusicApi>> = OnceLock::new();
 
