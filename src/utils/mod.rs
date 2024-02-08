@@ -1,6 +1,5 @@
 use anyhow::Result;
 use gtk::gio::SimpleAction;
-use gtk::glib::{ControlFlow, WeakRef};
 use gtk::{
     prelude::*, subclass::prelude::*, Application, NamedAction, Shortcut, ShortcutController,
     ShortcutTrigger,
