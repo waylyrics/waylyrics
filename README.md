@@ -16,6 +16,7 @@
         - [GTK+](#gtk)
         - [Qt](#qt)
         - [Electron](#electron)
+        - [TUI](#tui)
       - [本地](#本地)
         - [GTK+](#gtk-1)
         - [原生](#原生)
@@ -69,6 +70,10 @@ SIGUSR2: 开关GTK CSD
 - [lx-music-desktop](https://github.com/lyswhut/lx-music-desktop)
 - [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
 - [youtube-music](https://github.com/th-ch/youtube-music), 启用 Shortcut 插件
+
+##### TUI
+
+- [go-musicfox](https://github.com/go-musicfox/go-musicfox)
 
 #### 本地
 

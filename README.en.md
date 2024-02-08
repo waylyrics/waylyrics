@@ -16,6 +16,7 @@ Simple desktop lyrics made with GTK4 and ❤️.
         - [GTK+](#gtk)
         - [Qt](#qt)
         - [Electron](#electron)
+        - [TUI](#tui)
       - [local](#local)
         - [GTK+](#gtk-1)
         - [Native](#native)
@@ -70,6 +71,9 @@ SIGUSR2: switch gtk decoration on/off
 - [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
 - [youtube-music](https://github.com/th-ch/youtube-music), enable ShortCut plugin
 
+##### TUI
+
+- [go-musicfox](https://github.com/go-musicfox/go-musicfox)
 
 #### local
 
