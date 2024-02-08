@@ -121,16 +121,6 @@
 <a href="#119" id="119">119</a>
 <a href="#120" id="120">120</a>
 <a href="#121" id="121">121</a>
-<a href="#122" id="122">122</a>
-<a href="#123" id="123">123</a>
-<a href="#124" id="124">124</a>
-<a href="#125" id="125">125</a>
-<a href="#126" id="126">126</a>
-<a href="#127" id="127">127</a>
-<a href="#128" id="128">128</a>
-<a href="#129" id="129">129</a>
-<a href="#130" id="130">130</a>
-<a href="#131" id="131">131</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Result;
 <span class="kw">use </span>std::time::Duration;
 
@@ -166,12 +156,7 @@
     <span class="kw">async fn </span>query_lyric(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;LyricStore&gt; {
         <span class="kw">let </span>id = id.to_owned();
         <span class="macro">tokio_spawn!</span>(<span class="kw">async move </span>{
-            <span class="kw">let </span>cookie_path = <span class="kw">crate</span>::CONFIG_HOME
-                .get()
-                .expect(<span class="string">"should set CONFIG_HOME"</span>)
-                .to_owned()
-                + <span class="string">"ncm-cookie"</span>;
-            <span class="kw">let </span>api = NcmApi::new(<span class="bool-val">true</span>, <span class="kw-2">&amp;</span>cookie_path);
+            <span class="kw">let </span>api = NcmApi::new(<span class="bool-val">false</span>, <span class="string">""</span>);
             <span class="kw">let </span>id = id.parse()<span class="question-mark">?</span>;
             <span class="kw">let </span>query_result = api.lyric(id).<span class="kw">await</span><span class="question-mark">?</span>;
 
@@ -192,12 +177,7 @@
         <span class="macro">tokio_spawn!</span>(<span class="kw">async move </span>{
             <span class="macro">crate::log::debug!</span>(<span class="string">"search keyword: {keyword}"</span>);
 
-            <span class="kw">let </span>cookie_path = <span class="kw">crate</span>::CONFIG_HOME
-                .get()
-                .expect(<span class="string">"should set CONFIG_HOME"</span>)
-                .to_owned()
-                + <span class="string">"ncm-cookie"</span>;
-            <span class="kw">let </span>api = NcmApi::new(<span class="bool-val">true</span>, <span class="kw-2">&amp;</span>cookie_path);
+            <span class="kw">let </span>api = NcmApi::new(<span class="bool-val">false</span>, <span class="string">""</span>);
             <span class="kw">let </span>search_result = api.search(<span class="kw-2">&amp;</span>keyword, <span class="prelude-val">None</span>).<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">let </span>resp: SearchSongResp = search_result.deserialize()<span class="question-mark">?</span>;
             <span class="macro">crate::log::debug!</span>(<span class="string">"search result: {resp:?}"</span>);

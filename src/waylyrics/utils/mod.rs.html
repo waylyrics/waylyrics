@@ -138,12 +138,6 @@
 <a href="#136" id="136">136</a>
 <a href="#137" id="137">137</a>
 <a href="#138" id="138">138</a>
-<a href="#139" id="139">139</a>
-<a href="#140" id="140">140</a>
-<a href="#141" id="141">141</a>
-<a href="#142" id="142">142</a>
-<a href="#143" id="143">143</a>
-<a href="#144" id="144">144</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Result;
 <span class="kw">use </span>gtk::gio::SimpleAction;
 <span class="kw">use </span>gtk::{
@@ -261,12 +255,6 @@
     <span class="kw">let </span>xdg_dirs = xdg::BaseDirectories::with_prefix(<span class="string">"waylyrics"</span>)<span class="question-mark">?</span>;
     <span class="kw">let </span>config_home = xdg_dirs.get_config_home();
     <span class="kw">let </span>cache_dir = xdg_dirs.get_cache_home();
-    <span class="kw">let _ </span>= <span class="kw">crate</span>::CONFIG_HOME.set(
-        config_home
-            .to_str()
-            .expect(<span class="string">"xdg config home is not valid UTF-8"</span>)
-            .into(),
-    );
     <span class="kw">crate</span>::CACHE_DIR.set(
         cache_dir
             .to_str()
