@@ -59,6 +59,8 @@ cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pan
 
 # 编译
 
+waylyrics 会从该位置加载主题，除非被 `${XDG_DATA_HOME}/_theme/<name>.css` 覆盖
+
 ```bash
 export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 ```

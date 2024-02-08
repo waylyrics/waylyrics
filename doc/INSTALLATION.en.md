@@ -59,6 +59,8 @@ cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pan
 
 # Build
 
+waylyrics will load themes from here, unless they were overridden by `${XDG_DATA_HOME}/_theme/<name>.css` 
+
 ```bash
 export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 ```
