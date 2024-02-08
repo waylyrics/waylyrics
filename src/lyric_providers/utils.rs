@@ -3,6 +3,11 @@ use std::{sync::Arc, time::Duration};
 
 use super::{LyricLine, LyricLineOwned, LyricProvider};
 
+/// parses lrc tags in each line
+/// ignores lines not started with '['
+/// returned `Vec` is sorted by it's Duration
+/// In the case multiple lyrics comes with the same start_time,
+/// they are not reordered between them
 pub fn lrc_iter<'a>(
     lyric_lines: impl Iterator<Item = &'a str>,
 ) -> Result<Vec<LyricLine<'a>>, LrcParseError> {
