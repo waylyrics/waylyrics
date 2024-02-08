@@ -34,13 +34,6 @@ pub fn register_action_disconnect(app: &Application) {
     app.add_action(&action);
 }
 
-pub fn register_sigusr1_disconnect() {
-    glib::unix_signal_add_local(libc::SIGUSR1, move || {
-        clean_player();
-        glib::ControlFlow::Continue
-    });
-}
-
 // TODO: code cleanup
 pub fn register_action_search_lyric(app: &Application, wind: &app::Window, trigger: &str) {
     let action = SimpleAction::new("search-lyric", None);

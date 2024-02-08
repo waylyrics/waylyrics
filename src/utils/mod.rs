@@ -48,25 +48,6 @@ pub enum ParseError {
     IllFormed,
 }
 
-pub fn register_sigusr2_decoration(app: WeakRef<Application>) {
-    gtk::glib::unix_signal_add_local(libc::SIGUSR2, move || {
-        let Some(app) = app.upgrade() else {
-            return ControlFlow::Break;
-        };
-
-        let mut windows = app.windows();
-        if windows.is_empty() {
-            return ControlFlow::Continue;
-        }
-        let window = windows.remove(0);
-
-        let decorated = window.is_decorated();
-        window.set_decorated(!decorated);
-
-        ControlFlow::Continue
-    });
-}
-
 pub fn register_action_switch_decoration(wind: &Window, switch_decoration_trigger: &str) {
     let action = SimpleAction::new("switch-decoration", None);
     let _wind = Window::downgrade(wind);

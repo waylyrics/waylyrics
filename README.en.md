@@ -39,10 +39,6 @@ Also check [desktop file](io.poly000.waylyrics.desktop)
 
 https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871c67e/src/config.rs#L67-L71
 
-SIGUSR1: disconnect from current player
-
-SIGUSR2: switch gtk decoration on/off
-
 ## Requirement
 
 - A player at least supports MPRIS PlaybackStatus, Position and Metadata(with title)

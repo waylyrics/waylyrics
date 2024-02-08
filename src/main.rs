@@ -27,7 +27,7 @@ pub const THEME_PRESETS_DIR: &str = env!("WAYLYRICS_THEME_PRESETS_DIR");
 
 use utils::{
     register_action_reload_theme, register_action_switch_decoration,
-    register_action_switch_passthrough, register_sigusr2_decoration,
+    register_action_switch_passthrough,
 };
 
 fn main() -> Result<glib::ExitCode> {
@@ -146,9 +146,6 @@ fn register_actions(
     register_action_search_lyric(app, wind, &search_lyric);
     register_action_remove_lyric(app, wind);
     register_action_refetch_lyric(app, wind, &refetch_lyric);
-
-    register_sigusr1_disconnect();
-    register_sigusr2_decoration(ObjectExt::downgrade(app));
 }
 
 fn setup_providers(providers_enabled: Vec<String>) {

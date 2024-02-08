@@ -39,10 +39,6 @@
 
 https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871c67e/src/config.rs#L67-L71
 
-SIGUSR1: 断开当前播放器
-
-SIGUSR2: 开关GTK CSD
-
 ## 依赖
 
 - 播放器需至少在MPRIS提供 Position，Metadata(有title)，PlaybackStatus
