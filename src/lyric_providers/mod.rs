@@ -60,8 +60,8 @@ pub trait LyricProvider: LyricParse + Send + Sync {
 }
 
 pub trait LyricParse {
-    fn get_lyric(&self, store: &LyricStore) -> LyricOwned;
-    fn get_translated_lyric(&self, store: &LyricStore) -> LyricOwned;
+    fn parse_lyric(&self, store: &LyricStore) -> LyricOwned;
+    fn parse_translated_lyric(&self, store: &LyricStore) -> LyricOwned;
 }
 
 pub fn provider_fmt(

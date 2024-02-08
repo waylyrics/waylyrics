@@ -247,8 +247,8 @@ impl Window {
                     let song_id = result.id();
                     match provider.query_lyric(&song_id).await {
                         Ok(lyric) => {
-                            let origin = provider.get_lyric(&lyric);
-                            let translation = provider.get_translated_lyric(&lyric);
+                            let origin = provider.parse_lyric(&lyric);
+                            let translation = provider.parse_translated_lyric(&lyric);
                             LYRIC.set(LyricState{ origin, translation });
 
                             if window.imp().use_cache.get() {

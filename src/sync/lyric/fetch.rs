@@ -102,8 +102,8 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
         let provider = &providers[platform_idx];
         match provider.query_lyric(&song_id).await {
             Ok(lyric) => {
-                let olyric = provider.get_lyric(&lyric);
-                let tlyric = provider.get_translated_lyric(&lyric);
+                let olyric = provider.parse_lyric(&lyric);
+                let tlyric = provider.parse_translated_lyric(&lyric);
 
                 info!(
                     "fetched {song_id} from {} with weight {weight}",

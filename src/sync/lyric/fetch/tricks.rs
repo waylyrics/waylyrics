@@ -51,8 +51,8 @@ pub async fn get_lyric_hint_from_player() -> Option<LyricHintResult> {
             crate::log::debug!("spawned query from get_accurate_lyric");
 
             let lyric = provider.query_lyric(&song_id).await.ok()?;
-            let olyric = provider.get_lyric(&lyric);
-            let tlyric = provider.get_translated_lyric(&lyric);
+            let olyric = provider.parse_lyric(&lyric);
+            let tlyric = provider.parse_translated_lyric(&lyric);
 
             Some(LyricHintResult::Lyric { olyric, tlyric })
         }

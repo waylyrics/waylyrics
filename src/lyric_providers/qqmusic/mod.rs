@@ -133,12 +133,12 @@ async fn get_songmid(api: &QQMusicApi, client: &Client, songid: &str) -> Result<
 }
 
 impl super::LyricParse for QQMusic {
-    fn get_lyric(&self, store: &LyricStore) -> LyricOwned {
+    fn parse_lyric(&self, store: &LyricStore) -> LyricOwned {
         let lyric = store.lyric.as_deref();
         verify_lyric(lyric)
     }
 
-    fn get_translated_lyric(&self, store: &LyricStore) -> LyricOwned {
+    fn parse_translated_lyric(&self, store: &LyricStore) -> LyricOwned {
         let lyric = store.tlyric.as_deref();
         verify_lyric(lyric)
     }

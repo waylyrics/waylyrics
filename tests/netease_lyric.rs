@@ -10,7 +10,7 @@ use anyhow::Result;
 async fn get_netease_lyric() -> Result<()> {
     let provider = Netease;
     let lyric_store = provider.query_lyric("708965").await?;
-    let lyric = provider.get_lyric(&lyric_store);
+    let lyric = provider.parse_lyric(&lyric_store);
     let LyricOwned::LineTimestamp(lyrics) = lyric else {
         panic!("cannot get lyric from netease");
     };
