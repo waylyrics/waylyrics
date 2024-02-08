@@ -1,4 +1,4 @@
-name: Smoke test
+name: test
 
 on:
   - push
@@ -22,14 +22,16 @@ jobs:
         sudo apt update
         sudo apt install -y --no-install-recommends libgtk-4-dev libdbus-1-dev pkg-config weston
     - uses: Swatinem/rust-cache@v2
+    - name: Test
+      run: cargo test
     - name: Build
       run: cargo build --release
     - name: Installation
       run: |
         sudo mkdir -p /usr/share/waylyrics
         sudo install -m644 io.poly000.waylyrics.gschema.xml /usr/share/glib-2.0/schemas/
-        sudo install -dm755 /usr/share/waylyrics/themes
-        sudo cp -r themes/* /usr/share/waylyrics/themes/
+        sudo install -dm755 ${WAYLYRICS_THEME_PRESETS_DIR}
+        sudo cp -r themes/* ${WAYLYRICS_THEME_PRESETS_DIR}/
 
         # install schema
         sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
