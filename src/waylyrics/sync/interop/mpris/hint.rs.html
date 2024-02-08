@@ -82,10 +82,6 @@
 <a href="#80" id="80">80</a>
 <a href="#81" id="81">81</a>
 <a href="#82" id="82">82</a>
-<a href="#83" id="83">83</a>
-<a href="#84" id="84">84</a>
-<a href="#85" id="85">85</a>
-<a href="#86" id="86">86</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::str::FromStr;
 
 <span class="kw">use </span>mpris::{Metadata, Player};
@@ -103,14 +99,10 @@
             .as_ref()
             .expect(<span class="string">"player not exists in lyric fetching"</span>);
         <span class="kw">let </span>player_name = player.identity();
-        <span class="kw">let </span>player_bus_name = player
-            .bus_name()
-            .strip_prefix(<span class="string">"org.mpris.MediaPlayer2."</span>)
-            .unwrap();
+        <span class="kw">let </span>player_bus_name = player.bus_name_player_name_part();
 
         <span class="kw">match </span>(player_name, player_bus_name) {
-            (<span class="string">"ElectronNCM" </span>| <span class="string">"Qcm" </span>| <span class="string">"musicfox"</span>, <span class="kw">_</span>)
-            | (<span class="kw">_</span>, <span class="string">"com.gitee.gmg137.NeteaseCloudMusicGtk4" </span>| <span class="string">"NeteaseCloudMusicGtk4"</span>) =&gt; {
+            (<span class="string">"ElectronNCM" </span>| <span class="string">"Qcm"</span>, <span class="kw">_</span>) | (<span class="kw">_</span>, <span class="string">"musicfox" </span>| <span class="string">"NeteaseCloudMusicGtk4"</span>) =&gt; {
                 get_field_from_player(player, |meta| {
                     meta.get(<span class="string">"mpris:trackid"</span>)
                         .and_then(mpris::MetadataValue::as_str)
