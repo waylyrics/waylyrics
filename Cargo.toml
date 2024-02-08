@@ -26,6 +26,7 @@ url = "2.5.0"
 
 # ui
 gtk = { version = "0.7.3", package = "gtk4" }
+glib-macros = "0.18.5"
 
 # lyric providers + parse
 ncmapi = { git = "https://github.com/waylyrics/ncmapi-rs.git", rev = "394e9c2" }
@@ -49,7 +50,6 @@ derivative = "2.2.0"
 # error handling
 anyhow = "1.0.79"
 thiserror = "1.0.56"
-glib-macros = "0.18.5"
 
 # networking
 async-trait = "0.1.77"
