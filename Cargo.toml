@@ -7,9 +7,17 @@ authors = ["poly000"]
 license-file = "LICENSE"
 
 [profile.release]
-lto = true
+lto = "thin"
 strip = true
 panic = "abort"
+
+[profile.dev]
+panic = "abort"
+
+[profile.test]
+debug = "none"
+incremental = true
+lto = "off"
 
 [dependencies]
 mimalloc = { version = "0.1.39", optional = true, default-features = false }
