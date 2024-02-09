@@ -6,6 +6,7 @@ use crate::lyric_providers::{LyricLineOwned, LyricOwned, LyricParse, LyricProvid
 use anyhow::Result;
 
 /// This test cannot be run from offline environment!
+#[cfg(feature = "net-test")]
 #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
 async fn get_netease_lyric() -> Result<()> {
     let provider = Netease;

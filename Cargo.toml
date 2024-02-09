@@ -73,7 +73,8 @@ reqwest = { version = "0.11.23" }
 
 [features]
 mimalloc = ["dep:mimalloc"]
-default = ["mimalloc"]
+net-test = []
+default = ["mimalloc", "net-test"]
 vendored = ["dbus/vendored", "openssl/vendored"]
 
 [target.'cfg(unix)'.dependencies]
