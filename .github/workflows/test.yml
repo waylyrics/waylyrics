@@ -41,6 +41,9 @@ jobs:
         weston --backend=headless-backend.so -Swayland-1 &
         # let weston prepare for 1s
         sleep 1
+        # set config so waylyrics try to initialize QQMusic provider
+        mkdir -p ~/.config/waylyrics
+        echo 'qqmusic-api-base-url = "http://127.0.0.1:3300"' > ~/.config/waylyrics/config.toml
         # start waylyrics
         ret=-1
         WAYLAND_DISPLAY=wayland-1 RUST_BACKTRACE=1 timeout 5s ./target/release/waylyrics || ret=$?
