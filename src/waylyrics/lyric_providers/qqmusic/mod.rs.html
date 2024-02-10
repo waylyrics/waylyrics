@@ -175,6 +175,8 @@
 <a href="#173" id="173">173</a>
 <a href="#174" id="174">174</a>
 <a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{sync::OnceLock, time::Duration};
 
 <span class="kw">use </span>anyhow::Result;
@@ -203,7 +205,7 @@
         <span class="kw">let </span>base_url: Url = base_url.parse()<span class="question-mark">?</span>;
         QQMUSIC_API_CLIENT
             .set(<span class="prelude-val">Some</span>(QQMusicApi::new(base_url)))
-            .expect(<span class="string">"QQMusicApi could only be init once"</span>);
+            .map_err(|<span class="kw">_</span>| Error::ApiClientInited)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 
@@ -343,10 +345,12 @@
 
 <span class="attr">#[derive(thiserror::Error, Debug)]
 </span><span class="kw">pub enum </span>Error {
-    <span class="attr">#[error(<span class="string">"please make sure you configured QQMusicApi base URL"</span>)]
+    <span class="attr">#[error(<span class="string">"Please make sure you had configured QQMusicApi base URL"</span>)]
     </span>ApiClientNotInit,
     <span class="attr">#[error(<span class="string">"Not implemented"</span>)]
     </span>NotImplemented,
+    <span class="attr">#[error(<span class="string">"QQMusicApi already initialized"</span>)]
+    </span>ApiClientInited,
 }
 
 <span class="kw">pub static </span>QQMUSIC_API_CLIENT: OnceLock&lt;<span class="prelude-ty">Option</span>&lt;QQMusicApi&gt;&gt; = OnceLock::new();
