@@ -26,7 +26,7 @@ impl super::LyricProvider for QQMusic {
         let base_url: Url = base_url.parse()?;
         QQMUSIC_API_CLIENT
             .set(Some(QQMusicApi::new(base_url)))
-            .expect("QQMusicApi could only be init once");
+            .map_err(|_| Error::ApiClientInited)?;
         Ok(())
     }
 
@@ -166,10 +166,12 @@ fn verify_lyric(lyric: Option<&str>) -> LyricOwned {
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
-    #[error("please make sure you configured QQMusicApi base URL")]
+    #[error("Please make sure you had configured QQMusicApi base URL")]
     ApiClientNotInit,
     #[error("Not implemented")]
     NotImplemented,
+    #[error("QQMusicApi already initialized")]
+    ApiClientInited,
 }
 
 pub static QQMUSIC_API_CLIENT: OnceLock<Option<QQMusicApi>> = OnceLock::new();
