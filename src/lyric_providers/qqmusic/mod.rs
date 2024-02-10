@@ -26,7 +26,7 @@ impl super::LyricProvider for QQMusic {
         let base_url: Url = base_url.parse()?;
         QQMUSIC_API_CLIENT
             .set(Some(QQMusicApi::new(base_url)))
-            .expect_err("QQMusicApi could only be init once");
+            .expect("QQMusicApi could only be init once");
         Ok(())
     }
 

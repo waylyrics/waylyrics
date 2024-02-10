@@ -38,7 +38,7 @@ glib-macros = "0.18.5"
 
 # lyric providers + parse
 ncmapi = { git = "https://github.com/waylyrics/ncmapi-rs.git", rev = "394e9c2" }
-qqmusic-rs = { git = "https://github.com/waylyrics/qqmusic-rs.git", rev = "402558f" }
+qqmusic-rs = { git = "https://github.com/waylyrics/qqmusic-rs.git", rev = "22e66ba" }
 lrc-nom = "0.2.0"
 
 # logging
