@@ -103,16 +103,16 @@ impl super::LyricProvider for Netease {
 impl super::LyricParse for Netease {
     fn parse_lyric(&self, store: &LyricStore) -> LyricOwned {
         let lyric = store.lyric.as_deref();
-        match_lyric(lyric).into_owned()
+        verify_lyric(lyric).into_owned()
     }
 
     fn parse_translated_lyric(&self, store: &LyricStore) -> LyricOwned {
         let lyric = store.tlyric.as_deref();
-        match_lyric(lyric).into_owned()
+        verify_lyric(lyric).into_owned()
     }
 }
 
-fn match_lyric(lyric: Option<&str>) -> Lyric<'_> {
+fn verify_lyric(lyric: Option<&str>) -> Lyric<'_> {
     match lyric {
         Some("") | None => super::Lyric::None,
         Some(lyric) => {
