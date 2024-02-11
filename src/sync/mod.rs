@@ -12,7 +12,7 @@ mod utils;
 pub use interop::list_player_names;
 pub use lyric::scroll::register_lyric_display;
 
-/// A struct from metadata in mpris::TrackID to avoid track_id and title unwrapping
+/// metadata from connected player
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct TrackMeta {
     pub unique_song_id: Option<String>,
