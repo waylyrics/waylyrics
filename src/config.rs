@@ -26,22 +26,59 @@ pub enum LyricDisplay {
 #[derive(Deserialize, Serialize)]
 #[serde(rename_all = "kebab-case", default)]
 pub struct Config {
+    /// the interval waylyrics updates position/metadata from player
+    ///
+    /// default: "2s"
     pub player_sync_interval: String,
+    /// the way two lyric label align in
+    /// possible values: center, start, end, fill
+    /// also check [GTK+ doc](https://docs.gtk.org/gtk4/enum.Align.html#members)
+    ///
+    /// default: "center"
     pub lyric_align: Align,
+    /// the interval waylyrics refreshes lyric labels
+    ///
+    /// default: "10ms"
     pub lyric_update_interval: String,
+    /// waylyrics matches lyrics with `weights`
+    /// if `(length-lyric_len).abs() < length_toleration`,
+    /// waylyrics set it's weight as zero,
+    /// so mark it a best choice
+    ///
+    /// default: "2s"
     pub length_toleration: String,
+    /// whether to cache lyrics
     /// note: persistenced lyric offset depends on this
+    ///
+    /// default: ture
     pub cache_lyrics: bool,
+    /// whether to allow mouse-click passthrough
+    ///
+    /// default: true
     pub click_pass_through: bool,
+    /// whether to set `visable` as `false` when a label is empty
+    ///
+    /// default: true
     pub hide_label_on_empty_text: bool,
+    /// theme to load (<name>.css)
+    ///
+    /// default: "default"
     pub theme: String,
     pub enable_filter_regex: bool,
+    /// hide lyric if it matches any of these regexies
     /// inspired by LyricX's filter [list](https://github.com/ddddxxx/LyricsX/blob/c16b6a413dda7bc0b793b897522e0c4ee0ffc716/LyricsX/Supporting%20Files/UserDefaults.plist#L31-L62)
     pub filter_regexies: Vec<String>,
+    /// shortcuts when focusing on waylyrics
+    /// for global ones, please install the `.desktop` file
     pub triggers: Triggers,
     pub qqmusic_api_base_url: Option<String>,
     /// avaliable options: 网易云音乐, QQ音乐
     pub lyric_search_source: Vec<String>,
+    /// lyric display mode
+    /// avaliable options:
+    /// - `show_both`: show origin and translated lyric
+    /// - `prefer_translation`: show translated lyric if found any, or show origin lyric
+    /// - `origin`: only to show origin lyric
     pub lyric_display_mode: LyricDisplay,
 }
 
