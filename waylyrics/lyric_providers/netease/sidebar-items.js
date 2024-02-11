@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["match_lyric"],"struct":["Netease"]};
+window.SIDEBAR_ITEMS = {"fn":["verify_lyric"],"struct":["Netease"]};
