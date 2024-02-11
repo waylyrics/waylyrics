@@ -114,16 +114,18 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 [desktop-lyric]: https://github.com/tuberry/desktop-lyric
 [可道歌词]: https://www.autolyric.com/
 [Lyricify]: https://github.com/WXRIW/Lyricify-App
+[osdlyrics]: https://github.com/osdlyrics/osdlyrics
 
 ### Linux
 
-| 名称                          | 技术栈      | 桌面支持   | 播放器支持 | 备注 |
-| ----------------------------- | ----------- | ---------- | ---------- | ---- |
-| [waybar-netease-music-lyrics] | bash        | Sway       | NCM[^0]    |      |
-| [Sunamu]                      | Electron/TS | X/Xwayland | MPRIS      |      |
-| [desktop-lyric]               | JavaScript  | GNOME      | MPRIS      |      |
-| [lyricsSeeker]                | Python+QML  | Plasma     |            | WIP  |
-| [caraoke-plasmoid]            | QML         | Plasma     | MPRIS      |      |
+| 名称                          | 技术栈        | 桌面支持   | 播放器支持 | 备注 |
+| ----------------------------- | ------------- | ---------- | ---------- | ---- |
+| [waybar-netease-music-lyrics] | bash          | Sway       | NCM[^0]    |      |
+| [Sunamu]                      | Electron/TS   | X/Xwayland | MPRIS      |      |
+| [desktop-lyric]               | JavaScript    | GNOME      | MPRIS      |      |
+| [caraoke-plasmoid]            | QML           | Plasma     | MPRIS      |      |
+| [osdlyrics]                   | GTK2/C+Python | X/Xwayland | MPRIS      |      |
+| [lyricsSeeker]                | Python+QML    | Plasma     |            | WIP  |
 
 [^0]: https://github.com/kangxiaoju/waybar-netease-music-lyrics/blob/f84810fe1628ca38fa36d88506152d88cf0e77e4/song.sh#L41-L59
 
