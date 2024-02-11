@@ -10,7 +10,12 @@ use crate::sync::{LyricState, TrackMeta};
 use crate::{app, lyric_providers::LyricOwned, CACHE_DIR};
 
 /// This will not create cache dir for you -- you should create it yourself.
+///
 /// Note that window.imp().cache_lyrics controls whether to cache lyrics.
+///
+/// When `track_meta.title == None`, this returns `None` as well,
+///
+/// because we should not cache lyric for an unknown song
 pub fn get_cache_path(track_meta: &TrackMeta) -> Option<PathBuf> {
     match track_meta {
         TrackMeta {
@@ -39,13 +44,13 @@ pub async fn fetch_lyric_cached(
     window: &app::Window,
 ) -> Result<()> {
     let Some(cache_path) = get_cache_path(track_meta) else {
-        warn!("cannot cache lyric due to missing metadata");
+        warn!("cannot cache lyric due to missing title");
         return fetch_lyric(track_meta, window).await;
     };
 
     info!(
         "cache_path for {}: {cache_path:?}",
-        track_meta.title.as_deref().unwrap_or("Unknown Title")
+        track_meta.title.as_deref().unwrap()
     );
 
     if !ignore_cache {
