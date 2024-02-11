@@ -177,6 +177,10 @@
 <a href="#175" id="175">175</a>
 <a href="#176" id="176">176</a>
 <a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{sync::OnceLock, time::Duration};
 
 <span class="kw">use </span>anyhow::Result;
@@ -229,7 +233,7 @@
             <span class="kw">let </span>client = Client::builder().user_agent(<span class="string">"Waylyrics/0.1"</span>).build()<span class="question-mark">?</span>;
 
             <span class="comment">// might be a little tricky
-            </span><span class="kw">let </span>songid = <span class="kw">if </span>id.parse::&lt;u32&gt;().is_ok() {
+            </span><span class="kw">let </span>songid = <span class="kw">if </span>id.parse::&lt;usize&gt;().is_ok() {
                 SongId::Songid(<span class="kw-2">&amp;</span>id)
             } <span class="kw">else </span>{
                 SongId::Songmid(<span class="kw-2">&amp;</span>id)
@@ -302,6 +306,10 @@
         })
         .<span class="kw">await</span><span class="question-mark">?
     </span>}
+
+    <span class="kw">fn </span>is_likely_songid(<span class="kw-2">&amp;</span><span class="self">self</span>, s: <span class="kw-2">&amp;</span>str) -&gt; bool {
+        (s.len() == <span class="number">14 </span>&amp;&amp; s.starts_with(<span class="string">"0"</span>)) || s.parse::&lt;usize&gt;().is_ok()
+    }
 }
 
 <span class="kw">async fn </span>get_songmid(api: <span class="kw-2">&amp;</span>QQMusicApi, client: <span class="kw-2">&amp;</span>Client, songid: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;String&gt; {
