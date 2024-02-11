@@ -98,6 +98,10 @@ impl super::LyricProvider for Netease {
         })
         .await?
     }
+
+    fn is_likely_songid(&self, s: &str) -> bool {
+        s.parse::<u32>().is_ok()
+    }
 }
 
 impl super::LyricParse for Netease {

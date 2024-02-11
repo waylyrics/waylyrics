@@ -50,7 +50,7 @@ impl super::LyricProvider for QQMusic {
             let client = Client::builder().user_agent("Waylyrics/0.1").build()?;
 
             // might be a little tricky
-            let songid = if id.parse::<u32>().is_ok() {
+            let songid = if id.parse::<usize>().is_ok() {
                 SongId::Songid(&id)
             } else {
                 SongId::Songmid(&id)
@@ -122,6 +122,10 @@ impl super::LyricProvider for QQMusic {
                 .collect())
         })
         .await?
+    }
+
+    fn is_likely_songid(&self, s: &str) -> bool {
+        (s.len() == 14 && s.starts_with("0")) || s.parse::<usize>().is_ok()
     }
 }
 
