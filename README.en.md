@@ -81,6 +81,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 ##### GTK+
 
 - [amberol](https://gitlab.gnome.org/World/amberol)
+- [lollypop](https://github.com/hamonikr/lollypop)
 
 ##### Native
 
