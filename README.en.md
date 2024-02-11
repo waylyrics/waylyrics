@@ -13,6 +13,7 @@ Simple desktop lyrics made with GTK4 and ❤️.
   - [Requirement](#requirement)
     - [Recommended Players](#recommended-players)
       - [online](#online)
+        - [Browser](#browser)
         - [GTK+](#gtk)
         - [Qt](#qt)
         - [Electron](#electron)
@@ -47,6 +48,13 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 ### Recommended Players
 
 #### online
+
+##### Browser
+
+[plasma integration]: https://addons.mozilla.org/en-US/firefox/addon/plasma-integration/
+
+- Chrome
+- Firefox, with [plasma integration]
 
 ##### GTK+
 
@@ -88,11 +96,10 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 [youtube-music]: https://github.com/th-ch/youtube-music
 
 
-| Player                  | OSD | issue                        |
-| ----------------------- | --- | ---------------------------- |
-| Firefox                 | X   | do not provide position call |
-| qqmusic                 | O   | position stays on 0          |
-| [flutter-netease-music] | X   | no mpris support             |
+| Player                  | OSD | issue               |
+| ----------------------- | --- | ------------------- |
+| qqmusic                 | O   | position stays on 0 |
+| [flutter-netease-music] | X   | no mpris support    |
 
 ## Directories
 

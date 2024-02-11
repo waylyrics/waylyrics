@@ -13,6 +13,7 @@
   - [依赖](#依赖)
     - [推荐的播放器](#推荐的播放器)
       - [在线](#在线)
+        - [浏览器](#浏览器)
         - [GTK+](#gtk)
         - [Qt](#qt)
         - [Electron](#electron)
@@ -47,6 +48,13 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 ### 推荐的播放器
 
 #### 在线
+
+##### 浏览器
+
+[plasma integration]: https://addons.mozilla.org/en-US/firefox/addon/plasma-integration/
+
+- Chrome
+- Firefox，加[插件][plasma integration]
 
 ##### GTK+
 
@@ -88,11 +96,10 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 [youtube-music]: https://github.com/th-ch/youtube-music
 
 
-| Player                  | OSD | issue              |
-| ----------------------- | --- | ------------------ |
-| Firefox                 | X   | 不提供播放位置调用 |
-| qqmusic                 | O   | 位置一直为0        |
-| [flutter-netease-music] | X   | 完全不支持mpris    |
+| Player                  | OSD | issue           | 备注 |
+| ----------------------- | --- | --------------- | ---- |
+| qqmusic                 | O   | 位置一直为0     |      |
+| [flutter-netease-music] | X   | 完全不支持mpris |      |
 
 ## 目录
 
