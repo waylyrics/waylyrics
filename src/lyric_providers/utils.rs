@@ -11,7 +11,7 @@ use super::{LyricLine, LyricLineOwned, LyricProvider};
 pub fn lrc_iter<'a>(
     lyric_lines: impl Iterator<Item = &'a str>,
 ) -> Result<Vec<LyricLine<'a>>, LrcParseError> {
-    let filtered_lines = lyric_lines.filter(|l| l.starts_with("["));
+    let filtered_lines = lyric_lines.filter(|l| l.starts_with('['));
     let mut lrc_vec: Vec<_> = parse(filtered_lines)?
         .into_iter()
         .filter_map(|lrc_item| match lrc_item {

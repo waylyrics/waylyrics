@@ -80,7 +80,7 @@ impl<'a> Lyric<'a> {
             Lyric::LineTimestamp(lyrics) => LyricOwned::LineTimestamp(
                 lyrics
                     .into_iter()
-                    .map(|l| LyricLine::<'_>::into_owned(l))
+                    .map(LyricLine::<'_>::into_owned)
                     .collect(),
             ),
         }

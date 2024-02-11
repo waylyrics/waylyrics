@@ -125,7 +125,7 @@ impl super::LyricProvider for QQMusic {
     }
 
     fn is_likely_songid(&self, s: &str) -> bool {
-        (s.len() == 14 && s.starts_with("0")) || s.parse::<usize>().is_ok()
+        (s.len() == 14 && s.starts_with('0')) || s.parse::<usize>().is_ok()
     }
 }
 
