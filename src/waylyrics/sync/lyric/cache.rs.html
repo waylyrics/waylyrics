@@ -128,6 +128,11 @@
 <a href="#126" id="126">126</a>
 <a href="#127" id="127">127</a>
 <a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Result;
 <span class="kw">use </span>std::path::PathBuf;
 
@@ -140,7 +145,12 @@
 <span class="kw">use crate</span>::{app, lyric_providers::LyricOwned, CACHE_DIR};
 
 <span class="doccomment">/// This will not create cache dir for you -- you should create it yourself.
+///
 /// Note that window.imp().cache_lyrics controls whether to cache lyrics.
+///
+/// When `track_meta.title == None`, this returns `None` as well,
+///
+/// because we should not cache lyric for an unknown song
 </span><span class="kw">pub fn </span>get_cache_path(track_meta: <span class="kw-2">&amp;</span>TrackMeta) -&gt; <span class="prelude-ty">Option</span>&lt;PathBuf&gt; {
     <span class="kw">match </span>track_meta {
         TrackMeta {
@@ -169,13 +179,13 @@
     window: <span class="kw-2">&amp;</span>app::Window,
 ) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
     <span class="kw">let </span><span class="prelude-val">Some</span>(cache_path) = get_cache_path(track_meta) <span class="kw">else </span>{
-        <span class="macro">warn!</span>(<span class="string">"cannot cache lyric due to missing metadata"</span>);
+        <span class="macro">warn!</span>(<span class="string">"cannot cache lyric due to missing title"</span>);
         <span class="kw">return </span>fetch_lyric(track_meta, window).<span class="kw">await</span>;
     };
 
     <span class="macro">info!</span>(
         <span class="string">"cache_path for {}: {cache_path:?}"</span>,
-        track_meta.title.as_deref().unwrap_or(<span class="string">"Unknown Title"</span>)
+        track_meta.title.as_deref().unwrap()
     );
 
     <span class="kw">if </span>!ignore_cache {
