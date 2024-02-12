@@ -38,7 +38,7 @@ pub struct Config {
     pub lyric_align: Align,
     /// the interval waylyrics refreshes lyric labels
     ///
-    /// default: "10ms"
+    /// default: "20ms"
     pub lyric_update_interval: String,
     /// waylyrics matches lyrics with `weights`
     /// if `(length-lyric_len).abs() < length_toleration`,
@@ -114,7 +114,7 @@ impl Default for Config {
     fn default() -> Self {
         Self {
             player_sync_interval: "2s".to_owned(),
-            lyric_update_interval: "10ms".to_owned(),
+            lyric_update_interval: "20ms".to_owned(),
             length_toleration: "2s".to_owned(),
             click_pass_through: true,
             hide_label_on_empty_text: true,
