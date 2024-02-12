@@ -209,7 +209,7 @@
     </span><span class="kw">pub </span>lyric_align: Align,
     <span class="doccomment">/// the interval waylyrics refreshes lyric labels
     ///
-    /// default: "10ms"
+    /// default: "20ms"
     </span><span class="kw">pub </span>lyric_update_interval: String,
     <span class="doccomment">/// waylyrics matches lyrics with `weights`
     /// if `(length-lyric_len).abs() &lt; length_toleration`,
@@ -285,7 +285,7 @@
     <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             player_sync_interval: <span class="string">"2s"</span>.to_owned(),
-            lyric_update_interval: <span class="string">"10ms"</span>.to_owned(),
+            lyric_update_interval: <span class="string">"20ms"</span>.to_owned(),
             length_toleration: <span class="string">"2s"</span>.to_owned(),
             click_pass_through: <span class="bool-val">true</span>,
             hide_label_on_empty_text: <span class="bool-val">true</span>,
