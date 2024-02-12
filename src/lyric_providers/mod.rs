@@ -30,7 +30,7 @@ pub enum LyricOwned {
     LineTimestamp(Vec<LyricLineOwned>),
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+#[derive(Clone, Debug, Default, Deserialize, Serialize, PartialEq, Eq)]
 pub struct LyricLineOwned {
     pub text: String,
     pub start_time: Duration,

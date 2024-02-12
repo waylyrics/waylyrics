@@ -50,16 +50,20 @@ fn set_lyric_with_mode(
                 set_lyric(window, origin, "below");
             } else {
                 set_lyric(window, origin, "above");
+                set_lyric(window, Some(&Default::default()), "below");
             }
         }
         LyricDisplay::Origin => {
             set_lyric(window, origin, "above");
+            set_lyric(window, Some(&Default::default()), "below");
         }
         LyricDisplay::PreferTranslation => {
             if translation.is_none() {
                 set_lyric(window, origin, "above");
+                set_lyric(window, Some(&Default::default()), "below");
             } else {
                 set_lyric(window, translation, "above");
+                set_lyric(window, Some(&Default::default()), "below");
             }
         }
     }
@@ -90,21 +94,15 @@ pub fn refresh_lyric(window: &app::Window) {
                     LyricOwned::LineTimestamp(origin_lyric),
                     LyricOwned::LineTimestamp(translation_lyric),
                 ) => {
-                    let translation = crate::lyric_providers::utils::find_next_lyric(
-                        &elapsed,
-                        translation_lyric,
-                    );
-                    let origin = crate::lyric_providers::utils::find_next_lyric(
-                        &elapsed,
-                        origin_lyric,
-                    );
+                    let translation =
+                        crate::lyric_providers::utils::find_next_lyric(&elapsed, translation_lyric);
+                    let origin =
+                        crate::lyric_providers::utils::find_next_lyric(&elapsed, origin_lyric);
                     set_lyric_with_mode(window, translation, origin);
                 }
                 (LyricOwned::LineTimestamp(origin_lyric), _) => {
-                    let origin = crate::lyric_providers::utils::find_next_lyric(
-                        &elapsed,
-                        origin_lyric,
-                    );
+                    let origin =
+                        crate::lyric_providers::utils::find_next_lyric(&elapsed, origin_lyric);
                     set_lyric_with_mode(window, None, origin);
                 }
                 _ => (),
