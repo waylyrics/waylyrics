@@ -19,25 +19,16 @@ jobs:
             - name: Checkout Repository
               uses: actions/checkout@v3
 
-            - name: Install Rust toolchain
-              uses: actions-rs/toolchain@v1
-              with:
-                toolchain: nightly
-                profile: minimal
-                override: true
-                components: rustfmt, rust-src
+            - name: Setup Rust Toolchain
+              uses: dtolnay/rust-toolchain@stable
 
-            
             - name: Install deps
               run: |
                 sudo apt update
                 sudo apt install -y --no-install-recommends libgtk-4-dev libdbus-1-dev pkg-config
 
             - name: Build Documentation
-              uses: actions-rs/cargo@v1
-              with:
-                command: doc
-                args: --all --no-deps --document-private-items
+              run: cargo doc --all --no-deps --document-private-items
 
             - name: Deploy Documentation
               env:
