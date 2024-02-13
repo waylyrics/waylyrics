@@ -19,6 +19,7 @@ pub enum Align {
 pub enum LyricDisplay {
     #[default]
     ShowBoth,
+    ShowBothRev,
     Origin,
     PreferTranslation,
 }
@@ -77,6 +78,7 @@ pub struct Config {
     /// lyric display mode
     /// avaliable options:
     /// - `show_both`: show origin and translated lyric
+    /// - `show_both_rev`: similiar to `show_both`, but origin text are showed below
     /// - `prefer_translation`: show translated lyric if found any, or show origin lyric
     /// - `origin`: only to show origin lyric
     pub lyric_display_mode: LyricDisplay,

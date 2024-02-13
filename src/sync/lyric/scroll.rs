@@ -53,6 +53,15 @@ fn set_lyric_with_mode(
                 set_lyric(window, Some(&Default::default()), "below");
             }
         }
+        LyricDisplay::ShowBothRev => {
+            if translation.is_some() {
+                set_lyric(window, origin, "above");
+                set_lyric(window, translation, "below");
+            } else {
+                set_lyric(window, origin, "above");
+                set_lyric(window, Some(&Default::default()), "below");
+            }
+        }
         LyricDisplay::Origin => {
             set_lyric(window, origin, "above");
             set_lyric(window, Some(&Default::default()), "below");
