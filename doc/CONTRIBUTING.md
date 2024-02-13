@@ -14,3 +14,4 @@ There are numerous of suggestions for pull request of Waylyrics:
 1. Apply `cargo clippy --fix` before committing
 2. Squash your commits if your pull request was about single bug/feature/enhancement
 3. In addition, if you have multiple unrelated features to submit, please try to open separate pull requests for each feature.
+4. Prefer [Conventional Commit](https://www.conventionalcommits.org/)
