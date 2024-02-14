@@ -1,10 +1,10 @@
 # Waylyrics
 
-[![tg-group](https://img.shields.io/badge/tg%20group-open-blue)](https://t.me/+FWgnE0GRDYZhNjc1)
-[![matrix-group](https://img.shields.io/matrix/waylyrics_x:catgirl.cloud.svg?server_fqdn=matrix.catgirl.cloud)](https://matrix.to/#/#waylyrics_x:catgirl.cloud)
-
 <p align="center">
   <img src="img/waylyrics.png" style="height: 30vw"></img>
+  <br />
+  <a href="https://t.me/+FWgnE0GRDYZhNjc1">Telegram</a>&nbsp;|&nbsp;
+  <a href="https://matrix.to/#/#waylyrics_x:catgirl.cloud">Matrix</a>
   <br />
   <a href="https://www.bilibili.com/video/BV1ap421R7nD" target="blank">Feature Preview</a>
 </p>
