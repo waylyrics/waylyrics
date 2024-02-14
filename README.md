@@ -3,9 +3,11 @@
 [![tg-group](https://img.shields.io/badge/tg%20group-open-blue)](https://t.me/+FWgnE0GRDYZhNjc1)
 [![matrix-group](https://img.shields.io/matrix/waylyrics_x:catgirl.cloud.svg?server_fqdn=matrix.catgirl.cloud)](https://matrix.to/#/#waylyrics_x:catgirl.cloud)
 
-桌面歌词，基于GTK4，made with ❤
-
-![](https://github.com/waylyrics/waylyrics/assets/34085039/dd7d9236-b2ae-47da-b4a3-e19a7d10e31b)
+<p align="center">
+  <img src="img/waylyrics.png" style="height: 30vw"></img>
+  <br />
+  <a href="https://www.bilibili.com/video/BV1ap421R7nD" target="blank">功能预览</a>
+</p>
 
 - [Waylyrics](#waylyrics)
   - [构建/安装](#构建安装)
