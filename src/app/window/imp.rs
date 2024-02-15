@@ -2,12 +2,12 @@ use std::cell::Cell;
 use std::time::SystemTime;
 
 use gio::Settings;
-use glib::once_cell::sync::OnceCell;
 use gtk::gio::MenuItem;
 use gtk::glib::Propagation;
 use gtk::prelude::{ObjectExt, ToVariant};
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib, ApplicationWindow, PopoverMenu};
+use std::sync::OnceLock;
 
 use crate::app::utils::set_click_pass_through;
 use crate::app::REMOVE_LYRICS;
@@ -16,7 +16,7 @@ use crate::sync::list_player_names;
 
 #[derive(Default)]
 pub struct Window {
-    pub settings: OnceCell<Settings>,
+    pub settings: OnceLock<Settings>,
     pub cache_lyrics: Cell<bool>,
     pub lyric_display_mode: Cell<LyricDisplay>,
     pub lyric_start: Cell<Option<SystemTime>>,

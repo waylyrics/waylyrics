@@ -11,7 +11,10 @@ use super::window;
 
 pub fn set_click_pass_through(window: &window::Window, enabled: bool) {
     let obj = window;
-    let surface = obj.surface();
+    let Some(surface) = obj.surface() else {
+        return;
+    };
+
     if enabled {
         if !window.is_decorated() {
             surface.set_input_region(&Region::create_rectangle(&RectangleInt::new(0, 0, 0, 0)));

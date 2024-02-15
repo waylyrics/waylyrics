@@ -5,8 +5,8 @@ use std::{
 };
 
 use app::Window;
-use gtk::glib::once_cell::sync::Lazy;
 use lyric_providers::LyricProvider;
+use once_cell::sync::Lazy;
 use regex::RegexSet;
 
 pub mod app;
