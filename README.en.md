@@ -128,14 +128,14 @@ Typically,
 
 ### Linux
 
-| Name                          | Stack         | DE/WM      | Player Support     | #   |
-| ----------------------------- | ------------- | ---------- | ------------------ | --- |
-| [waybar-netease-music-lyrics] | bash          | Sway       | Any NCM Player[^0] |     |
-| [Sunamu]                      | Electron/TS   | X/Xwayland | MPRIS              |     |
-| [desktop-lyric]               | JavaScript    | GNOME      | MPRIS              |     |
-| [caraoke-plasmoid]            | QML           | Plasma     | MPRIS              |     |
-| [osdlyrics]                   | GTK2/C+Python | X/Xwayland | MPRIS              |     |
-| [lyricsSeeker]                | Python+QML    | Plasma     |                    | WIP |
+| Name                          | Stack         | DE/WM         | Player Support     | #   |
+| ----------------------------- | ------------- | ------------- | ------------------ | --- |
+| [waybar-netease-music-lyrics] | bash          | wlroots-based | Any NCM Player[^0] |     |
+| [Sunamu]                      | Electron/TS   | X/Xwayland    | MPRIS              |     |
+| [desktop-lyric]               | JavaScript    | GNOME         | MPRIS              |     |
+| [caraoke-plasmoid]            | QML           | Plasma        | MPRIS              |     |
+| [osdlyrics]                   | GTK2/C+Python | X/Xwayland    | MPRIS              |     |
+| [lyricsSeeker]                | Python+QML    | Plasma        |                    | WIP |
 
 [^0]: https://github.com/kangxiaoju/waybar-netease-music-lyrics/blob/f84810fe1628ca38fa36d88506152d88cf0e77e4/song.sh#L41-L59
 
