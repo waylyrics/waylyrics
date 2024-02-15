@@ -124,12 +124,12 @@
 <span class="kw">use </span>std::time::SystemTime;
 
 <span class="kw">use </span>gio::Settings;
-<span class="kw">use </span>glib::once_cell::sync::OnceCell;
 <span class="kw">use </span>gtk::gio::MenuItem;
 <span class="kw">use </span>gtk::glib::Propagation;
 <span class="kw">use </span>gtk::prelude::{ObjectExt, ToVariant};
 <span class="kw">use </span>gtk::subclass::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>gtk::{gio, glib, ApplicationWindow, PopoverMenu};
+<span class="kw">use </span>std::sync::OnceLock;
 
 <span class="kw">use </span><span class="kw">crate</span>::app::utils::set_click_pass_through;
 <span class="kw">use </span><span class="kw">crate</span>::app::REMOVE_LYRICS;
@@ -138,7 +138,7 @@
 
 <span class="attr">#[derive(Default)]
 </span><span class="kw">pub struct </span>Window {
-    <span class="kw">pub </span>settings: OnceCell&lt;Settings&gt;,
+    <span class="kw">pub </span>settings: OnceLock&lt;Settings&gt;,
     <span class="kw">pub </span>cache_lyrics: Cell&lt;bool&gt;,
     <span class="kw">pub </span>lyric_display_mode: Cell&lt;LyricDisplay&gt;,
     <span class="kw">pub </span>lyric_start: Cell&lt;<span class="prelude-ty">Option</span>&lt;SystemTime&gt;&gt;,

@@ -82,6 +82,9 @@
 <a href="#81" id="81">81</a>
 <a href="#82" id="82">82</a>
 <a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::EXCLUDED_REGEXES;
 
 <span class="kw">use </span>gtk::{
@@ -95,7 +98,10 @@
 
 <span class="kw">pub fn </span>set_click_pass_through(window: <span class="kw-2">&amp;</span>window::Window, enabled: bool) {
     <span class="kw">let </span>obj = window;
-    <span class="kw">let </span>surface = obj.surface();
+    <span class="kw">let </span><span class="prelude-val">Some</span>(surface) = obj.surface() <span class="kw">else </span>{
+        <span class="kw">return</span>;
+    };
+
     <span class="kw">if </span>enabled {
         <span class="kw">if </span>!window.is_decorated() {
             surface.set_input_region(<span class="kw-2">&amp;</span>Region::create_rectangle(<span class="kw-2">&amp;</span>RectangleInt::new(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)));
