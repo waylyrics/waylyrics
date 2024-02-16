@@ -7,6 +7,9 @@ use gtk::{
     Application,
 };
 
+use crate::log::debug;
+
+#[derive(Clone, Debug)]
 pub enum PlayAction {
     Connect(String),
     Disconnect,
@@ -20,6 +23,7 @@ fn register_play_action(app: WeakRef<Application>) -> Sender<PlayAction> {
 
     glib::spawn_future_local(async move {
         while let Ok(action) = rx.recv().await {
+            debug!("Received Play Action {action:?}");
             let (action_name, parameter) = match action {
                 PlayAction::Connect(player_id) => ("connect", Some(player_id.to_variant())),
                 PlayAction::Disconnect => ("disconnect", None),

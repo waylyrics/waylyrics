@@ -8,7 +8,9 @@ use gtk::{
 };
 
 use crate::app::Window;
+use crate::log::debug;
 
+#[derive(Clone, Debug)]
 pub enum UIAction {
     ReloadTheme,
     /// toggles mouse click passthrough
@@ -22,6 +24,8 @@ fn register_ui_action(app: WeakRef<Application>, wind: WeakRef<Window>) -> Sende
 
     glib::spawn_future_local(async move {
         while let Ok(action) = rx.recv().await {
+            debug!("Received UI Action {action:?}");
+
             let Some(app) = app.upgrade() else {
                 continue;
             };
