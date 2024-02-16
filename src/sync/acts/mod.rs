@@ -130,7 +130,7 @@ pub fn register_action_connect(app: &Application) {
     app.add_action(&connect);
 }
 
-pub enum AppAction {
+pub enum PlayAction {
     Connect(String),
     Disconnect,
     RefetchLyric,
@@ -138,7 +138,7 @@ pub enum AppAction {
     SearchLyric,
 }
 
-fn register_app_action(app: WeakRef<Application>) -> mpsc::Sender<AppAction> {
+fn register_app_action(app: WeakRef<Application>) -> mpsc::Sender<PlayAction> {
     let (tx, rx) = mpsc::channel();
 
     glib::idle_add_local(move || {
@@ -147,11 +147,11 @@ fn register_app_action(app: WeakRef<Application>) -> mpsc::Sender<AppAction> {
         };
 
         let (action_name, parameter) = match rx.try_recv() {
-            Ok(AppAction::Connect(player_id)) => ("connect", Some(player_id.to_variant())),
-            Ok(AppAction::Disconnect) => ("disconnect", None),
-            Ok(AppAction::RefetchLyric) => ("refetch-lyric", None),
-            Ok(AppAction::RemoveLyric) => ("remove-lyric", None),
-            Ok(AppAction::SearchLyric) => ("search-lyric", None),
+            Ok(PlayAction::Connect(player_id)) => ("connect", Some(player_id.to_variant())),
+            Ok(PlayAction::Disconnect) => ("disconnect", None),
+            Ok(PlayAction::RefetchLyric) => ("refetch-lyric", None),
+            Ok(PlayAction::RemoveLyric) => ("remove-lyric", None),
+            Ok(PlayAction::SearchLyric) => ("search-lyric", None),
             Err(_) => return glib::ControlFlow::Continue,
         };
 
@@ -168,4 +168,4 @@ pub fn init_app_action_channel(app: WeakRef<Application>) {
     APP_ACTION.set(tx).expect("must only initialize once");
 }
 
-pub static APP_ACTION: OnceLock<mpsc::Sender<AppAction>> = OnceLock::new();
+pub static APP_ACTION: OnceLock<mpsc::Sender<PlayAction>> = OnceLock::new();
