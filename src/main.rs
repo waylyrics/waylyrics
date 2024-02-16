@@ -21,12 +21,12 @@ use tracing_subscriber::filter::{EnvFilter, LevelFilter};
 use tracing_subscriber::prelude::*;
 use tracing_subscriber::{fmt, Registry};
 
-pub const THEME_PRESETS_DIR: &str = env!("WAYLYRICS_THEME_PRESETS_DIR");
-
-use utils::{
+use app::actions::{
     register_action_reload_theme, register_action_switch_decoration,
     register_action_switch_passthrough,
 };
+
+pub const THEME_PRESETS_DIR: &str = env!("WAYLYRICS_THEME_PRESETS_DIR");
 
 fn main() -> Result<glib::ExitCode> {
     Registry::default()

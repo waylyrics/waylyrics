@@ -8,6 +8,7 @@ use crate::{app::utils::set_click_pass_through, config::LyricDisplay, DEFAULT_TE
 
 const WINDOW_MIN_HEIGHT: i32 = 120;
 
+pub mod actions;
 pub mod dialog;
 pub mod utils;
 
