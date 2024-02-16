@@ -109,7 +109,7 @@ fn build_ui(app: &Application) -> Result<()> {
     register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
     register_actions(app, &wind, triggers);
 
-    init_app_action_channel(ObjectExt::downgrade(app));
+    init_play_action_channel(ObjectExt::downgrade(app));
 
     if enable_filter_regex {
         EXCLUDED_REGEXES.set(RegexSet::new(&filter_regexies)?);
