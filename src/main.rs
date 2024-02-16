@@ -17,6 +17,8 @@ use waylyrics::{utils, EXCLUDED_REGEXES, LYRIC_PROVIDERS, MAIN_WINDOW, THEME_PAT
 use waylyrics::log;
 use waylyrics::sync::*;
 
+use waylyrics::app::actions::init_ui_action_channel;
+
 use tracing_subscriber::filter::{EnvFilter, LevelFilter};
 use tracing_subscriber::prelude::*;
 use tracing_subscriber::{fmt, Registry};
@@ -110,6 +112,7 @@ fn build_ui(app: &Application) -> Result<()> {
     register_actions(app, &wind, triggers);
 
     init_play_action_channel(ObjectExt::downgrade(app));
+    init_ui_action_channel(ObjectExt::downgrade(app), ObjectExt::downgrade(&wind));
 
     if enable_filter_regex {
         EXCLUDED_REGEXES.set(RegexSet::new(&filter_regexies)?);

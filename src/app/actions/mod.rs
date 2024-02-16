@@ -1,6 +1,9 @@
+use std::sync::{mpsc, OnceLock};
+
 use crate::app::{utils::set_click_pass_through, Window};
 
 use gtk::gio::SimpleAction;
+use gtk::glib::{self, WeakRef};
 use gtk::{
     prelude::*, subclass::prelude::*, Application, NamedAction, Shortcut, ShortcutController,
     ShortcutTrigger,
@@ -69,3 +72,51 @@ pub fn register_action_switch_passthrough(wind: &Window, trigger: &str) {
     controller.add_shortcut(shortcut);
     wind.add_controller(controller);
 }
+
+pub enum UIAction {
+    ReloadTheme,
+    /// toggles mouse click passthrough
+    SwitchPassthrough,
+    /// toggles GTK+ CSD
+    SwitchDecoration,
+}
+
+fn register_ui_action(
+    app: WeakRef<Application>,
+    wind: WeakRef<Window>,
+) -> mpsc::Sender<UIAction> {
+    let (tx, rx) = mpsc::channel();
+
+    glib::idle_add_local(move || {
+        let Some(app) = app.upgrade() else {
+            return glib::ControlFlow::Continue;
+        };
+        let Some(wind) = wind.upgrade() else {
+            return glib::ControlFlow::Continue;
+        };
+
+        match rx.try_recv() {
+            Err(_) => return glib::ControlFlow::Continue,
+            Ok(action) => match action {
+                UIAction::ReloadTheme => app.activate_action("reload-theme", None),
+                UIAction::SwitchPassthrough => {
+                    ActionGroupExt::activate_action(&wind, "switch-passthrough", None)
+                }
+                UIAction::SwitchDecoration => {
+                    ActionGroupExt::activate_action(&wind, "switch-decoration", None)
+                }
+            },
+        };
+
+        glib::ControlFlow::Continue
+    });
+
+    tx
+}
+
+pub fn init_ui_action_channel(app: WeakRef<Application>, wind: WeakRef<Window>) {
+    let tx = register_ui_action(app, wind);
+    UI_ACTION.set(tx).expect("must only initialize once");
+}
+
+pub static UI_ACTION: OnceLock<mpsc::Sender<UIAction>> = OnceLock::new();
