@@ -48,6 +48,6 @@ pub use acts::{
     register_action_remove_lyric, register_action_search_lyric,
 };
 
-pub use acts::{init_play_action_channel, PlayAction};
+pub use acts::{init_play_action_channel, PlayAction, PLAY_ACTION};
 
 pub use interop::register_sync_task;
