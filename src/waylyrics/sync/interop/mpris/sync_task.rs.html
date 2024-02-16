@@ -244,7 +244,7 @@
             }
             <span class="prelude-val">Err</span>(PlayerStatus::Unsupported(kind)) =&gt; {
                 app::get_label(<span class="kw-2">&amp;</span>window, <span class="string">"above"</span>).set_label(<span class="string">"Unsupported Player"</span>);
-                app::get_label(<span class="kw-2">&amp;</span>window, <span class="string">"below"</span>).set_label(<span class="string">""</span>);
+                app::get_label(<span class="kw-2">&amp;</span>window, <span class="string">"below"</span>).set_label(kind);
 
                 utils::clean_lyric(<span class="kw-2">&amp;</span>window);
                 <span class="macro">error!</span>(kind);
