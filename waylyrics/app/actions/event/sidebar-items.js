@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["UIAction"],"fn":["init_ui_action_channel","register_ui_action"],"static":["UI_ACTION"]};

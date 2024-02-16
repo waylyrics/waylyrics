@@ -50,6 +50,8 @@
 <a href="#49" id="49">49</a>
 <a href="#50" id="50">50</a>
 <a href="#51" id="51">51</a>
+<a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::RefCell;
 <span class="kw">use </span>std::path::PathBuf;
 <span class="kw">use </span>std::time::Duration;
@@ -99,6 +101,8 @@
     register_action_connect, register_action_disconnect, register_action_refetch_lyric,
     register_action_remove_lyric, register_action_search_lyric,
 };
+
+<span class="kw">pub use </span>acts::{init_play_action_channel, PlayAction, PLAY_ACTION};
 
 <span class="kw">pub use </span>interop::register_sync_task;
 </code></pre></div></section></main></body></html>
