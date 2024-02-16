@@ -60,7 +60,7 @@ pub fn register_sync_task(app: WeakRef<Application>, interval: Duration) {
             }
             Err(PlayerStatus::Unsupported(kind)) => {
                 app::get_label(&window, "above").set_label("Unsupported Player");
-                app::get_label(&window, "below").set_label("");
+                app::get_label(&window, "below").set_label(kind);
 
                 utils::clean_lyric(&window);
                 error!(kind);
