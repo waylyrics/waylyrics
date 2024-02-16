@@ -1,5 +1,3 @@
-use std::sync::{mpsc, OnceLock};
-
 use crate::{
     log::{info, warn},
     sync::LyricState,
@@ -7,7 +5,7 @@ use crate::{
 use glib_macros::clone;
 use gtk::{
     gio::SimpleAction,
-    glib::{self, VariantTy, WeakRef},
+    glib::{self, VariantTy},
     prelude::*,
     subclass::prelude::ObjectSubclassIsExt,
     Application,
@@ -130,42 +128,7 @@ pub fn register_action_connect(app: &Application) {
     app.add_action(&connect);
 }
 
-pub enum PlayAction {
-    Connect(String),
-    Disconnect,
-    RefetchLyric,
-    RemoveLyric,
-    SearchLyric,
-}
-
-fn register_play_action(app: WeakRef<Application>) -> mpsc::Sender<PlayAction> {
-    let (tx, rx) = mpsc::channel();
-
-    glib::idle_add_local(move || {
-        let Some(app) = app.upgrade() else {
-            return glib::ControlFlow::Continue;
-        };
-
-        let (action_name, parameter) = match rx.try_recv() {
-            Ok(PlayAction::Connect(player_id)) => ("connect", Some(player_id.to_variant())),
-            Ok(PlayAction::Disconnect) => ("disconnect", None),
-            Ok(PlayAction::RefetchLyric) => ("refetch-lyric", None),
-            Ok(PlayAction::RemoveLyric) => ("remove-lyric", None),
-            Ok(PlayAction::SearchLyric) => ("search-lyric", None),
-            Err(_) => return glib::ControlFlow::Continue,
-        };
-
-        app.activate_action(action_name, parameter.as_ref());
-
-        glib::ControlFlow::Continue
-    });
-
-    tx
-}
-
-pub fn init_play_action_channel(app: WeakRef<Application>) {
-    let tx = register_play_action(app);
-    PLAY_ACTION.set(tx).expect("must only initialize once");
-}
-
-pub static PLAY_ACTION: OnceLock<mpsc::Sender<PlayAction>> = OnceLock::new();
+#[cfg(feature = "tray-icon")]
+mod event;
+#[cfg(feature = "tray-icon")]
+pub use event::{init_play_action_channel, PlayAction, PLAY_ACTION};
