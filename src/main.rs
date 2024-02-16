@@ -17,7 +17,7 @@ use waylyrics::{utils, EXCLUDED_REGEXES, LYRIC_PROVIDERS, MAIN_WINDOW, THEME_PAT
 use waylyrics::log;
 use waylyrics::sync::*;
 
-#[cfg(feature = "tray-icon")]
+#[cfg(feature = "action-event")]
 use waylyrics::app::actions::init_ui_action_channel;
 
 use tracing_subscriber::filter::{EnvFilter, LevelFilter};
@@ -112,9 +112,9 @@ fn build_ui(app: &Application) -> Result<()> {
     register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
     register_actions(app, &wind, triggers);
 
-    #[cfg(feature = "tray-icon")]
+    #[cfg(feature = "action-event")]
     init_play_action_channel(ObjectExt::downgrade(app));
-    #[cfg(feature = "tray-icon")]
+    #[cfg(feature = "action-event")]
     init_ui_action_channel(ObjectExt::downgrade(app), ObjectExt::downgrade(&wind));
 
     if enable_filter_regex {

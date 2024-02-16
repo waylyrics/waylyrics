@@ -79,7 +79,8 @@ mimalloc = ["dep:mimalloc"]
 net-test = []
 default = ["mimalloc", "net-test", "tray-icon"]
 vendored = ["dbus/vendored", "openssl/vendored"]
-tray-icon = ["dep:async-channel"]
+tray-icon = ["action-event"]
+action-event = ["dep:async-channel"]
 
 [target.'cfg(unix)'.dependencies]
 # MPRIS integration

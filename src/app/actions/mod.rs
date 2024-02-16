@@ -70,7 +70,7 @@ pub fn register_action_switch_passthrough(wind: &Window, trigger: &str) {
     wind.add_controller(controller);
 }
 
-#[cfg(feature = "tray-icon")]
+#[cfg(feature = "action-event")]
 mod event;
-#[cfg(feature = "tray-icon")]
+#[cfg(feature = "action-event")]
 pub use event::{init_ui_action_channel, UIAction, UI_ACTION};
