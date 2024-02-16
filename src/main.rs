@@ -1,6 +1,5 @@
 use std::path::PathBuf;
 
-use gtk::glib::clone::Downgrade;
 use gtk::prelude::*;
 use gtk::{glib, Application};
 
