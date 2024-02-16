@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use gtk::glib::clone::Downgrade;
 use gtk::prelude::*;
 use gtk::{glib, Application};
 
@@ -108,6 +109,8 @@ fn build_ui(app: &Application) -> Result<()> {
     register_sync_task(ObjectExt::downgrade(app), player_sync_interval);
     register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
     register_actions(app, &wind, triggers);
+
+    init_app_action_channel(ObjectExt::downgrade(app));
 
     if enable_filter_regex {
         EXCLUDED_REGEXES.set(RegexSet::new(&filter_regexies)?);
