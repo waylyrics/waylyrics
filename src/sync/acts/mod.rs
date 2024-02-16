@@ -138,7 +138,7 @@ pub enum PlayAction {
     SearchLyric,
 }
 
-fn register_app_action(app: WeakRef<Application>) -> mpsc::Sender<PlayAction> {
+fn register_play_action(app: WeakRef<Application>) -> mpsc::Sender<PlayAction> {
     let (tx, rx) = mpsc::channel();
 
     glib::idle_add_local(move || {
@@ -163,9 +163,9 @@ fn register_app_action(app: WeakRef<Application>) -> mpsc::Sender<PlayAction> {
     tx
 }
 
-pub fn init_app_action_channel(app: WeakRef<Application>) {
-    let tx = register_app_action(app);
-    APP_ACTION.set(tx).expect("must only initialize once");
+pub fn init_play_action_channel(app: WeakRef<Application>) {
+    let tx = register_play_action(app);
+    PLAY_ACTION.set(tx).expect("must only initialize once");
 }
 
-pub static APP_ACTION: OnceLock<mpsc::Sender<PlayAction>> = OnceLock::new();
+pub static PLAY_ACTION: OnceLock<mpsc::Sender<PlayAction>> = OnceLock::new();
