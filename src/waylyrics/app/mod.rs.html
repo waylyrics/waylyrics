@@ -92,6 +92,11 @@
 <a href="#91" id="91">91</a>
 <a href="#92" id="92">92</a>
 <a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>window;
 <span class="kw">use </span>std::cell::Cell;
 
@@ -119,6 +124,7 @@
     length_toleration_ms: u128,
     lyric_align: <span class="kw">impl </span>Into&lt;Align&gt; + Copy,
     lyric_display_mode: LyricDisplay,
+    show_default_text_on_idle: bool,
 ) -&gt; Window {
     REMOVE_LYRICS.set(
         <span class="kw">if </span>cache_lyrics {
@@ -172,6 +178,10 @@
     window.set_icon_name(<span class="prelude-val">Some</span>(<span class="kw">crate</span>::APP_ID));
     window.imp().length_toleration_ms.set(length_toleration_ms);
     window.imp().lyric_display_mode.set(lyric_display_mode);
+    window
+        .imp()
+        .show_default_text_on_idle
+        .set(show_default_text_on_idle);
     window
 }
 
