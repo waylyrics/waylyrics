@@ -17,11 +17,13 @@ use crate::sync::list_player_names;
 #[derive(Default)]
 pub struct Window {
     pub settings: OnceLock<Settings>,
+
     pub cache_lyrics: Cell<bool>,
     pub lyric_display_mode: Cell<LyricDisplay>,
     pub lyric_start: Cell<Option<SystemTime>>,
     pub lyric_offset_ms: Cell<i64>,
     pub length_toleration_ms: Cell<u128>,
+    pub show_default_text_on_idle: Cell<bool>,
 
     pub headerbar: gtk::HeaderBar,
     pub menubutton: gtk::MenuButton,

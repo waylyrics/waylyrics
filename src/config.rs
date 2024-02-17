@@ -82,6 +82,12 @@ pub struct Config {
     /// - `prefer_translation`: show translated lyric if found any, or show origin lyric
     /// - `origin`: only to show origin lyric
     pub lyric_display_mode: LyricDisplay,
+    /// if enabled, waylyrics set `DEFAULT_TEXT` on idle,
+    ///
+    /// otherwise it just show nothing
+    ///
+    /// default: true
+    pub show_default_text_on_idle: bool,
 }
 
 /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
@@ -155,6 +161,7 @@ impl Default for Config {
             qqmusic_api_base_url: None,
             lyric_search_source: vec![Netease.unique_name().into()],
             lyric_display_mode: LyricDisplay::default(),
+            show_default_text_on_idle: true,
         }
     }
 }

@@ -77,6 +77,7 @@ fn build_ui(app: &Application) -> Result<()> {
         qqmusic_api_base_url,
         lyric_search_source,
         lyric_display_mode,
+        show_default_text_on_idle,
     } = config;
 
     let player_sync_interval = parse_time(&player_sync_interval)?;
@@ -106,6 +107,7 @@ fn build_ui(app: &Application) -> Result<()> {
         parse_time(length_toleration)?.as_millis(),
         lyric_align,
         lyric_display_mode,
+        show_default_text_on_idle,
     );
 
     register_sync_task(ObjectExt::downgrade(app), player_sync_interval);
