@@ -81,13 +81,16 @@ mimalloc = ["dep:mimalloc"]
 net-test = []
 default = ["mimalloc", "net-test", "tray-icon"]
 vendored = ["dbus/vendored", "openssl/vendored"]
-tray-icon = ["action-event"]
+tray-icon = ["action-event", "ksni"]
 action-event = ["dep:async-channel"]
+ksni = ["dep:ksni"]
 
 [target.'cfg(unix)'.dependencies]
 # MPRIS integration
 dbus = "0.9.7"
+ksni = { version = "0.2.1", optional = true }
 mpris = "2.0.1"
 
 [target.'cfg(windows)'.dependencies]
 dbus = { version = "0.1.0", package = "dbus-dummy" }
+ksni = { version = "0.1.0", package = "ksni-dummy", optional = true }

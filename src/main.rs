@@ -21,6 +21,8 @@ use waylyrics::sync::*;
 
 #[cfg(feature = "action-event")]
 use waylyrics::app::actions::init_ui_action_channel;
+#[cfg(feature = "tray-icon")]
+use waylyrics::tray_icon::start_tray_service;
 
 use tracing_subscriber::filter::{EnvFilter, LevelFilter};
 use tracing_subscriber::prelude::*;
@@ -81,7 +83,14 @@ fn build_ui(app: &Application) -> Result<()> {
         lyric_search_source,
         lyric_display_mode,
         show_default_text_on_idle,
+        #[cfg(feature = "tray-icon")]
+        show_tray_icon,
     } = config;
+
+    #[cfg(feature = "tray-icon")]
+    if show_tray_icon {
+        start_tray_service();
+    }
 
     let player_sync_interval = parse_time(&player_sync_interval)?;
     let lyric_update_interval = parse_time(&lyric_update_interval)?;

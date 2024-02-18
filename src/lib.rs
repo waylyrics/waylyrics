@@ -49,3 +49,6 @@ macro_rules! tokio_spawn {
 
 #[cfg(test)]
 mod tests;
+
+#[cfg(feature = "tray-icon")]
+pub mod tray_icon;

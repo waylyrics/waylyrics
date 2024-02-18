@@ -47,6 +47,9 @@ pub use acts::{
     register_search_lyric,
 };
 
+#[cfg(feature = "action-event")]
 pub use acts::{init_play_action_channel, PlayAction, PLAY_ACTION};
+
 pub use interop::register_sync_task;
+pub use interop::PlayerId;
 pub use utils::{get_lyric_cache_path, set_current_lyric};
