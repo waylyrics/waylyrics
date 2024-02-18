@@ -20,8 +20,11 @@ pub enum Align {
     Fill,
 }
 
-#[derive(Deserialize, Serialize, Clone, Copy, Default)]
+#[derive(
+    Deserialize, Serialize, Clone, Copy, Default, strum::EnumIter, strum::Display, strum::EnumString,
+)]
 #[serde(rename_all = "snake_case")]
+#[strum(serialize_all = "snake_case")]
 pub enum LyricDisplay {
     #[default]
     ShowBoth,

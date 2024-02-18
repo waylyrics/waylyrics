@@ -54,9 +54,9 @@ md5 = "0.7.0"
 
 # utils
 regex = "1.10.3"
-libc = "0.2.153"
 xdg = "2.5.2"
 derivative = "2.2.0"
+strum = { version = "0.26.1", default-features = false, features = ["derive"] }
 
 # error handling
 anyhow = "1.0.79"

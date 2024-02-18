@@ -27,7 +27,8 @@ use tracing_subscriber::prelude::*;
 use tracing_subscriber::{fmt, Registry};
 
 use app::actions::{
-    register_reload_theme, register_switch_decoration, register_switch_passthrough,
+    register_reload_theme, register_set_display_mode, register_switch_decoration,
+    register_switch_passthrough,
 };
 
 pub const THEME_PRESETS_DIR: &str = env!("WAYLYRICS_THEME_PRESETS_DIR");
@@ -148,6 +149,7 @@ fn register_actions(
 ) {
     register_connect(app);
     register_disconnect(app);
+    register_set_display_mode(wind);
     register_switch_decoration(wind, &switch_decoration);
     register_switch_passthrough(wind, &switch_passthrough);
     register_reload_theme(app, wind, &reload_theme);
