@@ -75,9 +75,37 @@
 <a href="#74" id="74">74</a>
 <a href="#75" id="75">75</a>
 <a href="#76" id="76">76</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::app::{utils::set_click_pass_through, Window};
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+</pre></div><pre class="rust"><code><span class="attr">#[cfg(feature = <span class="string">"action-event"</span>)]
+</span><span class="kw">mod </span>event;
+<span class="attr">#[cfg(feature = <span class="string">"action-event"</span>)]
+</span><span class="kw">pub use </span>event::{init_ui_action_channel, UIAction, UI_ACTION};
+
+<span class="kw">use </span><span class="kw">crate</span>::app::{utils::set_click_pass_through, Window};
+
+<span class="kw">use </span><span class="kw">crate</span>::log::error;
 
 <span class="kw">use </span>gtk::gio::SimpleAction;
+<span class="kw">use </span>gtk::glib::VariantTy;
 <span class="kw">use </span>gtk::{
     prelude::<span class="kw-2">*</span>, subclass::prelude::<span class="kw-2">*</span>, Application, NamedAction, Shortcut, ShortcutController,
     ShortcutTrigger,
@@ -147,8 +175,20 @@
     wind.add_controller(controller);
 }
 
-<span class="attr">#[cfg(feature = <span class="string">"action-event"</span>)]
-</span><span class="kw">mod </span>event;
-<span class="attr">#[cfg(feature = <span class="string">"action-event"</span>)]
-</span><span class="kw">pub use </span>event::{init_ui_action_channel, UIAction, UI_ACTION};
+<span class="kw">pub fn </span>register_set_display_mode(wind: <span class="kw-2">&amp;</span>Window) {
+    <span class="kw">let </span>action = SimpleAction::new(<span class="string">"set-display-mode"</span>, <span class="prelude-val">Some</span>(VariantTy::STRING));
+    <span class="kw">let </span>_wind = Window::downgrade(wind);
+    action.connect_activate(<span class="kw">move </span>|<span class="kw">_</span>, display_mode| {
+        <span class="kw">let </span><span class="prelude-val">Some</span>(wind) = _wind.upgrade() <span class="kw">else </span>{ <span class="kw">return </span>};
+        <span class="kw">let </span><span class="prelude-val">Some</span>(display_mode) = display_mode.and_then(|d| d.str()) <span class="kw">else </span>{
+            <span class="kw">return</span>;
+        };
+        <span class="kw">let </span><span class="prelude-val">Ok</span>(display_mode) = display_mode.parse() <span class="kw">else </span>{
+            <span class="macro">error!</span>(<span class="string">"unknown display_mode: {display_mode}"</span>);
+            <span class="kw">return</span>;
+        };
+        wind.imp().lyric_display_mode.set(display_mode);
+    });
+    wind.add_action(<span class="kw-2">&amp;</span>action);
+}
 </code></pre></div></section></main></body></html>

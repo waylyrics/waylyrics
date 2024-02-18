@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["Window"]};
+window.SIDEBAR_ITEMS = {"constant":["SWITCH_PLAYERS"],"struct":["Window"]};

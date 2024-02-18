@@ -122,6 +122,22 @@
 <a href="#121" id="121">121</a>
 <a href="#122" id="122">122</a>
 <a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::Cell;
 <span class="kw">use </span>std::time::SystemTime;
 
@@ -152,7 +168,8 @@
     <span class="kw">pub </span>headerbar: gtk::HeaderBar,
     <span class="kw">pub </span>menubutton: gtk::MenuButton,
     <span class="kw">pub </span>menu: gio::Menu,
-    <span class="kw">pub </span>submenu: gio::Menu,
+    <span class="kw">pub </span>player_menu: gio::Menu,
+    <span class="kw">pub </span>display_mode_menu: gio::Menu,
     <span class="kw">pub </span>clickthrough: Cell&lt;bool&gt;,
 }
 
@@ -184,7 +201,10 @@
             .accessible_role(gtk::AccessibleRole::MenuItemRadio)
             .build();
         <span class="self">self</span>.menu
-            .append_submenu(<span class="prelude-val">Some</span>(<span class="string">"Switch players"</span>), <span class="kw-2">&amp;</span><span class="self">self</span>.submenu);
+            .append_submenu(<span class="prelude-val">Some</span>(SWITCH_PLAYERS), <span class="kw-2">&amp;</span><span class="self">self</span>.player_menu);
+        <span class="self">self</span>.menu
+            .append_submenu(<span class="prelude-val">Some</span>(<span class="string">"Lyric Display Mode"</span>), <span class="kw-2">&amp;</span><span class="self">self</span>.display_mode_menu);
+
         <span class="self">self</span>.menu.append_item(<span class="kw-2">&amp;</span>passthrough);
         <span class="self">self</span>.menu.append_item(<span class="kw-2">&amp;</span>hide_decoration);
         <span class="self">self</span>.menu.append_item(<span class="kw-2">&amp;</span>reload_theme);
@@ -193,12 +213,12 @@
         <span class="self">self</span>.menu.append_item(<span class="kw-2">&amp;</span>refetch_lyric);
         popover.set_menu_model(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.menu));
 
-        <span class="kw">let </span>_submenu = <span class="self">self</span>.submenu.downgrade();
+        <span class="kw">let </span>player_menu_weak = <span class="self">self</span>.player_menu.downgrade();
         popover.connect_visible_submenu_notify(<span class="kw">move </span>|sub| {
-            <span class="kw">if </span><span class="prelude-val">Some</span>(<span class="string">"Switch players"</span>) != sub.visible_submenu().as_deref() {
+            <span class="kw">if </span><span class="prelude-val">Some</span>(SWITCH_PLAYERS) != sub.visible_submenu().as_deref() {
                 <span class="kw">return</span>;
             }
-            <span class="kw">let </span><span class="prelude-val">Some</span>(menu) = _submenu.upgrade() <span class="kw">else </span>{
+            <span class="kw">let </span><span class="prelude-val">Some</span>(menu) = player_menu_weak.upgrade() <span class="kw">else </span>{
                 <span class="kw">return</span>;
             };
             menu.remove_all();
@@ -220,6 +240,16 @@
             }
             menu.append_section(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>section);
         });
+
+        <span class="kw">for </span>display_mode <span class="kw">in </span>&lt;LyricDisplay <span class="kw">as </span>strum::IntoEnumIterator&gt;::iter() {
+            <span class="kw">let </span>display_mode_str = display_mode.to_string();
+            <span class="kw">let </span>item = MenuItem::new(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>display_mode_str.replace(<span class="string">"_"</span>, <span class="string">"__"</span>)), <span class="prelude-val">None</span>);
+            item.set_action_and_target_value(
+                <span class="prelude-val">Some</span>(<span class="string">"win.set-display-mode"</span>),
+                <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>display_mode_str.to_variant()),
+            );
+            <span class="self">self</span>.display_mode_menu.append_item(<span class="kw-2">&amp;</span>item);
+        }
 
         <span class="self">self</span>.menubutton.set_popover(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>popover));
         <span class="self">self</span>.headerbar.pack_end(<span class="kw-2">&amp;</span><span class="self">self</span>.menubutton)
@@ -245,4 +275,6 @@
     }
 }
 <span class="kw">impl </span>ApplicationWindowImpl <span class="kw">for </span>Window {}
+
+<span class="kw">const </span>SWITCH_PLAYERS: <span class="kw-2">&amp;</span>str = <span class="string">"Switch players"</span>;
 </code></pre></div></section></main></body></html>
