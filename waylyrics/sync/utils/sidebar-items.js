@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["clean_lyric","match_likely_lyric"]};
+window.SIDEBAR_ITEMS = {"fn":["clean_lyric","get_lyric_cache_path","match_likely_lyric","set_current_lyric"]};

@@ -143,14 +143,6 @@
 <a href="#142" id="142">142</a>
 <a href="#143" id="143">143</a>
 <a href="#144" id="144">144</a>
-<a href="#145" id="145">145</a>
-<a href="#146" id="146">146</a>
-<a href="#147" id="147">147</a>
-<a href="#148" id="148">148</a>
-<a href="#149" id="149">149</a>
-<a href="#150" id="150">150</a>
-<a href="#151" id="151">151</a>
-<a href="#152" id="152">152</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>tricks;
 
 <span class="kw">use </span>anyhow::Result;
@@ -159,7 +151,6 @@
 <span class="kw">use </span>tokio::task::JoinSet;
 
 <span class="kw">use </span><span class="kw">crate</span>::log::{debug, error, info};
-<span class="kw">use </span>gtk::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>gtk::subclass::prelude::ObjectSubclassIsExt;
 
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::LyricOwned;
@@ -189,7 +180,7 @@
         tricks::get_lyric_hint_from_player().<span class="kw">await
     </span>{
         <span class="macro">info!</span>(<span class="string">"fetched lyrics by player hint"</span>);
-        set_lyric(olyric, tlyric, <span class="kw-2">&amp;</span>title, <span class="kw-2">&amp;</span>artists_str, window);
+        set_lyric(olyric, tlyric, <span class="kw-2">&amp;</span>title, <span class="kw-2">&amp;</span>artists_str);
         <span class="kw">return </span><span class="prelude-val">Ok</span>(());
     }
 
@@ -262,7 +253,7 @@
                     <span class="string">"fetched {song_id} from {} with weight {weight}"</span>,
                     provider.unique_name()
                 );
-                set_lyric(olyric, tlyric, <span class="kw-2">&amp;</span>title, <span class="kw-2">&amp;</span>artists_str, window);
+                set_lyric(olyric, tlyric, <span class="kw-2">&amp;</span>title, <span class="kw-2">&amp;</span>artists_str);
                 <span class="kw">return </span><span class="prelude-val">Ok</span>(());
             }
             <span class="prelude-val">Err</span>(e) =&gt; {
@@ -276,13 +267,7 @@
     <span class="prelude-val">Err</span>(<span class="kw">crate</span>::lyric_providers::Error::NoResult)<span class="question-mark">?
 </span>}
 
-<span class="kw">fn </span>set_lyric(
-    origin: LyricOwned,
-    translation: LyricOwned,
-    title: <span class="kw-2">&amp;</span>str,
-    artists: <span class="kw-2">&amp;</span>str,
-    window: <span class="kw-2">&amp;</span>app::Window,
-) {
+<span class="kw">fn </span>set_lyric(origin: LyricOwned, translation: LyricOwned, title: <span class="kw-2">&amp;</span>str, artists: <span class="kw-2">&amp;</span>str) {
     <span class="macro">debug!</span>(<span class="string">"original lyric: {origin:?}"</span>);
     <span class="macro">debug!</span>(<span class="string">"translated lyric: {translation:?}"</span>);
 
@@ -296,7 +281,6 @@
 
     <span class="kw">if </span>!<span class="macro">matches!</span>(translation, LyricOwned::LineTimestamp(<span class="kw">_</span>)) {
         <span class="macro">info!</span>(<span class="string">"No translated lyric for {} - {title}"</span>, artists,);
-        app::get_label(window, <span class="string">"below"</span>).set_visible(<span class="bool-val">false</span>);
     }
     LYRIC.set(LyricState {
         origin,

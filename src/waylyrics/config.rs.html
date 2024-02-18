@@ -172,11 +172,6 @@
 <a href="#171" id="171">171</a>
 <a href="#172" id="172">172</a>
 <a href="#173" id="173">173</a>
-<a href="#174" id="174">174</a>
-<a href="#175" id="175">175</a>
-<a href="#176" id="176">176</a>
-<a href="#177" id="177">177</a>
-<a href="#178" id="178">178</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>serde::{Deserialize, Serialize};
 
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{netease::Netease, LyricProvider};
@@ -236,10 +231,6 @@
     ///
     /// default: true
     </span><span class="kw">pub </span>click_pass_through: bool,
-    <span class="doccomment">/// whether to set `visable` as `false` when a label is empty
-    ///
-    /// default: true
-    </span><span class="kw">pub </span>hide_label_on_empty_text: bool,
     <span class="doccomment">/// theme to load (&lt;name&gt;.css)
     ///
     /// default: "default"
@@ -304,7 +295,6 @@
             lyric_update_interval: <span class="string">"20ms"</span>.to_owned(),
             length_toleration: <span class="string">"2s"</span>.to_owned(),
             click_pass_through: <span class="bool-val">true</span>,
-            hide_label_on_empty_text: <span class="bool-val">true</span>,
             theme: <span class="string">"default"</span>.into(),
             cache_lyrics: <span class="bool-val">true</span>,
             enable_filter_regex: <span class="bool-val">false</span>,

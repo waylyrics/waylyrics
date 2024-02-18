@@ -132,10 +132,8 @@
 <a href="#131" id="131">131</a>
 <a href="#132" id="132">132</a>
 <a href="#133" id="133">133</a>
-<a href="#134" id="134">134</a>
 </pre></div><pre class="rust"><code><span class="kw">use crate</span>::{
-    log::{info, warn},
-    sync::LyricState,
+    app::search_window, log::{info, warn}, sync::LyricState
 };
 <span class="kw">use </span>glib_macros::clone;
 <span class="kw">use </span>gtk::{
@@ -153,7 +151,7 @@
     lyric_providers::{default_search_query, LyricOwned},
     sync::{
         interop::clean_player, interop::common::update_lyric, lyric::cache::update_lyric_cache,
-        search_window, TrackState, LYRIC, TRACK_PLAYING_STATE,
+        TrackState, LYRIC, TRACK_PLAYING_STATE,
     },
     utils::reset_lyric_labels,
     MAIN_WINDOW,
