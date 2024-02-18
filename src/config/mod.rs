@@ -81,12 +81,13 @@ pub struct Config {
     pub show_default_text_on_idle: bool,
 
     /// the way two lyric label align in
-    /// possible values: center, start, end, fill
+    /// possible values: Center, Start, End, Fill
     /// also check [GTK+ doc](https://docs.gtk.org/gtk4/enum.Align.html#members)
     pub lyric_align: AlignS,
 
     /// shortcuts when focusing on waylyrics
     /// for global ones, please install the `.desktop` file
+    /// also check trigger format at https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html
     pub triggers: Triggers,
 }
 
