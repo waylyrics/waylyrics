@@ -60,8 +60,8 @@ fn build_ui(app: &Application) -> Result<()> {
 
     log::debug!("config path: {:?}", config_path);
     let config = std::fs::read_to_string(&config_path)?;
-    let config: Config = toml::from_str(&config).unwrap();
-    std::fs::write(&config_path, toml::to_string(&config)?)?;
+    let config: Config = toml_edit::de::from_str(&config)?;
+
     let Config {
         player_sync_interval,
         lyric_update_interval,
