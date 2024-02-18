@@ -54,9 +54,6 @@ fn main() -> Result<glib::ExitCode> {
 
     app.connect_activate(|app| build_ui(app).unwrap());
 
-    #[cfg(feature = "tray-icon")]
-    start_tray_service();
-
     Ok(app.run())
 }
 
@@ -86,7 +83,14 @@ fn build_ui(app: &Application) -> Result<()> {
         lyric_search_source,
         lyric_display_mode,
         show_default_text_on_idle,
+        #[cfg(feature = "tray-icon")]
+        show_tray_icon,
     } = config;
+
+    #[cfg(feature = "tray-icon")]
+    if show_tray_icon {
+        start_tray_service();
+    }
 
     let player_sync_interval = parse_time(&player_sync_interval)?;
     let lyric_update_interval = parse_time(&lyric_update_interval)?;

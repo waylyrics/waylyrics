@@ -82,6 +82,10 @@ pub struct Config {
     /// otherwise it just show nothing
     pub show_default_text_on_idle: bool,
 
+    /// whether to run tray-icon service
+    #[cfg(feature = "tray-icon")]
+    pub show_tray_icon: bool,
+
     /// the way two lyric label align in
     /// possible values: Center, Start, End, Fill
     /// also check [GTK+ doc](https://docs.gtk.org/gtk4/enum.Align.html#members)
@@ -138,6 +142,8 @@ impl Default for Config {
             lyric_search_source: vec![Netease.unique_name().into()],
             lyric_display_mode: LyricDisplay::default(),
             show_default_text_on_idle: true,
+            #[cfg(feature = "tray-icon")]
+            show_tray_icon: true,
         }
     }
 }
