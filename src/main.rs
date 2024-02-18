@@ -66,7 +66,6 @@ fn build_ui(app: &Application) -> Result<()> {
         player_sync_interval,
         lyric_update_interval,
         click_pass_through,
-        hide_label_on_empty_text,
         theme,
         cache_lyrics,
         enable_filter_regex,
@@ -99,7 +98,6 @@ fn build_ui(app: &Application) -> Result<()> {
 
     let wind = build_main_window(
         app,
-        hide_label_on_empty_text,
         click_pass_through,
         enable_filter_regex && !filter_regexies.is_empty(),
         cache_lyrics,

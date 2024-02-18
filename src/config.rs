@@ -57,10 +57,6 @@ pub struct Config {
     ///
     /// default: true
     pub click_pass_through: bool,
-    /// whether to set `visable` as `false` when a label is empty
-    ///
-    /// default: true
-    pub hide_label_on_empty_text: bool,
     /// theme to load (<name>.css)
     ///
     /// default: "default"
@@ -119,7 +115,6 @@ impl Default for Config {
             lyric_update_interval: "20ms".to_owned(),
             length_toleration: "2s".to_owned(),
             click_pass_through: true,
-            hide_label_on_empty_text: true,
             theme: "default".into(),
             cache_lyrics: true,
             enable_filter_regex: false,
