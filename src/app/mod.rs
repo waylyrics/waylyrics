@@ -19,7 +19,6 @@ thread_local! {
 
 pub fn build_main_window(
     app: &Application,
-    hide_label_on_empty_text: bool,
     click_pass_through: bool,
     enable_filter_regex: bool,
     cache_lyrics: bool,
@@ -51,7 +50,7 @@ pub fn build_main_window(
         .build();
 
     for label in [&above_label, &below_label] {
-        utils::setup_label(label, hide_label_on_empty_text, enable_filter_regex);
+        utils::setup_label(label, enable_filter_regex);
     }
     above_label.set_vexpand(true);
     below_label.set_vexpand(true);
