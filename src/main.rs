@@ -61,9 +61,9 @@ fn build_ui(app: &Application) -> Result<()> {
     let (config_path, theme_dir) = init_dirs()?;
 
     log::debug!("config path: {:?}", config_path);
-    let config_str = std::fs::read_to_string(&config_path)?;
-    let config: Config = toml_edit::de::from_str(&config_str)?;
-    let config_with_docs = append_comments(&config_str)?;
+    let config = std::fs::read_to_string(&config_path)?;
+    let config: Config = toml_edit::de::from_str(&config)?;
+    let config_with_docs = append_comments(&toml::to_string(&config)?)?;
     fs::write(config_path, config_with_docs)?;
 
     let Config {
