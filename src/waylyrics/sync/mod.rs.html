@@ -51,6 +51,9 @@
 <a href="#50" id="50">50</a>
 <a href="#51" id="51">51</a>
 <a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::RefCell;
 <span class="kw">use </span>std::path::PathBuf;
 <span class="kw">use </span>std::time::Duration;
@@ -100,7 +103,10 @@
     register_search_lyric,
 };
 
-<span class="kw">pub use </span>acts::{init_play_action_channel, PlayAction, PLAY_ACTION};
+<span class="attr">#[cfg(feature = <span class="string">"action-event"</span>)]
+</span><span class="kw">pub use </span>acts::{init_play_action_channel, PlayAction, PLAY_ACTION};
+
 <span class="kw">pub use </span>interop::register_sync_task;
+<span class="kw">pub use </span>interop::PlayerId;
 <span class="kw">pub use </span>utils::{get_lyric_cache_path, set_current_lyric};
 </code></pre></div></section></main></body></html>

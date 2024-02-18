@@ -50,6 +50,9 @@
 <a href="#49" id="49">49</a>
 <a href="#50" id="50">50</a>
 <a href="#51" id="51">51</a>
+<a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     cell::RefCell,
     path::PathBuf,
@@ -101,4 +104,7 @@
 
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests;
+
+<span class="attr">#[cfg(feature = <span class="string">"tray-icon"</span>)]
+</span><span class="kw">pub mod </span>tray_icon;
 </code></pre></div></section></main></body></html>

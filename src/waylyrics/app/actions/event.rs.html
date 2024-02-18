@@ -62,6 +62,11 @@
 <a href="#61" id="61">61</a>
 <a href="#62" id="62">62</a>
 <a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::OnceLock;
 
 <span class="kw">use </span>async_channel::Sender;
@@ -83,6 +88,8 @@
     </span>SwitchDecoration,
     <span class="doccomment">/// set new lyric display mode
     </span>SetDisplayMode(String),
+    <span class="doccomment">/// Quit Waylyrics
+    </span>Quit,
 }
 
 <span class="kw">fn </span>register_ui_action(app: WeakRef&lt;Application&gt;, wind: WeakRef&lt;Window&gt;) -&gt; Sender&lt;UIAction&gt; {
@@ -112,6 +119,9 @@
                     <span class="string">"set-display-mode"</span>,
                     <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>display_mode.to_variant()),
                 ),
+                UIAction::Quit =&gt; {
+                    wind.close();
+                }
             }
         }
     });

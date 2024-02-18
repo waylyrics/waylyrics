@@ -168,6 +168,11 @@
 <a href="#167" id="167">167</a>
 <a href="#168" id="168">168</a>
 <a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>documented::DocumentedFields;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 
@@ -223,7 +228,6 @@
 
     <span class="doccomment">/// whether to allow mouse-click passthrough
     </span><span class="kw">pub </span>click_pass_through: bool,
-
     <span class="doccomment">/// theme to load (&lt;name&gt;.css)
     </span><span class="kw">pub </span>theme: String,
 
@@ -252,6 +256,10 @@
     <span class="doccomment">/// if enabled, waylyrics will set `DEFAULT_TEXT` on idle,
     /// otherwise it just show nothing
     </span><span class="kw">pub </span>show_default_text_on_idle: bool,
+
+    <span class="doccomment">/// whether to run tray-icon service
+    </span><span class="attr">#[cfg(feature = <span class="string">"tray-icon"</span>)]
+    </span><span class="kw">pub </span>show_tray_icon: bool,
 
     <span class="doccomment">/// the way two lyric label align in
     /// possible values: Center, Start, End, Fill
@@ -309,6 +317,8 @@
             lyric_search_source: <span class="macro">vec!</span>[Netease.unique_name().into()],
             lyric_display_mode: LyricDisplay::default(),
             show_default_text_on_idle: <span class="bool-val">true</span>,
+            <span class="attr">#[cfg(feature = <span class="string">"tray-icon"</span>)]
+            </span>show_tray_icon: <span class="bool-val">true</span>,
         }
     }
 }
