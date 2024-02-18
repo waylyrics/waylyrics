@@ -21,6 +21,8 @@ use waylyrics::sync::*;
 
 #[cfg(feature = "action-event")]
 use waylyrics::app::actions::init_ui_action_channel;
+#[cfg(feature = "tray-icon")]
+use waylyrics::tray_icon::start_tray_service;
 
 use tracing_subscriber::filter::{EnvFilter, LevelFilter};
 use tracing_subscriber::prelude::*;
@@ -51,6 +53,9 @@ fn main() -> Result<glib::ExitCode> {
         .build();
 
     app.connect_activate(|app| build_ui(app).unwrap());
+
+    #[cfg(feature = "tray-icon")]
+    start_tray_service();
 
     Ok(app.run())
 }
