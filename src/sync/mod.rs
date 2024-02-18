@@ -43,10 +43,10 @@ thread_local! {
 
 mod acts;
 pub use acts::{
-    register_action_connect, register_action_disconnect, register_action_refetch_lyric,
-    register_action_remove_lyric, register_action_search_lyric,
+    register_connect, register_disconnect, register_refetch_lyric, register_remove_lyric,
+    register_search_lyric,
 };
 
 pub use acts::{init_play_action_channel, PlayAction, PLAY_ACTION};
 pub use interop::register_sync_task;
-pub use utils::{set_current_lyric, get_lyric_cache_path};
+pub use utils::{get_lyric_cache_path, set_current_lyric};

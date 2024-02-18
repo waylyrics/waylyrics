@@ -27,8 +27,7 @@ use tracing_subscriber::prelude::*;
 use tracing_subscriber::{fmt, Registry};
 
 use app::actions::{
-    register_action_reload_theme, register_action_switch_decoration,
-    register_action_switch_passthrough,
+    register_reload_theme, register_switch_decoration, register_switch_passthrough,
 };
 
 pub const THEME_PRESETS_DIR: &str = env!("WAYLYRICS_THEME_PRESETS_DIR");
@@ -147,14 +146,14 @@ fn register_actions(
         refetch_lyric,
     }: Triggers,
 ) {
-    register_action_connect(app);
-    register_action_disconnect(app);
-    register_action_switch_decoration(wind, &switch_decoration);
-    register_action_switch_passthrough(wind, &switch_passthrough);
-    register_action_reload_theme(app, wind, &reload_theme);
-    register_action_search_lyric(app, wind, &search_lyric);
-    register_action_remove_lyric(app, wind);
-    register_action_refetch_lyric(app, wind, &refetch_lyric);
+    register_connect(app);
+    register_disconnect(app);
+    register_switch_decoration(wind, &switch_decoration);
+    register_switch_passthrough(wind, &switch_passthrough);
+    register_reload_theme(app, wind, &reload_theme);
+    register_search_lyric(app, wind, &search_lyric);
+    register_remove_lyric(app, wind);
+    register_refetch_lyric(app, wind, &refetch_lyric);
 }
 
 fn setup_providers(providers_enabled: Vec<String>) {

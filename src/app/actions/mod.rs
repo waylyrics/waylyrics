@@ -6,7 +6,7 @@ use gtk::{
     ShortcutTrigger,
 };
 
-pub fn register_action_switch_decoration(wind: &Window, switch_decoration_trigger: &str) {
+pub fn register_switch_decoration(wind: &Window, switch_decoration_trigger: &str) {
     let action = SimpleAction::new("switch-decoration", None);
     let _wind = Window::downgrade(wind);
     action.connect_activate(move |_, _| {
@@ -26,7 +26,7 @@ pub fn register_action_switch_decoration(wind: &Window, switch_decoration_trigge
     wind.add_controller(controller);
 }
 
-pub fn register_action_reload_theme(app: &Application, wind: &Window, trigger: &str) {
+pub fn register_reload_theme(app: &Application, wind: &Window, trigger: &str) {
     let action = SimpleAction::new("reload-theme", None);
     action.connect_activate(move |_, _| {
         crate::THEME_PATH.with_borrow(|theme_path| {
@@ -47,7 +47,7 @@ pub fn register_action_reload_theme(app: &Application, wind: &Window, trigger: &
     wind.add_controller(controller);
 }
 
-pub fn register_action_switch_passthrough(wind: &Window, trigger: &str) {
+pub fn register_switch_passthrough(wind: &Window, trigger: &str) {
     let action = SimpleAction::new("switch-passthrough", None);
     let _wind = Window::downgrade(wind);
     action.connect_activate(move |_, _| {
