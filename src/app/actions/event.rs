@@ -19,6 +19,8 @@ pub enum UIAction {
     SwitchDecoration,
     /// set new lyric display mode
     SetDisplayMode(String),
+    /// Quit Waylyrics
+    Quit,
 }
 
 fn register_ui_action(app: WeakRef<Application>, wind: WeakRef<Window>) -> Sender<UIAction> {
@@ -48,6 +50,9 @@ fn register_ui_action(app: WeakRef<Application>, wind: WeakRef<Window>) -> Sende
                     "set-display-mode",
                     Some(&display_mode.to_variant()),
                 ),
+                UIAction::Quit => {
+                    wind.close();
+                }
             }
         }
     });
