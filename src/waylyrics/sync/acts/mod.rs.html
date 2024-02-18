@@ -132,8 +132,12 @@
 <a href="#131" id="131">131</a>
 <a href="#132" id="132">132</a>
 <a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
 </pre></div><pre class="rust"><code><span class="kw">use crate</span>::{
-    app::search_window, log::{info, warn}, sync::LyricState
+    app::search_window,
+    log::{info, warn},
+    sync::LyricState,
 };
 <span class="kw">use </span>glib_macros::clone;
 <span class="kw">use </span>gtk::{
@@ -159,7 +163,7 @@
 
 <span class="kw">use </span><span class="kw">crate</span>::sync::interop::connect_player_with_id;
 
-<span class="kw">pub fn </span>register_action_disconnect(app: <span class="kw-2">&amp;</span>Application) {
+<span class="kw">pub fn </span>register_disconnect(app: <span class="kw-2">&amp;</span>Application) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"disconnect"</span>, <span class="prelude-val">None</span>);
     action.connect_activate(|<span class="kw">_</span>, <span class="kw">_</span>| {
         clean_player();
@@ -168,7 +172,7 @@
 }
 
 <span class="comment">// TODO: code cleanup
-</span><span class="kw">pub fn </span>register_action_search_lyric(app: <span class="kw-2">&amp;</span>Application, wind: <span class="kw-2">&amp;</span>app::Window, trigger: <span class="kw-2">&amp;</span>str) {
+</span><span class="kw">pub fn </span>register_search_lyric(app: <span class="kw-2">&amp;</span>Application, wind: <span class="kw-2">&amp;</span>app::Window, trigger: <span class="kw-2">&amp;</span>str) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"search-lyric"</span>, <span class="prelude-val">None</span>);
     <span class="kw">let </span>cache_lyrics = wind.imp().cache_lyrics.get();
     action.connect_activate(<span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
@@ -196,7 +200,7 @@
     utils::bind_shortcut(<span class="string">"app.search-lyric"</span>, wind, trigger);
 }
 
-<span class="kw">pub fn </span>register_action_refetch_lyric(app: <span class="kw-2">&amp;</span>Application, window: <span class="kw-2">&amp;</span>app::Window, trigger: <span class="kw-2">&amp;</span>str) {
+<span class="kw">pub fn </span>register_refetch_lyric(app: <span class="kw-2">&amp;</span>Application, window: <span class="kw-2">&amp;</span>app::Window, trigger: <span class="kw-2">&amp;</span>str) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"refetch-lyric"</span>, <span class="prelude-val">None</span>);
     action.connect_activate(<span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
         <span class="kw">let </span>metainfo = TRACK_PLAYING_STATE
@@ -225,7 +229,7 @@
     utils::bind_shortcut(<span class="string">"app.refetch-lyric"</span>, window, trigger);
 }
 
-<span class="kw">pub fn </span>register_action_remove_lyric(app: <span class="kw-2">&amp;</span>Application, wind: <span class="kw-2">&amp;</span>app::Window) {
+<span class="kw">pub fn </span>register_remove_lyric(app: <span class="kw-2">&amp;</span>Application, wind: <span class="kw-2">&amp;</span>app::Window) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"remove-lyric"</span>, <span class="prelude-val">None</span>);
     <span class="kw">let </span>cache_lyrics = wind.imp().cache_lyrics.get();
     action.connect_activate(<span class="macro">clone!</span>(@weak wind <span class="kw">as </span>window =&gt; <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
@@ -248,7 +252,7 @@
     app.add_action(<span class="kw-2">&amp;</span>action);
 }
 
-<span class="kw">pub fn </span>register_action_connect(app: <span class="kw-2">&amp;</span>Application) {
+<span class="kw">pub fn </span>register_connect(app: <span class="kw-2">&amp;</span>Application) {
     <span class="kw">let </span>connect = SimpleAction::new(<span class="string">"connect"</span>, <span class="prelude-val">Some</span>(VariantTy::STRING));
     connect.connect_activate(|<span class="kw">_</span>, player_id| {
         <span class="kw">let </span><span class="prelude-val">Some</span>(player_id) = player_id.and_then(|p| p.str()) <span class="kw">else </span>{

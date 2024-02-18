@@ -83,7 +83,7 @@
     ShortcutTrigger,
 };
 
-<span class="kw">pub fn </span>register_action_switch_decoration(wind: <span class="kw-2">&amp;</span>Window, switch_decoration_trigger: <span class="kw-2">&amp;</span>str) {
+<span class="kw">pub fn </span>register_switch_decoration(wind: <span class="kw-2">&amp;</span>Window, switch_decoration_trigger: <span class="kw-2">&amp;</span>str) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"switch-decoration"</span>, <span class="prelude-val">None</span>);
     <span class="kw">let </span>_wind = Window::downgrade(wind);
     action.connect_activate(<span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
@@ -103,7 +103,7 @@
     wind.add_controller(controller);
 }
 
-<span class="kw">pub fn </span>register_action_reload_theme(app: <span class="kw-2">&amp;</span>Application, wind: <span class="kw-2">&amp;</span>Window, trigger: <span class="kw-2">&amp;</span>str) {
+<span class="kw">pub fn </span>register_reload_theme(app: <span class="kw-2">&amp;</span>Application, wind: <span class="kw-2">&amp;</span>Window, trigger: <span class="kw-2">&amp;</span>str) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"reload-theme"</span>, <span class="prelude-val">None</span>);
     action.connect_activate(<span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
         <span class="kw">crate</span>::THEME_PATH.with_borrow(|theme_path| {
@@ -124,7 +124,7 @@
     wind.add_controller(controller);
 }
 
-<span class="kw">pub fn </span>register_action_switch_passthrough(wind: <span class="kw-2">&amp;</span>Window, trigger: <span class="kw-2">&amp;</span>str) {
+<span class="kw">pub fn </span>register_switch_passthrough(wind: <span class="kw-2">&amp;</span>Window, trigger: <span class="kw-2">&amp;</span>str) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"switch-passthrough"</span>, <span class="prelude-val">None</span>);
     <span class="kw">let </span>_wind = Window::downgrade(wind);
     action.connect_activate(<span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {

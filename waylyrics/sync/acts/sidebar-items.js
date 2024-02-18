@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["register_action_connect","register_action_disconnect","register_action_refetch_lyric","register_action_remove_lyric","register_action_search_lyric"],"mod":["event","utils"]};
+window.SIDEBAR_ITEMS = {"fn":["register_connect","register_disconnect","register_refetch_lyric","register_remove_lyric","register_search_lyric"],"mod":["event","utils"]};
