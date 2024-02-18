@@ -1,3 +1,4 @@
+pub mod search_window;
 mod window;
 use std::cell::Cell;
 

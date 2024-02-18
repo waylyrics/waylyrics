@@ -14,7 +14,7 @@ use crate::{glib_spawn, tokio_spawn, LYRIC_PROVIDERS};
 
 use crate::app::dialog::show_dialog;
 use crate::sync::lyric::cache::update_lyric_cache;
-use crate::sync::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
+use crate::sync::{get_lyric_cache_path, set_current_lyric, LyricState};
 
 glib::wrapper! {
     pub struct ResultObject(ObjectSubclass<imp::ResultObject>);
@@ -249,14 +249,13 @@ impl Window {
                         Ok(lyric) => {
                             let origin = provider.parse_lyric(&lyric);
                             let translation = provider.parse_translated_lyric(&lyric);
-                            LYRIC.set(LyricState{ origin, translation });
+                            set_current_lyric(LyricState{ origin, translation });
+
 
                             if window.imp().use_cache.get() {
-                                TRACK_PLAYING_STATE.with_borrow(|TrackState {cache_path, ..}| {
-                                    if let Some(cache_path) = cache_path {
-                                        update_lyric_cache(cache_path);
-                                    }
-                                });
+                                if let Some(cache_path) = get_lyric_cache_path() {
+                                    update_lyric_cache(&cache_path);
+                                }
                             }
                         },
                         Err(e) => {

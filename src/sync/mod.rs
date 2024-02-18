@@ -6,7 +6,6 @@ use crate::lyric_providers::LyricOwned;
 
 mod interop;
 pub mod lyric;
-mod search_window;
 mod utils;
 
 pub use interop::list_player_names;
@@ -49,5 +48,5 @@ pub use acts::{
 };
 
 pub use acts::{init_play_action_channel, PlayAction, PLAY_ACTION};
-
 pub use interop::register_sync_task;
+pub use utils::{set_current_lyric, get_lyric_cache_path};
