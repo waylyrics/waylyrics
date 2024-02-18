@@ -22,7 +22,7 @@ pub enum PlayerStatus {
     Unsupported(&'static str),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PlayerId {
     pub player_name: String,
     pub inner_id: String,

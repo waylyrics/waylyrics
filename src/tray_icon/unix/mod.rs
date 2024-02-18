@@ -1,11 +1,17 @@
+use std::cell::RefCell;
+
 use async_channel::Sender;
 use ksni::{Tray, TrayService};
+use rust_decimal::prelude::Zero;
 use strum::IntoEnumIterator;
 
 use crate::app::actions::{UIAction, UI_ACTION};
-use crate::config::LyricDisplay;
 use crate::sync::{PlayAction, PLAY_ACTION};
 
+use crate::config::LyricDisplay;
+use crate::sync::{list_player_names, PlayerId};
+
+#[derive(Debug, Default)]
 struct TrayIcon {}
 
 impl Tray for TrayIcon {
@@ -17,6 +23,13 @@ impl Tray for TrayIcon {
     }
     fn menu(&self) -> Vec<ksni::MenuItem<Self>> {
         use ksni::menu::*;
+
+        let players = PLAYERS.with_borrow_mut(|players| {
+            players.clear();
+            players.append(&mut list_player_names());
+            players.clone()
+        });
+
         vec![
             SubMenu {
                 label: "Lyric Display Mode".into(),
@@ -61,6 +74,46 @@ impl Tray for TrayIcon {
                 ..Default::default()
             }
             .into(),
+            MenuItem::Separator,
+            SubMenu {
+                label: "Select Player".into(),
+                enabled: !players.len().is_zero(),
+                submenu: players
+                    .into_iter()
+                    .enumerate()
+                    .map(|(idx, PlayerId { player_name, .. })| {
+                        StandardItem {
+                            label: player_name,
+                            activate: Box::new(move |_| {
+                                let inner_id =
+                                    PLAYERS.with_borrow(|players| players[idx].inner_id.clone());
+                                let _ = play_action().send_blocking(PlayAction::Connect(inner_id));
+                            }),
+                            ..Default::default()
+                        }
+                        .into()
+                    })
+                    .collect(),
+                ..Default::default()
+            }
+            .into(),
+            StandardItem {
+                label: "Search Lyric".into(),
+                activate: Box::new(|_| {
+                    let _ = play_action().send_blocking(PlayAction::SearchLyric);
+                }),
+                ..Default::default()
+            }
+            .into(),
+            StandardItem {
+                label: "Refetch Lyric".into(),
+                activate: Box::new(|_| {
+                    let _ = play_action().send_blocking(PlayAction::RefetchLyric);
+                }),
+                ..Default::default()
+            }
+            .into(),
+            MenuItem::Separator,
             StandardItem {
                 label: "Quit".into(),
                 activate: Box::new(|_| {
@@ -74,7 +127,7 @@ impl Tray for TrayIcon {
 }
 
 pub fn start_tray_service() -> Option<()> {
-    let service = TrayService::new(TrayIcon {});
+    let service = TrayService::new(TrayIcon::default());
 
     Some(service.spawn())
 }
@@ -86,4 +139,8 @@ fn ui_action() -> Sender<UIAction> {
 fn play_action() -> Sender<PlayAction> {
     let play_action = PLAY_ACTION.get().unwrap().clone();
     play_action
+}
+
+thread_local! {
+    static PLAYERS: RefCell<Vec<PlayerId>> = RefCell::new(Default::default());
 }
