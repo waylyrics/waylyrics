@@ -1,21 +1,30 @@
+use documented::DocumentedFields;
 use serde::{Deserialize, Serialize};
 
 use crate::lyric_providers::{netease::Netease, LyricProvider};
 
-#[derive(Deserialize, Serialize, Clone, Copy)]
-#[serde(tag = "type")]
+#[derive(Deserialize, Serialize, Clone, Copy, Default)]
+pub struct AlignS {
+    #[serde(rename = "type")]
+    align_type: Align,
+}
+
+#[derive(Deserialize, Serialize, Clone, Copy, Default)]
 pub enum Align {
     /// left align
     Start,
     /// right align
     End,
-    /// (default)
+    #[default]
     Center,
     Fill,
 }
 
-#[derive(Deserialize, Serialize, Clone, Copy, Default)]
+#[derive(
+    Deserialize, Serialize, Clone, Copy, Default, strum::EnumIter, strum::Display, strum::EnumString,
+)]
 #[serde(rename_all = "snake_case")]
+#[strum(serialize_all = "snake_case")]
 pub enum LyricDisplay {
     #[default]
     ShowBoth,
@@ -24,53 +33,43 @@ pub enum LyricDisplay {
     PreferTranslation,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, DocumentedFields)]
 #[serde(rename_all = "kebab-case", default)]
 pub struct Config {
     /// the interval waylyrics updates position/metadata from player
-    ///
-    /// default: "2s"
     pub player_sync_interval: String,
-    /// the way two lyric label align in
-    /// possible values: center, start, end, fill
-    /// also check [GTK+ doc](https://docs.gtk.org/gtk4/enum.Align.html#members)
-    ///
-    /// default: "center"
-    pub lyric_align: Align,
+
     /// the interval waylyrics refreshes lyric labels
-    ///
-    /// default: "20ms"
     pub lyric_update_interval: String,
+
     /// waylyrics matches lyrics with `weights`
     /// if `(length-lyric_len).abs() < length_toleration`,
-    /// waylyrics set it's weight as zero,
-    /// so mark it a best choice
-    ///
-    /// default: "2s"
+    /// waylyrics set it's weight as zero, mark it a best choice
     pub length_toleration: String,
+
     /// whether to cache lyrics
     /// note: persistenced lyric offset depends on this
-    ///
-    /// default: ture
     pub cache_lyrics: bool,
+
     /// whether to allow mouse-click passthrough
-    ///
-    /// default: true
     pub click_pass_through: bool,
     /// theme to load (<name>.css)
-    ///
-    /// default: "default"
     pub theme: String,
+
+    /// if enabled, lyrics match one or more `filter_regex` will be hidden
     pub enable_filter_regex: bool,
+
     /// hide lyric if it matches any of these regexies
-    /// inspired by LyricX's filter [list](https://github.com/ddddxxx/LyricsX/blob/c16b6a413dda7bc0b793b897522e0c4ee0ffc716/LyricsX/Supporting%20Files/UserDefaults.plist#L31-L62)
+    /// inspired by LyricX's filter list
     pub filter_regexies: Vec<String>,
-    /// shortcuts when focusing on waylyrics
-    /// for global ones, please install the `.desktop` file
-    pub triggers: Triggers,
+
+    /// QQMusicApi api url
+    /// example: "http://127.0.0.1:11451"
     pub qqmusic_api_base_url: Option<String>,
+
     /// avaliable options: 网易云音乐, QQ音乐
     pub lyric_search_source: Vec<String>,
+
     /// lyric display mode
     /// avaliable options:
     /// - `show_both`: show origin and translated lyric
@@ -78,6 +77,20 @@ pub struct Config {
     /// - `prefer_translation`: show translated lyric if found any, or show origin lyric
     /// - `origin`: only to show origin lyric
     pub lyric_display_mode: LyricDisplay,
+
+    /// if enabled, waylyrics will set `DEFAULT_TEXT` on idle,
+    /// otherwise it just show nothing
+    pub show_default_text_on_idle: bool,
+
+    /// the way two lyric label align in
+    /// possible values: Center, Start, End, Fill
+    /// also check [GTK+ doc](https://docs.gtk.org/gtk4/enum.Align.html#members)
+    pub lyric_align: AlignS,
+
+    /// shortcuts when focusing on waylyrics
+    /// for global ones, please install the `.desktop` file
+    /// also check trigger format at https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html
+    pub triggers: Triggers,
 }
 
 /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
@@ -118,45 +131,20 @@ impl Default for Config {
             theme: "default".into(),
             cache_lyrics: true,
             enable_filter_regex: false,
-            filter_regexies: vec![
-                "^作词".into(),
-                "^作詞".into(),
-                "^作曲".into(),
-                "^編曲".into(),
-                "^编曲".into(),
-                "^収録".into(),
-                "^收录".into(),
-                "^演唱".into(),
-                "^歌手".into(),
-                "^歌曲".into(),
-                "^制作".into(),
-                "^製作".into(),
-                "^歌词".into(),
-                "^歌詞".into(),
-                "^翻譯".into(),
-                "^翻译".into(),
-                "^插曲".into(),
-                "^插入歌".into(),
-                "^主题歌".into(),
-                "^主題歌".into(),
-                "^片頭曲".into(),
-                "^片头曲".into(),
-                "^片尾曲".into(),
-                "^SoundTrack".into(),
-                "^アニメ".into(),
-            ],
-            lyric_align: Align::Center,
+            filter_regexies: default_filter_regexies(),
+            lyric_align: AlignS::default(),
             triggers: Triggers::default(),
             qqmusic_api_base_url: None,
             lyric_search_source: vec![Netease.unique_name().into()],
             lyric_display_mode: LyricDisplay::default(),
+            show_default_text_on_idle: true,
         }
     }
 }
 
-impl From<Align> for gtk::Align {
-    fn from(value: Align) -> Self {
-        match value {
+impl From<AlignS> for gtk::Align {
+    fn from(value: AlignS) -> Self {
+        match value.align_type {
             Align::Start => Self::Start,
             Align::End => Self::End,
             Align::Center => Self::Center,
@@ -164,3 +152,17 @@ impl From<Align> for gtk::Align {
         }
     }
 }
+
+#[rustfmt::skip]
+fn default_filter_regexies() -> Vec<String> {
+    [
+        "^作词", "^作詞", "^作曲", "^編曲", "^编曲", "^収録", "^收录", "^演唱", "^歌手", "^歌曲", "^制作", "^製作", "^歌词",
+        "^歌詞", "^翻譯", "^翻译", "^插曲", "^插入歌", "^主题歌", "^主題歌", "^片頭曲", "^片头曲", "^片尾曲", "^SoundTrack",
+        "^アニメ",
+    ]
+    .map(str::to_string)
+    .to_vec()
+}
+
+mod merge;
+pub use merge::append_comments;

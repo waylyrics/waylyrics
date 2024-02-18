@@ -68,6 +68,11 @@ pub fn register_sync_task(app: WeakRef<Application>, interval: Duration) {
             Err(PlayerStatus::Paused) => {
                 TRACK_PLAYING_STATE.with_borrow_mut(|TrackState { paused, .. }| *paused = true)
             }
+            Err(PlayerStatus::Stopped) => {
+                reset_lyric_labels(&window);
+                utils::clean_lyric(&window);
+                TRACK_PLAYING_STATE.take();
+            }
             _ => (),
         }
 
@@ -110,8 +115,10 @@ fn sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
             .map_err(|_| PlayerStatus::Unsupported("cannot fetch progress"))?;
 
         let progress_tick = progress_tracker.tick();
-        if progress_tick.progress.playback_status() != PlaybackStatus::Playing {
-            return Err(PlayerStatus::Paused);
+        match progress_tick.progress.playback_status() {
+            PlaybackStatus::Playing => (),
+            PlaybackStatus::Paused => return Err(PlayerStatus::Paused),
+            PlaybackStatus::Stopped => return Err(PlayerStatus::Stopped),
         }
 
         sync_position(player, window)?;

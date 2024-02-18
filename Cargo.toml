@@ -1,6 +1,6 @@
 [package]
 name = "waylyrics"
-version = "0.2.3"
+version = "0.2.5"
 edition = "2021"
 description = "Simple On Screen lyrics Display for linux/unix"
 authors = ["poly000"]
@@ -25,6 +25,8 @@ once_cell = "1.19.0"
 
 # serializing
 toml = "0.8.0"
+toml_edit = { version = "0.22.6", features = ["serde"] }
+documented = "0.3.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.113"
 rust_decimal = { version = "1.34.0", default-features = false, features = [
@@ -52,9 +54,9 @@ md5 = "0.7.0"
 
 # utils
 regex = "1.10.3"
-libc = "0.2.153"
 xdg = "2.5.2"
 derivative = "2.2.0"
+strum = { version = "0.26.1", default-features = false, features = ["derive"] }
 
 # error handling
 anyhow = "1.0.79"

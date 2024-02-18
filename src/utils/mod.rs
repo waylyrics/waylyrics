@@ -1,4 +1,5 @@
 use anyhow::Result;
+use gtk::glib::subclass::types::ObjectSubclassIsExt;
 use std::path::PathBuf;
 use std::time::Duration;
 
@@ -7,7 +8,13 @@ use crate::config::Config;
 use crate::DEFAULT_TEXT;
 
 pub fn reset_lyric_labels(window: &Window) {
-    get_label(window, "above").set_label(DEFAULT_TEXT);
+    let tip = if window.imp().show_default_text_on_idle.get() {
+        DEFAULT_TEXT
+    } else {
+        ""
+    };
+
+    get_label(window, "above").set_label(tip);
     get_label(window, "below").set_label("");
 }
 

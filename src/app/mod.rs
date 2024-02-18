@@ -25,6 +25,7 @@ pub fn build_main_window(
     length_toleration_ms: u128,
     lyric_align: impl Into<Align> + Copy,
     lyric_display_mode: LyricDisplay,
+    show_default_text_on_idle: bool,
 ) -> Window {
     REMOVE_LYRICS.set(
         if cache_lyrics {
@@ -78,6 +79,10 @@ pub fn build_main_window(
     window.set_icon_name(Some(crate::APP_ID));
     window.imp().length_toleration_ms.set(length_toleration_ms);
     window.imp().lyric_display_mode.set(lyric_display_mode);
+    window
+        .imp()
+        .show_default_text_on_idle
+        .set(show_default_text_on_idle);
     window
 }
 

@@ -18,6 +18,7 @@ pub use smtc::{
 pub enum PlayerStatus {
     Missing,
     Paused,
+    Stopped,
     Unsupported(&'static str),
 }
 

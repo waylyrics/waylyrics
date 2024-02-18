@@ -1,5 +1,7 @@
 use crate::{
-    app::search_window, log::{info, warn}, sync::LyricState
+    app::search_window,
+    log::{info, warn},
+    sync::LyricState,
 };
 use glib_macros::clone;
 use gtk::{
@@ -25,7 +27,7 @@ use crate::{
 
 use crate::sync::interop::connect_player_with_id;
 
-pub fn register_action_disconnect(app: &Application) {
+pub fn register_disconnect(app: &Application) {
     let action = SimpleAction::new("disconnect", None);
     action.connect_activate(|_, _| {
         clean_player();
@@ -34,7 +36,7 @@ pub fn register_action_disconnect(app: &Application) {
 }
 
 // TODO: code cleanup
-pub fn register_action_search_lyric(app: &Application, wind: &app::Window, trigger: &str) {
+pub fn register_search_lyric(app: &Application, wind: &app::Window, trigger: &str) {
     let action = SimpleAction::new("search-lyric", None);
     let cache_lyrics = wind.imp().cache_lyrics.get();
     action.connect_activate(move |_, _| {
@@ -62,7 +64,7 @@ pub fn register_action_search_lyric(app: &Application, wind: &app::Window, trigg
     utils::bind_shortcut("app.search-lyric", wind, trigger);
 }
 
-pub fn register_action_refetch_lyric(app: &Application, window: &app::Window, trigger: &str) {
+pub fn register_refetch_lyric(app: &Application, window: &app::Window, trigger: &str) {
     let action = SimpleAction::new("refetch-lyric", None);
     action.connect_activate(move |_, _| {
         let metainfo = TRACK_PLAYING_STATE
@@ -91,7 +93,7 @@ pub fn register_action_refetch_lyric(app: &Application, window: &app::Window, tr
     utils::bind_shortcut("app.refetch-lyric", window, trigger);
 }
 
-pub fn register_action_remove_lyric(app: &Application, wind: &app::Window) {
+pub fn register_remove_lyric(app: &Application, wind: &app::Window) {
     let action = SimpleAction::new("remove-lyric", None);
     let cache_lyrics = wind.imp().cache_lyrics.get();
     action.connect_activate(clone!(@weak wind as window => move |_, _| {
@@ -114,7 +116,7 @@ pub fn register_action_remove_lyric(app: &Application, wind: &app::Window) {
     app.add_action(&action);
 }
 
-pub fn register_action_connect(app: &Application) {
+pub fn register_connect(app: &Application) {
     let connect = SimpleAction::new("connect", Some(VariantTy::STRING));
     connect.connect_activate(|_, player_id| {
         let Some(player_id) = player_id.and_then(|p| p.str()) else {

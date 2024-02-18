@@ -1,12 +1,20 @@
+#[cfg(feature = "action-event")]
+mod event;
+#[cfg(feature = "action-event")]
+pub use event::{init_ui_action_channel, UIAction, UI_ACTION};
+
 use crate::app::{utils::set_click_pass_through, Window};
 
+use crate::log::error;
+
 use gtk::gio::SimpleAction;
+use gtk::glib::VariantTy;
 use gtk::{
     prelude::*, subclass::prelude::*, Application, NamedAction, Shortcut, ShortcutController,
     ShortcutTrigger,
 };
 
-pub fn register_action_switch_decoration(wind: &Window, switch_decoration_trigger: &str) {
+pub fn register_switch_decoration(wind: &Window, switch_decoration_trigger: &str) {
     let action = SimpleAction::new("switch-decoration", None);
     let _wind = Window::downgrade(wind);
     action.connect_activate(move |_, _| {
@@ -26,7 +34,7 @@ pub fn register_action_switch_decoration(wind: &Window, switch_decoration_trigge
     wind.add_controller(controller);
 }
 
-pub fn register_action_reload_theme(app: &Application, wind: &Window, trigger: &str) {
+pub fn register_reload_theme(app: &Application, wind: &Window, trigger: &str) {
     let action = SimpleAction::new("reload-theme", None);
     action.connect_activate(move |_, _| {
         crate::THEME_PATH.with_borrow(|theme_path| {
@@ -47,7 +55,7 @@ pub fn register_action_reload_theme(app: &Application, wind: &Window, trigger: &
     wind.add_controller(controller);
 }
 
-pub fn register_action_switch_passthrough(wind: &Window, trigger: &str) {
+pub fn register_switch_passthrough(wind: &Window, trigger: &str) {
     let action = SimpleAction::new("switch-passthrough", None);
     let _wind = Window::downgrade(wind);
     action.connect_activate(move |_, _| {
@@ -70,7 +78,19 @@ pub fn register_action_switch_passthrough(wind: &Window, trigger: &str) {
     wind.add_controller(controller);
 }
 
-#[cfg(feature = "action-event")]
-mod event;
-#[cfg(feature = "action-event")]
-pub use event::{init_ui_action_channel, UIAction, UI_ACTION};
+pub fn register_set_display_mode(wind: &Window) {
+    let action = SimpleAction::new("set-display-mode", Some(VariantTy::STRING));
+    let _wind = Window::downgrade(wind);
+    action.connect_activate(move |_, display_mode| {
+        let Some(wind) = _wind.upgrade() else { return };
+        let Some(display_mode) = display_mode.and_then(|d| d.str()) else {
+            return;
+        };
+        let Ok(display_mode) = display_mode.parse() else {
+            error!("unknown display_mode: {display_mode}");
+            return;
+        };
+        wind.imp().lyric_display_mode.set(display_mode);
+    });
+    wind.add_action(&action);
+}

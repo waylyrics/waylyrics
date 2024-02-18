@@ -17,6 +17,8 @@ pub enum UIAction {
     SwitchPassthrough,
     /// toggles GTK+ CSD
     SwitchDecoration,
+    /// set new lyric display mode
+    SetDisplayMode(String),
 }
 
 fn register_ui_action(app: WeakRef<Application>, wind: WeakRef<Window>) -> Sender<UIAction> {
@@ -41,6 +43,11 @@ fn register_ui_action(app: WeakRef<Application>, wind: WeakRef<Window>) -> Sende
                 UIAction::SwitchDecoration => {
                     ActionGroupExt::activate_action(&wind, "switch-decoration", None)
                 }
+                UIAction::SetDisplayMode(display_mode) => ActionGroupExt::activate_action(
+                    &wind,
+                    "set-display-mode",
+                    Some(&display_mode.to_variant()),
+                ),
             }
         }
     });

@@ -17,16 +17,19 @@ use crate::sync::list_player_names;
 #[derive(Default)]
 pub struct Window {
     pub settings: OnceLock<Settings>,
+
     pub cache_lyrics: Cell<bool>,
     pub lyric_display_mode: Cell<LyricDisplay>,
     pub lyric_start: Cell<Option<SystemTime>>,
     pub lyric_offset_ms: Cell<i64>,
     pub length_toleration_ms: Cell<u128>,
+    pub show_default_text_on_idle: Cell<bool>,
 
     pub headerbar: gtk::HeaderBar,
     pub menubutton: gtk::MenuButton,
     pub menu: gio::Menu,
-    pub submenu: gio::Menu,
+    pub player_menu: gio::Menu,
+    pub display_mode_menu: gio::Menu,
     pub clickthrough: Cell<bool>,
 }
 
@@ -58,7 +61,10 @@ impl ObjectImpl for Window {
             .accessible_role(gtk::AccessibleRole::MenuItemRadio)
             .build();
         self.menu
-            .append_submenu(Some("Switch players"), &self.submenu);
+            .append_submenu(Some(SWITCH_PLAYERS), &self.player_menu);
+        self.menu
+            .append_submenu(Some("Lyric Display Mode"), &self.display_mode_menu);
+
         self.menu.append_item(&passthrough);
         self.menu.append_item(&hide_decoration);
         self.menu.append_item(&reload_theme);
@@ -67,12 +73,12 @@ impl ObjectImpl for Window {
         self.menu.append_item(&refetch_lyric);
         popover.set_menu_model(Some(&self.menu));
 
-        let _submenu = self.submenu.downgrade();
+        let player_menu_weak = self.player_menu.downgrade();
         popover.connect_visible_submenu_notify(move |sub| {
-            if Some("Switch players") != sub.visible_submenu().as_deref() {
+            if Some(SWITCH_PLAYERS) != sub.visible_submenu().as_deref() {
                 return;
             }
-            let Some(menu) = _submenu.upgrade() else {
+            let Some(menu) = player_menu_weak.upgrade() else {
                 return;
             };
             menu.remove_all();
@@ -94,6 +100,16 @@ impl ObjectImpl for Window {
             }
             menu.append_section(None, &section);
         });
+
+        for display_mode in <LyricDisplay as strum::IntoEnumIterator>::iter() {
+            let display_mode_str = display_mode.to_string();
+            let item = MenuItem::new(Some(&display_mode_str.replace("_", "__")), None);
+            item.set_action_and_target_value(
+                Some("win.set-display-mode"),
+                Some(&display_mode_str.to_variant()),
+            );
+            self.display_mode_menu.append_item(&item);
+        }
 
         self.menubutton.set_popover(Some(&popover));
         self.headerbar.pack_end(&self.menubutton)
@@ -119,3 +135,5 @@ impl WindowImpl for Window {
     }
 }
 impl ApplicationWindowImpl for Window {}
+
+const SWITCH_PLAYERS: &str = "Switch players";

@@ -1,3 +1,4 @@
+use std::fs;
 use std::path::PathBuf;
 
 use gtk::prelude::*;
@@ -7,6 +8,7 @@ use anyhow::Result;
 
 use regex::RegexSet;
 use waylyrics::app::{self, build_main_window};
+use waylyrics::config::append_comments;
 use waylyrics::config::{Config, Triggers};
 use waylyrics::lyric_providers::qqmusic::QQMusic;
 use waylyrics::lyric_providers::utils::get_provider;
@@ -25,8 +27,8 @@ use tracing_subscriber::prelude::*;
 use tracing_subscriber::{fmt, Registry};
 
 use app::actions::{
-    register_action_reload_theme, register_action_switch_decoration,
-    register_action_switch_passthrough,
+    register_reload_theme, register_set_display_mode, register_switch_decoration,
+    register_switch_passthrough,
 };
 
 pub const THEME_PRESETS_DIR: &str = env!("WAYLYRICS_THEME_PRESETS_DIR");
@@ -60,8 +62,10 @@ fn build_ui(app: &Application) -> Result<()> {
 
     log::debug!("config path: {:?}", config_path);
     let config = std::fs::read_to_string(&config_path)?;
-    let config: Config = toml::from_str(&config).unwrap();
-    std::fs::write(&config_path, toml::to_string(&config)?)?;
+    let config: Config = toml_edit::de::from_str(&config)?;
+    let config_with_docs = append_comments(&toml::to_string(&config)?)?;
+    fs::write(config_path, config_with_docs)?;
+
     let Config {
         player_sync_interval,
         lyric_update_interval,
@@ -76,6 +80,7 @@ fn build_ui(app: &Application) -> Result<()> {
         qqmusic_api_base_url,
         lyric_search_source,
         lyric_display_mode,
+        show_default_text_on_idle,
     } = config;
 
     let player_sync_interval = parse_time(&player_sync_interval)?;
@@ -92,7 +97,7 @@ fn build_ui(app: &Application) -> Result<()> {
     };
 
     log::debug!("theme path: {:?}", theme_path);
-    let css_style = std::fs::read_to_string(&theme_path)?;
+    let css_style = fs::read_to_string(&theme_path)?;
     app::utils::merge_css(&css_style);
     THEME_PATH.set(theme_path);
 
@@ -104,6 +109,7 @@ fn build_ui(app: &Application) -> Result<()> {
         parse_time(length_toleration)?.as_millis(),
         lyric_align,
         lyric_display_mode,
+        show_default_text_on_idle,
     );
 
     register_sync_task(ObjectExt::downgrade(app), player_sync_interval);
@@ -141,14 +147,15 @@ fn register_actions(
         refetch_lyric,
     }: Triggers,
 ) {
-    register_action_connect(app);
-    register_action_disconnect(app);
-    register_action_switch_decoration(wind, &switch_decoration);
-    register_action_switch_passthrough(wind, &switch_passthrough);
-    register_action_reload_theme(app, wind, &reload_theme);
-    register_action_search_lyric(app, wind, &search_lyric);
-    register_action_remove_lyric(app, wind);
-    register_action_refetch_lyric(app, wind, &refetch_lyric);
+    register_connect(app);
+    register_disconnect(app);
+    register_set_display_mode(wind);
+    register_switch_decoration(wind, &switch_decoration);
+    register_switch_passthrough(wind, &switch_passthrough);
+    register_reload_theme(app, wind, &reload_theme);
+    register_search_lyric(app, wind, &search_lyric);
+    register_remove_lyric(app, wind);
+    register_refetch_lyric(app, wind, &refetch_lyric);
 }
 
 fn setup_providers(providers_enabled: Vec<String>) {
