@@ -1,6 +1,5 @@
 use crate::{
-    log::{info, warn},
-    sync::LyricState,
+    app::search_window, log::{info, warn}, sync::LyricState
 };
 use glib_macros::clone;
 use gtk::{
@@ -18,7 +17,7 @@ use crate::{
     lyric_providers::{default_search_query, LyricOwned},
     sync::{
         interop::clean_player, interop::common::update_lyric, lyric::cache::update_lyric_cache,
-        search_window, TrackState, LYRIC, TRACK_PLAYING_STATE,
+        TrackState, LYRIC, TRACK_PLAYING_STATE,
     },
     utils::reset_lyric_labels,
     MAIN_WINDOW,
