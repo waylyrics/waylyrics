@@ -6,7 +6,6 @@ use std::sync::Arc;
 use tokio::task::JoinSet;
 
 use crate::log::{debug, error, info};
-use gtk::prelude::*;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 
 use crate::lyric_providers::LyricOwned;
@@ -36,7 +35,7 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
         tricks::get_lyric_hint_from_player().await
     {
         info!("fetched lyrics by player hint");
-        set_lyric(olyric, tlyric, &title, &artists_str, window);
+        set_lyric(olyric, tlyric, &title, &artists_str);
         return Ok(());
     }
 
@@ -109,7 +108,7 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
                     "fetched {song_id} from {} with weight {weight}",
                     provider.unique_name()
                 );
-                set_lyric(olyric, tlyric, &title, &artists_str, window);
+                set_lyric(olyric, tlyric, &title, &artists_str);
                 return Ok(());
             }
             Err(e) => {
@@ -123,13 +122,7 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
     Err(crate::lyric_providers::Error::NoResult)?
 }
 
-fn set_lyric(
-    origin: LyricOwned,
-    translation: LyricOwned,
-    title: &str,
-    artists: &str,
-    window: &app::Window,
-) {
+fn set_lyric(origin: LyricOwned, translation: LyricOwned, title: &str, artists: &str) {
     debug!("original lyric: {origin:?}");
     debug!("translated lyric: {translation:?}");
 
@@ -143,7 +136,6 @@ fn set_lyric(
 
     if !matches!(translation, LyricOwned::LineTimestamp(_)) {
         info!("No translated lyric for {} - {title}", artists,);
-        app::get_label(window, "below").set_visible(false);
     }
     LYRIC.set(LyricState {
         origin,
