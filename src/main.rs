@@ -1,3 +1,4 @@
+use std::fs;
 use std::path::PathBuf;
 
 use gtk::prelude::*;
@@ -7,6 +8,7 @@ use anyhow::Result;
 
 use regex::RegexSet;
 use waylyrics::app::{self, build_main_window};
+use waylyrics::config::append_comments;
 use waylyrics::config::{Config, Triggers};
 use waylyrics::lyric_providers::qqmusic::QQMusic;
 use waylyrics::lyric_providers::utils::get_provider;
@@ -59,8 +61,10 @@ fn build_ui(app: &Application) -> Result<()> {
     let (config_path, theme_dir) = init_dirs()?;
 
     log::debug!("config path: {:?}", config_path);
-    let config = std::fs::read_to_string(&config_path)?;
-    let config: Config = toml_edit::de::from_str(&config)?;
+    let config_str = std::fs::read_to_string(&config_path)?;
+    let config: Config = toml_edit::de::from_str(&config_str)?;
+    let config_with_docs = append_comments(&config_str)?;
+    fs::write(config_path, config_with_docs)?;
 
     let Config {
         player_sync_interval,
@@ -93,7 +97,7 @@ fn build_ui(app: &Application) -> Result<()> {
     };
 
     log::debug!("theme path: {:?}", theme_path);
-    let css_style = std::fs::read_to_string(&theme_path)?;
+    let css_style = fs::read_to_string(&theme_path)?;
     app::utils::merge_css(&css_style);
     THEME_PATH.set(theme_path);
 

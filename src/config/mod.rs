@@ -1,12 +1,11 @@
+use documented::DocumentedFields;
 use serde::{Deserialize, Serialize};
-use toml_example::TomlExample;
 
 use crate::lyric_providers::{netease::Netease, LyricProvider};
 
-#[derive(Deserialize, Serialize, Clone, Copy, Default, TomlExample)]
+#[derive(Deserialize, Serialize, Clone, Copy, Default)]
 pub struct AlignS {
     #[serde(rename = "type")]
-    #[toml_example(default = "center")]
     align_type: Align,
 }
 
@@ -31,38 +30,31 @@ pub enum LyricDisplay {
     PreferTranslation,
 }
 
-#[derive(Deserialize, Serialize, TomlExample)]
+#[derive(Deserialize, Serialize, DocumentedFields)]
 #[serde(rename_all = "kebab-case", default)]
 pub struct Config {
     /// the interval waylyrics updates position/metadata from player
-    #[toml_example(default = "2s")]
     pub player_sync_interval: String,
 
     /// the interval waylyrics refreshes lyric labels
-    #[toml_example(default = "20ms")]
     pub lyric_update_interval: String,
 
     /// waylyrics matches lyrics with `weights`
     /// if `(length-lyric_len).abs() < length_toleration`,
     /// waylyrics set it's weight as zero, mark it a best choice
-    #[toml_example(default = "2s")]
     pub length_toleration: String,
 
     /// whether to cache lyrics
     /// note: persistenced lyric offset depends on this
-    #[toml_example(default = true)]
     pub cache_lyrics: bool,
 
     /// whether to allow mouse-click passthrough
-    #[toml_example(default = true)]
     pub click_pass_through: bool,
 
     /// theme to load (<name>.css)
-    #[toml_example(default = "default")]
     pub theme: String,
 
     /// if enabled, lyrics match one or more `filter_regex` will be hidden
-    #[toml_example(default = false)]
     pub enable_filter_regex: bool,
 
     /// hide lyric if it matches any of these regexies
@@ -74,7 +66,6 @@ pub struct Config {
     pub qqmusic_api_base_url: Option<String>,
 
     /// avaliable options: 网易云音乐, QQ音乐
-    #[toml_example(default = ["网易云音乐"])]
     pub lyric_search_source: Vec<String>,
 
     /// lyric display mode
@@ -83,44 +74,35 @@ pub struct Config {
     /// - `show_both_rev`: similiar to `show_both`, but origin text are showed below
     /// - `prefer_translation`: show translated lyric if found any, or show origin lyric
     /// - `origin`: only to show origin lyric
-    #[toml_example(default = "show_both")]
     pub lyric_display_mode: LyricDisplay,
 
     /// if enabled, waylyrics will set `DEFAULT_TEXT` on idle,
     /// otherwise it just show nothing
-    #[toml_example(default = true)]
     pub show_default_text_on_idle: bool,
 
     /// the way two lyric label align in
     /// possible values: center, start, end, fill
     /// also check [GTK+ doc](https://docs.gtk.org/gtk4/enum.Align.html#members)
-    #[toml_example(nesting)]
     pub lyric_align: AlignS,
 
     /// shortcuts when focusing on waylyrics
     /// for global ones, please install the `.desktop` file
-    #[toml_example(nesting)]
     pub triggers: Triggers,
 }
 
 /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
-#[derive(Deserialize, Serialize, TomlExample)]
+#[derive(Deserialize, Serialize)]
 #[serde(default)]
 pub struct Triggers {
     /// whether to show GTK+ CSD
-    #[toml_example(default = "<Control>d")]
     pub switch_decoration: String,
     /// reapply current theme file
-    #[toml_example(default = "<Control><Shift>t")]
     pub reload_theme: String,
     /// manually search lyric
-    #[toml_example(default = "<Control>s")]
     pub search_lyric: String,
     /// try to refetch lyric
-    #[toml_example(default = "<Alt><Shift>l")]
     pub refetch_lyric: String,
     /// whether to allow mouse click-through
-    #[toml_example(default = "<Alt>p")]
     pub switch_passthrough: String,
 }
 
@@ -168,34 +150,16 @@ impl From<AlignS> for gtk::Align {
     }
 }
 
+#[rustfmt::skip]
 fn default_filter_regexies() -> Vec<String> {
     [
-        "^作词",
-        "^作詞",
-        "^作曲",
-        "^編曲",
-        "^编曲",
-        "^収録",
-        "^收录",
-        "^演唱",
-        "^歌手",
-        "^歌曲",
-        "^制作",
-        "^製作",
-        "^歌词",
-        "^歌詞",
-        "^翻譯",
-        "^翻译",
-        "^插曲",
-        "^插入歌",
-        "^主题歌",
-        "^主題歌",
-        "^片頭曲",
-        "^片头曲",
-        "^片尾曲",
-        "^SoundTrack",
+        "^作词", "^作詞", "^作曲", "^編曲", "^编曲", "^収録", "^收录", "^演唱", "^歌手", "^歌曲", "^制作", "^製作", "^歌词",
+        "^歌詞", "^翻譯", "^翻译", "^插曲", "^插入歌", "^主题歌", "^主題歌", "^片頭曲", "^片头曲", "^片尾曲", "^SoundTrack",
         "^アニメ",
     ]
     .map(str::to_string)
     .to_vec()
 }
+
+mod merge;
+pub use merge::append_comments;

@@ -411,6 +411,27 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "212d0f5754cb6769937f4501cc0e67f4f4483c8d2c3e1e922ee9edbe4ab4c7c0"
 
 [[package]]
+name = "documented"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e2f2016be31b2ee8ca5950d0b985e53d2802bbe646634e41cdf70f668fc66049"
+dependencies = [
+ "documented-derive",
+ "phf 0.11.2",
+ "thiserror",
+]
+
+[[package]]
+name = "documented-derive"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "83095afc77f3f21d50be46d608d0a1cfa463cc97e4f3aedab871d6e0baf91870"
+dependencies = [
+ "quote 1.0.35",
+ "syn 2.0.48",
+]
+
+[[package]]
 name = "encoding_rs"
 version = "0.8.33"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1271,7 +1292,7 @@ dependencies = [
  "hex",
  "memory-cache-rs",
  "openssl",
- "phf",
+ "phf 0.9.0",
  "rand",
  "regex",
  "reqwest",
@@ -1461,9 +1482,19 @@ version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b2ac8b67553a7ca9457ce0e526948cad581819238f4a9d1ea74545851fa24f37"
 dependencies = [
- "phf_macros",
- "phf_shared",
+ "phf_macros 0.9.0",
+ "phf_shared 0.9.0",
  "proc-macro-hack",
+]
+
+[[package]]
+name = "phf"
+version = "0.11.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ade2d8b8f33c7333b51bcf0428d37e217e9f32192ae4772156f65063b8ce03dc"
+dependencies = [
+ "phf_macros 0.11.2",
+ "phf_shared 0.11.2",
 ]
 
 [[package]]
@@ -1472,7 +1503,17 @@ version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d43f3220d96e0080cc9ea234978ccd80d904eafb17be31bb0f76daaea6493082"
 dependencies = [
- "phf_shared",
+ "phf_shared 0.9.0",
+ "rand",
+]
+
+[[package]]
+name = "phf_generator"
+version = "0.11.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "48e4cc64c2ad9ebe670cb8fd69dd50ae301650392e81c05f9bfcb2d5bdbc24b0"
+dependencies = [
+ "phf_shared 0.11.2",
  "rand",
 ]
 
@@ -1482,8 +1523,8 @@ version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b706f5936eb50ed880ae3009395b43ed19db5bff2ebd459c95e7bf013a89ab86"
 dependencies = [
- "phf_generator",
- "phf_shared",
+ "phf_generator 0.9.1",
+ "phf_shared 0.9.0",
  "proc-macro-hack",
  "proc-macro2",
  "quote 1.0.35",
@@ -1491,10 +1532,32 @@ dependencies = [
 ]
 
 [[package]]
+name = "phf_macros"
+version = "0.11.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3444646e286606587e49f3bcf1679b8cef1dc2c5ecc29ddacaffc305180d464b"
+dependencies = [
+ "phf_generator 0.11.2",
+ "phf_shared 0.11.2",
+ "proc-macro2",
+ "quote 1.0.35",
+ "syn 2.0.48",
+]
+
+[[package]]
 name = "phf_shared"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a68318426de33640f02be62b4ae8eb1261be2efbc337b60c54d845bf4484e0d9"
+dependencies = [
+ "siphasher",
+]
+
+[[package]]
+name = "phf_shared"
+version = "0.11.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "90fcb95eef784c2ac79119d1dd819e162b5da872ce6f3c3abe1e8ca1c082f72b"
 dependencies = [
  "siphasher",
 ]
@@ -2439,27 +2502,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "toml-example"
-version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d2fee6640dd28021a113ff4a22aa37ba1e9e7cf46c9709dc0be6a4b3127aaa55"
-dependencies = [
- "toml-example-derive",
-]
-
-[[package]]
-name = "toml-example-derive"
-version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bec15491a187b38e9c0b1d5fa7227fc905d6365b8b00dbf9fb86c0ae691e3d90"
-dependencies = [
- "proc-macro-error",
- "proc-macro2",
- "quote 1.0.35",
- "syn 2.0.48",
-]
-
-[[package]]
 name = "toml_datetime"
 version = "0.6.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2754,6 +2796,7 @@ dependencies = [
  "dbus",
  "dbus-dummy",
  "derivative",
+ "documented",
  "glib-macros",
  "gtk4",
  "libc",
@@ -2773,7 +2816,7 @@ dependencies = [
  "serde_json",
  "thiserror",
  "tokio",
- "toml-example",
+ "toml",
  "toml_edit 0.22.6",
  "tracing",
  "tracing-journald",

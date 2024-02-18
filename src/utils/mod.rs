@@ -2,7 +2,6 @@ use anyhow::Result;
 use gtk::glib::subclass::types::ObjectSubclassIsExt;
 use std::path::PathBuf;
 use std::time::Duration;
-use toml_example::TomlExample;
 
 use crate::app::{get_label, Window};
 use crate::config::Config;
@@ -67,7 +66,7 @@ pub fn init_dirs() -> Result<(PathBuf, PathBuf)> {
     let user_theme_dir = xdg_dirs.get_data_home().join("_themes");
 
     if !config_path.exists() {
-        std::fs::write(&config_path, Config::toml_example())?;
+        std::fs::write(&config_path, toml::to_string(&Config::default())?)?;
     }
     if !user_theme_dir.exists() {
         std::fs::create_dir_all(&user_theme_dir)?;
