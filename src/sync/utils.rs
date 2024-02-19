@@ -3,6 +3,7 @@ use std::{path::PathBuf, time::Duration};
 use fuzzy_match::algorithms::{SimilarityAlgorithm, SorensenDice};
 use gtk::subclass::prelude::*;
 
+use crate::log::trace;
 use crate::{app, lyric_providers::SongInfo};
 
 use super::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
@@ -49,6 +50,7 @@ pub fn match_likely_lyric<'a>(
                             r_album.as_deref(),
                             r_singer,
                         );
+                        trace!("p={likelihood} for {s:?}");
                         (s, likelihood)
                     },
                 )
