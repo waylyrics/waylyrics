@@ -143,6 +143,14 @@
 <a href="#142" id="142">142</a>
 <a href="#143" id="143">143</a>
 <a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>tricks;
 
 <span class="kw">use </span>anyhow::Result;
@@ -202,13 +210,21 @@
 
             set.spawn(<span class="kw">async move </span>{
                 <span class="kw">let </span>artists = artists.iter().map(|s| s.as_str()).collect::&lt;Vec&lt;<span class="kw-2">&amp;</span>str&gt;&gt;();
+                <span class="kw">let </span>title = title.as_ref();
                 <span class="kw">let </span>album = album.as_deref();
+                <span class="kw">let </span>singer = <span class="kw">if </span>artists.is_empty() {
+                    <span class="prelude-val">None
+                </span>} <span class="kw">else </span>{
+                    <span class="prelude-val">Some</span>(artists.join(<span class="string">","</span>))
+                };
                 <span class="kw">let </span>search_result = provider
                     .search_song_detailed(album.unwrap_or_default(), <span class="kw-2">&amp;</span>artists, <span class="kw-2">&amp;</span>title)
                     .<span class="kw">await</span>;
                 search_result.map(|songs| {
                     match_likely_lyric(
-                        album.zip(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>title)),
+                        album,
+                        title,
+                        singer.as_deref(),
                         length,
                         <span class="kw-2">&amp;</span>songs,
                         length_toleration_ms,
