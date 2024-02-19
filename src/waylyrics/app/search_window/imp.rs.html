@@ -83,6 +83,8 @@
 <a href="#82" id="82">82</a>
 <a href="#83" id="83">83</a>
 <a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::{Cell, RefCell};
 
 <span class="kw">use </span>glib::Properties;
@@ -129,7 +131,9 @@
 </span><span class="kw">pub struct </span>Window {
     <span class="kw">pub </span>vbox: gtk::Box,
 
-    <span class="kw">pub </span>input: gtk::Entry,
+    <span class="kw">pub </span>input_title: gtk::Entry,
+    <span class="kw">pub </span>input_album: gtk::Entry,
+    <span class="kw">pub </span>input_artists: gtk::Entry,
 
     <span class="kw">pub </span>set_button: gtk::Button,
 

@@ -324,13 +324,66 @@
 <a href="#323" id="323">323</a>
 <a href="#324" id="324">324</a>
 <a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
+<a href="#332" id="332">332</a>
+<a href="#333" id="333">333</a>
+<a href="#334" id="334">334</a>
+<a href="#335" id="335">335</a>
+<a href="#336" id="336">336</a>
+<a href="#337" id="337">337</a>
+<a href="#338" id="338">338</a>
+<a href="#339" id="339">339</a>
+<a href="#340" id="340">340</a>
+<a href="#341" id="341">341</a>
+<a href="#342" id="342">342</a>
+<a href="#343" id="343">343</a>
+<a href="#344" id="344">344</a>
+<a href="#345" id="345">345</a>
+<a href="#346" id="346">346</a>
+<a href="#347" id="347">347</a>
+<a href="#348" id="348">348</a>
+<a href="#349" id="349">349</a>
+<a href="#350" id="350">350</a>
+<a href="#351" id="351">351</a>
+<a href="#352" id="352">352</a>
+<a href="#353" id="353">353</a>
+<a href="#354" id="354">354</a>
+<a href="#355" id="355">355</a>
+<a href="#356" id="356">356</a>
+<a href="#357" id="357">357</a>
+<a href="#358" id="358">358</a>
+<a href="#359" id="359">359</a>
+<a href="#360" id="360">360</a>
+<a href="#361" id="361">361</a>
+<a href="#362" id="362">362</a>
+<a href="#363" id="363">363</a>
+<a href="#364" id="364">364</a>
+<a href="#365" id="365">365</a>
+<a href="#366" id="366">366</a>
+<a href="#367" id="367">367</a>
+<a href="#368" id="368">368</a>
+<a href="#369" id="369">369</a>
+<a href="#370" id="370">370</a>
+<a href="#371" id="371">371</a>
+<a href="#372" id="372">372</a>
+<a href="#373" id="373">373</a>
+<a href="#374" id="374">374</a>
+<a href="#375" id="375">375</a>
+<a href="#376" id="376">376</a>
+<a href="#377" id="377">377</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>imp;
 
 <span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span><span class="kw">crate</span>::log::{error, info};
+<span class="kw">use </span><span class="kw">crate</span>::lyric_providers::SongInfo;
 <span class="kw">use </span>glib::Object;
-<span class="kw">use </span>gtk::glib::clone;
+<span class="kw">use </span>gtk::glib::{clone, IntoGStr};
 <span class="kw">use </span>gtk::subclass::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>gtk::{gio, glib, ColumnViewColumn};
 <span class="kw">use </span>gtk::{prelude::<span class="kw-2">*</span>, ListItem};
@@ -340,7 +393,7 @@
 
 <span class="kw">use </span><span class="kw">crate</span>::app::dialog::show_dialog;
 <span class="kw">use </span><span class="kw">crate</span>::sync::lyric::cache::update_lyric_cache;
-<span class="kw">use </span><span class="kw">crate</span>::sync::{get_lyric_cache_path, set_current_lyric, LyricState};
+<span class="kw">use </span><span class="kw">crate</span>::sync::{fuzzy_match_song, get_lyric_cache_path, set_current_lyric, LyricState};
 
 <span class="macro">glib::wrapper! </span>{
     <span class="kw">pub struct </span>ResultObject(ObjectSubclass&lt;imp::ResultObject&gt;);
@@ -376,12 +429,14 @@
 }
 
 <span class="kw">impl </span>Window {
-    <span class="kw">pub fn </span>new(query_default: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;, use_cache: bool) -&gt; <span class="self">Self </span>{
+    <span class="kw">pub fn </span>new&lt;S: IntoGStr&gt;(title: S, album: S, artists: S, use_cache: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>window: <span class="self">Self </span>= Object::builder().build();
         window.set_title(<span class="prelude-val">Some</span>(<span class="string">"Search lyric"</span>));
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(query) = query_default {
-            window.imp().input.buffer().set_text(query);
-        }
+
+        window.imp().input_title.buffer().set_text(title);
+        window.imp().input_album.buffer().set_text(album);
+        window.imp().input_artists.buffer().set_text(artists);
+
         window.imp().use_cache.set(use_cache);
         window
     }
@@ -408,7 +463,11 @@
 
         imp.vbox
             .set_properties(<span class="kw-2">&amp;</span>[(<span class="string">"orientation"</span>, <span class="kw-2">&amp;</span>gtk::Orientation::Vertical)]);
-        imp.vbox.append(<span class="kw-2">&amp;</span>imp.input);
+
+        imp.vbox.append(<span class="kw-2">&amp;</span>imp.input_title);
+        imp.vbox.append(<span class="kw-2">&amp;</span>imp.input_artists);
+        imp.vbox.append(<span class="kw-2">&amp;</span>imp.input_album);
+
         imp.vbox.append(<span class="kw-2">&amp;</span>imp.result_scrolled_window);
         imp.vbox.append(<span class="kw-2">&amp;</span>imp.set_button);
 
@@ -435,18 +494,29 @@
         imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.column_length);
         imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.column_source);
 
-        imp.input.set_placeholder_text(<span class="prelude-val">Some</span>(<span class="string">"Enter query..."</span>));
-        imp.input
+        imp.input_title.set_placeholder_text(<span class="prelude-val">Some</span>(<span class="string">"Enter title..."</span>));
+        imp.input_title
             .set_secondary_icon_name(<span class="prelude-val">Some</span>(<span class="string">"system-search-symbolic"</span>));
+        imp.input_album.set_placeholder_text(<span class="prelude-val">Some</span>(<span class="string">"Enter album..."</span>));
+        imp.input_artists
+            .set_placeholder_text(<span class="prelude-val">Some</span>(<span class="string">"Enter artists..."</span>));
+
         imp.set_button.set_label(<span class="string">"Set as lyric"</span>);
 
         <span class="self">self</span>.set_child(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>imp.vbox));
     }
 
     <span class="kw">async fn </span>search(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="kw">let </span>buffer = <span class="self">self</span>.imp().input.buffer();
-        <span class="kw">let </span>query = Arc::new(buffer.text().to_string());
-        <span class="kw">if </span>query.is_empty() {
+        <span class="kw">let </span>buffer = <span class="self">self</span>.imp().input_title.buffer();
+        <span class="kw">let </span>query_title = Arc::new(buffer.text().to_string());
+        <span class="kw">let </span>buffer = <span class="self">self</span>.imp().input_album.buffer();
+        <span class="kw">let </span>query_album = Arc::new(buffer.text().to_string());
+        <span class="kw">let </span>buffer = <span class="self">self</span>.imp().input_artists.buffer();
+        <span class="kw">let </span>query_artists = Arc::new(buffer.text().to_string());
+        <span class="kw">if </span>[<span class="kw-2">&amp;</span>query_album, <span class="kw-2">&amp;</span>query_artists, <span class="kw-2">&amp;</span>query_title]
+            .iter()
+            .all(|q| q.is_empty())
+        {
             <span class="kw">return</span>;
         }
 
@@ -454,8 +524,13 @@
         <span class="kw">let </span>providers = LYRIC_PROVIDERS
             .get()
             .expect(<span class="string">"lyric providers should be initialized"</span>);
-        <span class="kw">let </span>results = <span class="macro">tokio_spawn!</span>(<span class="kw">async move </span>{
+
+        <span class="kw">let </span>_title = query_title.clone();
+        <span class="kw">let </span>_album = query_album.clone();
+        <span class="kw">let </span>_artists = query_artists.clone();
+        <span class="kw">let </span><span class="kw-2">mut </span>results = <span class="macro">tokio_spawn!</span>(<span class="kw">async move </span>{
             <span class="kw">let </span><span class="kw-2">mut </span>set = JoinSet::new();
+            <span class="kw">let </span>query = <span class="macro">format!</span>(<span class="string">"{_title} {_album} {_artists}"</span>);
             <span class="kw">for </span>(idx, provider) <span class="kw">in </span>providers.iter().enumerate() {
                 <span class="kw">let </span>query = query.clone();
                 <span class="kw">let </span>provider_id = provider.unique_name();
@@ -482,6 +557,35 @@
         })
         .<span class="kw">await
         </span>.expect(<span class="string">"Tokio runtime failure"</span>);
+
+        <span class="kw">let </span>query_title_chars = query_title.chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+        <span class="kw">let </span>query_album_chars = query_album.chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+        <span class="kw">let </span>query_artists_chars = query_artists.chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+        results.sort_unstable_by_key(
+            |(
+                SongInfo {
+                    title,
+                    album,
+                    singer,
+                    ..
+                },
+                ..,
+            )| {
+                <span class="kw">let </span>factor = fuzzy_match_song(
+                    <span class="kw-2">&amp;</span>query_title_chars,
+                    <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>query_album_chars),
+                    <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>query_artists_chars),
+                    <span class="kw-2">&amp;</span>title.chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
+                    album
+                        .as_ref()
+                        .map(|a| a.chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;())
+                        .as_deref(),
+                    <span class="kw-2">&amp;</span>singer.chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
+                );
+
+                (factor * -<span class="number">1024.</span>) <span class="kw">as </span>i32
+            },
+        );
 
         <span class="kw">let </span>results: Vec&lt;ResultObject&gt; = results
             .into_iter()
@@ -528,7 +632,7 @@
 
     <span class="kw">fn </span>setup_callbacks(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">let </span>imp = <span class="self">self</span>.imp();
-        imp.input
+        imp.input_title
             .connect_activate(<span class="macro">clone!</span>(@weak <span class="self">self </span><span class="kw">as </span>window =&gt; <span class="kw">move </span>|<span class="kw">_</span>| {
                 <span class="kw">let </span>window = window.downgrade();
                 <span class="macro">crate::log::debug!</span>(<span class="string">"spawned window.search() from search button"</span>);
@@ -539,7 +643,7 @@
                 });
             }));
 
-        imp.input
+        imp.input_title
             .connect_icon_release(<span class="macro">clone!</span>(@weak <span class="self">self </span><span class="kw">as </span>window =&gt; <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
                 <span class="kw">let </span>window = window.downgrade();
                 <span class="macro">crate::log::debug!</span>(<span class="string">"spawned window.search() from search icon release"</span>);
