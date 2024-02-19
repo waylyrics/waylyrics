@@ -92,6 +92,17 @@
 <a href="#91" id="91">91</a>
 <a href="#92" id="92">92</a>
 <a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{path::PathBuf, time::Duration};
 
 <span class="kw">use </span>fuzzy_match::algorithms::{SimilarityAlgorithm, SorensenDice};
@@ -107,7 +118,8 @@
     window.imp().lyric_offset_ms.set(<span class="number">0</span>);
 }
 
-<span class="kw">pub fn </span>match_likely_lyric&lt;<span class="lifetime">'a</span>&gt;(
+<span class="doccomment">/// both singer and album are optional non-empty string
+</span><span class="kw">pub fn </span>match_likely_lyric&lt;<span class="lifetime">'a</span>&gt;(
     album: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;,
     title: <span class="kw-2">&amp;</span>str,
     singer: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;,
@@ -124,6 +136,17 @@
                 })
                 .map(|song| (song, <span class="number">0</span>))
         })
+        .or(search_result.first().and_then(|song| {
+            <span class="comment">// if we get only title, it is likely
+            // the player is giving messy title, which is not applicable
+            // to fuzzt-match. so we skip fuzzy-match and use
+            // the first result instead
+            </span><span class="kw">if </span>album.is_none() &amp;&amp; singer.is_none() {
+                <span class="prelude-val">Some</span>((song, <span class="number">2</span>))
+            } <span class="kw">else </span>{
+                <span class="prelude-val">None
+            </span>}
+        }))
         .or_else(|| {
             <span class="kw">let </span><span class="kw-2">mut </span>fuzzy_match = SorensenDice::new();
             search_result
@@ -151,7 +174,6 @@
                 .max_by_key(|(<span class="kw">_</span>, likelihood)| (likelihood * <span class="number">128.</span>) <span class="kw">as </span>u32)
                 .map(|(s, <span class="kw">_</span>)| (s, <span class="number">1</span>))
         })
-        .or(search_result.first().map(|song| (song, <span class="number">2</span>)))
         .map(|(song, weight)| (song.id.as_str(), weight))
 }
 
