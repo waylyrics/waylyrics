@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use std::{env, process};
 
 use async_channel::Sender;
 use ksni::{Tray, TrayService};
@@ -10,6 +11,8 @@ use crate::sync::{PlayAction, PLAY_ACTION};
 
 use crate::config::LyricDisplay;
 use crate::sync::{list_player_names, PlayerId};
+
+use crate::log::error;
 
 #[derive(Debug, Default)]
 struct TrayIcon {}
@@ -114,6 +117,23 @@ impl Tray for TrayIcon {
             }
             .into(),
             MenuItem::Separator,
+            StandardItem {
+                label: "Restart".into(),
+                activate: Box::new(|_| {
+                    let my_path = env::args().nth(0).unwrap();
+                    let Ok(_) = process::Command::new("sh")
+                        .arg("-c")
+                        .arg(format!("sleep 1 && {my_path}"))
+                        .spawn()
+                    else {
+                        error!("failed to run waylyrics");
+                        return;
+                    };
+                    let _ = ui_action().send_blocking(UIAction::Quit);
+                }),
+                ..Default::default()
+            }
+            .into(),
             StandardItem {
                 label: "Quit".into(),
                 activate: Box::new(|_| {
