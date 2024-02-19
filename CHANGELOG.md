@@ -11,10 +11,12 @@ All notable changes to this project will be documented in this file.
 ### Documentation
 
 - Update changelog
+- Update changelog
 
 ### Features
 
 - Sort search result by fuzzy-match weight
+- Show tooltip for search entries
 
 ### Miscellaneous Tasks
 
