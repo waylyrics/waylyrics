@@ -117,11 +117,15 @@ impl Window {
         imp.result_list.append_column(&imp.column_source);
 
         imp.input_title.set_placeholder_text(Some("Enter title..."));
-        imp.input_title
-            .set_secondary_icon_name(Some("system-search-symbolic"));
+        imp.input_title.set_tooltip_text(Some("title"));
         imp.input_album.set_placeholder_text(Some("Enter album..."));
+        imp.input_album.set_tooltip_text(Some("album"));
         imp.input_artists
             .set_placeholder_text(Some("Enter artists..."));
+        imp.input_artists.set_tooltip_text(Some("artists"));
+
+        imp.input_title
+            .set_secondary_icon_name(Some("system-search-symbolic"));
 
         imp.set_button.set_label("Set as lyric");
 
