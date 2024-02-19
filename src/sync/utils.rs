@@ -31,18 +31,15 @@ pub fn match_likely_lyric<'a>(
                 })
                 .map(|song| (song, 0))
         })
-        .or(search_result.first().and_then(|song| {
+        .or_else(|| {
             // if we get only title, it is likely
             // the player is giving messy title, which is not applicable
             // to fuzzt-match. so we skip fuzzy-match and use
             // the first result instead
             if album.is_none() && singer.is_none() {
-                Some((song, 2))
-            } else {
-                None
+                return None;
             }
-        }))
-        .or_else(|| {
+
             let title: Vec<char> = title.chars().collect();
             let album: Option<Vec<char>> = album.map(|a| a.chars().collect());
             let singer: Option<Vec<char>> = singer.map(|s| s.chars().collect());
@@ -73,6 +70,7 @@ pub fn match_likely_lyric<'a>(
                 .max_by_key(|(_, likelihood)| (likelihood * 1024.) as u32)
                 .map(|(s, _)| (s, 1))
         })
+        .or(search_result.first().and_then(|song| Some((song, 2))))
         .map(|(song, weight)| (song.id.as_str(), weight))
 }
 
@@ -84,7 +82,7 @@ pub fn get_lyric_cache_path() -> Option<PathBuf> {
     TRACK_PLAYING_STATE.with_borrow(|TrackState { cache_path, .. }| cache_path.as_ref().cloned())
 }
 
-fn fuzzy_match_song(
+pub fn fuzzy_match_song(
     title: &[char],
     album: Option<&[char]>,
     singer: Option<&[char]>,
