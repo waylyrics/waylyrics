@@ -159,14 +159,7 @@
 <a href="#158" id="158">158</a>
 <a href="#159" id="159">159</a>
 <a href="#160" id="160">160</a>
-<a href="#161" id="161">161</a>
-<a href="#162" id="162">162</a>
-<a href="#163" id="163">163</a>
-<a href="#164" id="164">164</a>
-<a href="#165" id="165">165</a>
-<a href="#166" id="166">166</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::RefCell;
-<span class="kw">use </span>std::{env, process};
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::{env, process};
 
 <span class="kw">use </span>async_channel::Sender;
 <span class="kw">use </span>ksni::{Tray, TrayService};
@@ -194,11 +187,7 @@
     <span class="kw">fn </span>menu(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;ksni::MenuItem&lt;<span class="self">Self</span>&gt;&gt; {
         <span class="kw">use </span>ksni::menu::<span class="kw-2">*</span>;
 
-        <span class="kw">let </span>players = PLAYERS.with_borrow_mut(|players| {
-            players.clear();
-            players.append(<span class="kw-2">&amp;mut </span>list_player_names());
-            players.clone()
-        });
+        <span class="kw">let </span>players = list_player_names();
 
         <span class="macro">vec!</span>[
             SubMenu {
@@ -250,19 +239,22 @@
                 enabled: !players.len().is_zero(),
                 submenu: players
                     .into_iter()
-                    .enumerate()
-                    .map(|(idx, PlayerId { player_name, .. })| {
-                        StandardItem {
-                            label: player_name,
-                            activate: Box::new(<span class="kw">move </span>|<span class="kw">_</span>| {
-                                <span class="kw">let </span>inner_id =
-                                    PLAYERS.with_borrow(|players| players[idx].inner_id.clone());
-                                <span class="kw">let _ </span>= play_action().send_blocking(PlayAction::Connect(inner_id));
-                            }),
-                            ..Default::default()
-                        }
-                        .into()
-                    })
+                    .map(
+                        |PlayerId {
+                             player_name,
+                             inner_id,
+                         }| {
+                            StandardItem {
+                                label: player_name,
+                                activate: Box::new(<span class="kw">move </span>|<span class="kw">_</span>| {
+                                    <span class="kw">let _ </span>= play_action()
+                                        .send_blocking(PlayAction::Connect(inner_id.clone()));
+                                }),
+                                ..Default::default()
+                            }
+                            .into()
+                        },
+                    )
                     .collect(),
                 ..Default::default()
             }
@@ -326,9 +318,5 @@
 <span class="kw">fn </span>play_action() -&gt; Sender&lt;PlayAction&gt; {
     <span class="kw">let </span>play_action = PLAY_ACTION.get().unwrap().clone();
     play_action
-}
-
-<span class="macro">thread_local! </span>{
-    <span class="kw">static </span>PLAYERS: RefCell&lt;Vec&lt;PlayerId&gt;&gt; = RefCell::new(Default::default());
 }
 </code></pre></div></section></main></body></html>

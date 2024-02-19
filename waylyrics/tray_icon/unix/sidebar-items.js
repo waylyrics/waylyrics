@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["PLAYERS"],"fn":["play_action","start_tray_service","ui_action"],"struct":["TrayIcon"]};
+window.SIDEBAR_ITEMS = {"fn":["play_action","start_tray_service","ui_action"],"struct":["TrayIcon"]};
