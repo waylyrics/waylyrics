@@ -103,10 +103,13 @@
 <a href="#102" id="102">102</a>
 <a href="#103" id="103">103</a>
 <a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{path::PathBuf, time::Duration};
 
-<span class="kw">use </span>fuzzy_match::algorithms::{SimilarityAlgorithm, SorensenDice};
 <span class="kw">use </span>gtk::subclass::prelude::<span class="kw-2">*</span>;
+<span class="kw">use </span>sorensen::distance;
 
 <span class="kw">use </span><span class="kw">crate</span>::log::trace;
 <span class="kw">use crate</span>::{app, lyric_providers::SongInfo};
@@ -148,7 +151,9 @@
             </span>}
         }))
         .or_else(|| {
-            <span class="kw">let </span><span class="kw-2">mut </span>fuzzy_match = SorensenDice::new();
+            <span class="kw">let </span>title: Vec&lt;char&gt; = title.chars().collect();
+            <span class="kw">let </span>album: <span class="prelude-ty">Option</span>&lt;Vec&lt;char&gt;&gt; = album.map(|a| a.chars().collect());
+            <span class="kw">let </span>singer: <span class="prelude-ty">Option</span>&lt;Vec&lt;char&gt;&gt; = singer.map(|s| s.chars().collect());
             search_result
                 .iter()
                 .map(
@@ -159,19 +164,21 @@
                          ..
                      }| {
                         <span class="kw">let </span>likelihood = fuzzy_match_song(
-                            <span class="kw-2">&amp;mut </span>fuzzy_match,
-                            title,
-                            album,
-                            singer,
-                            r_title,
-                            r_album.as_deref(),
-                            r_singer,
+                            <span class="kw-2">&amp;</span>title,
+                            album.as_deref(),
+                            singer.as_deref(),
+                            <span class="kw-2">&amp;</span>r_title.chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
+                            r_album
+                                .as_ref()
+                                .map(|a| a.chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;())
+                                .as_deref(),
+                            <span class="kw-2">&amp;</span>r_singer.chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
                         );
                         <span class="macro">trace!</span>(<span class="string">"p={likelihood} for {s:?}"</span>);
                         (s, likelihood)
                     },
                 )
-                .max_by_key(|(<span class="kw">_</span>, likelihood)| (likelihood * <span class="number">128.</span>) <span class="kw">as </span>u32)
+                .max_by_key(|(<span class="kw">_</span>, likelihood)| (likelihood * <span class="number">1024.</span>) <span class="kw">as </span>u32)
                 .map(|(s, <span class="kw">_</span>)| (s, <span class="number">1</span>))
         })
         .map(|(song, weight)| (song.id.as_str(), weight))
@@ -186,24 +193,23 @@
 }
 
 <span class="kw">fn </span>fuzzy_match_song(
-    fuzzy_match: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>SimilarityAlgorithm,
-    title: <span class="kw-2">&amp;</span>str,
-    album: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;,
-    singer: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;,
-    r_title: <span class="kw-2">&amp;</span>str,
-    r_album: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;,
-    r_singer: <span class="kw-2">&amp;</span>str,
+    title: <span class="kw-2">&amp;</span>[char],
+    album: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>[char]&gt;,
+    singer: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>[char]&gt;,
+    r_title: <span class="kw-2">&amp;</span>[char],
+    r_album: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>[char]&gt;,
+    r_singer: <span class="kw-2">&amp;</span>[char],
 ) -&gt; f64 {
-    <span class="kw">let </span>title_likelihood = fuzzy_match.get_similarity(title, r_title) <span class="kw">as </span>f64;
-    <span class="kw">let </span>singer_likelihood = fuzzy_match.get_similarity(singer.unwrap_or_default(), r_singer) <span class="kw">as </span>f64;
+    <span class="kw">let </span>title_likelihood = distance(title, r_title);
+    <span class="kw">let </span>singer_likelihood = || distance(singer.unwrap_or_default(), r_singer) <span class="kw">as </span>f64;
     <span class="kw">let </span>album_likelihood =
-        fuzzy_match.get_similarity(album.unwrap_or_default(), r_album.unwrap_or_default()) <span class="kw">as </span>f64;
+        || distance(album.unwrap_or_default(), r_album.unwrap_or_default()) <span class="kw">as </span>f64;
     <span class="kw">match </span>(singer, album) {
         (<span class="prelude-val">Some</span>(<span class="kw">_</span>), <span class="prelude-val">Some</span>(<span class="kw">_</span>)) =&gt; {
-            title_likelihood * <span class="number">0.6 </span>+ singer_likelihood * <span class="number">0.3 </span>+ album_likelihood * <span class="number">0.1
+            title_likelihood * <span class="number">0.6 </span>+ singer_likelihood() * <span class="number">0.3 </span>+ album_likelihood() * <span class="number">0.1
         </span>}
-        (<span class="prelude-val">Some</span>(<span class="kw">_</span>), <span class="prelude-val">None</span>) =&gt; title_likelihood * <span class="number">0.7 </span>+ singer_likelihood * <span class="number">0.3</span>,
-        (<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="kw">_</span>)) =&gt; title_likelihood * <span class="number">0.9 </span>+ album_likelihood * <span class="number">0.1</span>,
+        (<span class="prelude-val">Some</span>(<span class="kw">_</span>), <span class="prelude-val">None</span>) =&gt; title_likelihood * <span class="number">0.7 </span>+ singer_likelihood() * <span class="number">0.3</span>,
+        (<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="kw">_</span>)) =&gt; title_likelihood * <span class="number">0.9 </span>+ album_likelihood() * <span class="number">0.1</span>,
         (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; title_likelihood,
     }
 }
