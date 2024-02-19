@@ -1,10 +1,9 @@
 name: Generate changelog
 
 on:
-    push:
-        tags:
-            - v*
-    workflow_dispatch:
+  push:
+    branches:
+      - master
         
 permissions:
     contents: write
