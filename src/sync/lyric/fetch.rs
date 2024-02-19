@@ -57,13 +57,21 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
 
             set.spawn(async move {
                 let artists = artists.iter().map(|s| s.as_str()).collect::<Vec<&str>>();
+                let title = title.as_ref();
                 let album = album.as_deref();
+                let singer = if artists.is_empty() {
+                    None
+                } else {
+                    Some(artists.join(","))
+                };
                 let search_result = provider
                     .search_song_detailed(album.unwrap_or_default(), &artists, &title)
                     .await;
                 search_result.map(|songs| {
                     match_likely_lyric(
-                        album.zip(Some(&title)),
+                        album,
+                        title,
+                        singer.as_deref(),
                         length,
                         &songs,
                         length_toleration_ms,
