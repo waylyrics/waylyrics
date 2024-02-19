@@ -44,7 +44,9 @@ impl ObjectImpl for ResultObject {}
 pub struct Window {
     pub vbox: gtk::Box,
 
-    pub input: gtk::Entry,
+    pub input_title: gtk::Entry,
+    pub input_album: gtk::Entry,
+    pub input_artists: gtk::Entry,
 
     pub set_button: gtk::Button,
 

@@ -16,7 +16,7 @@ mod utils;
 use crate::{
     app::{self, dialog::show_dialog},
     glib_spawn,
-    lyric_providers::{default_search_query, LyricOwned},
+    lyric_providers::LyricOwned,
     sync::{
         interop::clean_player, interop::common::update_lyric, lyric::cache::update_lyric_cache,
         TrackState, LYRIC, TRACK_PLAYING_STATE,
@@ -41,22 +41,28 @@ pub fn register_search_lyric(app: &Application, wind: &app::Window, trigger: &st
     let cache_lyrics = wind.imp().cache_lyrics.get();
     action.connect_activate(move |_, _| {
         // Get current playing track
-        let query_default = TRACK_PLAYING_STATE.with_borrow(|TrackState { metainfo, .. }| {
-            metainfo.as_ref().map(|track| {
-                let artists = if let Some(artists) = track.artists.as_ref() {
-                    artists.iter().map(|s| s.as_str()).collect()
-                } else {
-                    vec![]
-                };
-                default_search_query(
-                    track.album.as_deref().unwrap_or_default(),
-                    &artists,
-                    track.title.as_deref().unwrap_or("Unknown"),
-                )
-            })
-        });
+        let (title, album, artists) =
+            TRACK_PLAYING_STATE.with_borrow(|TrackState { metainfo, .. }| {
+                metainfo
+                    .as_ref()
+                    .map(|track| {
+                        let artists = if let Some(artists) = track.artists.as_ref() {
+                            artists
+                                .iter()
+                                .map(|s| s.as_str())
+                                .collect::<Vec<&str>>()
+                                .join(",")
+                        } else {
+                            "".into()
+                        };
+                        let title = track.title.as_deref().unwrap_or_default();
+                        let album = track.album.as_deref().unwrap_or_default();
+                        (title.into(), album.into(), artists.into())
+                    })
+                    .unwrap_or(("".to_string(), "".to_string(), "".to_string()))
+            });
 
-        let window = search_window::Window::new(query_default.as_deref(), cache_lyrics);
+        let window = search_window::Window::new(title, album, artists, cache_lyrics);
         window.present();
     });
     app.add_action(&action);

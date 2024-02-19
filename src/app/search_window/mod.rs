@@ -3,8 +3,9 @@ mod imp;
 use std::sync::Arc;
 
 use crate::log::{error, info};
+use crate::lyric_providers::SongInfo;
 use glib::Object;
-use gtk::glib::clone;
+use gtk::glib::{clone, IntoGStr};
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib, ColumnViewColumn};
 use gtk::{prelude::*, ListItem};
@@ -14,7 +15,7 @@ use crate::{glib_spawn, tokio_spawn, LYRIC_PROVIDERS};
 
 use crate::app::dialog::show_dialog;
 use crate::sync::lyric::cache::update_lyric_cache;
-use crate::sync::{get_lyric_cache_path, set_current_lyric, LyricState};
+use crate::sync::{fuzzy_match_song, get_lyric_cache_path, set_current_lyric, LyricState};
 
 glib::wrapper! {
     pub struct ResultObject(ObjectSubclass<imp::ResultObject>);
@@ -50,12 +51,14 @@ glib::wrapper! {
 }
 
 impl Window {
-    pub fn new(query_default: Option<&str>, use_cache: bool) -> Self {
+    pub fn new<S: IntoGStr>(title: S, album: S, artists: S, use_cache: bool) -> Self {
         let window: Self = Object::builder().build();
         window.set_title(Some("Search lyric"));
-        if let Some(query) = query_default {
-            window.imp().input.buffer().set_text(query);
-        }
+
+        window.imp().input_title.buffer().set_text(title);
+        window.imp().input_album.buffer().set_text(album);
+        window.imp().input_artists.buffer().set_text(artists);
+
         window.imp().use_cache.set(use_cache);
         window
     }
@@ -82,7 +85,11 @@ impl Window {
 
         imp.vbox
             .set_properties(&[("orientation", &gtk::Orientation::Vertical)]);
-        imp.vbox.append(&imp.input);
+
+        imp.vbox.append(&imp.input_title);
+        imp.vbox.append(&imp.input_artists);
+        imp.vbox.append(&imp.input_album);
+
         imp.vbox.append(&imp.result_scrolled_window);
         imp.vbox.append(&imp.set_button);
 
@@ -109,18 +116,29 @@ impl Window {
         imp.result_list.append_column(&imp.column_length);
         imp.result_list.append_column(&imp.column_source);
 
-        imp.input.set_placeholder_text(Some("Enter query..."));
-        imp.input
+        imp.input_title.set_placeholder_text(Some("Enter title..."));
+        imp.input_title
             .set_secondary_icon_name(Some("system-search-symbolic"));
+        imp.input_album.set_placeholder_text(Some("Enter album..."));
+        imp.input_artists
+            .set_placeholder_text(Some("Enter artists..."));
+
         imp.set_button.set_label("Set as lyric");
 
         self.set_child(Some(&imp.vbox));
     }
 
     async fn search(&self) {
-        let buffer = self.imp().input.buffer();
-        let query = Arc::new(buffer.text().to_string());
-        if query.is_empty() {
+        let buffer = self.imp().input_title.buffer();
+        let query_title = Arc::new(buffer.text().to_string());
+        let buffer = self.imp().input_album.buffer();
+        let query_album = Arc::new(buffer.text().to_string());
+        let buffer = self.imp().input_artists.buffer();
+        let query_artists = Arc::new(buffer.text().to_string());
+        if [&query_album, &query_artists, &query_title]
+            .iter()
+            .all(|q| q.is_empty())
+        {
             return;
         }
 
@@ -128,8 +146,13 @@ impl Window {
         let providers = LYRIC_PROVIDERS
             .get()
             .expect("lyric providers should be initialized");
-        let results = tokio_spawn!(async move {
+
+        let _title = query_title.clone();
+        let _album = query_album.clone();
+        let _artists = query_artists.clone();
+        let mut results = tokio_spawn!(async move {
             let mut set = JoinSet::new();
+            let query = format!("{_title} {_album} {_artists}");
             for (idx, provider) in providers.iter().enumerate() {
                 let query = query.clone();
                 let provider_id = provider.unique_name();
@@ -156,6 +179,35 @@ impl Window {
         })
         .await
         .expect("Tokio runtime failure");
+
+        let query_title_chars = query_title.chars().collect::<Vec<_>>();
+        let query_album_chars = query_album.chars().collect::<Vec<_>>();
+        let query_artists_chars = query_artists.chars().collect::<Vec<_>>();
+        results.sort_unstable_by_key(
+            |(
+                SongInfo {
+                    title,
+                    album,
+                    singer,
+                    ..
+                },
+                ..,
+            )| {
+                let factor = fuzzy_match_song(
+                    &query_title_chars,
+                    Some(&query_album_chars),
+                    Some(&query_artists_chars),
+                    &title.chars().collect::<Vec<_>>(),
+                    album
+                        .as_ref()
+                        .map(|a| a.chars().collect::<Vec<_>>())
+                        .as_deref(),
+                    &singer.chars().collect::<Vec<_>>(),
+                );
+
+                (factor * -1024.) as i32
+            },
+        );
 
         let results: Vec<ResultObject> = results
             .into_iter()
@@ -202,7 +254,7 @@ impl Window {
 
     fn setup_callbacks(&self) {
         let imp = self.imp();
-        imp.input
+        imp.input_title
             .connect_activate(clone!(@weak self as window => move |_| {
                 let window = window.downgrade();
                 crate::log::debug!("spawned window.search() from search button");
@@ -213,7 +265,7 @@ impl Window {
                 });
             }));
 
-        imp.input
+        imp.input_title
             .connect_icon_release(clone!(@weak self as window => move |_, _| {
                 let window = window.downgrade();
                 crate::log::debug!("spawned window.search() from search icon release");
