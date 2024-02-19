@@ -12,6 +12,7 @@ BuildRequires:  gtk4-devel
 BuildRequires:  openssl-devel
 BuildRequires:  dbus-1-devel
 BuildRequires:  mimalloc-devel
+BuildRequires:  hicolor-icon-theme
 
 %define debug_package %{nil}
 
@@ -36,6 +37,7 @@ install -d %{buildroot}%{_datadir}/waylyrics
 install -Dm644 io.poly000.waylyrics.gschema.xml -t %{buildroot}%{_datadir}/glib-2.0/schemas/
 
 cp -r themes %{buildroot}%{_datadir}/waylyrics/
+cp -r res/icons %{buildroot}%{_datadir}/
 
 rm %{buildroot}/usr/.crates.toml %{buildroot}/usr/.crates2.json
 
@@ -48,6 +50,7 @@ rm %{buildroot}/usr/.crates.toml %{buildroot}/usr/.crates2.json
 %{_datadir}/applications/io.poly000.waylyrics.desktop
 %{_datadir}/waylyrics/
 %{_datadir}/glib-2.0/schemas/io.poly000.waylyrics.gschema.xml
+%{_datadir}/icons/hicolor/scalable/apps/io.poly000.waylyrics.svg
 
 %changelog
 {{{ git_repo_changelog }}}
