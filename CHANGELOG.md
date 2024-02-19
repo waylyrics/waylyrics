@@ -8,9 +8,22 @@ All notable changes to this project will be documented in this file.
 
 - Changelog CI need write permission
 
+### Documentation
+
+- Update changelog
+
+### Features
+
+- Sort search result by fuzzy-match weight
+
 ### Miscellaneous Tasks
 
 - Generate changelogs for master
+- Update changelog on each commit
+
+### Refactor
+
+- Skip fuzzy-match in it's block
 
 ## [0.2.7] - 2024-02-19
 
