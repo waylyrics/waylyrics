@@ -13,18 +13,18 @@
   - [构建/安装](#构建安装)
   - [用法](#用法)
   - [依赖](#依赖)
-    - [推荐的播放器](#推荐的播放器)
-      - [在线](#在线)
-        - [浏览器](#浏览器)
-        - [GTK+](#gtk)
-        - [Qt](#qt)
-        - [Electron](#electron)
-        - [TUI](#tui)
-      - [本地](#本地)
-        - [GTK+](#gtk-1)
-        - [原生](#原生)
-        - [Qt](#qt-1)
-    - [无法使用的播放器](#无法使用的播放器)
+  - [推荐的播放器](#推荐的播放器)
+    - [在线](#在线)
+      - [浏览器](#浏览器)
+      - [GTK+](#gtk)
+      - [Qt](#qt)
+      - [Electron](#electron)
+      - [TUI](#tui)
+    - [本地](#本地)
+      - [GTK+](#gtk-1)
+      - [原生](#原生)
+      - [Qt](#qt-1)
+  - [无法使用的播放器](#无法使用的播放器)
   - [目录](#目录)
   - [替代品](#替代品)
     - [Linux](#linux)
@@ -47,53 +47,53 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 - 播放器需至少在MPRIS提供 Position，Metadata(有title)，PlaybackStatus
 - 需要你的wm允许你设置窗口置顶
 
-### 推荐的播放器
+## 推荐的播放器
 
-#### 在线
+### 在线
 
-##### 浏览器
+#### 浏览器
 
 [plasma integration]: https://addons.mozilla.org/en-US/firefox/addon/plasma-integration/
 
 - Chrome
 - Firefox，加[插件][plasma integration]
 
-##### GTK+
+#### GTK+
 
 - [netease-cloud-music-gtk](https://github.com/gmg137/netease-cloud-music-gtk)
 
-##### Qt
+#### Qt
 
 - [FeelUOwn](https://github.com/feeluown/FeelUOwn/), 3.9.12+
 - [Qcm](https://github.com/hypengw/Qcm)
 - [Telegram](https://t.me/Music163Bot)
 
-##### Electron
+#### Electron
 
 - [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
 - [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
 - [youtube-music](https://github.com/th-ch/youtube-music), 启用 Shortcut 插件
 
-##### TUI
+#### TUI
 
 - [go-musicfox](https://github.com/go-musicfox/go-musicfox), 需要 [352bd99](https://github.com/go-musicfox/go-musicfox/commit/352bd9903f759eed98b1079fd44dc37a95da85d2) 修改
 
-#### 本地
+### 本地
 
-##### GTK+
+#### GTK+
 
 - [amberol](https://gitlab.gnome.org/World/amberol)
 - [lollypop](https://github.com/hamonikr/lollypop)
 
-##### 原生
+#### 原生
 
 - mpv + [mpv-mpris](https://github.com/hoyon/mpv-mpris)
 
-##### Qt
+#### Qt
 
 - [VLC](https://www.videolan.org)
 
-### 无法使用的播放器
+## 无法使用的播放器
 
 [flutter-netease-music]: https://github.com/boyan01/flutter-netease-music
 [youtube-music]: https://github.com/th-ch/youtube-music

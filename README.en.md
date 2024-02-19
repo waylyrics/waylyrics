@@ -13,18 +13,18 @@
   - [Build/Install](#buildinstall)
   - [Usage](#usage)
   - [Requirement](#requirement)
-    - [Recommended Players](#recommended-players)
-      - [online](#online)
-        - [Browser](#browser)
-        - [GTK+](#gtk)
-        - [Qt](#qt)
-        - [Electron](#electron)
-        - [TUI](#tui)
-      - [local](#local)
-        - [GTK+](#gtk-1)
-        - [Native](#native)
-        - [Qt](#qt-1)
-    - [Players with bad MPRIS support](#players-with-bad-mpris-support)
+  - [Recommended Players](#recommended-players)
+    - [online](#online)
+      - [Browser](#browser)
+      - [GTK+](#gtk)
+      - [Qt](#qt)
+      - [Electron](#electron)
+      - [TUI](#tui)
+    - [local](#local)
+      - [GTK+](#gtk-1)
+      - [Native](#native)
+      - [Qt](#qt-1)
+  - [Players with bad MPRIS support](#players-with-bad-mpris-support)
   - [Directories](#directories)
   - [Alternatives](#alternatives)
     - [Linux](#linux)
@@ -47,53 +47,53 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 - A player at least supports MPRIS PlaybackStatus, Position and Metadata(with title)
 - In particular, a wm allows you set windows as top-level
 
-### Recommended Players
+## Recommended Players
 
-#### online
+### online
 
-##### Browser
+#### Browser
 
 [plasma integration]: https://addons.mozilla.org/en-US/firefox/addon/plasma-integration/
 
 - Chrome
 - Firefox, with [plasma integration]
 
-##### GTK+
+#### GTK+
 
 - [netease-cloud-music-gtk](https://github.com/gmg137/netease-cloud-music-gtk)
 
-##### Qt
+#### Qt
 
 - [Qcm](https://github.com/hypengw/Qcm)
 - [FeelUOwn](https://github.com/feeluown/FeelUOwn/), with the latest code
 - [Telegram](https://t.me/Music163Bot)
 
-##### Electron
+#### Electron
 
 - [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
 - [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
 - [youtube-music](https://github.com/th-ch/youtube-music), enable ShortCut plugin
 
-##### TUI
+#### TUI
 
 - [go-musicfox](https://github.com/go-musicfox/go-musicfox), with [352bd99](https://github.com/go-musicfox/go-musicfox/commit/352bd9903f759eed98b1079fd44dc37a95da85d2) patch
 
-#### local
+### local
 
-##### GTK+
+#### GTK+
 
 - [amberol](https://gitlab.gnome.org/World/amberol)
 - [lollypop](https://github.com/hamonikr/lollypop)
 
-##### Native
+#### Native
 
 - mpv + [mpv-mpris](https://github.com/hoyon/mpv-mpris)
 
-##### Qt
+#### Qt
 
 - [VLC](https://www.videolan.org)
 
-### Players with bad MPRIS support
+## Players with bad MPRIS support
 
 [flutter-netease-music]: https://github.com/boyan01/flutter-netease-music
 [youtube-music]: https://github.com/th-ch/youtube-music
