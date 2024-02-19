@@ -1,4 +1,3 @@
-use std::cell::RefCell;
 use std::{env, process};
 
 use async_channel::Sender;
@@ -27,11 +26,7 @@ impl Tray for TrayIcon {
     fn menu(&self) -> Vec<ksni::MenuItem<Self>> {
         use ksni::menu::*;
 
-        let players = PLAYERS.with_borrow_mut(|players| {
-            players.clear();
-            players.append(&mut list_player_names());
-            players.clone()
-        });
+        let players = list_player_names();
 
         vec![
             SubMenu {
@@ -83,19 +78,22 @@ impl Tray for TrayIcon {
                 enabled: !players.len().is_zero(),
                 submenu: players
                     .into_iter()
-                    .enumerate()
-                    .map(|(idx, PlayerId { player_name, .. })| {
-                        StandardItem {
-                            label: player_name,
-                            activate: Box::new(move |_| {
-                                let inner_id =
-                                    PLAYERS.with_borrow(|players| players[idx].inner_id.clone());
-                                let _ = play_action().send_blocking(PlayAction::Connect(inner_id));
-                            }),
-                            ..Default::default()
-                        }
-                        .into()
-                    })
+                    .map(
+                        |PlayerId {
+                             player_name,
+                             inner_id,
+                         }| {
+                            StandardItem {
+                                label: player_name,
+                                activate: Box::new(move |_| {
+                                    let _ = play_action()
+                                        .send_blocking(PlayAction::Connect(inner_id.clone()));
+                                }),
+                                ..Default::default()
+                            }
+                            .into()
+                        },
+                    )
                     .collect(),
                 ..Default::default()
             }
@@ -159,8 +157,4 @@ fn ui_action() -> Sender<UIAction> {
 fn play_action() -> Sender<PlayAction> {
     let play_action = PLAY_ACTION.get().unwrap().clone();
     play_action
-}
-
-thread_local! {
-    static PLAYERS: RefCell<Vec<PlayerId>> = RefCell::new(Default::default());
 }
