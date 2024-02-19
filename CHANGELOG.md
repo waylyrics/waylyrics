@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Update changelog
 - Update changelog
 - Update readme
+- Update changelog
 
 ### Features
 
@@ -28,6 +29,10 @@ All notable changes to this project will be documented in this file.
 ### Refactor
 
 - Skip fuzzy-match in it's block
+
+### Build
+
+- Add icon
 
 ## [0.2.7] - 2024-02-19
 
