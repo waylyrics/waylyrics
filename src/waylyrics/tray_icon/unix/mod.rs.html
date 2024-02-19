@@ -145,7 +145,28 @@
 <a href="#144" id="144">144</a>
 <a href="#145" id="145">145</a>
 <a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::RefCell;
+<span class="kw">use </span>std::{env, process};
 
 <span class="kw">use </span>async_channel::Sender;
 <span class="kw">use </span>ksni::{Tray, TrayService};
@@ -157,6 +178,8 @@
 
 <span class="kw">use </span><span class="kw">crate</span>::config::LyricDisplay;
 <span class="kw">use </span><span class="kw">crate</span>::sync::{list_player_names, PlayerId};
+
+<span class="kw">use </span><span class="kw">crate</span>::log::error;
 
 <span class="attr">#[derive(Debug, Default)]
 </span><span class="kw">struct </span>TrayIcon {}
@@ -261,6 +284,23 @@
             }
             .into(),
             MenuItem::Separator,
+            StandardItem {
+                label: <span class="string">"Restart"</span>.into(),
+                activate: Box::new(|<span class="kw">_</span>| {
+                    <span class="kw">let </span>my_path = env::args().nth(<span class="number">0</span>).unwrap();
+                    <span class="kw">let </span><span class="prelude-val">Ok</span>(<span class="kw">_</span>) = process::Command::new(<span class="string">"sh"</span>)
+                        .arg(<span class="string">"-c"</span>)
+                        .arg(<span class="macro">format!</span>(<span class="string">"sleep 1 &amp;&amp; {my_path}"</span>))
+                        .spawn()
+                    <span class="kw">else </span>{
+                        <span class="macro">error!</span>(<span class="string">"failed to run waylyrics"</span>);
+                        <span class="kw">return</span>;
+                    };
+                    <span class="kw">let _ </span>= ui_action().send_blocking(UIAction::Quit);
+                }),
+                ..Default::default()
+            }
+            .into(),
             StandardItem {
                 label: <span class="string">"Quit"</span>.into(),
                 activate: Box::new(|<span class="kw">_</span>| {
