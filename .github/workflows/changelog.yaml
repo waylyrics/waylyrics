@@ -2,8 +2,8 @@ name: Generate changelog
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - v*
         
 permissions:
     contents: write
