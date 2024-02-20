@@ -117,18 +117,22 @@ impl Window {
         imp.result_list.append_column(&imp.column_length);
         imp.result_list.append_column(&imp.column_source);
 
-        imp.input_title.set_placeholder_text(Some(&gettext("Enter title...")));
+        imp.input_title
+            .set_placeholder_text(Some(&gettext("Enter title...")));
         imp.input_title.set_tooltip_text(Some(&gettext("title")));
-        imp.input_album.set_placeholder_text(Some(&gettext("Enter album...")));
+        imp.input_album
+            .set_placeholder_text(Some(&gettext("Enter album...")));
         imp.input_album.set_tooltip_text(Some(&gettext("album")));
         imp.input_artists
             .set_placeholder_text(Some(&gettext("Enter artists...")));
-        imp.input_artists.set_tooltip_text(Some(&gettext("artists")));
+        imp.input_artists
+            .set_tooltip_text(Some(&gettext("artists")));
 
         imp.input_title
             .set_secondary_icon_name(Some("system-search-symbolic"));
 
         imp.set_button.set_label(&gettext("Set as lyric"));
+        self.imp().set_button.set_visible(false);
 
         self.set_child(Some(&imp.vbox));
     }
@@ -231,8 +235,15 @@ impl Window {
         self.results().remove_all();
 
         if results.is_empty() {
-            show_dialog(Some(self),&gettext( "No result was found."), gtk::MessageType::Error);
+            show_dialog(
+                Some(self),
+                &gettext("No result was found."),
+                gtk::MessageType::Error,
+            );
+            self.imp().set_button.set_visible(false);
             return;
+        } else {
+            self.imp().set_button.set_visible(true);
         }
 
         self.results().extend_from_slice(&results);
