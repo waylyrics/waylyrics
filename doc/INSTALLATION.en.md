@@ -51,7 +51,7 @@ check this [PR](https://github.com/NixOS/nixpkgs/pull/231984) for an outdated ex
 ## Debian-based
 
 ```bash
-sudo apt-get install libssl-dev libgtk-4-dev libdbus-1-dev libmimalloc-dev
+sudo apt-get install libssl-dev libgtk-4-dev libdbus-1-dev libmimalloc-dev gettext
 ```
 
 ## Arch-based
@@ -65,7 +65,7 @@ paru -S gtk4 libxcb mimalloc
 Please install dependencies in below:
 
 ```
-cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pango-devel
+cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pango-devel gettext
 ```
 
 # Build

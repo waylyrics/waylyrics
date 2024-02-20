@@ -13,6 +13,7 @@ BuildRequires:  openssl-devel
 BuildRequires:  dbus-1-devel
 BuildRequires:  mimalloc-devel
 BuildRequires:  hicolor-icon-theme
+BuildRequires:  gettext-runtime
 
 %define debug_package %{nil}
 

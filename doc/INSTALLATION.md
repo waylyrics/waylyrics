@@ -51,7 +51,7 @@ sudo zypper install waylyrics
 ## Debian-based
 
 ```bash
-sudo apt-get install libssl-dev libgtk-4-dev libdbus-1-dev libmimalloc-dev
+sudo apt-get install libssl-dev libgtk-4-dev libdbus-1-dev libmimalloc-dev gettext
 ```
 
 ## Arch-based
@@ -65,7 +65,7 @@ paru -S gtk4 libxcb mimalloc
 请安装如下依赖：
 
 ```
-cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pango-devel
+cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pango-devel gettext
 ```
 
 # 编译
