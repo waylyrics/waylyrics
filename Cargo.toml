@@ -75,6 +75,7 @@ tokio = { version = "1.35.1", features = [
 ] }
 reqwest = { version = "0.11.23" }
 
+# async event
 async-channel = { version = "2.2.0", optional = true }
 
 [features] # cross thread gtk action
@@ -82,9 +83,8 @@ mimalloc = ["dep:mimalloc"]
 net-test = []
 default = ["mimalloc", "net-test", "tray-icon"]
 vendored = ["dbus/vendored", "openssl/vendored"]
-tray-icon = ["action-event", "ksni"]
+tray-icon = ["action-event", "dep:ksni"]
 action-event = ["dep:async-channel"]
-ksni = ["dep:ksni"]
 
 [target.'cfg(unix)'.dependencies]
 # MPRIS integration

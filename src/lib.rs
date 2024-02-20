@@ -12,6 +12,8 @@ pub mod lyric_providers;
 pub mod sync;
 pub mod utils;
 
+pub const DEFAULT_TEXT: &str = "Waylyrics";
+pub const PACKAGE_NAME: &str = env!("CARGO_PKG_NAME");
 pub const APP_ID: &str = "io.poly000.waylyrics";
 
 thread_local! {
@@ -22,8 +24,6 @@ thread_local! {
 }
 
 pub static LYRIC_PROVIDERS: OnceLock<Vec<&'static dyn LyricProvider>> = OnceLock::new();
-
-pub const DEFAULT_TEXT: &str = "Waylyrics";
 
 pub static TOKIO_RUNTIME: Lazy<tokio::runtime::Runtime> =
     Lazy::new(|| tokio::runtime::Runtime::new().unwrap());

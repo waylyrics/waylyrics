@@ -12,16 +12,17 @@ use crate::config::LyricDisplay;
 use crate::sync::{list_player_names, PlayerId};
 
 use crate::log::error;
+use crate::{APP_ID, PACKAGE_NAME};
 
 #[derive(Debug, Default)]
 struct TrayIcon {}
 
 impl Tray for TrayIcon {
     fn icon_name(&self) -> String {
-        crate::APP_ID.to_string()
+        APP_ID.to_string()
     }
     fn id(&self) -> String {
-        env!("CARGO_PKG_NAME").into()
+        PACKAGE_NAME.into()
     }
     fn menu(&self) -> Vec<ksni::MenuItem<Self>> {
         use ksni::menu::*;
