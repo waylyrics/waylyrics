@@ -1,6 +1,6 @@
 [package]
 name = "waylyrics"
-version = "0.2.7"
+version = "0.2.8"
 edition = "2021"
 description = "Simple On Screen lyrics Display for linux/unix"
 authors = ["poly000"]
