@@ -4,9 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## [unreleased]
 
+### Miscellaneous Tasks
+
+- Fix changelog ci skipped unexpectedly
+
+## [0.2.8] - 2024-02-20
+
 ### Bug Fixes
 
 - Changelog CI need write permission
+- Incomplete i18n in menu
 
 ### Documentation
 
@@ -15,24 +22,40 @@ All notable changes to this project will be documented in this file.
 - Update changelog
 - Update readme
 - Update changelog
+- Update changelog
+- Add gettext to dependencies
 
 ### Features
 
 - Sort search result by fuzzy-match weight
 - Show tooltip for search entries
+- I18n support
 
 ### Miscellaneous Tasks
 
 - Generate changelogs for master
 - Update changelog on each commit
+- Do not flood commit logs
+- Remove unnessacary use of Arc<dyn LyricProvider>
+- Release v0.2.8
 
 ### Refactor
 
 - Skip fuzzy-match in it's block
 
+### Styling
+
+- Package_name as a constant [ci-skip]
+
 ### Build
 
 - Add icon
+- Make global theme presets optional
+- Package with i18n files
+
+### I18n
+
+- Add translation for Simplefied Chinese
 
 ## [0.2.7] - 2024-02-19
 
