@@ -1,6 +1,7 @@
 use std::cell::Cell;
 use std::time::SystemTime;
 
+use gettextrs::gettext;
 use gio::Settings;
 use gtk::gio::MenuItem;
 use gtk::glib::Propagation;
@@ -10,7 +11,6 @@ use gtk::{gio, glib, ApplicationWindow, PopoverMenu};
 use std::sync::OnceLock;
 
 use crate::app::utils::set_click_pass_through;
-use crate::app::REMOVE_LYRICS;
 use crate::config::LyricDisplay;
 use crate::sync::list_player_names;
 
@@ -50,20 +50,36 @@ impl ObjectImpl for Window {
         self.headerbar.set_decoration_layout(Some("menu:close"));
         self.menubutton.set_icon_name("open-menu-symbolic");
 
-        let hide_decoration = MenuItem::new(Some("Hide Decoration"), Some("win.switch-decoration"));
-        let passthrough = MenuItem::new(Some("Switch Passthrough"), Some("win.switch-passthrough"));
-        let reload_theme = MenuItem::new(Some("Reload theme"), Some("app.reload-theme"));
-        let search_lyric = MenuItem::new(Some("Search lyric"), Some("app.search-lyric"));
-        let refetch_lyric = MenuItem::new(Some("Refetch lyric"), Some("app.refetch-lyric"));
-        let remove_lyric = MenuItem::new(Some(&REMOVE_LYRICS.take()), Some("app.remove-lyric"));
+        let hide_decoration = MenuItem::new(
+            Some(&gettext("Hide Decoration")),
+            Some("win.switch-decoration"),
+        );
+        let passthrough = MenuItem::new(
+            Some(&gettext("Toggle Passthrough")),
+            Some("win.switch-passthrough"),
+        );
+        let reload_theme = MenuItem::new(Some(&gettext("Reload theme")), Some("app.reload-theme"));
+        let search_lyric = MenuItem::new(Some(&gettext("Search lyric")), Some("app.search-lyric"));
+        let refetch_lyric =
+            MenuItem::new(Some(&gettext("Refetch lyric")), Some("app.refetch-lyric"));
+        let remove_lyric = MenuItem::new(
+            Some(&if self.cache_lyrics.get() {
+                gettext("Remove lyric")
+            } else {
+                gettext("Remove lyric forever")
+            }),
+            Some("app.remove-lyric"),
+        );
 
         let popover = PopoverMenu::builder()
             .accessible_role(gtk::AccessibleRole::MenuItemRadio)
             .build();
         self.menu
-            .append_submenu(Some(SWITCH_PLAYERS), &self.player_menu);
-        self.menu
-            .append_submenu(Some("Lyric Display Mode"), &self.display_mode_menu);
+            .append_submenu(Some(&gettext(SELECT_PLAYER)), &self.player_menu);
+        self.menu.append_submenu(
+            Some(&gettext("Lyric Display Mode")),
+            &self.display_mode_menu,
+        );
 
         self.menu.append_item(&passthrough);
         self.menu.append_item(&hide_decoration);
@@ -75,7 +91,7 @@ impl ObjectImpl for Window {
 
         let player_menu_weak = self.player_menu.downgrade();
         popover.connect_visible_submenu_notify(move |sub| {
-            if Some(SWITCH_PLAYERS) != sub.visible_submenu().as_deref() {
+            if Some(&*gettext(SELECT_PLAYER)) != sub.visible_submenu().as_deref() {
                 return;
             }
             let Some(menu) = player_menu_weak.upgrade() else {
@@ -86,7 +102,8 @@ impl ObjectImpl for Window {
             let section = gio::Menu::new();
             let players = list_player_names();
             if !players.is_empty() {
-                let disconnect = MenuItem::new(Some("Disconnect"), Some("app.disconnect"));
+                let disconnect =
+                    MenuItem::new(Some(&gettext("Disconnect")), Some("app.disconnect"));
                 menu.append_item(&disconnect);
             }
 
@@ -136,4 +153,4 @@ impl WindowImpl for Window {
 }
 impl ApplicationWindowImpl for Window {}
 
-const SWITCH_PLAYERS: &str = "Switch players";
+const SELECT_PLAYER: &str = "Select player";

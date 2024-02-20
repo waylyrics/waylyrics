@@ -1,6 +1,7 @@
 use std::{env, process};
 
 use async_channel::Sender;
+use gettextrs::gettext;
 use ksni::{Tray, TrayService};
 use rust_decimal::prelude::Zero;
 use strum::IntoEnumIterator;
@@ -31,7 +32,7 @@ impl Tray for TrayIcon {
 
         vec![
             SubMenu {
-                label: "Lyric Display Mode".into(),
+                label: gettext("Lyric Display Mode"),
                 submenu: LyricDisplay::iter()
                     .map(|display_mode| {
                         let label = display_mode.to_string().replace("_", "__");
@@ -50,7 +51,7 @@ impl Tray for TrayIcon {
             }
             .into(),
             StandardItem {
-                label: "Toggle Decoration".into(),
+                label: gettext("Toggle Decoration"),
                 activate: Box::new(|_| {
                     let _ = ui_action().send_blocking(UIAction::SwitchDecoration);
                 }),
@@ -58,7 +59,7 @@ impl Tray for TrayIcon {
             }
             .into(),
             StandardItem {
-                label: "Toggle Passthrough".into(),
+                label: gettext("Toggle Passthrough"),
                 activate: Box::new(|_| {
                     let _ = ui_action().send_blocking(UIAction::SwitchPassthrough);
                 }),
@@ -66,7 +67,7 @@ impl Tray for TrayIcon {
             }
             .into(),
             StandardItem {
-                label: "Reload theme".into(),
+                label: gettext("Reload theme"),
                 activate: Box::new(|_| {
                     let _ = ui_action().send_blocking(UIAction::ReloadTheme);
                 }),
@@ -75,7 +76,7 @@ impl Tray for TrayIcon {
             .into(),
             MenuItem::Separator,
             SubMenu {
-                label: "Select Player".into(),
+                label: gettext("Select Player"),
                 enabled: !players.len().is_zero(),
                 submenu: players
                     .into_iter()
@@ -100,7 +101,7 @@ impl Tray for TrayIcon {
             }
             .into(),
             StandardItem {
-                label: "Search Lyric".into(),
+                label: gettext("Search Lyric"),
                 activate: Box::new(|_| {
                     let _ = play_action().send_blocking(PlayAction::SearchLyric);
                 }),
@@ -108,7 +109,7 @@ impl Tray for TrayIcon {
             }
             .into(),
             StandardItem {
-                label: "Refetch Lyric".into(),
+                label: gettext("Refetch Lyric"),
                 activate: Box::new(|_| {
                     let _ = play_action().send_blocking(PlayAction::RefetchLyric);
                 }),
@@ -117,7 +118,7 @@ impl Tray for TrayIcon {
             .into(),
             MenuItem::Separator,
             StandardItem {
-                label: "Restart".into(),
+                label: gettext("Restart"),
                 activate: Box::new(|_| {
                     let my_path = env::args().nth(0).unwrap();
                     let Ok(_) = process::Command::new("sh")
@@ -134,7 +135,7 @@ impl Tray for TrayIcon {
             }
             .into(),
             StandardItem {
-                label: "Quit".into(),
+                label: gettext("Quit"),
                 activate: Box::new(|_| {
                     let _ = ui_action().send_blocking(UIAction::Quit);
                 }),

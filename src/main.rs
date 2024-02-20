@@ -1,6 +1,7 @@
 use std::fs;
 use std::path::PathBuf;
 
+use gettextrs::TextDomain;
 use gtk::prelude::*;
 use gtk::{glib, Application};
 
@@ -14,7 +15,7 @@ use waylyrics::lyric_providers::qqmusic::QQMusic;
 use waylyrics::lyric_providers::utils::get_provider;
 use waylyrics::lyric_providers::LyricProvider;
 use waylyrics::utils::init_dirs;
-use waylyrics::{utils, EXCLUDED_REGEXES, LYRIC_PROVIDERS, MAIN_WINDOW, THEME_PATH};
+use waylyrics::{utils, EXCLUDED_REGEXES, LYRIC_PROVIDERS, MAIN_WINDOW, PACKAGE_NAME, THEME_PATH};
 
 use waylyrics::log;
 use waylyrics::sync::*;
@@ -36,6 +37,8 @@ use app::actions::{
 pub const THEME_PRESETS_DIR: Option<&str> = option_env!("WAYLYRICS_THEME_PRESETS_DIR");
 
 fn main() -> Result<glib::ExitCode> {
+    let _ = TextDomain::new(PACKAGE_NAME).init();
+
     Registry::default()
         .with(
             EnvFilter::builder()

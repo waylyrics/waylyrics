@@ -1,6 +1,5 @@
 pub mod search_window;
 mod window;
-use std::cell::Cell;
 
 use gtk::{prelude::*, subclass::prelude::ObjectSubclassIsExt, Align, Application, Label};
 pub use window::Window;
@@ -13,10 +12,6 @@ pub mod actions;
 pub mod dialog;
 pub mod utils;
 
-thread_local! {
-    static REMOVE_LYRICS: Cell<String> = const { Cell::new(String::new()) };
-}
-
 pub fn build_main_window(
     app: &Application,
     click_pass_through: bool,
@@ -27,15 +22,6 @@ pub fn build_main_window(
     lyric_display_mode: LyricDisplay,
     show_default_text_on_idle: bool,
 ) -> Window {
-    REMOVE_LYRICS.set(
-        if cache_lyrics {
-            "Remove lyric permanently"
-        } else {
-            "Remove lyric"
-        }
-        .to_string(),
-    );
-
     let window = Window::new(app, click_pass_through, cache_lyrics);
 
     window.set_size_request(500, WINDOW_MIN_HEIGHT);

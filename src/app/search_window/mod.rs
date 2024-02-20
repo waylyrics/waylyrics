@@ -4,6 +4,7 @@ use std::sync::Arc;
 
 use crate::log::{error, info};
 use crate::lyric_providers::SongInfo;
+use gettextrs::gettext;
 use glib::Object;
 use gtk::glib::{clone, IntoGStr};
 use gtk::subclass::prelude::*;
@@ -53,7 +54,7 @@ glib::wrapper! {
 impl Window {
     pub fn new<S: IntoGStr>(title: S, album: S, artists: S, use_cache: bool) -> Self {
         let window: Self = Object::builder().build();
-        window.set_title(Some("Search lyric"));
+        window.set_title(Some(&gettext("Search lyric")));
 
         window.imp().input_title.buffer().set_text(title);
         window.imp().input_album.buffer().set_text(album);
@@ -104,11 +105,11 @@ impl Window {
         imp.column_singer.set_resizable(true);
         imp.column_album.set_resizable(true);
 
-        imp.column_title.set_title(Some("Title"));
-        imp.column_singer.set_title(Some("Singer"));
-        imp.column_album.set_title(Some("Album"));
-        imp.column_length.set_title(Some("Length"));
-        imp.column_source.set_title(Some("Source"));
+        imp.column_title.set_title(Some(&gettext("Title")));
+        imp.column_singer.set_title(Some(&gettext("Singer")));
+        imp.column_album.set_title(Some(&gettext("Album")));
+        imp.column_length.set_title(Some(&gettext("Length")));
+        imp.column_source.set_title(Some(&gettext("Source")));
 
         imp.result_list.append_column(&imp.column_title);
         imp.result_list.append_column(&imp.column_singer);
@@ -116,18 +117,18 @@ impl Window {
         imp.result_list.append_column(&imp.column_length);
         imp.result_list.append_column(&imp.column_source);
 
-        imp.input_title.set_placeholder_text(Some("Enter title..."));
-        imp.input_title.set_tooltip_text(Some("title"));
-        imp.input_album.set_placeholder_text(Some("Enter album..."));
-        imp.input_album.set_tooltip_text(Some("album"));
+        imp.input_title.set_placeholder_text(Some(&gettext("Enter title...")));
+        imp.input_title.set_tooltip_text(Some(&gettext("title")));
+        imp.input_album.set_placeholder_text(Some(&gettext("Enter album...")));
+        imp.input_album.set_tooltip_text(Some(&gettext("album")));
         imp.input_artists
-            .set_placeholder_text(Some("Enter artists..."));
-        imp.input_artists.set_tooltip_text(Some("artists"));
+            .set_placeholder_text(Some(&gettext("Enter artists...")));
+        imp.input_artists.set_tooltip_text(Some(&gettext("artists")));
 
         imp.input_title
             .set_secondary_icon_name(Some("system-search-symbolic"));
 
-        imp.set_button.set_label("Set as lyric");
+        imp.set_button.set_label(&gettext("Set as lyric"));
 
         self.set_child(Some(&imp.vbox));
     }
@@ -230,7 +231,7 @@ impl Window {
         self.results().remove_all();
 
         if results.is_empty() {
-            show_dialog(Some(self), "No result was found.", gtk::MessageType::Error);
+            show_dialog(Some(self),&gettext( "No result was found."), gtk::MessageType::Error);
             return;
         }
 
