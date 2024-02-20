@@ -380,12 +380,14 @@
 <a href="#379" id="379">379</a>
 <a href="#380" id="380">380</a>
 <a href="#381" id="381">381</a>
+<a href="#382" id="382">382</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>imp;
 
 <span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span><span class="kw">crate</span>::log::{error, info};
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::SongInfo;
+<span class="kw">use </span>gettextrs::gettext;
 <span class="kw">use </span>glib::Object;
 <span class="kw">use </span>gtk::glib::{clone, IntoGStr};
 <span class="kw">use </span>gtk::subclass::prelude::<span class="kw-2">*</span>;
@@ -435,7 +437,7 @@
 <span class="kw">impl </span>Window {
     <span class="kw">pub fn </span>new&lt;S: IntoGStr&gt;(title: S, album: S, artists: S, use_cache: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>window: <span class="self">Self </span>= Object::builder().build();
-        window.set_title(<span class="prelude-val">Some</span>(<span class="string">"Search lyric"</span>));
+        window.set_title(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Search lyric"</span>)));
 
         window.imp().input_title.buffer().set_text(title);
         window.imp().input_album.buffer().set_text(album);
@@ -486,11 +488,11 @@
         imp.column_singer.set_resizable(<span class="bool-val">true</span>);
         imp.column_album.set_resizable(<span class="bool-val">true</span>);
 
-        imp.column_title.set_title(<span class="prelude-val">Some</span>(<span class="string">"Title"</span>));
-        imp.column_singer.set_title(<span class="prelude-val">Some</span>(<span class="string">"Singer"</span>));
-        imp.column_album.set_title(<span class="prelude-val">Some</span>(<span class="string">"Album"</span>));
-        imp.column_length.set_title(<span class="prelude-val">Some</span>(<span class="string">"Length"</span>));
-        imp.column_source.set_title(<span class="prelude-val">Some</span>(<span class="string">"Source"</span>));
+        imp.column_title.set_title(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Title"</span>)));
+        imp.column_singer.set_title(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Singer"</span>)));
+        imp.column_album.set_title(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Album"</span>)));
+        imp.column_length.set_title(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Length"</span>)));
+        imp.column_source.set_title(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Source"</span>)));
 
         imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.column_title);
         imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.column_singer);
@@ -498,18 +500,18 @@
         imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.column_length);
         imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.column_source);
 
-        imp.input_title.set_placeholder_text(<span class="prelude-val">Some</span>(<span class="string">"Enter title..."</span>));
-        imp.input_title.set_tooltip_text(<span class="prelude-val">Some</span>(<span class="string">"title"</span>));
-        imp.input_album.set_placeholder_text(<span class="prelude-val">Some</span>(<span class="string">"Enter album..."</span>));
-        imp.input_album.set_tooltip_text(<span class="prelude-val">Some</span>(<span class="string">"album"</span>));
+        imp.input_title.set_placeholder_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Enter title..."</span>)));
+        imp.input_title.set_tooltip_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"title"</span>)));
+        imp.input_album.set_placeholder_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Enter album..."</span>)));
+        imp.input_album.set_tooltip_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"album"</span>)));
         imp.input_artists
-            .set_placeholder_text(<span class="prelude-val">Some</span>(<span class="string">"Enter artists..."</span>));
-        imp.input_artists.set_tooltip_text(<span class="prelude-val">Some</span>(<span class="string">"artists"</span>));
+            .set_placeholder_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Enter artists..."</span>)));
+        imp.input_artists.set_tooltip_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"artists"</span>)));
 
         imp.input_title
             .set_secondary_icon_name(<span class="prelude-val">Some</span>(<span class="string">"system-search-symbolic"</span>));
 
-        imp.set_button.set_label(<span class="string">"Set as lyric"</span>);
+        imp.set_button.set_label(<span class="kw-2">&amp;</span>gettext(<span class="string">"Set as lyric"</span>));
 
         <span class="self">self</span>.set_child(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>imp.vbox));
     }
@@ -612,7 +614,7 @@
         <span class="self">self</span>.results().remove_all();
 
         <span class="kw">if </span>results.is_empty() {
-            show_dialog(<span class="prelude-val">Some</span>(<span class="self">self</span>), <span class="string">"No result was found."</span>, gtk::MessageType::Error);
+            show_dialog(<span class="prelude-val">Some</span>(<span class="self">self</span>),<span class="kw-2">&amp;</span>gettext( <span class="string">"No result was found."</span>), gtk::MessageType::Error);
             <span class="kw">return</span>;
         }
 

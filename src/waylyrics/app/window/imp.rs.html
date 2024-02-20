@@ -138,9 +138,27 @@
 <a href="#137" id="137">137</a>
 <a href="#138" id="138">138</a>
 <a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::Cell;
 <span class="kw">use </span>std::time::SystemTime;
 
+<span class="kw">use </span>gettextrs::gettext;
 <span class="kw">use </span>gio::Settings;
 <span class="kw">use </span>gtk::gio::MenuItem;
 <span class="kw">use </span>gtk::glib::Propagation;
@@ -150,7 +168,6 @@
 <span class="kw">use </span>std::sync::OnceLock;
 
 <span class="kw">use </span><span class="kw">crate</span>::app::utils::set_click_pass_through;
-<span class="kw">use </span><span class="kw">crate</span>::app::REMOVE_LYRICS;
 <span class="kw">use </span><span class="kw">crate</span>::config::LyricDisplay;
 <span class="kw">use </span><span class="kw">crate</span>::sync::list_player_names;
 
@@ -190,20 +207,36 @@
         <span class="self">self</span>.headerbar.set_decoration_layout(<span class="prelude-val">Some</span>(<span class="string">"menu:close"</span>));
         <span class="self">self</span>.menubutton.set_icon_name(<span class="string">"open-menu-symbolic"</span>);
 
-        <span class="kw">let </span>hide_decoration = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">"Hide Decoration"</span>), <span class="prelude-val">Some</span>(<span class="string">"win.switch-decoration"</span>));
-        <span class="kw">let </span>passthrough = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">"Switch Passthrough"</span>), <span class="prelude-val">Some</span>(<span class="string">"win.switch-passthrough"</span>));
-        <span class="kw">let </span>reload_theme = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">"Reload theme"</span>), <span class="prelude-val">Some</span>(<span class="string">"app.reload-theme"</span>));
-        <span class="kw">let </span>search_lyric = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">"Search lyric"</span>), <span class="prelude-val">Some</span>(<span class="string">"app.search-lyric"</span>));
-        <span class="kw">let </span>refetch_lyric = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">"Refetch lyric"</span>), <span class="prelude-val">Some</span>(<span class="string">"app.refetch-lyric"</span>));
-        <span class="kw">let </span>remove_lyric = MenuItem::new(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>REMOVE_LYRICS.take()), <span class="prelude-val">Some</span>(<span class="string">"app.remove-lyric"</span>));
+        <span class="kw">let </span>hide_decoration = MenuItem::new(
+            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Hide Decoration"</span>)),
+            <span class="prelude-val">Some</span>(<span class="string">"win.switch-decoration"</span>),
+        );
+        <span class="kw">let </span>passthrough = MenuItem::new(
+            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Toggle Passthrough"</span>)),
+            <span class="prelude-val">Some</span>(<span class="string">"win.switch-passthrough"</span>),
+        );
+        <span class="kw">let </span>reload_theme = MenuItem::new(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Reload theme"</span>)), <span class="prelude-val">Some</span>(<span class="string">"app.reload-theme"</span>));
+        <span class="kw">let </span>search_lyric = MenuItem::new(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Search lyric"</span>)), <span class="prelude-val">Some</span>(<span class="string">"app.search-lyric"</span>));
+        <span class="kw">let </span>refetch_lyric =
+            MenuItem::new(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Refetch lyric"</span>)), <span class="prelude-val">Some</span>(<span class="string">"app.refetch-lyric"</span>));
+        <span class="kw">let </span>remove_lyric = MenuItem::new(
+            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="kw">if </span><span class="self">self</span>.cache_lyrics.get() {
+                gettext(<span class="string">"Remove lyric"</span>)
+            } <span class="kw">else </span>{
+                gettext(<span class="string">"Remove lyric forever"</span>)
+            }),
+            <span class="prelude-val">Some</span>(<span class="string">"app.remove-lyric"</span>),
+        );
 
         <span class="kw">let </span>popover = PopoverMenu::builder()
             .accessible_role(gtk::AccessibleRole::MenuItemRadio)
             .build();
         <span class="self">self</span>.menu
-            .append_submenu(<span class="prelude-val">Some</span>(SWITCH_PLAYERS), <span class="kw-2">&amp;</span><span class="self">self</span>.player_menu);
-        <span class="self">self</span>.menu
-            .append_submenu(<span class="prelude-val">Some</span>(<span class="string">"Lyric Display Mode"</span>), <span class="kw-2">&amp;</span><span class="self">self</span>.display_mode_menu);
+            .append_submenu(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(SELECT_PLAYER)), <span class="kw-2">&amp;</span><span class="self">self</span>.player_menu);
+        <span class="self">self</span>.menu.append_submenu(
+            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Lyric Display Mode"</span>)),
+            <span class="kw-2">&amp;</span><span class="self">self</span>.display_mode_menu,
+        );
 
         <span class="self">self</span>.menu.append_item(<span class="kw-2">&amp;</span>passthrough);
         <span class="self">self</span>.menu.append_item(<span class="kw-2">&amp;</span>hide_decoration);
@@ -215,7 +248,7 @@
 
         <span class="kw">let </span>player_menu_weak = <span class="self">self</span>.player_menu.downgrade();
         popover.connect_visible_submenu_notify(<span class="kw">move </span>|sub| {
-            <span class="kw">if </span><span class="prelude-val">Some</span>(SWITCH_PLAYERS) != sub.visible_submenu().as_deref() {
+            <span class="kw">if </span><span class="prelude-val">Some</span>(<span class="kw-2">&amp;*</span>gettext(SELECT_PLAYER)) != sub.visible_submenu().as_deref() {
                 <span class="kw">return</span>;
             }
             <span class="kw">let </span><span class="prelude-val">Some</span>(menu) = player_menu_weak.upgrade() <span class="kw">else </span>{
@@ -226,7 +259,8 @@
             <span class="kw">let </span>section = gio::Menu::new();
             <span class="kw">let </span>players = list_player_names();
             <span class="kw">if </span>!players.is_empty() {
-                <span class="kw">let </span>disconnect = MenuItem::new(<span class="prelude-val">Some</span>(<span class="string">"Disconnect"</span>), <span class="prelude-val">Some</span>(<span class="string">"app.disconnect"</span>));
+                <span class="kw">let </span>disconnect =
+                    MenuItem::new(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Disconnect"</span>)), <span class="prelude-val">Some</span>(<span class="string">"app.disconnect"</span>));
                 menu.append_item(<span class="kw-2">&amp;</span>disconnect);
             }
 
@@ -276,5 +310,5 @@
 }
 <span class="kw">impl </span>ApplicationWindowImpl <span class="kw">for </span>Window {}
 
-<span class="kw">const </span>SWITCH_PLAYERS: <span class="kw-2">&amp;</span>str = <span class="string">"Switch players"</span>;
+<span class="kw">const </span>SELECT_PLAYER: <span class="kw-2">&amp;</span>str = <span class="string">"Select player"</span>;
 </code></pre></div></section></main></body></html>

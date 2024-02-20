@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["REMOVE_LYRICS","WINDOW_MIN_HEIGHT"],"fn":["build_main_window","get_label"],"mod":["actions","dialog","search_window","utils","window"],"struct":["Window"]};
+window.SIDEBAR_ITEMS = {"constant":["WINDOW_MIN_HEIGHT"],"fn":["build_main_window","get_label"],"mod":["actions","dialog","search_window","utils","window"],"struct":["Window"]};
