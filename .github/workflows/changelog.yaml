@@ -1,9 +1,10 @@
 name: Generate changelog
 
 on:
-  push:
-    tags:
-      - v*
+    push:
+        tags:
+            - v*
+    workflow_dispatch:
         
 permissions:
     contents: write
@@ -28,7 +29,6 @@ jobs:
             OUTPUT: CHANGELOG.md
   
         - name: Commit 
-          if: contains('refs/heads/master', github.ref)
           run: |
             git config user.name 'github-actions[bot]'
             git config user.email 'github-actions[bot]@users.noreply.github.com'
