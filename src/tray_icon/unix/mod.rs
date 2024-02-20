@@ -33,6 +33,7 @@ impl Tray for TrayIcon {
         vec![
             SubMenu {
                 label: gettext("Lyric Display Mode"),
+                icon_name: "quickview".into(),
                 submenu: LyricDisplay::iter()
                     .map(|display_mode| {
                         let label = display_mode.to_string().replace("_", "__");
@@ -52,6 +53,7 @@ impl Tray for TrayIcon {
             .into(),
             StandardItem {
                 label: gettext("Toggle Decoration"),
+                icon_name: "window-new".into(),
                 activate: Box::new(|_| {
                     let _ = ui_action().send_blocking(UIAction::SwitchDecoration);
                 }),
@@ -60,6 +62,7 @@ impl Tray for TrayIcon {
             .into(),
             StandardItem {
                 label: gettext("Toggle Passthrough"),
+                icon_name: "input-mouse".into(),
                 activate: Box::new(|_| {
                     let _ = ui_action().send_blocking(UIAction::SwitchPassthrough);
                 }),
@@ -68,6 +71,7 @@ impl Tray for TrayIcon {
             .into(),
             StandardItem {
                 label: gettext("Reload theme"),
+                icon_name: "color-management".into(),
                 activate: Box::new(|_| {
                     let _ = ui_action().send_blocking(UIAction::ReloadTheme);
                 }),
@@ -77,6 +81,7 @@ impl Tray for TrayIcon {
             MenuItem::Separator,
             SubMenu {
                 label: gettext("Select Player"),
+                icon_name: "format-indent-more".into(),
                 enabled: !players.len().is_zero(),
                 submenu: players
                     .into_iter()
@@ -102,6 +107,7 @@ impl Tray for TrayIcon {
             .into(),
             StandardItem {
                 label: gettext("Search Lyric"),
+                icon_name: "system-search".into(),
                 activate: Box::new(|_| {
                     let _ = play_action().send_blocking(PlayAction::SearchLyric);
                 }),
@@ -110,6 +116,7 @@ impl Tray for TrayIcon {
             .into(),
             StandardItem {
                 label: gettext("Refetch Lyric"),
+                icon_name: "folder-download".into(),
                 activate: Box::new(|_| {
                     let _ = play_action().send_blocking(PlayAction::RefetchLyric);
                 }),
@@ -119,6 +126,7 @@ impl Tray for TrayIcon {
             MenuItem::Separator,
             StandardItem {
                 label: gettext("Restart"),
+                icon_name: "system-reboot".into(),
                 activate: Box::new(|_| {
                     let my_path = env::args().nth(0).unwrap();
                     let Ok(_) = process::Command::new("sh")
@@ -136,6 +144,7 @@ impl Tray for TrayIcon {
             .into(),
             StandardItem {
                 label: gettext("Quit"),
+                icon_name: "application-exit".into(),
                 activate: Box::new(|_| {
                     let _ = ui_action().send_blocking(UIAction::Quit);
                 }),
