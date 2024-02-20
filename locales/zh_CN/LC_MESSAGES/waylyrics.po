@@ -1,0 +1,131 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the waylyrics package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: waylyrics 0.2.7\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-21 02:39+0800\n"
+"PO-Revision-Date: 2024-02-21 02:57+0800\n"
+"Last-Translator: poly000 <1348292515@qq.com>\n"
+"Language-Team: \n"
+"Language: yue\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.2\n"
+
+#: ../src/app/window/imp.rs:54
+msgid "Hide Decoration"
+msgstr "关闭边框"
+
+#: ../src/app/window/imp.rs:58 ../src/tray_icon/unix/mod.rs:62
+msgid "Toggle Passthrough"
+msgstr "开关穿透"
+
+#: ../src/app/window/imp.rs:61 ../src/tray_icon/unix/mod.rs:70
+msgid "Reload theme"
+msgstr "重载主题"
+
+#: ../src/app/window/imp.rs:62 ../src/app/search_window/mod.rs:57
+msgid "Search lyric"
+msgstr "搜索歌词"
+
+#: ../src/app/window/imp.rs:64
+msgid "Refetch lyric"
+msgstr "重下歌词"
+
+#: ../src/app/window/imp.rs:67
+msgid "Remove lyric"
+msgstr "隐藏歌词"
+
+#: ../src/app/window/imp.rs:69
+msgid "Remove lyric forever"
+msgstr "移除歌词"
+
+#: ../src/app/window/imp.rs:80 ../src/tray_icon/unix/mod.rs:35
+msgid "Lyric Display Mode"
+msgstr "显示模式"
+
+#: ../src/app/window/imp.rs:106
+msgid "Disconnect"
+msgstr "断开连接"
+
+#: ../src/app/search_window/mod.rs:108
+msgid "Title"
+msgstr "标题"
+
+#: ../src/app/search_window/mod.rs:109
+msgid "Singer"
+msgstr "歌手"
+
+#: ../src/app/search_window/mod.rs:110
+msgid "Album"
+msgstr "专辑"
+
+#: ../src/app/search_window/mod.rs:111
+msgid "Length"
+msgstr "长度"
+
+#: ../src/app/search_window/mod.rs:112
+msgid "Source"
+msgstr "来源"
+
+#: ../src/app/search_window/mod.rs:120
+msgid "Enter title..."
+msgstr "输入标题…"
+
+#: ../src/app/search_window/mod.rs:121
+msgid "title"
+msgstr "标题"
+
+#: ../src/app/search_window/mod.rs:122
+msgid "Enter album..."
+msgstr "输入专辑…"
+
+#: ../src/app/search_window/mod.rs:123
+msgid "album"
+msgstr "专辑"
+
+#: ../src/app/search_window/mod.rs:125
+msgid "Enter artists..."
+msgstr "输入歌手…"
+
+#: ../src/app/search_window/mod.rs:126
+msgid "artists"
+msgstr "歌手"
+
+#: ../src/app/search_window/mod.rs:131
+msgid "Set as lyric"
+msgstr "设为歌词"
+
+#: ../src/app/search_window/mod.rs:234
+msgid "No result was found."
+msgstr "搜索无结果。"
+
+#: ../src/tray_icon/unix/mod.rs:54
+msgid "Toggle Decoration"
+msgstr "开关边框"
+
+#: ../src/tray_icon/unix/mod.rs:79
+msgid "Select Player"
+msgstr "选择播放器"
+
+#: ../src/tray_icon/unix/mod.rs:104
+msgid "Search Lyric"
+msgstr "搜索歌词"
+
+#: ../src/tray_icon/unix/mod.rs:112
+msgid "Refetch Lyric"
+msgstr "重下歌词"
+
+#: ../src/tray_icon/unix/mod.rs:121
+msgid "Restart"
+msgstr "重启"
+
+#: ../src/tray_icon/unix/mod.rs:138
+msgid "Quit"
+msgstr "退出"
