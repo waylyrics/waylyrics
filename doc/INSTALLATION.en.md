@@ -24,7 +24,7 @@ We provide builds in [github action][builds].
 
 Note that these build sets `WAYLYRICS_THEME_PRESETS_DIR` as `/usr/share/waylyrics/themes`,
 
-You could place themes to `${XDG_DATA_HOME}/_themes/`, waylyrics will try this first.
+You can also place themes to `${XDG_DATA_HOME}/_themes/`, waylyrics will try this first.
 
 # Install with package manager
 
@@ -70,11 +70,13 @@ cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pan
 
 # Build
 
-waylyrics will load themes from here, unless they were overridden by `${XDG_DATA_HOME}/_themes/<name>.css` 
-
 ```bash
 export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 ```
+
+waylyrics will load themes from `PRESET_DIR`, unless they were overridden by `${XDG_DATA_HOME}/_themes/<name>.css` 
+
+If `WAYLYRICS_THEME_PRESETS_DIR` is not set, waylyrics will only load themes from user data home.
 
 ## With stable toolchain
 
@@ -94,7 +96,7 @@ Target binaries are placed in `target/release/`.
 
 ## Compiling Schema
 
-You can install the schema locally:
+To install the schema locally:
 
 ```bash
 mkdir -p ~/.local/share/glib-2.0/schemas

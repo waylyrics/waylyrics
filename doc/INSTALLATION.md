@@ -70,11 +70,13 @@ cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pan
 
 # 编译
 
-waylyrics 会从该位置加载主题，除非被 `${XDG_DATA_HOME}/_themes/<name>.css` 覆盖
-
 ```bash
 export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 ```
+
+waylyrics 会从该位置加载主题，除非被 `${XDG_DATA_HOME}/_themes/<name>.css` 覆盖
+
+如果编译时没有设置这个环境变量，waylyrics将只能加载用户主题。
 
 ## 使用 stable 工具链
 
@@ -94,7 +96,7 @@ cargo +nightly build --release --locked --target-dir target
 
 ## 编译Schema
 
-你也可以本地安装schema:
+本地安装schema:
 
 ```bash
 mkdir -p ~/.local/share/glib-2.0/schemas

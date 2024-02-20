@@ -33,7 +33,7 @@ use app::actions::{
     register_switch_passthrough,
 };
 
-pub const THEME_PRESETS_DIR: &str = env!("WAYLYRICS_THEME_PRESETS_DIR");
+pub const THEME_PRESETS_DIR: Option<&str> = option_env!("WAYLYRICS_THEME_PRESETS_DIR");
 
 fn main() -> Result<glib::ExitCode> {
     Registry::default()
@@ -52,7 +52,11 @@ fn main() -> Result<glib::ExitCode> {
         .application_id(waylyrics::APP_ID)
         .build();
 
-    app.connect_activate(|app| build_ui(app).unwrap());
+    app.connect_activate(|app| {
+        if let Err(e) = build_ui(app) {
+            log::error!("failed to start: {e}");
+        }
+    });
 
     Ok(app.run())
 }
@@ -97,11 +101,14 @@ fn build_ui(app: &Application) -> Result<()> {
 
     let theme_file_name = format!("{theme}.css");
     let user_theme = theme_dir.join(&theme_file_name);
-    let global_theme = PathBuf::from(THEME_PRESETS_DIR).join(&theme_file_name);
+    let global_theme = THEME_PRESETS_DIR.map(|d| PathBuf::from(d).join(&theme_file_name));
 
     let theme_path = if user_theme.exists() {
         user_theme
     } else {
+        let Some(global_theme) = global_theme else {
+            anyhow::bail!("theme {theme_file_name} not found");
+        };
         global_theme
     };
 
