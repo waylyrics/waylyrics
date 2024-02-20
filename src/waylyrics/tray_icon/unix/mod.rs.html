@@ -159,6 +159,7 @@
 <a href="#158" id="158">158</a>
 <a href="#159" id="159">159</a>
 <a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{env, process};
 
 <span class="kw">use </span>async_channel::Sender;
@@ -173,16 +174,17 @@
 <span class="kw">use </span><span class="kw">crate</span>::sync::{list_player_names, PlayerId};
 
 <span class="kw">use </span><span class="kw">crate</span>::log::error;
+<span class="kw">use crate</span>::{APP_ID, PACKAGE_NAME};
 
 <span class="attr">#[derive(Debug, Default)]
 </span><span class="kw">struct </span>TrayIcon {}
 
 <span class="kw">impl </span>Tray <span class="kw">for </span>TrayIcon {
     <span class="kw">fn </span>icon_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
-        <span class="kw">crate</span>::APP_ID.to_string()
+        APP_ID.to_string()
     }
     <span class="kw">fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
-        <span class="macro">env!</span>(<span class="string">"CARGO_PKG_NAME"</span>).into()
+        PACKAGE_NAME.into()
     }
     <span class="kw">fn </span>menu(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;ksni::MenuItem&lt;<span class="self">Self</span>&gt;&gt; {
         <span class="kw">use </span>ksni::menu::<span class="kw-2">*</span>;
