@@ -49,9 +49,8 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
 
     let (mut results, artists_str, title) = tokio_spawn!(async move {
         let mut set = JoinSet::new();
-        for (idx, provider) in providers.iter().enumerate() {
+        for (idx, provider) in providers.into_iter().enumerate() {
             let title = title.clone();
-            let provider = provider.clone();
             let artists = artists.clone();
             let album = album.clone();
 

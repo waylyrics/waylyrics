@@ -1,5 +1,5 @@
 use lrc_nom::{parse, LrcParseError};
-use std::{sync::Arc, time::Duration};
+use std::time::Duration;
 
 use super::{LyricLine, LyricLineOwned, LyricProvider};
 
@@ -42,10 +42,10 @@ pub fn find_next_lyric<'a>(
         .last()
 }
 
-pub fn get_provider(provider_id: &str) -> Option<Arc<dyn LyricProvider>> {
+pub fn get_provider(provider_id: &str) -> Option<&'static dyn LyricProvider> {
     use super::netease::Netease;
     use super::qqmusic::QQMusic;
-    let providers: [Arc<dyn super::LyricProvider>; 2] = [Arc::new(Netease), Arc::new(QQMusic)];
+    let providers: [&'static dyn super::LyricProvider; 2] = [&Netease, &QQMusic];
     providers
         .into_iter()
         .find(|p| p.unique_name() == provider_id)
