@@ -40,6 +40,16 @@ install -Dm644 io.poly000.waylyrics.gschema.xml -t %{buildroot}%{_datadir}/glib-
 cp -r themes %{buildroot}%{_datadir}/waylyrics/
 cp -r res/icons %{buildroot}%{_datadir}/
 
+# Locale files
+(
+    cd locales
+    for po in $(find . -type f -name '*.po')
+    do
+        mkdir -p %{buildroot}%{_datadir}"/locale/${po#/*}" 
+        msgfmt -o %{buildroot}%{_datadir}"/locale/${po%.po}.mo" ${po}
+    done
+)
+
 rm %{buildroot}/usr/.crates.toml %{buildroot}/usr/.crates2.json
 
 %check
@@ -52,6 +62,7 @@ rm %{buildroot}/usr/.crates.toml %{buildroot}/usr/.crates2.json
 %{_datadir}/waylyrics/
 %{_datadir}/glib-2.0/schemas/io.poly000.waylyrics.gschema.xml
 %{_datadir}/icons/hicolor/scalable/apps/io.poly000.waylyrics.svg
+%{_datadir}/locale/zh_CN/LC_MESSAGES/waylyrics.mo
 
 %changelog
 {{{ git_repo_changelog }}}
