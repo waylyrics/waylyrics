@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: waylyrics 0.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-21 02:39+0800\n"
-"PO-Revision-Date: 2024-02-21 02:57+0800\n"
+"POT-Creation-Date: 2024-02-21 03:22+0800\n"
+"PO-Revision-Date: 2024-02-21 03:56+0800\n"
 "Last-Translator: poly000 <1348292515@qq.com>\n"
 "Language-Team: \n"
 "Language: yue\n"
@@ -46,6 +46,11 @@ msgstr "隐藏歌词"
 msgid "Remove lyric forever"
 msgstr "移除歌词"
 
+#: ../src/app/window/imp.rs:78 ../src/app/window/imp.rs:94
+#: ../src/tray_icon/unix/mod.rs:79
+msgid "Select Player"
+msgstr "选择播放器"
+
 #: ../src/app/window/imp.rs:80 ../src/tray_icon/unix/mod.rs:35
 msgid "Lyric Display Mode"
 msgstr "显示模式"
@@ -68,7 +73,7 @@ msgstr "专辑"
 
 #: ../src/app/search_window/mod.rs:111
 msgid "Length"
-msgstr "长度"
+msgstr "时长"
 
 #: ../src/app/search_window/mod.rs:112
 msgid "Source"
@@ -109,10 +114,6 @@ msgstr "搜索无结果。"
 #: ../src/tray_icon/unix/mod.rs:54
 msgid "Toggle Decoration"
 msgstr "开关边框"
-
-#: ../src/tray_icon/unix/mod.rs:79
-msgid "Select Player"
-msgstr "选择播放器"
 
 #: ../src/tray_icon/unix/mod.rs:104
 msgid "Search Lyric"
