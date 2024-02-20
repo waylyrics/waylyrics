@@ -381,6 +381,17 @@
 <a href="#380" id="380">380</a>
 <a href="#381" id="381">381</a>
 <a href="#382" id="382">382</a>
+<a href="#383" id="383">383</a>
+<a href="#384" id="384">384</a>
+<a href="#385" id="385">385</a>
+<a href="#386" id="386">386</a>
+<a href="#387" id="387">387</a>
+<a href="#388" id="388">388</a>
+<a href="#389" id="389">389</a>
+<a href="#390" id="390">390</a>
+<a href="#391" id="391">391</a>
+<a href="#392" id="392">392</a>
+<a href="#393" id="393">393</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>imp;
 
 <span class="kw">use </span>std::sync::Arc;
@@ -500,18 +511,22 @@
         imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.column_length);
         imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.column_source);
 
-        imp.input_title.set_placeholder_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Enter title..."</span>)));
+        imp.input_title
+            .set_placeholder_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Enter title..."</span>)));
         imp.input_title.set_tooltip_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"title"</span>)));
-        imp.input_album.set_placeholder_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Enter album..."</span>)));
+        imp.input_album
+            .set_placeholder_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Enter album..."</span>)));
         imp.input_album.set_tooltip_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"album"</span>)));
         imp.input_artists
             .set_placeholder_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Enter artists..."</span>)));
-        imp.input_artists.set_tooltip_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"artists"</span>)));
+        imp.input_artists
+            .set_tooltip_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"artists"</span>)));
 
         imp.input_title
             .set_secondary_icon_name(<span class="prelude-val">Some</span>(<span class="string">"system-search-symbolic"</span>));
 
         imp.set_button.set_label(<span class="kw-2">&amp;</span>gettext(<span class="string">"Set as lyric"</span>));
+        <span class="self">self</span>.imp().set_button.set_visible(<span class="bool-val">false</span>);
 
         <span class="self">self</span>.set_child(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>imp.vbox));
     }
@@ -614,8 +629,15 @@
         <span class="self">self</span>.results().remove_all();
 
         <span class="kw">if </span>results.is_empty() {
-            show_dialog(<span class="prelude-val">Some</span>(<span class="self">self</span>),<span class="kw-2">&amp;</span>gettext( <span class="string">"No result was found."</span>), gtk::MessageType::Error);
+            show_dialog(
+                <span class="prelude-val">Some</span>(<span class="self">self</span>),
+                <span class="kw-2">&amp;</span>gettext(<span class="string">"No result was found."</span>),
+                gtk::MessageType::Error,
+            );
+            <span class="self">self</span>.imp().set_button.set_visible(<span class="bool-val">false</span>);
             <span class="kw">return</span>;
+        } <span class="kw">else </span>{
+            <span class="self">self</span>.imp().set_button.set_visible(<span class="bool-val">true</span>);
         }
 
         <span class="self">self</span>.results().extend_from_slice(<span class="kw-2">&amp;</span>results);
