@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: waylyrics 0.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-21 02:39+0800\n"
+"POT-Creation-Date: 2024-02-21 03:22+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,6 +43,11 @@ msgstr ""
 
 #: ../src/app/window/imp.rs:69
 msgid "Remove lyric forever"
+msgstr ""
+
+#: ../src/app/window/imp.rs:78 ../src/app/window/imp.rs:94
+#: ../src/tray_icon/unix/mod.rs:79
+msgid "Select Player"
 msgstr ""
 
 #: ../src/app/window/imp.rs:80 ../src/tray_icon/unix/mod.rs:35
@@ -107,10 +112,6 @@ msgstr ""
 
 #: ../src/tray_icon/unix/mod.rs:54
 msgid "Toggle Decoration"
-msgstr ""
-
-#: ../src/tray_icon/unix/mod.rs:79
-msgid "Select Player"
 msgstr ""
 
 #: ../src/tray_icon/unix/mod.rs:104

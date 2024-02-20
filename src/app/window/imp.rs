@@ -75,7 +75,7 @@ impl ObjectImpl for Window {
             .accessible_role(gtk::AccessibleRole::MenuItemRadio)
             .build();
         self.menu
-            .append_submenu(Some(&gettext(SELECT_PLAYER)), &self.player_menu);
+            .append_submenu(Some(&gettext("Select Player")), &self.player_menu);
         self.menu.append_submenu(
             Some(&gettext("Lyric Display Mode")),
             &self.display_mode_menu,
@@ -91,7 +91,7 @@ impl ObjectImpl for Window {
 
         let player_menu_weak = self.player_menu.downgrade();
         popover.connect_visible_submenu_notify(move |sub| {
-            if Some(&*gettext(SELECT_PLAYER)) != sub.visible_submenu().as_deref() {
+            if Some(&*gettext("Select Player")) != sub.visible_submenu().as_deref() {
                 return;
             }
             let Some(menu) = player_menu_weak.upgrade() else {
@@ -152,5 +152,3 @@ impl WindowImpl for Window {
     }
 }
 impl ApplicationWindowImpl for Window {}
-
-const SELECT_PLAYER: &str = "Select player";
