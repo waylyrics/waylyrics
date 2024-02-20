@@ -161,6 +161,15 @@
 <a href="#160" id="160">160</a>
 <a href="#161" id="161">161</a>
 <a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{env, process};
 
 <span class="kw">use </span>async_channel::Sender;
@@ -196,6 +205,7 @@
         <span class="macro">vec!</span>[
             SubMenu {
                 label: gettext(<span class="string">"Lyric Display Mode"</span>),
+                icon_name: <span class="string">"quickview"</span>.into(),
                 submenu: LyricDisplay::iter()
                     .map(|display_mode| {
                         <span class="kw">let </span>label = display_mode.to_string().replace(<span class="string">"_"</span>, <span class="string">"__"</span>);
@@ -215,6 +225,7 @@
             .into(),
             StandardItem {
                 label: gettext(<span class="string">"Toggle Decoration"</span>),
+                icon_name: <span class="string">"window-new"</span>.into(),
                 activate: Box::new(|<span class="kw">_</span>| {
                     <span class="kw">let _ </span>= ui_action().send_blocking(UIAction::SwitchDecoration);
                 }),
@@ -223,6 +234,7 @@
             .into(),
             StandardItem {
                 label: gettext(<span class="string">"Toggle Passthrough"</span>),
+                icon_name: <span class="string">"input-mouse"</span>.into(),
                 activate: Box::new(|<span class="kw">_</span>| {
                     <span class="kw">let _ </span>= ui_action().send_blocking(UIAction::SwitchPassthrough);
                 }),
@@ -231,6 +243,7 @@
             .into(),
             StandardItem {
                 label: gettext(<span class="string">"Reload theme"</span>),
+                icon_name: <span class="string">"color-management"</span>.into(),
                 activate: Box::new(|<span class="kw">_</span>| {
                     <span class="kw">let _ </span>= ui_action().send_blocking(UIAction::ReloadTheme);
                 }),
@@ -240,6 +253,7 @@
             MenuItem::Separator,
             SubMenu {
                 label: gettext(<span class="string">"Select Player"</span>),
+                icon_name: <span class="string">"format-indent-more"</span>.into(),
                 enabled: !players.len().is_zero(),
                 submenu: players
                     .into_iter()
@@ -265,6 +279,7 @@
             .into(),
             StandardItem {
                 label: gettext(<span class="string">"Search Lyric"</span>),
+                icon_name: <span class="string">"system-search"</span>.into(),
                 activate: Box::new(|<span class="kw">_</span>| {
                     <span class="kw">let _ </span>= play_action().send_blocking(PlayAction::SearchLyric);
                 }),
@@ -273,6 +288,7 @@
             .into(),
             StandardItem {
                 label: gettext(<span class="string">"Refetch Lyric"</span>),
+                icon_name: <span class="string">"folder-download"</span>.into(),
                 activate: Box::new(|<span class="kw">_</span>| {
                     <span class="kw">let _ </span>= play_action().send_blocking(PlayAction::RefetchLyric);
                 }),
@@ -282,6 +298,7 @@
             MenuItem::Separator,
             StandardItem {
                 label: gettext(<span class="string">"Restart"</span>),
+                icon_name: <span class="string">"system-reboot"</span>.into(),
                 activate: Box::new(|<span class="kw">_</span>| {
                     <span class="kw">let </span>my_path = env::args().nth(<span class="number">0</span>).unwrap();
                     <span class="kw">let </span><span class="prelude-val">Ok</span>(<span class="kw">_</span>) = process::Command::new(<span class="string">"sh"</span>)
@@ -299,6 +316,7 @@
             .into(),
             StandardItem {
                 label: gettext(<span class="string">"Quit"</span>),
+                icon_name: <span class="string">"application-exit"</span>.into(),
                 activate: Box::new(|<span class="kw">_</span>| {
                     <span class="kw">let _ </span>= ui_action().send_blocking(UIAction::Quit);
                 }),
