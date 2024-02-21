@@ -17,7 +17,12 @@ glib::wrapper! {
 }
 
 impl Window {
-    pub fn new(app: &Application, cache_lyrics: bool) -> Self {
+    pub fn new(
+        app: &Application,
+        cache_lyrics: bool,
+        length_toleration_ms: u128,
+        show_default_text_on_idle: bool,
+    ) -> Self {
         let window: Self = Object::builder().property("application", app).build();
         let imp = window.imp();
 
@@ -25,6 +30,8 @@ impl Window {
         window.set_widget_name("main-window");
 
         imp.cache_lyrics.set(cache_lyrics);
+        imp.length_toleration_ms.set(length_toleration_ms);
+        imp.show_default_text_on_idle.set(show_default_text_on_idle);
 
         window
     }
