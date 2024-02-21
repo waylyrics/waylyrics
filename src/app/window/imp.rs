@@ -3,9 +3,10 @@ use std::time::SystemTime;
 
 use gettextrs::gettext;
 use gio::Settings;
+use glib_macros::clone;
 use gtk::gio::MenuItem;
 use gtk::glib::Propagation;
-use gtk::prelude::{ObjectExt, ToVariant};
+use gtk::prelude::ToVariant;
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib, ApplicationWindow, PopoverMenu};
 use std::sync::OnceLock;
@@ -79,43 +80,46 @@ impl ObjectImpl for Window {
         let popover = PopoverMenu::builder()
             .accessible_role(gtk::AccessibleRole::MenuItemRadio)
             .build();
-        self.menu.append_submenu(
-            Some(&gettext("Select Player")), //
-            &self.player_menu,
-        );
-        self.menu.append_submenu(
+
+        let ui_section = gio::Menu::default();
+        ui_section.append_submenu(
             Some(&gettext("Lyric Display Mode")),
             &self.display_mode_menu,
         );
-        self.menu.append_submenu(
+        ui_section.append_submenu(
             Some(&gettext("Lyric Align")), //
             &self.align_mode_menu,
         );
+        ui_section.append_item(&passthrough);
+        ui_section.append_item(&hide_decoration);
+        ui_section.append_item(&reload_theme);
+        self.menu.append_section(None, &ui_section);
 
-        self.menu.append_item(&passthrough);
-        self.menu.append_item(&hide_decoration);
-        self.menu.append_item(&reload_theme);
-        self.menu.append_item(&search_lyric);
-        self.menu.append_item(&remove_lyric);
-        self.menu.append_item(&refetch_lyric);
+        let play_section = gio::Menu::default();
+        play_section.append_submenu(
+            Some(&gettext("Select Player")), //
+            &self.player_menu,
+        );
+        play_section.append_item(&search_lyric);
+        play_section.append_item(&remove_lyric);
+        play_section.append_item(&refetch_lyric);
+        self.menu.append_section(None, &play_section);
+
         popover.set_menu_model(Some(&self.menu));
 
-        let player_menu_weak = self.player_menu.downgrade();
-        popover.connect_visible_submenu_notify(move |sub| {
+        let player_menu = &self.player_menu;
+        popover.connect_visible_submenu_notify(clone!(@weak player_menu=> move |sub| {
             if Some(&*gettext("Select Player")) != sub.visible_submenu().as_deref() {
                 return;
             }
-            let Some(menu) = player_menu_weak.upgrade() else {
-                return;
-            };
-            menu.remove_all();
+            player_menu.remove_all();
 
             let section = gio::Menu::new();
             let players = list_player_names();
             if !players.is_empty() {
                 let disconnect =
                     MenuItem::new(Some(&gettext("Disconnect")), Some("app.disconnect"));
-                menu.append_item(&disconnect);
+                player_menu.append_item(&disconnect);
             }
 
             for player in players {
@@ -126,8 +130,9 @@ impl ObjectImpl for Window {
                 );
                 section.append_item(&item);
             }
-            menu.append_section(None, &section);
-        });
+            player_menu.append_section(None, &section);
+        }));
+        self.menubutton.set_popover(Some(&popover));
 
         for display_mode in <LyricDisplayMode as strum::IntoEnumIterator>::iter() {
             let display_mode_str = display_mode.to_string();
@@ -149,7 +154,6 @@ impl ObjectImpl for Window {
             self.align_mode_menu.append_item(&item);
         }
 
-        self.menubutton.set_popover(Some(&popover));
         self.headerbar.pack_end(&self.menubutton)
     }
 }
