@@ -190,6 +190,11 @@
 <a href="#189" id="189">189</a>
 <a href="#190" id="190">190</a>
 <a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{env, process};
 
 <span class="kw">use </span>async_channel::Sender;
@@ -277,6 +282,7 @@
                 icon_name: <span class="string">"input-mouse"</span>.into(),
                 activate: Box::new(|<span class="kw">_</span>| {
                     <span class="kw">let _ </span>= ui_action().send_blocking(UIAction::SwitchPassthrough);
+                    restart_myself();
                 }),
                 ..Default::default()
             }
@@ -340,16 +346,7 @@
                 label: gettext(<span class="string">"Restart"</span>),
                 icon_name: <span class="string">"system-reboot"</span>.into(),
                 activate: Box::new(|<span class="kw">_</span>| {
-                    <span class="kw">let </span>my_path = env::args().nth(<span class="number">0</span>).unwrap();
-                    <span class="kw">let </span><span class="prelude-val">Ok</span>(<span class="kw">_</span>) = process::Command::new(<span class="string">"sh"</span>)
-                        .arg(<span class="string">"-c"</span>)
-                        .arg(<span class="macro">format!</span>(<span class="string">"sleep 1 &amp;&amp; {my_path}"</span>))
-                        .spawn()
-                    <span class="kw">else </span>{
-                        <span class="macro">error!</span>(<span class="string">"failed to run waylyrics"</span>);
-                        <span class="kw">return</span>;
-                    };
-                    <span class="kw">let _ </span>= ui_action().send_blocking(UIAction::Quit);
+                    restart_myself();
                 }),
                 ..Default::default()
             }
@@ -380,5 +377,18 @@
 <span class="kw">fn </span>play_action() -&gt; Sender&lt;PlayAction&gt; {
     <span class="kw">let </span>play_action = PLAY_ACTION.get().unwrap().clone();
     play_action
+}
+
+<span class="kw">fn </span>restart_myself() {
+    <span class="kw">let </span>my_path = env::args().nth(<span class="number">0</span>).unwrap();
+    <span class="kw">let </span><span class="prelude-val">Ok</span>(<span class="kw">_</span>) = process::Command::new(<span class="string">"sh"</span>)
+        .arg(<span class="string">"-c"</span>)
+        .arg(<span class="macro">format!</span>(<span class="string">"sleep 1 &amp;&amp; {my_path}"</span>))
+        .spawn()
+    <span class="kw">else </span>{
+        <span class="macro">error!</span>(<span class="string">"failed to run waylyrics"</span>);
+        <span class="kw">return</span>;
+    };
+    <span class="kw">let _ </span>= ui_action().send_blocking(UIAction::Quit);
 }
 </code></pre></div></section></main></body></html>
