@@ -1,9 +1,6 @@
 name: Generate changelog
 
 on:
-    push:
-        tags:
-            - v*
     workflow_dispatch:
         
 permissions:
