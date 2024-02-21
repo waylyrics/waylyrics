@@ -45,46 +45,31 @@ fn set_lyric_with_mode(
 ) {
     match window.imp().lyric_display_mode.get() {
         LyricDisplay::ShowBoth => {
-            if translation.is_some() {
-                set_lyric(window, translation, "above");
-                set_lyric(window, origin, "below");
-            } else {
-                set_lyric(window, origin, "above");
-                set_lyric(window, Some(&Default::default()), "below");
-            }
+            set_lyric(window, translation, "above");
+            set_lyric(window, origin, "below");
         }
         LyricDisplay::ShowBothRev => {
-            if translation.is_some() {
-                set_lyric(window, origin, "above");
-                set_lyric(window, translation, "below");
-            } else {
-                set_lyric(window, origin, "above");
-                set_lyric(window, Some(&Default::default()), "below");
-            }
+            set_lyric(window, origin, "above");
+            set_lyric(window, translation, "below");
         }
         LyricDisplay::Origin => {
             set_lyric(window, origin, "above");
-            set_lyric(window, Some(&Default::default()), "below");
+            set_lyric(window, None, "below");
         }
         LyricDisplay::PreferTranslation => {
-            if translation.is_none() {
-                set_lyric(window, origin, "above");
-                set_lyric(window, Some(&Default::default()), "below");
-            } else {
-                set_lyric(window, translation, "above");
-                set_lyric(window, Some(&Default::default()), "below");
-            }
+            let text = translation.or(origin);
+            set_lyric(window, text, "above");
+            set_lyric(window, None, "below");
         }
     }
 }
 
 fn set_lyric(window: &app::Window, text: Option<&LyricLineOwned>, position: &str) {
-    if let Some(LyricLineOwned { text, .. }) = text {
-        let text = text.trim();
-        get_label(window, position).set_label(text);
-    } else {
-        get_label(window, position).set_label("");
-    }
+    let text = text
+        .map(|LyricLineOwned { text, .. }| text.as_str().trim())
+        .unwrap_or_default();
+
+    get_label(window, position).set_label(text);
 }
 
 pub fn refresh_lyric(window: &app::Window) {
