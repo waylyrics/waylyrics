@@ -201,7 +201,7 @@
 <span class="kw">use </span><span class="kw">crate</span>::app::actions::{UIAction, UI_ACTION};
 <span class="kw">use </span><span class="kw">crate</span>::sync::{PlayAction, PLAY_ACTION};
 
-<span class="kw">use </span><span class="kw">crate</span>::config::{Align, LyricDisplay};
+<span class="kw">use </span><span class="kw">crate</span>::config::{Align, LyricDisplayMode};
 <span class="kw">use </span><span class="kw">crate</span>::sync::{list_player_names, PlayerId};
 
 <span class="kw">use </span><span class="kw">crate</span>::log::error;
@@ -226,7 +226,7 @@
             SubMenu {
                 label: gettext(<span class="string">"Lyric Display Mode"</span>),
                 icon_name: <span class="string">"quickview"</span>.into(),
-                submenu: LyricDisplay::iter()
+                submenu: LyricDisplayMode::iter()
                     .map(|display_mode| {
                         <span class="kw">let </span>label = gettext(display_mode.to_string());
                         StandardItem {

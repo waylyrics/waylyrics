@@ -171,6 +171,9 @@
 <a href="#170" id="170">170</a>
 <a href="#171" id="171">171</a>
 <a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::Cell;
 <span class="kw">use </span>std::time::SystemTime;
 
@@ -184,28 +187,31 @@
 <span class="kw">use </span>std::sync::OnceLock;
 
 <span class="kw">use </span><span class="kw">crate</span>::app::utils::set_click_pass_through;
-<span class="kw">use </span><span class="kw">crate</span>::config::{Align, LyricDisplay};
+<span class="kw">use </span><span class="kw">crate</span>::config::{Align, LyricDisplayMode};
 <span class="kw">use </span><span class="kw">crate</span>::sync::list_player_names;
 
 <span class="attr">#[derive(Default)]
 </span><span class="kw">pub struct </span>Window {
     <span class="kw">pub </span>settings: OnceLock&lt;Settings&gt;,
 
+    <span class="kw">pub </span>clickthrough: Cell&lt;bool&gt;,
     <span class="kw">pub </span>cache_lyrics: Cell&lt;bool&gt;,
-    <span class="kw">pub </span>lyric_display_mode: Cell&lt;LyricDisplay&gt;,
+
     <span class="kw">pub </span>lyric_align: Cell&lt;Align&gt;,
+    <span class="kw">pub </span>lyric_display_mode: Cell&lt;LyricDisplayMode&gt;,
+    <span class="kw">pub </span>show_default_text_on_idle: Cell&lt;bool&gt;,
+
     <span class="kw">pub </span>lyric_start: Cell&lt;<span class="prelude-ty">Option</span>&lt;SystemTime&gt;&gt;,
     <span class="kw">pub </span>lyric_offset_ms: Cell&lt;i64&gt;,
     <span class="kw">pub </span>length_toleration_ms: Cell&lt;u128&gt;,
-    <span class="kw">pub </span>show_default_text_on_idle: Cell&lt;bool&gt;,
 
-    <span class="kw">pub </span>headerbar: gtk::HeaderBar,
+    <span class="comment">// widgets
+    </span><span class="kw">pub </span>headerbar: gtk::HeaderBar,
     <span class="kw">pub </span>menubutton: gtk::MenuButton,
     <span class="kw">pub </span>menu: gio::Menu,
     <span class="kw">pub </span>player_menu: gio::Menu,
     <span class="kw">pub </span>display_mode_menu: gio::Menu,
     <span class="kw">pub </span>align_mode_menu: gio::Menu,
-    <span class="kw">pub </span>clickthrough: Cell&lt;bool&gt;,
 }
 
 <span class="attr">#[glib::object_subclass]
@@ -299,7 +305,7 @@
             menu.append_section(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>section);
         });
 
-        <span class="kw">for </span>display_mode <span class="kw">in </span>&lt;LyricDisplay <span class="kw">as </span>strum::IntoEnumIterator&gt;::iter() {
+        <span class="kw">for </span>display_mode <span class="kw">in </span>&lt;LyricDisplayMode <span class="kw">as </span>strum::IntoEnumIterator&gt;::iter() {
             <span class="kw">let </span>display_mode_str = display_mode.to_string();
             <span class="kw">let </span>item = MenuItem::new(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="kw-2">&amp;</span>display_mode_str)), <span class="prelude-val">None</span>);
             item.set_action_and_target_value(

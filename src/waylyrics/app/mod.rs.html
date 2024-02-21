@@ -93,23 +93,13 @@
 <a href="#92" id="92">92</a>
 <a href="#93" id="93">93</a>
 <a href="#94" id="94">94</a>
-<a href="#95" id="95">95</a>
-<a href="#96" id="96">96</a>
-<a href="#97" id="97">97</a>
-<a href="#98" id="98">98</a>
-<a href="#99" id="99">99</a>
-<a href="#100" id="100">100</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>search_window;
 <span class="kw">mod </span>window;
 
 <span class="kw">use </span>gtk::{prelude::<span class="kw-2">*</span>, subclass::prelude::ObjectSubclassIsExt, Application, Label};
 <span class="kw">pub use </span>window::Window;
 
-<span class="kw">use crate</span>::{
-    app::utils::set_click_pass_through,
-    config::{<span class="self">self</span>, LyricDisplay},
-    DEFAULT_TEXT,
-};
+<span class="kw">use crate</span>::{app::utils::set_click_pass_through, config, DEFAULT_TEXT};
 
 <span class="kw">const </span>WINDOW_MIN_HEIGHT: i32 = <span class="number">120</span>;
 
@@ -123,7 +113,6 @@
     enable_filter_regex: bool,
     cache_lyrics: bool,
     length_toleration_ms: u128,
-    lyric_display_mode: LyricDisplay,
     show_default_text_on_idle: bool,
 ) -&gt; Window {
     <span class="kw">let </span>window = Window::new(app, click_pass_through, cache_lyrics);
@@ -168,7 +157,6 @@
 
     window.set_icon_name(<span class="prelude-val">Some</span>(<span class="kw">crate</span>::APP_ID));
     window.imp().length_toleration_ms.set(length_toleration_ms);
-    window.imp().lyric_display_mode.set(lyric_display_mode);
     window
         .imp()
         .show_default_text_on_idle

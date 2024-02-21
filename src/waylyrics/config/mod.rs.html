@@ -151,16 +151,6 @@
 <a href="#150" id="150">150</a>
 <a href="#151" id="151">151</a>
 <a href="#152" id="152">152</a>
-<a href="#153" id="153">153</a>
-<a href="#154" id="154">154</a>
-<a href="#155" id="155">155</a>
-<a href="#156" id="156">156</a>
-<a href="#157" id="157">157</a>
-<a href="#158" id="158">158</a>
-<a href="#159" id="159">159</a>
-<a href="#160" id="160">160</a>
-<a href="#161" id="161">161</a>
-<a href="#162" id="162">162</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>documented::DocumentedFields;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 <span class="kw">use </span>strum::{EnumIter, EnumString};
@@ -178,10 +168,9 @@
     Fill,
 }
 
-<span class="attr">#[derive(Deserialize, Serialize, Clone, Copy, Default, EnumIter, strum::Display, EnumString)]
-#[serde(rename_all = <span class="string">"snake_case"</span>)]
+<span class="attr">#[derive(Clone, Copy, Default, EnumIter, strum::Display, EnumString)]
 #[strum(serialize_all = <span class="string">"snake_case"</span>)]
-</span><span class="kw">pub enum </span>LyricDisplay {
+</span><span class="kw">pub enum </span>LyricDisplayMode {
     <span class="attr">#[default]
     </span>ShowBoth,
     ShowBothRev,
@@ -226,14 +215,6 @@
 
     <span class="doccomment">/// avaliable options: 网易云音乐, QQ音乐
     </span><span class="kw">pub </span>lyric_search_source: Vec&lt;String&gt;,
-
-    <span class="doccomment">/// lyric display mode
-    /// avaliable options:
-    /// - `show_both`: show origin and translated lyric
-    /// - `show_both_rev`: similiar to `show_both`, but origin text are showed below
-    /// - `prefer_translation`: show translated lyric if found any, or show origin lyric
-    /// - `origin`: only to show origin lyric
-    </span><span class="kw">pub </span>lyric_display_mode: LyricDisplay,
 
     <span class="doccomment">/// if enabled, waylyrics will set `DEFAULT_TEXT` on idle,
     /// otherwise it just show nothing
@@ -291,7 +272,6 @@
             triggers: Triggers::default(),
             qqmusic_api_base_url: <span class="prelude-val">None</span>,
             lyric_search_source: <span class="macro">vec!</span>[Netease.unique_name().into()],
-            lyric_display_mode: LyricDisplay::default(),
             show_default_text_on_idle: <span class="bool-val">true</span>,
             <span class="attr">#[cfg(feature = <span class="string">"tray-icon"</span>)]
             </span>show_tray_icon: <span class="bool-val">true</span>,

@@ -105,21 +105,6 @@
 <a href="#104" id="104">104</a>
 <a href="#105" id="105">105</a>
 <a href="#106" id="106">106</a>
-<a href="#107" id="107">107</a>
-<a href="#108" id="108">108</a>
-<a href="#109" id="109">109</a>
-<a href="#110" id="110">110</a>
-<a href="#111" id="111">111</a>
-<a href="#112" id="112">112</a>
-<a href="#113" id="113">113</a>
-<a href="#114" id="114">114</a>
-<a href="#115" id="115">115</a>
-<a href="#116" id="116">116</a>
-<a href="#117" id="117">117</a>
-<a href="#118" id="118">118</a>
-<a href="#119" id="119">119</a>
-<a href="#120" id="120">120</a>
-<a href="#121" id="121">121</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::time::Duration;
 
 <span class="kw">use </span>gtk::glib::ControlFlow;
@@ -128,7 +113,7 @@
 <span class="kw">use </span>gtk::{glib::WeakRef, Application};
 
 <span class="kw">use </span><span class="kw">crate</span>::app::{<span class="self">self</span>, get_label};
-<span class="kw">use </span><span class="kw">crate</span>::config::LyricDisplay;
+<span class="kw">use </span><span class="kw">crate</span>::config::LyricDisplayMode;
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{LyricLineOwned, LyricOwned};
 
 <span class="kw">use </span><span class="kw">crate</span>::sync::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
@@ -166,47 +151,32 @@
     origin: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>LyricLineOwned&gt;,
 ) {
     <span class="kw">match </span>window.imp().lyric_display_mode.get() {
-        LyricDisplay::ShowBoth =&gt; {
-            <span class="kw">if </span>translation.is_some() {
-                set_lyric(window, translation, <span class="string">"above"</span>);
-                set_lyric(window, origin, <span class="string">"below"</span>);
-            } <span class="kw">else </span>{
-                set_lyric(window, origin, <span class="string">"above"</span>);
-                set_lyric(window, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>Default::default()), <span class="string">"below"</span>);
-            }
+        LyricDisplayMode::ShowBoth =&gt; {
+            set_lyric(window, translation, <span class="string">"above"</span>);
+            set_lyric(window, origin, <span class="string">"below"</span>);
         }
-        LyricDisplay::ShowBothRev =&gt; {
-            <span class="kw">if </span>translation.is_some() {
-                set_lyric(window, origin, <span class="string">"above"</span>);
-                set_lyric(window, translation, <span class="string">"below"</span>);
-            } <span class="kw">else </span>{
-                set_lyric(window, origin, <span class="string">"above"</span>);
-                set_lyric(window, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>Default::default()), <span class="string">"below"</span>);
-            }
-        }
-        LyricDisplay::Origin =&gt; {
+        LyricDisplayMode::ShowBothRev =&gt; {
             set_lyric(window, origin, <span class="string">"above"</span>);
-            set_lyric(window, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>Default::default()), <span class="string">"below"</span>);
+            set_lyric(window, translation, <span class="string">"below"</span>);
         }
-        LyricDisplay::PreferTranslation =&gt; {
-            <span class="kw">if </span>translation.is_none() {
-                set_lyric(window, origin, <span class="string">"above"</span>);
-                set_lyric(window, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>Default::default()), <span class="string">"below"</span>);
-            } <span class="kw">else </span>{
-                set_lyric(window, translation, <span class="string">"above"</span>);
-                set_lyric(window, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>Default::default()), <span class="string">"below"</span>);
-            }
+        LyricDisplayMode::Origin =&gt; {
+            set_lyric(window, origin, <span class="string">"above"</span>);
+            set_lyric(window, <span class="prelude-val">None</span>, <span class="string">"below"</span>);
+        }
+        LyricDisplayMode::PreferTranslation =&gt; {
+            <span class="kw">let </span>text = translation.or(origin);
+            set_lyric(window, text, <span class="string">"above"</span>);
+            set_lyric(window, <span class="prelude-val">None</span>, <span class="string">"below"</span>);
         }
     }
 }
 
 <span class="kw">fn </span>set_lyric(window: <span class="kw-2">&amp;</span>app::Window, text: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>LyricLineOwned&gt;, position: <span class="kw-2">&amp;</span>str) {
-    <span class="kw">if let </span><span class="prelude-val">Some</span>(LyricLineOwned { text, .. }) = text {
-        <span class="kw">let </span>text = text.trim();
-        get_label(window, position).set_label(text);
-    } <span class="kw">else </span>{
-        get_label(window, position).set_label(<span class="string">""</span>);
-    }
+    <span class="kw">let </span>text = text
+        .map(|LyricLineOwned { text, .. }| text.as_str().trim())
+        .unwrap_or_default();
+
+    get_label(window, position).set_label(text);
 }
 
 <span class="kw">pub fn </span>refresh_lyric(window: <span class="kw-2">&amp;</span>app::Window) {

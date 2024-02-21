@@ -68,6 +68,15 @@
 <a href="#67" id="67">67</a>
 <a href="#68" id="68">68</a>
 <a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>imp;
 
 <span class="kw">use </span>gio::Settings;
@@ -76,7 +85,7 @@
 <span class="kw">use </span>gtk::subclass::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>gtk::{gio, glib, Application};
 
-<span class="kw">use </span><span class="kw">crate</span>::config::Align;
+<span class="kw">use </span><span class="kw">crate</span>::config::{Align, LyricDisplayMode};
 <span class="kw">use </span><span class="kw">crate</span>::APP_ID;
 
 <span class="macro">glib::wrapper! </span>{
@@ -116,12 +125,15 @@
         <span class="kw">let </span>(width, height) = <span class="self">self</span>.default_size();
         <span class="kw">let </span>decorated = <span class="self">self</span>.is_decorated();
         <span class="kw">let </span>align_mode = <span class="self">self</span>.imp().lyric_align.get().to_string();
+        <span class="kw">let </span>display_mode = <span class="self">self</span>.imp().lyric_display_mode.get().to_string();
 
         <span class="self">self</span>.settings().set_int(<span class="string">"window-width"</span>, width)<span class="question-mark">?</span>;
         <span class="self">self</span>.settings().set_int(<span class="string">"window-height"</span>, height)<span class="question-mark">?</span>;
         <span class="self">self</span>.settings().set_boolean(<span class="string">"window-decorated"</span>, decorated)<span class="question-mark">?</span>;
         <span class="self">self</span>.settings()
             .set_string(<span class="string">"lyric-align-mode"</span>, <span class="kw-2">&amp;</span>align_mode)<span class="question-mark">?</span>;
+        <span class="self">self</span>.settings()
+            .set_string(<span class="string">"lyric-display-mode"</span>, <span class="kw-2">&amp;</span>display_mode)<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(())
     }
@@ -131,10 +143,16 @@
         <span class="kw">let </span>width = <span class="self">self</span>.settings().int(<span class="string">"window-width"</span>);
         <span class="kw">let </span>decorated = <span class="self">self</span>.settings().boolean(<span class="string">"window-decorated"</span>);
         <span class="kw">let </span>align_mode: Align = <span class="self">self</span>.settings().string(<span class="string">"lyric-align-mode"</span>).parse().unwrap();
+        <span class="kw">let </span>display_mode: LyricDisplayMode = <span class="self">self
+            </span>.settings()
+            .string(<span class="string">"lyric-display-mode"</span>)
+            .parse()
+            .unwrap();
 
         <span class="self">self</span>.set_default_size(width, height);
         <span class="self">self</span>.set_decorated(decorated);
         <span class="self">self</span>.imp().lyric_align.set(align_mode);
+        <span class="self">self</span>.imp().lyric_display_mode.set(display_mode)
     }
 }
 </code></pre></div></section></main></body></html>
