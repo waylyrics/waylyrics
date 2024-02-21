@@ -275,7 +275,7 @@
 
         <span class="kw">for </span>display_mode <span class="kw">in </span>&lt;LyricDisplay <span class="kw">as </span>strum::IntoEnumIterator&gt;::iter() {
             <span class="kw">let </span>display_mode_str = display_mode.to_string();
-            <span class="kw">let </span>item = MenuItem::new(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>display_mode_str.replace(<span class="string">"_"</span>, <span class="string">"__"</span>)), <span class="prelude-val">None</span>);
+            <span class="kw">let </span>item = MenuItem::new(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="kw-2">&amp;</span>display_mode_str)), <span class="prelude-val">None</span>);
             item.set_action_and_target_value(
                 <span class="prelude-val">Some</span>(<span class="string">"win.set-display-mode"</span>),
                 <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>display_mode_str.to_variant()),
