@@ -147,10 +147,6 @@
 <a href="#146" id="146">146</a>
 <a href="#147" id="147">147</a>
 <a href="#148" id="148">148</a>
-<a href="#149" id="149">149</a>
-<a href="#150" id="150">150</a>
-<a href="#151" id="151">151</a>
-<a href="#152" id="152">152</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>documented::DocumentedFields;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 <span class="kw">use </span>strum::{EnumIter, EnumString};
@@ -195,9 +191,6 @@
     <span class="doccomment">/// whether to cache lyrics
     /// note: persistenced lyric offset depends on this
     </span><span class="kw">pub </span>cache_lyrics: bool,
-
-    <span class="doccomment">/// whether to allow mouse-click passthrough
-    </span><span class="kw">pub </span>click_pass_through: bool,
 
     <span class="doccomment">/// theme to load (&lt;name&gt;.css)
     </span><span class="kw">pub </span>theme: String,
@@ -264,7 +257,6 @@
             player_sync_interval: <span class="string">"2s"</span>.to_owned(),
             lyric_update_interval: <span class="string">"20ms"</span>.to_owned(),
             length_toleration: <span class="string">"2s"</span>.to_owned(),
-            click_pass_through: <span class="bool-val">true</span>,
             theme: <span class="string">"default"</span>.into(),
             cache_lyrics: <span class="bool-val">true</span>,
             enable_filter_regex: <span class="bool-val">false</span>,

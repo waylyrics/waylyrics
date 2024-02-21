@@ -77,6 +77,13 @@
 <a href="#76" id="76">76</a>
 <a href="#77" id="77">77</a>
 <a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>imp;
 
 <span class="kw">use </span>gio::Settings;
@@ -96,13 +103,15 @@
 }
 
 <span class="kw">impl </span>Window {
-    <span class="kw">pub fn </span>new(app: <span class="kw-2">&amp;</span>Application, clickthrough: bool, cache_lyrics: bool) -&gt; <span class="self">Self </span>{
+    <span class="kw">pub fn </span>new(app: <span class="kw-2">&amp;</span>Application, cache_lyrics: bool) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>window: <span class="self">Self </span>= Object::builder().property(<span class="string">"application"</span>, app).build();
         <span class="kw">let </span>imp = window.imp();
+
         window.set_titlebar(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>imp.headerbar));
-        imp.clickthrough.set(clickthrough);
-        imp.cache_lyrics.set(cache_lyrics);
         window.set_widget_name(<span class="string">"main-window"</span>);
+
+        imp.cache_lyrics.set(cache_lyrics);
+
         window
     }
 
@@ -124,12 +133,15 @@
     <span class="kw">pub fn </span>save_window_state(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;(), glib::BoolError&gt; {
         <span class="kw">let </span>(width, height) = <span class="self">self</span>.default_size();
         <span class="kw">let </span>decorated = <span class="self">self</span>.is_decorated();
+        <span class="kw">let </span>click_through = <span class="self">self</span>.imp().clickthrough.get();
         <span class="kw">let </span>align_mode = <span class="self">self</span>.imp().lyric_align.get().to_string();
         <span class="kw">let </span>display_mode = <span class="self">self</span>.imp().lyric_display_mode.get().to_string();
 
         <span class="self">self</span>.settings().set_int(<span class="string">"window-width"</span>, width)<span class="question-mark">?</span>;
         <span class="self">self</span>.settings().set_int(<span class="string">"window-height"</span>, height)<span class="question-mark">?</span>;
         <span class="self">self</span>.settings().set_boolean(<span class="string">"window-decorated"</span>, decorated)<span class="question-mark">?</span>;
+        <span class="self">self</span>.settings()
+            .set_boolean(<span class="string">"window-click-through"</span>, click_through)<span class="question-mark">?</span>;
         <span class="self">self</span>.settings()
             .set_string(<span class="string">"lyric-align-mode"</span>, <span class="kw-2">&amp;</span>align_mode)<span class="question-mark">?</span>;
         <span class="self">self</span>.settings()
@@ -142,6 +154,7 @@
         <span class="kw">let </span>height = <span class="self">self</span>.settings().int(<span class="string">"window-height"</span>);
         <span class="kw">let </span>width = <span class="self">self</span>.settings().int(<span class="string">"window-width"</span>);
         <span class="kw">let </span>decorated = <span class="self">self</span>.settings().boolean(<span class="string">"window-decorated"</span>);
+        <span class="kw">let </span>click_through = <span class="self">self</span>.settings().boolean(<span class="string">"window-click-through"</span>);
         <span class="kw">let </span>align_mode: Align = <span class="self">self</span>.settings().string(<span class="string">"lyric-align-mode"</span>).parse().unwrap();
         <span class="kw">let </span>display_mode: LyricDisplayMode = <span class="self">self
             </span>.settings()
@@ -151,6 +164,7 @@
 
         <span class="self">self</span>.set_default_size(width, height);
         <span class="self">self</span>.set_decorated(decorated);
+        <span class="self">self</span>.imp().clickthrough.set(click_through);
         <span class="self">self</span>.imp().lyric_align.set(align_mode);
         <span class="self">self</span>.imp().lyric_display_mode.set(display_mode)
     }

@@ -92,7 +92,6 @@
 <a href="#91" id="91">91</a>
 <a href="#92" id="92">92</a>
 <a href="#93" id="93">93</a>
-<a href="#94" id="94">94</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>search_window;
 <span class="kw">mod </span>window;
 
@@ -109,13 +108,12 @@
 
 <span class="kw">pub fn </span>build_main_window(
     app: <span class="kw-2">&amp;</span>Application,
-    click_pass_through: bool,
     enable_filter_regex: bool,
     cache_lyrics: bool,
     length_toleration_ms: u128,
     show_default_text_on_idle: bool,
 ) -&gt; Window {
-    <span class="kw">let </span>window = Window::new(app, click_pass_through, cache_lyrics);
+    <span class="kw">let </span>window = Window::new(app, cache_lyrics);
 
     window.set_size_request(<span class="number">500</span>, WINDOW_MIN_HEIGHT);
     window.set_title(<span class="prelude-val">Some</span>(DEFAULT_TEXT));
