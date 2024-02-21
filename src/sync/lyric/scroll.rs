@@ -45,31 +45,94 @@ fn set_lyric_with_mode(
 ) {
     match window.imp().lyric_display_mode.get() {
         LyricDisplayMode::ShowBoth => {
-            set_lyric(window, translation, "above");
-            set_lyric(window, origin, "below");
+            set_lyric(
+                window,
+                translation,
+                "above",
+                #[cfg(feature = "set-label-class")]
+                &["translation"],
+            );
+            set_lyric(
+                window,
+                origin,
+                "below",
+                #[cfg(feature = "set-label-class")]
+                &["origin"],
+            );
         }
         LyricDisplayMode::ShowBothRev => {
-            set_lyric(window, origin, "above");
-            set_lyric(window, translation, "below");
+            set_lyric(
+                window,
+                origin,
+                "above",
+                #[cfg(feature = "set-label-class")]
+                &["origin"],
+            );
+            set_lyric(
+                window,
+                translation,
+                "below",
+                #[cfg(feature = "set-label-class")]
+                &["translation"],
+            );
         }
         LyricDisplayMode::Origin => {
-            set_lyric(window, origin, "above");
-            set_lyric(window, None, "below");
+            set_lyric(
+                window,
+                origin,
+                "above",
+                #[cfg(feature = "set-label-class")]
+                &["origin"],
+            );
+            set_lyric(
+                window,
+                None,
+                "below",
+                #[cfg(feature = "set-label-class")]
+                &[],
+            );
         }
         LyricDisplayMode::PreferTranslation => {
+            #[cfg(feature = "set-label-class")]
+            let class = if translation.is_some() {
+                "translation"
+            } else {
+                "origin"
+            };
             let text = translation.or(origin);
-            set_lyric(window, text, "above");
-            set_lyric(window, None, "below");
+            set_lyric(
+                window,
+                text,
+                "above",
+                #[cfg(feature = "set-label-class")]
+                &[class],
+            );
+            set_lyric(
+                window,
+                None,
+                "below",
+                #[cfg(feature = "set-label-class")]
+                &[],
+            );
         }
     }
 }
 
-fn set_lyric(window: &app::Window, text: Option<&LyricLineOwned>, position: &str) {
+fn set_lyric(
+    window: &app::Window,
+    text: Option<&LyricLineOwned>,
+    position: &str,
+    #[cfg(feature = "set-label-class")] classes: &[&str],
+) {
     let text = text
         .map(|LyricLineOwned { text, .. }| text.as_str().trim())
         .unwrap_or_default();
 
-    get_label(window, position).set_label(text);
+    let label = get_label(window, position);
+
+    label.set_label(text);
+    #[cfg(feature = "set-label-class")]
+    label.set_css_classes(classes);
 }
 
 pub fn refresh_lyric(window: &app::Window) {

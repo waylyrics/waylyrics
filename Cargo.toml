@@ -88,6 +88,7 @@ default = ["mimalloc", "net-test", "tray-icon"]
 vendored = ["dbus/vendored", "openssl/vendored"]
 tray-icon = ["action-event", "dep:ksni"]
 action-event = ["dep:async-channel"]
+set-label-class = []
 
 [target.'cfg(unix)'.dependencies]
 # MPRIS integration
