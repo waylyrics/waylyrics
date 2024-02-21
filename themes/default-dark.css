@@ -1,31 +1,30 @@
-window#main-window {
-    background-color: rgba(0, 0, 0, 0.0);
+/* 标题边框 */
+headerbar {
+    opacity: 0.5;
 }
 
-/* 标题栏的标题也是 label，因此需要特别指定 above 和 below */
-label#above, label#below {
-    /* 圆角 */
-    border-radius: 16px;
+/* 主窗口 */
+window#main-window {
+    background-color: rgba(0, 0, 0, 0.0);
+    /* 减少 Gtk CSD 的阴影 */
+    box-shadow: 0px 0px 1px 0px;
+}
 
-    font-size: 28px;
+label#above,
+label#below {
     color: rgba(0, 0, 0, 1.0);
     background-color: rgba(255, 255, 255, 0.4);
+}
+
+label#above {
+    border-radius: 16px;
+    font-size: 28px;
     padding: 10px;
 }
 
 label#below {
     border-radius: 12px;
-    margin: 5px 0px;
     font-size: 24px;
     padding: 7px;
-}
-
-/* 减少 Gtk CSD 的阴影 */
-window {
-    box-shadow: 0px 0px 1px 0px;
-}
-
-/* 设置 headerbar 为 50% 不透明度 */
-headerbar {
-    opacity: 0.5;
+    margin: 5px 0px;
 }
