@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: waylyrics 0.2.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-21 15:20+0800\n"
+"POT-Creation-Date: 2024-02-21 19:24+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,44 +17,48 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/app/window/imp.rs:54
+#: ../src/app/window/imp.rs:56
 msgid "Hide Decoration"
 msgstr ""
 
-#: ../src/app/window/imp.rs:58 ../src/tray_icon/unix/mod.rs:64
+#: ../src/app/window/imp.rs:60 ../src/tray_icon/unix/mod.rs:84
 msgid "Toggle Passthrough"
 msgstr ""
 
-#: ../src/app/window/imp.rs:61 ../src/tray_icon/unix/mod.rs:73
+#: ../src/app/window/imp.rs:63 ../src/tray_icon/unix/mod.rs:93
 msgid "Reload theme"
 msgstr ""
 
-#: ../src/app/window/imp.rs:62 ../src/app/search_window/mod.rs:57
+#: ../src/app/window/imp.rs:64 ../src/app/search_window/mod.rs:57
 msgid "Search lyric"
 msgstr ""
 
-#: ../src/app/window/imp.rs:64
+#: ../src/app/window/imp.rs:66
 msgid "Refetch lyric"
 msgstr ""
 
-#: ../src/app/window/imp.rs:67
+#: ../src/app/window/imp.rs:69
 msgid "Remove lyric"
 msgstr ""
 
-#: ../src/app/window/imp.rs:69
+#: ../src/app/window/imp.rs:71
 msgid "Remove lyric forever"
 msgstr ""
 
-#: ../src/app/window/imp.rs:78 ../src/app/window/imp.rs:94
-#: ../src/tray_icon/unix/mod.rs:83
+#: ../src/app/window/imp.rs:80 ../src/app/window/imp.rs:102
+#: ../src/tray_icon/unix/mod.rs:103
 msgid "Select Player"
 msgstr ""
 
-#: ../src/app/window/imp.rs:80 ../src/tray_icon/unix/mod.rs:35
+#: ../src/app/window/imp.rs:84 ../src/tray_icon/unix/mod.rs:35
 msgid "Lyric Display Mode"
 msgstr ""
 
-#: ../src/app/window/imp.rs:106
+#: ../src/app/window/imp.rs:88 ../src/tray_icon/unix/mod.rs:55
+msgid "Lyric Align"
+msgstr ""
+
+#: ../src/app/window/imp.rs:114
 msgid "Disconnect"
 msgstr ""
 
@@ -110,39 +114,55 @@ msgstr ""
 msgid "No result was found."
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:55
+#: ../src/tray_icon/unix/mod.rs:75
 msgid "Toggle Decoration"
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:109
+#: ../src/tray_icon/unix/mod.rs:129
 msgid "Search Lyric"
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:118
+#: ../src/tray_icon/unix/mod.rs:138
 msgid "Refetch Lyric"
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:128
+#: ../src/tray_icon/unix/mod.rs:148
 msgid "Restart"
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:146
+#: ../src/tray_icon/unix/mod.rs:166
 msgid "Quit"
 msgstr ""
 
-#: ../src/app/window/imp.rs:123 ../src/tray_icon/unix/mod.rs:39
+#: ../src/app/window/imp.rs:131 ../src/tray_icon/unix/mod.rs:39
 msgid "show_both"
 msgstr ""
 
-#: ../src/app/window/imp.rs:123 ../src/tray_icon/unix/mod.rs:39
+#: ../src/app/window/imp.rs:131 ../src/tray_icon/unix/mod.rs:39
 msgid "show_both_rev"
 msgstr ""
 
-#: ../src/app/window/imp.rs:123 ../src/tray_icon/unix/mod.rs:39
+#: ../src/app/window/imp.rs:131 ../src/tray_icon/unix/mod.rs:39
+msgid "origin"
+msgstr ""
+
+#: ../src/app/window/imp.rs:131 ../src/tray_icon/unix/mod.rs:39
 msgid "prefer_translation"
 msgstr ""
 
-#: ../src/app/window/imp.rs:123 ../src/tray_icon/unix/mod.rs:39
-msgid "origin"
+#: ../src/app/window/imp.rs:141 ../src/tray_icon/unix/mod.rs:59
+msgid "Center"
+msgstr ""
+
+#: ../src/app/window/imp.rs:141 ../src/tray_icon/unix/mod.rs:59
+msgid "Start"
+msgstr ""
+
+#: ../src/app/window/imp.rs:141 ../src/tray_icon/unix/mod.rs:59
+msgid "End"
+msgstr ""
+
+#: ../src/app/window/imp.rs:141 ../src/tray_icon/unix/mod.rs:59
+msgid "Fill"
 msgstr ""
 
