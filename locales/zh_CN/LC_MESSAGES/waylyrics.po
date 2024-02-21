@@ -8,11 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: waylyrics 0.2.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-21 03:22+0800\n"
-"PO-Revision-Date: 2024-02-21 03:56+0800\n"
+"POT-Creation-Date: 2024-02-21 15:20+0800\n"
+"PO-Revision-Date: 2024-02-21 15:26+0800\n"
 "Last-Translator: poly000 <1348292515@qq.com>\n"
 "Language-Team: \n"
-"Language: yue\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -22,11 +22,11 @@ msgstr ""
 msgid "Hide Decoration"
 msgstr "关闭边框"
 
-#: ../src/app/window/imp.rs:58 ../src/tray_icon/unix/mod.rs:62
+#: ../src/app/window/imp.rs:58 ../src/tray_icon/unix/mod.rs:64
 msgid "Toggle Passthrough"
 msgstr "开关穿透"
 
-#: ../src/app/window/imp.rs:61 ../src/tray_icon/unix/mod.rs:70
+#: ../src/app/window/imp.rs:61 ../src/tray_icon/unix/mod.rs:73
 msgid "Reload theme"
 msgstr "重载主题"
 
@@ -47,7 +47,7 @@ msgid "Remove lyric forever"
 msgstr "移除歌词"
 
 #: ../src/app/window/imp.rs:78 ../src/app/window/imp.rs:94
-#: ../src/tray_icon/unix/mod.rs:79
+#: ../src/tray_icon/unix/mod.rs:83
 msgid "Select Player"
 msgstr "选择播放器"
 
@@ -79,54 +79,70 @@ msgstr "时长"
 msgid "Source"
 msgstr "来源"
 
-#: ../src/app/search_window/mod.rs:120
+#: ../src/app/search_window/mod.rs:121
 msgid "Enter title..."
 msgstr "输入标题…"
 
-#: ../src/app/search_window/mod.rs:121
+#: ../src/app/search_window/mod.rs:122
 msgid "title"
 msgstr "标题"
 
-#: ../src/app/search_window/mod.rs:122
+#: ../src/app/search_window/mod.rs:124
 msgid "Enter album..."
 msgstr "输入专辑…"
 
-#: ../src/app/search_window/mod.rs:123
+#: ../src/app/search_window/mod.rs:125
 msgid "album"
 msgstr "专辑"
 
-#: ../src/app/search_window/mod.rs:125
+#: ../src/app/search_window/mod.rs:127
 msgid "Enter artists..."
 msgstr "输入歌手…"
 
-#: ../src/app/search_window/mod.rs:126
+#: ../src/app/search_window/mod.rs:129
 msgid "artists"
 msgstr "歌手"
 
-#: ../src/app/search_window/mod.rs:131
+#: ../src/app/search_window/mod.rs:134
 msgid "Set as lyric"
 msgstr "设为歌词"
 
-#: ../src/app/search_window/mod.rs:234
+#: ../src/app/search_window/mod.rs:240
 msgid "No result was found."
 msgstr "搜索无结果。"
 
-#: ../src/tray_icon/unix/mod.rs:54
+#: ../src/tray_icon/unix/mod.rs:55
 msgid "Toggle Decoration"
 msgstr "开关边框"
 
-#: ../src/tray_icon/unix/mod.rs:104
+#: ../src/tray_icon/unix/mod.rs:109
 msgid "Search Lyric"
 msgstr "搜索歌词"
 
-#: ../src/tray_icon/unix/mod.rs:112
+#: ../src/tray_icon/unix/mod.rs:118
 msgid "Refetch Lyric"
 msgstr "重下歌词"
 
-#: ../src/tray_icon/unix/mod.rs:121
+#: ../src/tray_icon/unix/mod.rs:128
 msgid "Restart"
 msgstr "重启"
 
-#: ../src/tray_icon/unix/mod.rs:138
+#: ../src/tray_icon/unix/mod.rs:146
 msgid "Quit"
 msgstr "退出"
+
+#: ../src/app/window/imp.rs:123 ../src/tray_icon/unix/mod.rs:39
+msgid "show_both"
+msgstr "同时显示"
+
+#: ../src/app/window/imp.rs:123 ../src/tray_icon/unix/mod.rs:39
+msgid "show_both_rev"
+msgstr "同时显示（反）"
+
+#: ../src/app/window/imp.rs:123 ../src/tray_icon/unix/mod.rs:39
+msgid "prefer_translation"
+msgstr "偏好翻译"
+
+#: ../src/app/window/imp.rs:123 ../src/tray_icon/unix/mod.rs:39
+msgid "origin"
+msgstr "仅原歌词"

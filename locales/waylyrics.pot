@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: waylyrics 0.2.7\n"
+"Project-Id-Version: waylyrics 0.2.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-21 03:22+0800\n"
+"POT-Creation-Date: 2024-02-21 15:20+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,11 +21,11 @@ msgstr ""
 msgid "Hide Decoration"
 msgstr ""
 
-#: ../src/app/window/imp.rs:58 ../src/tray_icon/unix/mod.rs:62
+#: ../src/app/window/imp.rs:58 ../src/tray_icon/unix/mod.rs:64
 msgid "Toggle Passthrough"
 msgstr ""
 
-#: ../src/app/window/imp.rs:61 ../src/tray_icon/unix/mod.rs:70
+#: ../src/app/window/imp.rs:61 ../src/tray_icon/unix/mod.rs:73
 msgid "Reload theme"
 msgstr ""
 
@@ -46,7 +46,7 @@ msgid "Remove lyric forever"
 msgstr ""
 
 #: ../src/app/window/imp.rs:78 ../src/app/window/imp.rs:94
-#: ../src/tray_icon/unix/mod.rs:79
+#: ../src/tray_icon/unix/mod.rs:83
 msgid "Select Player"
 msgstr ""
 
@@ -78,54 +78,71 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-#: ../src/app/search_window/mod.rs:120
+#: ../src/app/search_window/mod.rs:121
 msgid "Enter title..."
 msgstr ""
 
-#: ../src/app/search_window/mod.rs:121
+#: ../src/app/search_window/mod.rs:122
 msgid "title"
 msgstr ""
 
-#: ../src/app/search_window/mod.rs:122
+#: ../src/app/search_window/mod.rs:124
 msgid "Enter album..."
 msgstr ""
 
-#: ../src/app/search_window/mod.rs:123
+#: ../src/app/search_window/mod.rs:125
 msgid "album"
 msgstr ""
 
-#: ../src/app/search_window/mod.rs:125
+#: ../src/app/search_window/mod.rs:127
 msgid "Enter artists..."
 msgstr ""
 
-#: ../src/app/search_window/mod.rs:126
+#: ../src/app/search_window/mod.rs:129
 msgid "artists"
 msgstr ""
 
-#: ../src/app/search_window/mod.rs:131
+#: ../src/app/search_window/mod.rs:134
 msgid "Set as lyric"
 msgstr ""
 
-#: ../src/app/search_window/mod.rs:234
+#: ../src/app/search_window/mod.rs:240
 msgid "No result was found."
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:54
+#: ../src/tray_icon/unix/mod.rs:55
 msgid "Toggle Decoration"
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:104
+#: ../src/tray_icon/unix/mod.rs:109
 msgid "Search Lyric"
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:112
+#: ../src/tray_icon/unix/mod.rs:118
 msgid "Refetch Lyric"
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:121
+#: ../src/tray_icon/unix/mod.rs:128
 msgid "Restart"
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:138
+#: ../src/tray_icon/unix/mod.rs:146
 msgid "Quit"
 msgstr ""
+
+#: ../src/app/window/imp.rs:123 ../src/tray_icon/unix/mod.rs:39
+msgid "show_both"
+msgstr ""
+
+#: ../src/app/window/imp.rs:123 ../src/tray_icon/unix/mod.rs:39
+msgid "show_both_rev"
+msgstr ""
+
+#: ../src/app/window/imp.rs:123 ../src/tray_icon/unix/mod.rs:39
+msgid "prefer_translation"
+msgstr ""
+
+#: ../src/app/window/imp.rs:123 ../src/tray_icon/unix/mod.rs:39
+msgid "origin"
+msgstr ""
+

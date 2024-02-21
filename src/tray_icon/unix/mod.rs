@@ -36,7 +36,7 @@ impl Tray for TrayIcon {
                 icon_name: "quickview".into(),
                 submenu: LyricDisplay::iter()
                     .map(|display_mode| {
-                        let label = display_mode.to_string().replace("_", "__");
+                        let label = gettext(display_mode.to_string());
                         StandardItem {
                             label,
                             activate: Box::new(move |_| {
