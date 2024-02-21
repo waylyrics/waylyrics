@@ -2,11 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [0.2.9] - 2024-02-21
+
+### Documentation
+
+- Update changelog
+
+### Features
+
+- Only show set-lyric button when avaliable
+- Show icons on tray-icon menu
+- [**breaking**] Set lyric align mode on run time
 
 ### Miscellaneous Tasks
 
 - Fix changelog ci skipped unexpectedly
+- Remove invalid github template
+- Clean up theme comments
+- Release v0.2.9
+
+### I18n
+
+- Translate length to 时长
+- Translate display_mode
+- Translate lyric align
 
 ## [0.2.8] - 2024-02-20
 
