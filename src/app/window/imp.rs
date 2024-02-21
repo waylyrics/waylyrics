@@ -11,28 +11,31 @@ use gtk::{gio, glib, ApplicationWindow, PopoverMenu};
 use std::sync::OnceLock;
 
 use crate::app::utils::set_click_pass_through;
-use crate::config::{Align, LyricDisplay};
+use crate::config::{Align, LyricDisplayMode};
 use crate::sync::list_player_names;
 
 #[derive(Default)]
 pub struct Window {
     pub settings: OnceLock<Settings>,
 
+    pub clickthrough: Cell<bool>,
     pub cache_lyrics: Cell<bool>,
-    pub lyric_display_mode: Cell<LyricDisplay>,
+
     pub lyric_align: Cell<Align>,
+    pub lyric_display_mode: Cell<LyricDisplayMode>,
+    pub show_default_text_on_idle: Cell<bool>,
+
     pub lyric_start: Cell<Option<SystemTime>>,
     pub lyric_offset_ms: Cell<i64>,
     pub length_toleration_ms: Cell<u128>,
-    pub show_default_text_on_idle: Cell<bool>,
 
+    // widgets
     pub headerbar: gtk::HeaderBar,
     pub menubutton: gtk::MenuButton,
     pub menu: gio::Menu,
     pub player_menu: gio::Menu,
     pub display_mode_menu: gio::Menu,
     pub align_mode_menu: gio::Menu,
-    pub clickthrough: Cell<bool>,
 }
 
 #[glib::object_subclass]
@@ -126,7 +129,7 @@ impl ObjectImpl for Window {
             menu.append_section(None, &section);
         });
 
-        for display_mode in <LyricDisplay as strum::IntoEnumIterator>::iter() {
+        for display_mode in <LyricDisplayMode as strum::IntoEnumIterator>::iter() {
             let display_mode_str = display_mode.to_string();
             let item = MenuItem::new(Some(&gettext(&display_mode_str)), None);
             item.set_action_and_target_value(

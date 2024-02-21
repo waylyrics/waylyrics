@@ -9,7 +9,7 @@ use strum::IntoEnumIterator;
 use crate::app::actions::{UIAction, UI_ACTION};
 use crate::sync::{PlayAction, PLAY_ACTION};
 
-use crate::config::{Align, LyricDisplay};
+use crate::config::{Align, LyricDisplayMode};
 use crate::sync::{list_player_names, PlayerId};
 
 use crate::log::error;
@@ -34,7 +34,7 @@ impl Tray for TrayIcon {
             SubMenu {
                 label: gettext("Lyric Display Mode"),
                 icon_name: "quickview".into(),
-                submenu: LyricDisplay::iter()
+                submenu: LyricDisplayMode::iter()
                     .map(|display_mode| {
                         let label = gettext(display_mode.to_string());
                         StandardItem {

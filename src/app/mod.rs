@@ -4,11 +4,7 @@ mod window;
 use gtk::{prelude::*, subclass::prelude::ObjectSubclassIsExt, Application, Label};
 pub use window::Window;
 
-use crate::{
-    app::utils::set_click_pass_through,
-    config::{self, LyricDisplay},
-    DEFAULT_TEXT,
-};
+use crate::{app::utils::set_click_pass_through, config, DEFAULT_TEXT};
 
 const WINDOW_MIN_HEIGHT: i32 = 120;
 
@@ -22,7 +18,6 @@ pub fn build_main_window(
     enable_filter_regex: bool,
     cache_lyrics: bool,
     length_toleration_ms: u128,
-    lyric_display_mode: LyricDisplay,
     show_default_text_on_idle: bool,
 ) -> Window {
     let window = Window::new(app, click_pass_through, cache_lyrics);
@@ -67,7 +62,6 @@ pub fn build_main_window(
 
     window.set_icon_name(Some(crate::APP_ID));
     window.imp().length_toleration_ms.set(length_toleration_ms);
-    window.imp().lyric_display_mode.set(lyric_display_mode);
     window
         .imp()
         .show_default_text_on_idle

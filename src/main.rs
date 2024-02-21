@@ -87,7 +87,6 @@ fn build_ui(app: &Application) -> Result<()> {
         triggers,
         qqmusic_api_base_url,
         lyric_search_source,
-        lyric_display_mode,
         show_default_text_on_idle,
         #[cfg(feature = "tray-icon")]
         show_tray_icon,
@@ -125,7 +124,6 @@ fn build_ui(app: &Application) -> Result<()> {
         enable_filter_regex && !filter_regexies.is_empty(),
         cache_lyrics,
         parse_time(length_toleration)?.as_millis(),
-        lyric_display_mode,
         show_default_text_on_idle,
     );
 

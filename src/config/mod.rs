@@ -15,10 +15,9 @@ pub enum Align {
     Fill,
 }
 
-#[derive(Deserialize, Serialize, Clone, Copy, Default, EnumIter, strum::Display, EnumString)]
-#[serde(rename_all = "snake_case")]
+#[derive(Clone, Copy, Default, EnumIter, strum::Display, EnumString)]
 #[strum(serialize_all = "snake_case")]
-pub enum LyricDisplay {
+pub enum LyricDisplayMode {
     #[default]
     ShowBoth,
     ShowBothRev,
@@ -63,14 +62,6 @@ pub struct Config {
 
     /// avaliable options: 网易云音乐, QQ音乐
     pub lyric_search_source: Vec<String>,
-
-    /// lyric display mode
-    /// avaliable options:
-    /// - `show_both`: show origin and translated lyric
-    /// - `show_both_rev`: similiar to `show_both`, but origin text are showed below
-    /// - `prefer_translation`: show translated lyric if found any, or show origin lyric
-    /// - `origin`: only to show origin lyric
-    pub lyric_display_mode: LyricDisplay,
 
     /// if enabled, waylyrics will set `DEFAULT_TEXT` on idle,
     /// otherwise it just show nothing
@@ -128,7 +119,6 @@ impl Default for Config {
             triggers: Triggers::default(),
             qqmusic_api_base_url: None,
             lyric_search_source: vec![Netease.unique_name().into()],
-            lyric_display_mode: LyricDisplay::default(),
             show_default_text_on_idle: true,
             #[cfg(feature = "tray-icon")]
             show_tray_icon: true,

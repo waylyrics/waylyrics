@@ -6,7 +6,7 @@ use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib, Application};
 
-use crate::config::Align;
+use crate::config::{Align, LyricDisplayMode};
 use crate::APP_ID;
 
 glib::wrapper! {
@@ -46,12 +46,15 @@ impl Window {
         let (width, height) = self.default_size();
         let decorated = self.is_decorated();
         let align_mode = self.imp().lyric_align.get().to_string();
+        let display_mode = self.imp().lyric_display_mode.get().to_string();
 
         self.settings().set_int("window-width", width)?;
         self.settings().set_int("window-height", height)?;
         self.settings().set_boolean("window-decorated", decorated)?;
         self.settings()
             .set_string("lyric-align-mode", &align_mode)?;
+        self.settings()
+            .set_string("lyric-display-mode", &display_mode)?;
 
         Ok(())
     }
@@ -61,9 +64,15 @@ impl Window {
         let width = self.settings().int("window-width");
         let decorated = self.settings().boolean("window-decorated");
         let align_mode: Align = self.settings().string("lyric-align-mode").parse().unwrap();
+        let display_mode: LyricDisplayMode = self
+            .settings()
+            .string("lyric-display-mode")
+            .parse()
+            .unwrap();
 
         self.set_default_size(width, height);
         self.set_decorated(decorated);
         self.imp().lyric_align.set(align_mode);
+        self.imp().lyric_display_mode.set(display_mode)
     }
 }

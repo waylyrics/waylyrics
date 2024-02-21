@@ -17,5 +17,9 @@
       <default>"Center"</default>
       <summary>lyric align mode</summary>
     </key>
+    <key name="lyric-display-mode" type="s">
+      <default>"show_both"</default>
+      <summary>lyric display mode</summary>
+    </key>
   </schema>
 </schemalist>

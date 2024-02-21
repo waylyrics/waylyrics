@@ -6,7 +6,7 @@ use gtk::{glib, prelude::*};
 use gtk::{glib::WeakRef, Application};
 
 use crate::app::{self, get_label};
-use crate::config::LyricDisplay;
+use crate::config::LyricDisplayMode;
 use crate::lyric_providers::{LyricLineOwned, LyricOwned};
 
 use crate::sync::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
@@ -44,19 +44,19 @@ fn set_lyric_with_mode(
     origin: Option<&LyricLineOwned>,
 ) {
     match window.imp().lyric_display_mode.get() {
-        LyricDisplay::ShowBoth => {
+        LyricDisplayMode::ShowBoth => {
             set_lyric(window, translation, "above");
             set_lyric(window, origin, "below");
         }
-        LyricDisplay::ShowBothRev => {
+        LyricDisplayMode::ShowBothRev => {
             set_lyric(window, origin, "above");
             set_lyric(window, translation, "below");
         }
-        LyricDisplay::Origin => {
+        LyricDisplayMode::Origin => {
             set_lyric(window, origin, "above");
             set_lyric(window, None, "below");
         }
-        LyricDisplay::PreferTranslation => {
+        LyricDisplayMode::PreferTranslation => {
             let text = translation.or(origin);
             set_lyric(window, text, "above");
             set_lyric(window, None, "below");
