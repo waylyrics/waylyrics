@@ -43,9 +43,6 @@ pub struct Config {
     /// note: persistenced lyric offset depends on this
     pub cache_lyrics: bool,
 
-    /// whether to allow mouse-click passthrough
-    pub click_pass_through: bool,
-
     /// theme to load (<name>.css)
     pub theme: String,
 
@@ -111,7 +108,6 @@ impl Default for Config {
             player_sync_interval: "2s".to_owned(),
             lyric_update_interval: "20ms".to_owned(),
             length_toleration: "2s".to_owned(),
-            click_pass_through: true,
             theme: "default".into(),
             cache_lyrics: true,
             enable_filter_regex: false,

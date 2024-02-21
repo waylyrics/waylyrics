@@ -13,6 +13,10 @@
       <default>true</default>
       <summary>enable GTK+ CSD</summary>
     </key>
+    <key name="window-click-through" type="b">
+      <default>true</default>
+      <summary>allow mouse click-through</summary>
+    </key>
     <key name="lyric-align-mode" type="s">
       <default>"Center"</default>
       <summary>lyric align mode</summary>

@@ -17,13 +17,15 @@ glib::wrapper! {
 }
 
 impl Window {
-    pub fn new(app: &Application, clickthrough: bool, cache_lyrics: bool) -> Self {
+    pub fn new(app: &Application, cache_lyrics: bool) -> Self {
         let window: Self = Object::builder().property("application", app).build();
         let imp = window.imp();
+
         window.set_titlebar(Some(&imp.headerbar));
-        imp.clickthrough.set(clickthrough);
-        imp.cache_lyrics.set(cache_lyrics);
         window.set_widget_name("main-window");
+
+        imp.cache_lyrics.set(cache_lyrics);
+
         window
     }
 
@@ -45,12 +47,15 @@ impl Window {
     pub fn save_window_state(&self) -> Result<(), glib::BoolError> {
         let (width, height) = self.default_size();
         let decorated = self.is_decorated();
+        let click_through = self.imp().clickthrough.get();
         let align_mode = self.imp().lyric_align.get().to_string();
         let display_mode = self.imp().lyric_display_mode.get().to_string();
 
         self.settings().set_int("window-width", width)?;
         self.settings().set_int("window-height", height)?;
         self.settings().set_boolean("window-decorated", decorated)?;
+        self.settings()
+            .set_boolean("window-click-through", click_through)?;
         self.settings()
             .set_string("lyric-align-mode", &align_mode)?;
         self.settings()
@@ -63,6 +68,7 @@ impl Window {
         let height = self.settings().int("window-height");
         let width = self.settings().int("window-width");
         let decorated = self.settings().boolean("window-decorated");
+        let click_through = self.settings().boolean("window-click-through");
         let align_mode: Align = self.settings().string("lyric-align-mode").parse().unwrap();
         let display_mode: LyricDisplayMode = self
             .settings()
@@ -72,6 +78,7 @@ impl Window {
 
         self.set_default_size(width, height);
         self.set_decorated(decorated);
+        self.imp().clickthrough.set(click_through);
         self.imp().lyric_align.set(align_mode);
         self.imp().lyric_display_mode.set(display_mode)
     }

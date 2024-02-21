@@ -14,13 +14,12 @@ pub mod utils;
 
 pub fn build_main_window(
     app: &Application,
-    click_pass_through: bool,
     enable_filter_regex: bool,
     cache_lyrics: bool,
     length_toleration_ms: u128,
     show_default_text_on_idle: bool,
 ) -> Window {
-    let window = Window::new(app, click_pass_through, cache_lyrics);
+    let window = Window::new(app, cache_lyrics);
 
     window.set_size_request(500, WINDOW_MIN_HEIGHT);
     window.set_title(Some(DEFAULT_TEXT));
