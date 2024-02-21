@@ -67,6 +67,13 @@
 <a href="#66" id="66">66</a>
 <a href="#67" id="67">67</a>
 <a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::OnceLock;
 
 <span class="kw">use </span>async_channel::Sender;
@@ -88,6 +95,8 @@
     </span>SwitchDecoration,
     <span class="doccomment">/// set new lyric display mode
     </span>SetDisplayMode(String),
+    <span class="doccomment">/// set new lyric align mode
+    </span>SetLyricAlign(String),
     <span class="doccomment">/// Quit Waylyrics
     </span>Quit,
 }
@@ -118,6 +127,11 @@
                     <span class="kw-2">&amp;</span>wind,
                     <span class="string">"set-display-mode"</span>,
                     <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>display_mode.to_variant()),
+                ),
+                UIAction::SetLyricAlign(lyric_align) =&gt; ActionGroupExt::activate_action(
+                    <span class="kw-2">&amp;</span>wind,
+                    <span class="string">"set-lyric-align"</span>,
+                    <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>lyric_align.to_variant()),
                 ),
                 UIAction::Quit =&gt; {
                     wind.close();

@@ -83,13 +83,33 @@
 <a href="#82" id="82">82</a>
 <a href="#83" id="83">83</a>
 <a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>search_window;
 <span class="kw">mod </span>window;
 
-<span class="kw">use </span>gtk::{prelude::<span class="kw-2">*</span>, subclass::prelude::ObjectSubclassIsExt, Align, Application, Label};
+<span class="kw">use </span>gtk::{prelude::<span class="kw-2">*</span>, subclass::prelude::ObjectSubclassIsExt, Application, Label};
 <span class="kw">pub use </span>window::Window;
 
-<span class="kw">use crate</span>::{app::utils::set_click_pass_through, config::LyricDisplay, DEFAULT_TEXT};
+<span class="kw">use crate</span>::{
+    app::utils::set_click_pass_through,
+    config::{<span class="self">self</span>, LyricDisplay},
+    DEFAULT_TEXT,
+};
 
 <span class="kw">const </span>WINDOW_MIN_HEIGHT: i32 = <span class="number">120</span>;
 
@@ -103,7 +123,6 @@
     enable_filter_regex: bool,
     cache_lyrics: bool,
     length_toleration_ms: u128,
-    lyric_align: <span class="kw">impl </span>Into&lt;Align&gt; + Copy,
     lyric_display_mode: LyricDisplay,
     show_default_text_on_idle: bool,
 ) -&gt; Window {
@@ -126,9 +145,6 @@
     above_label.set_vexpand(<span class="bool-val">true</span>);
     below_label.set_vexpand(<span class="bool-val">true</span>);
 
-    above_label.set_halign(lyric_align.into());
-    below_label.set_halign(lyric_align.into());
-
     <span class="kw">let </span>verical_box = gtk::Box::builder()
         .baseline_position(gtk::BaselinePosition::Center)
         .orientation(gtk::Orientation::Vertical)
@@ -140,6 +156,9 @@
     verical_box.insert_child_after(<span class="kw-2">&amp;</span>below_label, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>above_label));
 
     window.set_child(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>verical_box));
+
+    <span class="kw">let </span>align = window.imp().lyric_align.get();
+    set_lyric_align(<span class="kw-2">&amp;</span>window, align);
 
     window.connect_decorated_notify(|window| {
         <span class="macro">crate::log::debug!</span>(<span class="string">"triggered decorated signal"</span>);
@@ -157,12 +176,25 @@
     window
 }
 
-<span class="kw">pub fn </span>get_label(window: <span class="kw-2">&amp;</span>Window, position: <span class="kw-2">&amp;</span>str) -&gt; Label {
-    <span class="kw">let </span>vbox: gtk::Box = window.child().unwrap().downcast().unwrap();
-    <span class="kw">let </span>first: Label = vbox.first_child().unwrap().downcast().unwrap();
-    <span class="kw">let </span>last: Label = vbox.last_child().unwrap().downcast().unwrap();
+<span class="kw">pub fn </span>set_lyric_align(window: <span class="kw-2">&amp;</span>Window, align: config::Align) -&gt; <span class="prelude-ty">Option</span>&lt;()&gt; {
+    <span class="kw">let </span>labels = get_labels(window)<span class="question-mark">?</span>;
+    <span class="kw">for </span>label <span class="kw">in </span>labels {
+        label.set_halign(align.into());
+    }
+    window.imp().lyric_align.set(align);
+    <span class="prelude-val">Some</span>(())
+}
 
-    [first, last]
+<span class="kw">fn </span>get_labels(window: <span class="kw-2">&amp;</span>Window) -&gt; <span class="prelude-ty">Option</span>&lt;[Label; <span class="number">2</span>]&gt; {
+    <span class="kw">let </span>vbox: gtk::Box = window.child()<span class="question-mark">?</span>.downcast().ok()<span class="question-mark">?</span>;
+    <span class="kw">let </span>above_label: Label = vbox.first_child()<span class="question-mark">?</span>.downcast().ok()<span class="question-mark">?</span>;
+    <span class="kw">let </span>below_label: Label = vbox.last_child()<span class="question-mark">?</span>.downcast().ok()<span class="question-mark">?</span>;
+    <span class="prelude-val">Some</span>([above_label, below_label])
+}
+
+<span class="kw">pub fn </span>get_label(window: <span class="kw-2">&amp;</span>Window, position: <span class="kw-2">&amp;</span>str) -&gt; Label {
+    get_labels(window)
+        .expect(<span class="string">"cannot find labels"</span>)
         .into_iter()
         .find(|label| label.widget_name() == position)
         .unwrap()

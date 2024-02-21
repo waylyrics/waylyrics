@@ -75,6 +75,7 @@
 <a href="#74" id="74">74</a>
 <a href="#75" id="75">75</a>
 <a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::EXCLUDED_REGEXES;
 
 <span class="kw">use </span>gtk::{
@@ -141,13 +142,14 @@
 <span class="kw">pub fn </span>setup_label(label: <span class="kw-2">&amp;</span>Label, hide_filtered_words: bool) {
     <span class="kw">if </span>hide_filtered_words {
         label.connect_label_notify(|label| {
-            <span class="kw">let </span>label_text = label.label();
-
-            label.set_visible(!has_filtered_word(label_text.as_str()) &amp;&amp; !label_text.is_empty());
+            <span class="kw">let </span>text = label.label();
+            <span class="kw">let </span>visible = !has_filtered_word(<span class="kw-2">&amp;</span>text) &amp;&amp; !text.is_empty();
+            label.set_visible(visible);
         });
     } <span class="kw">else </span>{
         label.connect_label_notify(|label| {
-            label.set_visible(!label.label().is_empty());
+            <span class="kw">let </span>visible = !label.label().is_empty();
+            label.set_visible(visible);
         });
     }
 }

@@ -170,6 +170,26 @@
 <a href="#169" id="169">169</a>
 <a href="#170" id="170">170</a>
 <a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{env, process};
 
 <span class="kw">use </span>async_channel::Sender;
@@ -181,7 +201,7 @@
 <span class="kw">use </span><span class="kw">crate</span>::app::actions::{UIAction, UI_ACTION};
 <span class="kw">use </span><span class="kw">crate</span>::sync::{PlayAction, PLAY_ACTION};
 
-<span class="kw">use </span><span class="kw">crate</span>::config::LyricDisplay;
+<span class="kw">use </span><span class="kw">crate</span>::config::{Align, LyricDisplay};
 <span class="kw">use </span><span class="kw">crate</span>::sync::{list_player_names, PlayerId};
 
 <span class="kw">use </span><span class="kw">crate</span>::log::error;
@@ -213,6 +233,26 @@
                             label,
                             activate: Box::new(<span class="kw">move </span>|<span class="kw">_</span>| {
                                 <span class="kw">let </span>action = UIAction::SetDisplayMode(display_mode.to_string());
+                                <span class="kw">let _ </span>= ui_action().send_blocking(action);
+                            }),
+                            ..Default::default()
+                        }
+                        .into()
+                    })
+                    .collect(),
+                ..Default::default()
+            }
+            .into(),
+            SubMenu {
+                label: gettext(<span class="string">"Lyric Align"</span>),
+                icon_name: <span class="string">"format-justify-left"</span>.into(),
+                submenu: Align::iter()
+                    .map(|lyric_align| {
+                        <span class="kw">let </span>label = gettext(lyric_align.to_string());
+                        StandardItem {
+                            label,
+                            activate: Box::new(<span class="kw">move </span>|<span class="kw">_</span>| {
+                                <span class="kw">let </span>action = UIAction::SetLyricAlign(lyric_align.to_string());
                                 <span class="kw">let _ </span>= ui_action().send_blocking(action);
                             }),
                             ..Default::default()

@@ -153,6 +153,24 @@
 <a href="#152" id="152">152</a>
 <a href="#153" id="153">153</a>
 <a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::Cell;
 <span class="kw">use </span>std::time::SystemTime;
 
@@ -166,7 +184,7 @@
 <span class="kw">use </span>std::sync::OnceLock;
 
 <span class="kw">use </span><span class="kw">crate</span>::app::utils::set_click_pass_through;
-<span class="kw">use </span><span class="kw">crate</span>::config::LyricDisplay;
+<span class="kw">use </span><span class="kw">crate</span>::config::{Align, LyricDisplay};
 <span class="kw">use </span><span class="kw">crate</span>::sync::list_player_names;
 
 <span class="attr">#[derive(Default)]
@@ -175,6 +193,7 @@
 
     <span class="kw">pub </span>cache_lyrics: Cell&lt;bool&gt;,
     <span class="kw">pub </span>lyric_display_mode: Cell&lt;LyricDisplay&gt;,
+    <span class="kw">pub </span>lyric_align: Cell&lt;Align&gt;,
     <span class="kw">pub </span>lyric_start: Cell&lt;<span class="prelude-ty">Option</span>&lt;SystemTime&gt;&gt;,
     <span class="kw">pub </span>lyric_offset_ms: Cell&lt;i64&gt;,
     <span class="kw">pub </span>length_toleration_ms: Cell&lt;u128&gt;,
@@ -185,6 +204,7 @@
     <span class="kw">pub </span>menu: gio::Menu,
     <span class="kw">pub </span>player_menu: gio::Menu,
     <span class="kw">pub </span>display_mode_menu: gio::Menu,
+    <span class="kw">pub </span>align_mode_menu: gio::Menu,
     <span class="kw">pub </span>clickthrough: Cell&lt;bool&gt;,
 }
 
@@ -229,11 +249,17 @@
         <span class="kw">let </span>popover = PopoverMenu::builder()
             .accessible_role(gtk::AccessibleRole::MenuItemRadio)
             .build();
-        <span class="self">self</span>.menu
-            .append_submenu(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Select Player"</span>)), <span class="kw-2">&amp;</span><span class="self">self</span>.player_menu);
+        <span class="self">self</span>.menu.append_submenu(
+            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Select Player"</span>)), <span class="comment">//
+            </span><span class="kw-2">&amp;</span><span class="self">self</span>.player_menu,
+        );
         <span class="self">self</span>.menu.append_submenu(
             <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Lyric Display Mode"</span>)),
             <span class="kw-2">&amp;</span><span class="self">self</span>.display_mode_menu,
+        );
+        <span class="self">self</span>.menu.append_submenu(
+            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Lyric Align"</span>)), <span class="comment">//
+            </span><span class="kw-2">&amp;</span><span class="self">self</span>.align_mode_menu,
         );
 
         <span class="self">self</span>.menu.append_item(<span class="kw-2">&amp;</span>passthrough);
@@ -281,6 +307,16 @@
                 <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>display_mode_str.to_variant()),
             );
             <span class="self">self</span>.display_mode_menu.append_item(<span class="kw-2">&amp;</span>item);
+        }
+
+        <span class="kw">for </span>lyric_align <span class="kw">in </span>&lt;Align <span class="kw">as </span>strum::IntoEnumIterator&gt;::iter() {
+            <span class="kw">let </span>lyric_align_str = lyric_align.to_string();
+            <span class="kw">let </span>item = MenuItem::new(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="kw-2">&amp;</span>lyric_align_str)), <span class="prelude-val">None</span>);
+            item.set_action_and_target_value(
+                <span class="prelude-val">Some</span>(<span class="string">"win.set-lyric-align"</span>),
+                <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>lyric_align_str.to_variant()),
+            );
+            <span class="self">self</span>.align_mode_menu.append_item(<span class="kw-2">&amp;</span>item);
         }
 
         <span class="self">self</span>.menubutton.set_popover(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>popover));

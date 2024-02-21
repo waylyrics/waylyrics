@@ -161,30 +161,13 @@
 <a href="#160" id="160">160</a>
 <a href="#161" id="161">161</a>
 <a href="#162" id="162">162</a>
-<a href="#163" id="163">163</a>
-<a href="#164" id="164">164</a>
-<a href="#165" id="165">165</a>
-<a href="#166" id="166">166</a>
-<a href="#167" id="167">167</a>
-<a href="#168" id="168">168</a>
-<a href="#169" id="169">169</a>
-<a href="#170" id="170">170</a>
-<a href="#171" id="171">171</a>
-<a href="#172" id="172">172</a>
-<a href="#173" id="173">173</a>
-<a href="#174" id="174">174</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>documented::DocumentedFields;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
+<span class="kw">use </span>strum::{EnumIter, EnumString};
 
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{netease::Netease, LyricProvider};
 
-<span class="attr">#[derive(Deserialize, Serialize, Clone, Copy, Default)]
-</span><span class="kw">pub struct </span>AlignS {
-    <span class="attr">#[serde(rename = <span class="string">"type"</span>)]
-    </span>align_type: Align,
-}
-
-<span class="attr">#[derive(Deserialize, Serialize, Clone, Copy, Default)]
+<span class="attr">#[derive(Clone, Copy, Default, EnumIter, strum::Display, EnumString)]
 </span><span class="kw">pub enum </span>Align {
     <span class="doccomment">/// left align
     </span>Start,
@@ -195,9 +178,7 @@
     Fill,
 }
 
-<span class="attr">#[derive(
-    Deserialize, Serialize, Clone, Copy, Default, strum::EnumIter, strum::Display, strum::EnumString,
-)]
+<span class="attr">#[derive(Deserialize, Serialize, Clone, Copy, Default, EnumIter, strum::Display, EnumString)]
 #[serde(rename_all = <span class="string">"snake_case"</span>)]
 #[strum(serialize_all = <span class="string">"snake_case"</span>)]
 </span><span class="kw">pub enum </span>LyricDisplay {
@@ -228,6 +209,7 @@
 
     <span class="doccomment">/// whether to allow mouse-click passthrough
     </span><span class="kw">pub </span>click_pass_through: bool,
+
     <span class="doccomment">/// theme to load (&lt;name&gt;.css)
     </span><span class="kw">pub </span>theme: String,
 
@@ -260,11 +242,6 @@
     <span class="doccomment">/// whether to run tray-icon service
     </span><span class="attr">#[cfg(feature = <span class="string">"tray-icon"</span>)]
     </span><span class="kw">pub </span>show_tray_icon: bool,
-
-    <span class="doccomment">/// the way two lyric label align in
-    /// possible values: Center, Start, End, Fill
-    /// also check [GTK+ doc](https://docs.gtk.org/gtk4/enum.Align.html#members)
-    </span><span class="kw">pub </span>lyric_align: AlignS,
 
     <span class="doccomment">/// shortcuts when focusing on waylyrics
     /// for global ones, please install the `.desktop` file
@@ -311,7 +288,6 @@
             cache_lyrics: <span class="bool-val">true</span>,
             enable_filter_regex: <span class="bool-val">false</span>,
             filter_regexies: default_filter_regexies(),
-            lyric_align: AlignS::default(),
             triggers: Triggers::default(),
             qqmusic_api_base_url: <span class="prelude-val">None</span>,
             lyric_search_source: <span class="macro">vec!</span>[Netease.unique_name().into()],
@@ -323,9 +299,9 @@
     }
 }
 
-<span class="kw">impl </span>From&lt;AlignS&gt; <span class="kw">for </span>gtk::Align {
-    <span class="kw">fn </span>from(value: AlignS) -&gt; <span class="self">Self </span>{
-        <span class="kw">match </span>value.align_type {
+<span class="kw">impl </span>From&lt;Align&gt; <span class="kw">for </span>gtk::Align {
+    <span class="kw">fn </span>from(value: Align) -&gt; <span class="self">Self </span>{
+        <span class="kw">match </span>value {
             Align::Start =&gt; <span class="self">Self</span>::Start,
             Align::End =&gt; <span class="self">Self</span>::End,
             Align::Center =&gt; <span class="self">Self</span>::Center,

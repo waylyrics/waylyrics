@@ -1,3 +1,3 @@
 (function() {var implementors = {
-"waylyrics":[["impl IntoEnumIterator for <a class=\"enum\" href=\"waylyrics/config/enum.LyricDisplay.html\" title=\"enum waylyrics::config::LyricDisplay\">LyricDisplay</a>"]]
+"waylyrics":[["impl IntoEnumIterator for <a class=\"enum\" href=\"waylyrics/config/enum.LyricDisplay.html\" title=\"enum waylyrics::config::LyricDisplay\">LyricDisplay</a>"],["impl IntoEnumIterator for <a class=\"enum\" href=\"waylyrics/config/enum.Align.html\" title=\"enum waylyrics::config::Align\">Align</a>"]]
 };if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
