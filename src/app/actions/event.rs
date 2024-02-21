@@ -19,6 +19,8 @@ pub enum UIAction {
     SwitchDecoration,
     /// set new lyric display mode
     SetDisplayMode(String),
+    /// set new lyric align mode
+    SetLyricAlign(String),
     /// Quit Waylyrics
     Quit,
 }
@@ -49,6 +51,11 @@ fn register_ui_action(app: WeakRef<Application>, wind: WeakRef<Window>) -> Sende
                     &wind,
                     "set-display-mode",
                     Some(&display_mode.to_variant()),
+                ),
+                UIAction::SetLyricAlign(lyric_align) => ActionGroupExt::activate_action(
+                    &wind,
+                    "set-lyric-align",
+                    Some(&lyric_align.to_variant()),
                 ),
                 UIAction::Quit => {
                     wind.close();

@@ -11,7 +11,7 @@ use gtk::{gio, glib, ApplicationWindow, PopoverMenu};
 use std::sync::OnceLock;
 
 use crate::app::utils::set_click_pass_through;
-use crate::config::LyricDisplay;
+use crate::config::{Align, LyricDisplay};
 use crate::sync::list_player_names;
 
 #[derive(Default)]
@@ -20,6 +20,7 @@ pub struct Window {
 
     pub cache_lyrics: Cell<bool>,
     pub lyric_display_mode: Cell<LyricDisplay>,
+    pub lyric_align: Cell<Align>,
     pub lyric_start: Cell<Option<SystemTime>>,
     pub lyric_offset_ms: Cell<i64>,
     pub length_toleration_ms: Cell<u128>,
@@ -30,6 +31,7 @@ pub struct Window {
     pub menu: gio::Menu,
     pub player_menu: gio::Menu,
     pub display_mode_menu: gio::Menu,
+    pub align_mode_menu: gio::Menu,
     pub clickthrough: Cell<bool>,
 }
 
@@ -74,11 +76,17 @@ impl ObjectImpl for Window {
         let popover = PopoverMenu::builder()
             .accessible_role(gtk::AccessibleRole::MenuItemRadio)
             .build();
-        self.menu
-            .append_submenu(Some(&gettext("Select Player")), &self.player_menu);
+        self.menu.append_submenu(
+            Some(&gettext("Select Player")), //
+            &self.player_menu,
+        );
         self.menu.append_submenu(
             Some(&gettext("Lyric Display Mode")),
             &self.display_mode_menu,
+        );
+        self.menu.append_submenu(
+            Some(&gettext("Lyric Align")), //
+            &self.align_mode_menu,
         );
 
         self.menu.append_item(&passthrough);
@@ -126,6 +134,16 @@ impl ObjectImpl for Window {
                 Some(&display_mode_str.to_variant()),
             );
             self.display_mode_menu.append_item(&item);
+        }
+
+        for lyric_align in <Align as strum::IntoEnumIterator>::iter() {
+            let lyric_align_str = lyric_align.to_string();
+            let item = MenuItem::new(Some(&gettext(&lyric_align_str)), None);
+            item.set_action_and_target_value(
+                Some("win.set-lyric-align"),
+                Some(&lyric_align_str.to_variant()),
+            );
+            self.align_mode_menu.append_item(&item);
         }
 
         self.menubutton.set_popover(Some(&popover));

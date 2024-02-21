@@ -1,15 +1,10 @@
 use documented::DocumentedFields;
 use serde::{Deserialize, Serialize};
+use strum::{EnumIter, EnumString};
 
 use crate::lyric_providers::{netease::Netease, LyricProvider};
 
-#[derive(Deserialize, Serialize, Clone, Copy, Default)]
-pub struct AlignS {
-    #[serde(rename = "type")]
-    align_type: Align,
-}
-
-#[derive(Deserialize, Serialize, Clone, Copy, Default)]
+#[derive(Clone, Copy, Default, EnumIter, strum::Display, EnumString)]
 pub enum Align {
     /// left align
     Start,
@@ -20,9 +15,7 @@ pub enum Align {
     Fill,
 }
 
-#[derive(
-    Deserialize, Serialize, Clone, Copy, Default, strum::EnumIter, strum::Display, strum::EnumString,
-)]
+#[derive(Deserialize, Serialize, Clone, Copy, Default, EnumIter, strum::Display, EnumString)]
 #[serde(rename_all = "snake_case")]
 #[strum(serialize_all = "snake_case")]
 pub enum LyricDisplay {
@@ -53,6 +46,7 @@ pub struct Config {
 
     /// whether to allow mouse-click passthrough
     pub click_pass_through: bool,
+
     /// theme to load (<name>.css)
     pub theme: String,
 
@@ -85,11 +79,6 @@ pub struct Config {
     /// whether to run tray-icon service
     #[cfg(feature = "tray-icon")]
     pub show_tray_icon: bool,
-
-    /// the way two lyric label align in
-    /// possible values: Center, Start, End, Fill
-    /// also check [GTK+ doc](https://docs.gtk.org/gtk4/enum.Align.html#members)
-    pub lyric_align: AlignS,
 
     /// shortcuts when focusing on waylyrics
     /// for global ones, please install the `.desktop` file
@@ -136,7 +125,6 @@ impl Default for Config {
             cache_lyrics: true,
             enable_filter_regex: false,
             filter_regexies: default_filter_regexies(),
-            lyric_align: AlignS::default(),
             triggers: Triggers::default(),
             qqmusic_api_base_url: None,
             lyric_search_source: vec![Netease.unique_name().into()],
@@ -148,9 +136,9 @@ impl Default for Config {
     }
 }
 
-impl From<AlignS> for gtk::Align {
-    fn from(value: AlignS) -> Self {
-        match value.align_type {
+impl From<Align> for gtk::Align {
+    fn from(value: Align) -> Self {
+        match value {
             Align::Start => Self::Start,
             Align::End => Self::End,
             Align::Center => Self::Center,

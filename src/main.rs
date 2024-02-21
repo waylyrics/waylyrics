@@ -30,8 +30,8 @@ use tracing_subscriber::prelude::*;
 use tracing_subscriber::{fmt, Registry};
 
 use app::actions::{
-    register_reload_theme, register_set_display_mode, register_switch_decoration,
-    register_switch_passthrough,
+    register_reload_theme, register_set_display_mode, register_set_lyric_align,
+    register_switch_decoration, register_switch_passthrough,
 };
 
 pub const THEME_PRESETS_DIR: Option<&str> = option_env!("WAYLYRICS_THEME_PRESETS_DIR");
@@ -84,7 +84,6 @@ fn build_ui(app: &Application) -> Result<()> {
         enable_filter_regex,
         filter_regexies,
         ref length_toleration,
-        lyric_align,
         triggers,
         qqmusic_api_base_url,
         lyric_search_source,
@@ -126,7 +125,6 @@ fn build_ui(app: &Application) -> Result<()> {
         enable_filter_regex && !filter_regexies.is_empty(),
         cache_lyrics,
         parse_time(length_toleration)?.as_millis(),
-        lyric_align,
         lyric_display_mode,
         show_default_text_on_idle,
     );
@@ -168,6 +166,7 @@ fn register_actions(
 ) {
     register_connect(app);
     register_disconnect(app);
+    register_set_lyric_align(wind);
     register_set_display_mode(wind);
     register_switch_decoration(wind, &switch_decoration);
     register_switch_passthrough(wind, &switch_passthrough);

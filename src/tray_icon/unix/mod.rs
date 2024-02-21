@@ -9,7 +9,7 @@ use strum::IntoEnumIterator;
 use crate::app::actions::{UIAction, UI_ACTION};
 use crate::sync::{PlayAction, PLAY_ACTION};
 
-use crate::config::LyricDisplay;
+use crate::config::{Align, LyricDisplay};
 use crate::sync::{list_player_names, PlayerId};
 
 use crate::log::error;
@@ -41,6 +41,26 @@ impl Tray for TrayIcon {
                             label,
                             activate: Box::new(move |_| {
                                 let action = UIAction::SetDisplayMode(display_mode.to_string());
+                                let _ = ui_action().send_blocking(action);
+                            }),
+                            ..Default::default()
+                        }
+                        .into()
+                    })
+                    .collect(),
+                ..Default::default()
+            }
+            .into(),
+            SubMenu {
+                label: gettext("Lyric Align"),
+                icon_name: "format-justify-left".into(),
+                submenu: Align::iter()
+                    .map(|lyric_align| {
+                        let label = gettext(lyric_align.to_string());
+                        StandardItem {
+                            label,
+                            activate: Box::new(move |_| {
+                                let action = UIAction::SetLyricAlign(lyric_align.to_string());
                                 let _ = ui_action().send_blocking(action);
                             }),
                             ..Default::default()

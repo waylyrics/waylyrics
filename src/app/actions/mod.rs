@@ -5,6 +5,7 @@ pub use event::{init_ui_action_channel, UIAction, UI_ACTION};
 
 use crate::app::{utils::set_click_pass_through, Window};
 
+use crate::config::Align;
 use crate::log::error;
 
 use gtk::gio::SimpleAction;
@@ -13,6 +14,8 @@ use gtk::{
     prelude::*, subclass::prelude::*, Application, NamedAction, Shortcut, ShortcutController,
     ShortcutTrigger,
 };
+
+use super::set_lyric_align;
 
 pub fn register_switch_decoration(wind: &Window, switch_decoration_trigger: &str) {
     let action = SimpleAction::new("switch-decoration", None);
@@ -91,6 +94,23 @@ pub fn register_set_display_mode(wind: &Window) {
             return;
         };
         wind.imp().lyric_display_mode.set(display_mode);
+    });
+    wind.add_action(&action);
+}
+
+pub fn register_set_lyric_align(wind: &Window) {
+    let action = SimpleAction::new("set-lyric-align", Some(VariantTy::STRING));
+    let _wind = Window::downgrade(wind);
+    action.connect_activate(move |_, lyric_align| {
+        let Some(wind) = _wind.upgrade() else { return };
+        let Some(align) = lyric_align.and_then(|d| d.str()) else {
+            return;
+        };
+        let Ok(align): Result<Align, _> = align.parse() else {
+            error!("unknown lyric align: {align}");
+            return;
+        };
+        set_lyric_align(&wind, align);
     });
     wind.add_action(&action);
 }

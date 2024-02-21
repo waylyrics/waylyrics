@@ -13,5 +13,9 @@
       <default>true</default>
       <summary>enable GTK+ CSD</summary>
     </key>
+    <key name="lyric-align-mode" type="s">
+      <default>"Center"</default>
+      <summary>lyric align mode</summary>
+    </key>
   </schema>
 </schemalist>

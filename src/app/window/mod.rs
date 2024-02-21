@@ -6,6 +6,7 @@ use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib, Application};
 
+use crate::config::Align;
 use crate::APP_ID;
 
 glib::wrapper! {
@@ -44,10 +45,13 @@ impl Window {
     pub fn save_window_state(&self) -> Result<(), glib::BoolError> {
         let (width, height) = self.default_size();
         let decorated = self.is_decorated();
+        let align_mode = self.imp().lyric_align.get().to_string();
 
         self.settings().set_int("window-width", width)?;
         self.settings().set_int("window-height", height)?;
         self.settings().set_boolean("window-decorated", decorated)?;
+        self.settings()
+            .set_string("lyric-align-mode", &align_mode)?;
 
         Ok(())
     }
@@ -56,8 +60,10 @@ impl Window {
         let height = self.settings().int("window-height");
         let width = self.settings().int("window-width");
         let decorated = self.settings().boolean("window-decorated");
+        let align_mode: Align = self.settings().string("lyric-align-mode").parse().unwrap();
 
         self.set_default_size(width, height);
         self.set_decorated(decorated);
+        self.imp().lyric_align.set(align_mode);
     }
 }

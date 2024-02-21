@@ -64,13 +64,14 @@ pub fn has_filtered_word(text: &str) -> bool {
 pub fn setup_label(label: &Label, hide_filtered_words: bool) {
     if hide_filtered_words {
         label.connect_label_notify(|label| {
-            let label_text = label.label();
-
-            label.set_visible(!has_filtered_word(label_text.as_str()) && !label_text.is_empty());
+            let text = label.label();
+            let visible = !has_filtered_word(&text) && !text.is_empty();
+            label.set_visible(visible);
         });
     } else {
         label.connect_label_notify(|label| {
-            label.set_visible(!label.label().is_empty());
+            let visible = !label.label().is_empty();
+            label.set_visible(visible);
         });
     }
 }
