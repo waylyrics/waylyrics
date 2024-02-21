@@ -113,7 +113,12 @@
     length_toleration_ms: u128,
     show_default_text_on_idle: bool,
 ) -&gt; Window {
-    <span class="kw">let </span>window = Window::new(app, cache_lyrics);
+    <span class="kw">let </span>window = Window::new(
+        app,
+        cache_lyrics,
+        length_toleration_ms,
+        show_default_text_on_idle,
+    );
 
     window.set_size_request(<span class="number">500</span>, WINDOW_MIN_HEIGHT);
     window.set_title(<span class="prelude-val">Some</span>(DEFAULT_TEXT));
@@ -154,11 +159,6 @@
     });
 
     window.set_icon_name(<span class="prelude-val">Some</span>(<span class="kw">crate</span>::APP_ID));
-    window.imp().length_toleration_ms.set(length_toleration_ms);
-    window
-        .imp()
-        .show_default_text_on_idle
-        .set(show_default_text_on_idle);
     window
 }
 
