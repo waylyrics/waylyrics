@@ -1,30 +1,29 @@
 /* 标题边框 */
 headerbar {
-    opacity: 0.5;
+  opacity: 0.5;
 }
 
 /* 主窗口 */
 window#main-window {
-    background-color: rgba(0, 0, 0, 0.0);
-    /* 减少 Gtk CSD 的阴影 */
-    box-shadow: 0px 0px 1px 0px;
+  background-color: hsl(0deg 0% 0% / 0%);
+
+  /* 减少 Gtk CSD 的阴影 */
+  box-shadow: 0 0 1px 0;
 }
 
 label#above,
 label#below {
-    color: rgba(0, 0, 0, 1.0);
-    background-color: rgba(255, 255, 255, 0.4);
+  padding: 10px;
+  color: hsl(0deg 0% 0%);
+  background-color: hsl(0deg 0% 100% / 30%);
+  border-radius: 10px;
 }
 
 label#above {
-    border-radius: 16px;
-    font-size: 28px;
-    padding: 10px;
+  font-size: 28px;
 }
 
 label#below {
-    border-radius: 12px;
-    font-size: 24px;
-    padding: 7px;
-    margin: 5px 0px;
+  margin: 5px 0;
+  font-size: 24px;
 }
