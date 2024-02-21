@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.10] - 2024-02-21
+
+### Documentation
+
+- Update changelog
+
+### Features
+
+- Set lyric-display-mode in GSettings
+- Split popover menu to UI section and Play section
+- Set mouse click-through in GSettings
+- New style
+- (optional) select labels by translation/origin
+
+### Miscellaneous Tasks
+
+- Release v0.2.10
+
+### Refactor
+
+- Cleanup `set_lyric_with_mode` [ci skip]
+- Move logic-related fields to Window::new
+
+### Revert
+
+- "feat: (optional) select labels by translation/origin"
+
+### Styling
+
+- Format CSS with Prettier and Stylelint
+
 ## [0.2.9] - 2024-02-21
 
 ### Documentation
