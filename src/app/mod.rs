@@ -4,7 +4,11 @@ mod window;
 use gtk::{prelude::*, subclass::prelude::ObjectSubclassIsExt, Application, Label};
 pub use window::Window;
 
-use crate::{app::utils::set_click_pass_through, config, DEFAULT_TEXT};
+use crate::{
+    app::utils::set_click_pass_through,
+    config::{self, LyricDisplayMode},
+    DEFAULT_TEXT,
+};
 
 const WINDOW_MIN_HEIGHT: i32 = 120;
 
@@ -65,11 +69,45 @@ pub fn build_main_window(
         .imp()
         .show_default_text_on_idle
         .set(show_default_text_on_idle);
+
+    let display_mode = window.imp().lyric_display_mode.get();
+    set_label_classes(&window, display_mode);
     window
 }
 
+pub fn set_lyric_display_mode(window: &Window, display_mode: LyricDisplayMode) -> Option<()> {
+    window.imp().lyric_display_mode.set(display_mode);
+    set_label_classes(window, display_mode);
+    Some(())
+}
+
+pub fn set_label_classes(window: &Window, display_mode: LyricDisplayMode) -> Option<()> {
+    let [above, below] = get_labels(window)?;
+
+    match display_mode {
+        LyricDisplayMode::ShowBoth => {
+            above.set_css_classes(&["origin"]);
+            below.set_css_classes(&["translation"]);
+        }
+        LyricDisplayMode::ShowBothRev => {
+            above.set_css_classes(&["translation"]);
+            below.set_css_classes(&["origin"]);
+        }
+        LyricDisplayMode::Origin => {
+            above.set_css_classes(&["origin"]);
+            below.set_css_classes(&[]);
+        }
+        LyricDisplayMode::PreferTranslation => {
+            above.set_css_classes(&[]);
+            below.set_css_classes(&[]);
+        }
+    }
+
+    Some(())
+}
+
 pub fn set_lyric_align(window: &Window, align: config::Align) -> Option<()> {
-    let labels = get_labels(window)?;
+    let labels: [Label; 2] = get_labels(window)?;
     for label in labels {
         label.set_halign(align.into());
     }
