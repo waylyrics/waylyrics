@@ -174,14 +174,19 @@
 <a href="#173" id="173">173</a>
 <a href="#174" id="174">174</a>
 <a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::Cell;
 <span class="kw">use </span>std::time::SystemTime;
 
 <span class="kw">use </span>gettextrs::gettext;
 <span class="kw">use </span>gio::Settings;
+<span class="kw">use </span>glib_macros::clone;
 <span class="kw">use </span>gtk::gio::MenuItem;
 <span class="kw">use </span>gtk::glib::Propagation;
-<span class="kw">use </span>gtk::prelude::{ObjectExt, ToVariant};
+<span class="kw">use </span>gtk::prelude::ToVariant;
 <span class="kw">use </span>gtk::subclass::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>gtk::{gio, glib, ApplicationWindow, PopoverMenu};
 <span class="kw">use </span>std::sync::OnceLock;
@@ -255,43 +260,46 @@
         <span class="kw">let </span>popover = PopoverMenu::builder()
             .accessible_role(gtk::AccessibleRole::MenuItemRadio)
             .build();
-        <span class="self">self</span>.menu.append_submenu(
-            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Select Player"</span>)), <span class="comment">//
-            </span><span class="kw-2">&amp;</span><span class="self">self</span>.player_menu,
-        );
-        <span class="self">self</span>.menu.append_submenu(
+
+        <span class="kw">let </span>ui_section = gio::Menu::default();
+        ui_section.append_submenu(
             <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Lyric Display Mode"</span>)),
             <span class="kw-2">&amp;</span><span class="self">self</span>.display_mode_menu,
         );
-        <span class="self">self</span>.menu.append_submenu(
+        ui_section.append_submenu(
             <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Lyric Align"</span>)), <span class="comment">//
             </span><span class="kw-2">&amp;</span><span class="self">self</span>.align_mode_menu,
         );
+        ui_section.append_item(<span class="kw-2">&amp;</span>passthrough);
+        ui_section.append_item(<span class="kw-2">&amp;</span>hide_decoration);
+        ui_section.append_item(<span class="kw-2">&amp;</span>reload_theme);
+        <span class="self">self</span>.menu.append_section(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>ui_section);
 
-        <span class="self">self</span>.menu.append_item(<span class="kw-2">&amp;</span>passthrough);
-        <span class="self">self</span>.menu.append_item(<span class="kw-2">&amp;</span>hide_decoration);
-        <span class="self">self</span>.menu.append_item(<span class="kw-2">&amp;</span>reload_theme);
-        <span class="self">self</span>.menu.append_item(<span class="kw-2">&amp;</span>search_lyric);
-        <span class="self">self</span>.menu.append_item(<span class="kw-2">&amp;</span>remove_lyric);
-        <span class="self">self</span>.menu.append_item(<span class="kw-2">&amp;</span>refetch_lyric);
+        <span class="kw">let </span>play_section = gio::Menu::default();
+        play_section.append_submenu(
+            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Select Player"</span>)), <span class="comment">//
+            </span><span class="kw-2">&amp;</span><span class="self">self</span>.player_menu,
+        );
+        play_section.append_item(<span class="kw-2">&amp;</span>search_lyric);
+        play_section.append_item(<span class="kw-2">&amp;</span>remove_lyric);
+        play_section.append_item(<span class="kw-2">&amp;</span>refetch_lyric);
+        <span class="self">self</span>.menu.append_section(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>play_section);
+
         popover.set_menu_model(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.menu));
 
-        <span class="kw">let </span>player_menu_weak = <span class="self">self</span>.player_menu.downgrade();
-        popover.connect_visible_submenu_notify(<span class="kw">move </span>|sub| {
+        <span class="kw">let </span>player_menu = <span class="kw-2">&amp;</span><span class="self">self</span>.player_menu;
+        popover.connect_visible_submenu_notify(<span class="macro">clone!</span>(@weak player_menu=&gt; <span class="kw">move </span>|sub| {
             <span class="kw">if </span><span class="prelude-val">Some</span>(<span class="kw-2">&amp;*</span>gettext(<span class="string">"Select Player"</span>)) != sub.visible_submenu().as_deref() {
                 <span class="kw">return</span>;
             }
-            <span class="kw">let </span><span class="prelude-val">Some</span>(menu) = player_menu_weak.upgrade() <span class="kw">else </span>{
-                <span class="kw">return</span>;
-            };
-            menu.remove_all();
+            player_menu.remove_all();
 
             <span class="kw">let </span>section = gio::Menu::new();
             <span class="kw">let </span>players = list_player_names();
             <span class="kw">if </span>!players.is_empty() {
                 <span class="kw">let </span>disconnect =
                     MenuItem::new(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Disconnect"</span>)), <span class="prelude-val">Some</span>(<span class="string">"app.disconnect"</span>));
-                menu.append_item(<span class="kw-2">&amp;</span>disconnect);
+                player_menu.append_item(<span class="kw-2">&amp;</span>disconnect);
             }
 
             <span class="kw">for </span>player <span class="kw">in </span>players {
@@ -302,8 +310,9 @@
                 );
                 section.append_item(<span class="kw-2">&amp;</span>item);
             }
-            menu.append_section(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>section);
-        });
+            player_menu.append_section(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>section);
+        }));
+        <span class="self">self</span>.menubutton.set_popover(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>popover));
 
         <span class="kw">for </span>display_mode <span class="kw">in </span>&lt;LyricDisplayMode <span class="kw">as </span>strum::IntoEnumIterator&gt;::iter() {
             <span class="kw">let </span>display_mode_str = display_mode.to_string();
@@ -325,7 +334,6 @@
             <span class="self">self</span>.align_mode_menu.append_item(<span class="kw-2">&amp;</span>item);
         }
 
-        <span class="self">self</span>.menubutton.set_popover(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>popover));
         <span class="self">self</span>.headerbar.pack_end(<span class="kw-2">&amp;</span><span class="self">self</span>.menubutton)
     }
 }
