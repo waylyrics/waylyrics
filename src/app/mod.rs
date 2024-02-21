@@ -23,7 +23,12 @@ pub fn build_main_window(
     length_toleration_ms: u128,
     show_default_text_on_idle: bool,
 ) -> Window {
-    let window = Window::new(app, cache_lyrics);
+    let window = Window::new(
+        app,
+        cache_lyrics,
+        length_toleration_ms,
+        show_default_text_on_idle,
+    );
 
     window.set_size_request(500, WINDOW_MIN_HEIGHT);
     window.set_title(Some(DEFAULT_TEXT));
@@ -64,14 +69,10 @@ pub fn build_main_window(
     });
 
     window.set_icon_name(Some(crate::APP_ID));
-    window.imp().length_toleration_ms.set(length_toleration_ms);
-    window
-        .imp()
-        .show_default_text_on_idle
-        .set(show_default_text_on_idle);
 
     let display_mode = window.imp().lyric_display_mode.get();
     set_label_classes(&window, display_mode);
+  
     window
 }
 
@@ -98,6 +99,7 @@ pub fn set_label_classes(window: &Window, display_mode: LyricDisplayMode) -> Opt
             below.set_css_classes(&[]);
         }
         LyricDisplayMode::PreferTranslation => {
+            // how could we handle this?
             above.set_css_classes(&[]);
             below.set_css_classes(&[]);
         }
