@@ -135,11 +135,6 @@
 <a href="#134" id="134">134</a>
 <a href="#135" id="135">135</a>
 <a href="#136" id="136">136</a>
-<a href="#137" id="137">137</a>
-<a href="#138" id="138">138</a>
-<a href="#139" id="139">139</a>
-<a href="#140" id="140">140</a>
-<a href="#141" id="141">141</a>
 </pre></div><pre class="rust"><code><span class="kw">use crate</span>::{
     app::search_window,
     log::{info, warn},
@@ -177,31 +172,26 @@
     app.add_action(<span class="kw-2">&amp;</span>action);
 }
 
-<span class="comment">// TODO: code cleanup
-</span><span class="kw">pub fn </span>register_search_lyric(app: <span class="kw-2">&amp;</span>Application, wind: <span class="kw-2">&amp;</span>app::Window, trigger: <span class="kw-2">&amp;</span>str) {
+<span class="kw">pub fn </span>register_search_lyric(app: <span class="kw-2">&amp;</span>Application, wind: <span class="kw-2">&amp;</span>app::Window, trigger: <span class="kw-2">&amp;</span>str) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"search-lyric"</span>, <span class="prelude-val">None</span>);
     <span class="kw">let </span>cache_lyrics = wind.imp().cache_lyrics.get();
     action.connect_activate(<span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
         <span class="comment">// Get current playing track
         </span><span class="kw">let </span>(title, album, artists) =
             TRACK_PLAYING_STATE.with_borrow(|TrackState { metainfo, .. }| {
-                metainfo
-                    .as_ref()
-                    .map(|track| {
-                        <span class="kw">let </span>artists = <span class="kw">if let </span><span class="prelude-val">Some</span>(artists) = track.artists.as_ref() {
-                            artists
-                                .iter()
-                                .map(|s| s.as_str())
-                                .collect::&lt;Vec&lt;<span class="kw-2">&amp;</span>str&gt;&gt;()
-                                .join(<span class="string">","</span>)
-                        } <span class="kw">else </span>{
-                            <span class="string">""</span>.into()
-                        };
-                        <span class="kw">let </span>title = track.title.as_deref().unwrap_or_default();
-                        <span class="kw">let </span>album = track.album.as_deref().unwrap_or_default();
-                        (title.into(), album.into(), artists.into())
-                    })
-                    .unwrap_or((<span class="string">""</span>.to_string(), <span class="string">""</span>.to_string(), <span class="string">""</span>.to_string()))
+                <span class="kw">let </span><span class="prelude-val">Some</span>(track) = metainfo.as_ref() <span class="kw">else </span>{
+                    <span class="kw">return </span>Default::default();
+                };
+                <span class="kw">let </span>artists = track.artists.as_ref().map(|artists| {
+                    artists
+                        .iter()
+                        .map(String::as_str)
+                        .collect::&lt;Vec&lt;<span class="kw-2">&amp;</span>str&gt;&gt;()
+                        .join(<span class="string">","</span>)
+                }).unwrap_or_default();
+                <span class="kw">let </span>title = track.title.as_deref().unwrap_or_default().to_string();
+                <span class="kw">let </span>album = track.album.as_deref().unwrap_or_default().to_string();
+                (title, album, artists)
             });
 
         <span class="kw">let </span>window = search_window::Window::new(title, album, artists, cache_lyrics);

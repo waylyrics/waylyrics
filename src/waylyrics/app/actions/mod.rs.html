@@ -106,15 +106,6 @@
 <a href="#105" id="105">105</a>
 <a href="#106" id="106">106</a>
 <a href="#107" id="107">107</a>
-<a href="#108" id="108">108</a>
-<a href="#109" id="109">109</a>
-<a href="#110" id="110">110</a>
-<a href="#111" id="111">111</a>
-<a href="#112" id="112">112</a>
-<a href="#113" id="113">113</a>
-<a href="#114" id="114">114</a>
-<a href="#115" id="115">115</a>
-<a href="#116" id="116">116</a>
 </pre></div><pre class="rust"><code><span class="attr">#[cfg(feature = <span class="string">"action-event"</span>)]
 </span><span class="kw">mod </span>event;
 <span class="attr">#[cfg(feature = <span class="string">"action-event"</span>)]
@@ -125,8 +116,9 @@
 <span class="kw">use </span><span class="kw">crate</span>::config::Align;
 <span class="kw">use </span><span class="kw">crate</span>::log::error;
 
+<span class="kw">use </span>glib_macros::clone;
 <span class="kw">use </span>gtk::gio::SimpleAction;
-<span class="kw">use </span>gtk::glib::VariantTy;
+<span class="kw">use </span>gtk::glib::{<span class="self">self</span>, VariantTy};
 <span class="kw">use </span>gtk::{
     prelude::<span class="kw-2">*</span>, subclass::prelude::<span class="kw-2">*</span>, Application, NamedAction, Shortcut, ShortcutController,
     ShortcutTrigger,
@@ -136,12 +128,9 @@
 
 <span class="kw">pub fn </span>register_switch_decoration(wind: <span class="kw-2">&amp;</span>Window, switch_decoration_trigger: <span class="kw-2">&amp;</span>str) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"switch-decoration"</span>, <span class="prelude-val">None</span>);
-    <span class="kw">let </span>_wind = Window::downgrade(wind);
-    action.connect_activate(<span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(wind) = _wind.upgrade() {
-            wind.set_decorated(!wind.is_decorated());
-        }
-    });
+    action.connect_activate(<span class="macro">clone!</span>(@weak wind =&gt; <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
+        wind.set_decorated(!wind.is_decorated());
+    }));
     wind.add_action(<span class="kw-2">&amp;</span>action);
 
     <span class="kw">let </span>shortcut = Shortcut::builder()
@@ -177,15 +166,12 @@
 
 <span class="kw">pub fn </span>register_switch_passthrough(wind: <span class="kw-2">&amp;</span>Window, trigger: <span class="kw-2">&amp;</span>str) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"switch-passthrough"</span>, <span class="prelude-val">None</span>);
-    <span class="kw">let </span>_wind = Window::downgrade(wind);
-    action.connect_activate(<span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(wind) = _wind.upgrade() {
-            <span class="kw">let </span>clickthrough = !wind.imp().clickthrough.get();
-            wind.imp().clickthrough.set(clickthrough);
-            set_click_pass_through(<span class="kw-2">&amp;</span>wind, clickthrough);
-            wind.present();
-        }
-    });
+    action.connect_activate(<span class="macro">clone!</span>(@weak wind =&gt; <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
+        <span class="kw">let </span>clickthrough = !wind.imp().clickthrough.get();
+        wind.imp().clickthrough.set(clickthrough);
+        set_click_pass_through(<span class="kw-2">&amp;</span>wind, clickthrough);
+        wind.present();
+    }));
     wind.add_action(<span class="kw-2">&amp;</span>action);
 
     <span class="kw">let </span>shortcut = Shortcut::builder()
@@ -200,9 +186,7 @@
 
 <span class="kw">pub fn </span>register_set_display_mode(wind: <span class="kw-2">&amp;</span>Window) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"set-display-mode"</span>, <span class="prelude-val">Some</span>(VariantTy::STRING));
-    <span class="kw">let </span>_wind = Window::downgrade(wind);
-    action.connect_activate(<span class="kw">move </span>|<span class="kw">_</span>, display_mode| {
-        <span class="kw">let </span><span class="prelude-val">Some</span>(wind) = _wind.upgrade() <span class="kw">else </span>{ <span class="kw">return </span>};
+    action.connect_activate(<span class="macro">clone!</span>(@weak wind =&gt; <span class="kw">move </span>|<span class="kw">_</span>, display_mode| {
         <span class="kw">let </span><span class="prelude-val">Some</span>(display_mode) = display_mode.and_then(|d| d.str()) <span class="kw">else </span>{
             <span class="kw">return</span>;
         };
@@ -211,15 +195,13 @@
             <span class="kw">return</span>;
         };
         wind.imp().lyric_display_mode.set(display_mode);
-    });
+    }));
     wind.add_action(<span class="kw-2">&amp;</span>action);
 }
 
 <span class="kw">pub fn </span>register_set_lyric_align(wind: <span class="kw-2">&amp;</span>Window) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"set-lyric-align"</span>, <span class="prelude-val">Some</span>(VariantTy::STRING));
-    <span class="kw">let </span>_wind = Window::downgrade(wind);
-    action.connect_activate(<span class="kw">move </span>|<span class="kw">_</span>, lyric_align| {
-        <span class="kw">let </span><span class="prelude-val">Some</span>(wind) = _wind.upgrade() <span class="kw">else </span>{ <span class="kw">return </span>};
+    action.connect_activate(<span class="macro">clone!</span>(@weak wind =&gt; <span class="kw">move </span>|<span class="kw">_</span>, lyric_align| {
         <span class="kw">let </span><span class="prelude-val">Some</span>(align) = lyric_align.and_then(|d| d.str()) <span class="kw">else </span>{
             <span class="kw">return</span>;
         };
@@ -228,7 +210,7 @@
             <span class="kw">return</span>;
         };
         set_lyric_align(<span class="kw-2">&amp;</span>wind, align);
-    });
+    }));
     wind.add_action(<span class="kw-2">&amp;</span>action);
 }
 </code></pre></div></section></main></body></html>
