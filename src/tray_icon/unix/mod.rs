@@ -1,6 +1,9 @@
+use std::thread::sleep;
+use std::time::Duration;
 use std::{env, process};
 
 use async_channel::Sender;
+
 use gettextrs::gettext;
 use ksni::{Tray, TrayService};
 use rust_decimal::prelude::Zero;
@@ -85,7 +88,11 @@ impl Tray for TrayIcon {
                 icon_name: "input-mouse".into(),
                 activate: Box::new(|_| {
                     let _ = ui_action().send_blocking(UIAction::SwitchPassthrough);
-                    restart_myself();
+                    let dur = Duration::from_millis(200);
+                    sleep(dur);
+                    let _ = ui_action().send_blocking(UIAction::SwitchDecoration);
+                    sleep(dur);
+                    let _ = ui_action().send_blocking(UIAction::SwitchDecoration);
                 }),
                 ..Default::default()
             }
