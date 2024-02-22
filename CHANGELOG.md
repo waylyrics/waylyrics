@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.11] - 2024-02-22
+
+### Bug Fixes
+
+- Restart in tray-icon set click-through
+- Use hsla for transparent window background
+
+### Documentation
+
+- Update changelog
+
+### Miscellaneous Tasks
+
+- Disable changelog on tag due to shitty failure [ci skip]
+- Bump dependencies
+- Release v0.2.11
+
+### Performance
+
+- Store default MainContext
+
+### Refactor
+
+- Use `clone!` macro rather than calling upgrade/downgrade manually
+
 ## [0.2.10] - 2024-02-21
 
 ### Documentation
