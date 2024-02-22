@@ -15,11 +15,8 @@ label#above,
 label#below {
   padding: 10px;
   color: hsl(0deg 0% 100%);
-  background: linear-gradient(
-    135deg,
-    hsl(197deg 94% 67% / 80%),
-    hsl(348deg 79% 81% / 80%)
-  );
+  background: linear-gradient(135deg, hsla(197, 94%, 67%, 0.8),
+      hsla(348, 79%, 81%, 0.8));
   border-radius: 10px;
 }
 

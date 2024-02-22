@@ -14,8 +14,8 @@ window#main-window {
 label#above,
 label#below {
   padding: 10px;
-  color: hsl(0deg 0% 0%);
-  background-color: hsl(0deg 0% 100% / 30%);
+  color: hsl(0, 0%, 0%);
+  background-color: hsla(0, 0%, 100%, 0.3);
   border-radius: 10px;
 }
 
