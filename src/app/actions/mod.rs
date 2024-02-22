@@ -8,8 +8,9 @@ use crate::app::{utils::set_click_pass_through, Window};
 use crate::config::Align;
 use crate::log::error;
 
+use glib_macros::clone;
 use gtk::gio::SimpleAction;
-use gtk::glib::VariantTy;
+use gtk::glib::{self, VariantTy};
 use gtk::{
     prelude::*, subclass::prelude::*, Application, NamedAction, Shortcut, ShortcutController,
     ShortcutTrigger,
@@ -19,12 +20,9 @@ use super::set_lyric_align;
 
 pub fn register_switch_decoration(wind: &Window, switch_decoration_trigger: &str) {
     let action = SimpleAction::new("switch-decoration", None);
-    let _wind = Window::downgrade(wind);
-    action.connect_activate(move |_, _| {
-        if let Some(wind) = _wind.upgrade() {
-            wind.set_decorated(!wind.is_decorated());
-        }
-    });
+    action.connect_activate(clone!(@weak wind => move |_, _| {
+        wind.set_decorated(!wind.is_decorated());
+    }));
     wind.add_action(&action);
 
     let shortcut = Shortcut::builder()
@@ -60,15 +58,12 @@ pub fn register_reload_theme(app: &Application, wind: &Window, trigger: &str) {
 
 pub fn register_switch_passthrough(wind: &Window, trigger: &str) {
     let action = SimpleAction::new("switch-passthrough", None);
-    let _wind = Window::downgrade(wind);
-    action.connect_activate(move |_, _| {
-        if let Some(wind) = _wind.upgrade() {
-            let clickthrough = !wind.imp().clickthrough.get();
-            wind.imp().clickthrough.set(clickthrough);
-            set_click_pass_through(&wind, clickthrough);
-            wind.present();
-        }
-    });
+    action.connect_activate(clone!(@weak wind => move |_, _| {
+        let clickthrough = !wind.imp().clickthrough.get();
+        wind.imp().clickthrough.set(clickthrough);
+        set_click_pass_through(&wind, clickthrough);
+        wind.present();
+    }));
     wind.add_action(&action);
 
     let shortcut = Shortcut::builder()
@@ -83,9 +78,7 @@ pub fn register_switch_passthrough(wind: &Window, trigger: &str) {
 
 pub fn register_set_display_mode(wind: &Window) {
     let action = SimpleAction::new("set-display-mode", Some(VariantTy::STRING));
-    let _wind = Window::downgrade(wind);
-    action.connect_activate(move |_, display_mode| {
-        let Some(wind) = _wind.upgrade() else { return };
+    action.connect_activate(clone!(@weak wind => move |_, display_mode| {
         let Some(display_mode) = display_mode.and_then(|d| d.str()) else {
             return;
         };
@@ -94,15 +87,13 @@ pub fn register_set_display_mode(wind: &Window) {
             return;
         };
         wind.imp().lyric_display_mode.set(display_mode);
-    });
+    }));
     wind.add_action(&action);
 }
 
 pub fn register_set_lyric_align(wind: &Window) {
     let action = SimpleAction::new("set-lyric-align", Some(VariantTy::STRING));
-    let _wind = Window::downgrade(wind);
-    action.connect_activate(move |_, lyric_align| {
-        let Some(wind) = _wind.upgrade() else { return };
+    action.connect_activate(clone!(@weak wind => move |_, lyric_align| {
         let Some(align) = lyric_align.and_then(|d| d.str()) else {
             return;
         };
@@ -111,6 +102,6 @@ pub fn register_set_lyric_align(wind: &Window) {
             return;
         };
         set_lyric_align(&wind, align);
-    });
+    }));
     wind.add_action(&action);
 }
