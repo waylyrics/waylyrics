@@ -95,14 +95,9 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 ## Players with bad MPRIS support
 
-[flutter-netease-music]: https://github.com/boyan01/flutter-netease-music
-[youtube-music]: https://github.com/th-ch/youtube-music
-
-
-| Player                  | OSD | issue               |
-| ----------------------- | --- | ------------------- |
-| qqmusic                 | O   | position stays on 0 |
-| [flutter-netease-music] | X   | no mpris support    |
+| Player  | OSD | issue               |
+| ------- | --- | ------------------- |
+| qqmusic | O   | position stays on 0 |
 
 ## Directories
 

@@ -95,14 +95,9 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 ## 无法使用的播放器
 
-[flutter-netease-music]: https://github.com/boyan01/flutter-netease-music
-[youtube-music]: https://github.com/th-ch/youtube-music
-
-
-| Player                  | OSD | issue           | 备注 |
-| ----------------------- | --- | --------------- | ---- |
-| qqmusic                 | O   | 位置一直为0     |      |
-| [flutter-netease-music] | X   | 完全不支持mpris |      |
+| Player  | OSD | issue       | 备注 |
+| ------- | --- | ----------- | ---- |
+| qqmusic | O   | 位置一直为0 |      |
 
 ## 目录
 
