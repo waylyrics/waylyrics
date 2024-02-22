@@ -1,6 +1,7 @@
 use std::{cell::RefCell, path::PathBuf, sync::OnceLock};
 
 use app::Window;
+use gtk::glib::MainContext;
 use lyric_providers::LyricProvider;
 use once_cell::sync::Lazy;
 use regex::RegexSet;
@@ -25,13 +26,14 @@ thread_local! {
 
 pub static LYRIC_PROVIDERS: OnceLock<Vec<&'static dyn LyricProvider>> = OnceLock::new();
 
-pub static TOKIO_RUNTIME: Lazy<tokio::runtime::Runtime> =
+static MAIN_CONTEXT: Lazy<MainContext> = Lazy::new(gtk::glib::MainContext::default);
+static TOKIO_RUNTIME: Lazy<tokio::runtime::Runtime> =
     Lazy::new(|| tokio::runtime::Runtime::new().unwrap());
 
 #[macro_export]
 macro_rules! glib_spawn {
     ($future: expr) => {
-        gtk::glib::MainContext::default().spawn_local($future)
+        $crate::MAIN_CONTEXT.spawn_local($future)
     };
 }
 
