@@ -5,7 +5,7 @@ headerbar {
 
 /* 主窗口 */
 window#main-window {
-  background-color: hsl(0deg 0% 0% / 0%);
+  background-color: hsla(0, 0%, 0%, 0);
 
   /* 减少 Gtk CSD 的阴影 */
   box-shadow: 0 0 1px 0;
