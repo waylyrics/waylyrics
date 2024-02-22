@@ -8,10 +8,13 @@ All notable changes to this project will be documented in this file.
 
 - Restart in tray-icon set click-through
 - Use hsla for transparent window background
+- Hsl color format
 
 ### Documentation
 
 - Update changelog
+- Update changelog
+- Remove dead `flutter-netease-music`
 
 ### Miscellaneous Tasks
 
@@ -26,6 +29,10 @@ All notable changes to this project will be documented in this file.
 ### Refactor
 
 - Use `clone!` macro rather than calling upgrade/downgrade manually
+
+### Enhance
+
+- Switch-passthrough in tray-icon without restart
 
 ## [0.2.10] - 2024-02-21
 
