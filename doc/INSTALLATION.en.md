@@ -1,12 +1,9 @@
 
 - [Download pre-built executable](#download-pre-built-executable)
 - [Install with package manager](#install-with-package-manager)
-  - [Arch-based](#arch-based)
-  - [openSUSE (Leap \>= 15.5)](#opensuse-leap--155)
-  - [NixOS](#nixos)
 - [Prepare Dependencies](#prepare-dependencies)
   - [Debian-based](#debian-based)
-  - [Arch-based](#arch-based-1)
+  - [Arch-based](#arch-based)
   - [Other RPM-based disturbution](#other-rpm-based-disturbution)
 - [Build](#build)
   - [With stable toolchain](#with-stable-toolchain)
@@ -28,23 +25,7 @@ You can also place themes to `${XDG_DATA_HOME}/_themes/`, waylyrics will try thi
 
 # Install with package manager
 
-## Arch-based
-
-```bash
-paru -S aur/waylyrics-git
-```
-
-[Waylyrics-git](https://github.com/archlinuxcn/repo/tree/master/archlinuxcn/waylyrics-git) is also avaliable on archlinuxcn.
-
-## openSUSE (Leap >= 15.5)
-
-```bash
-sudo zypper install waylyrics
-```
-
-## NixOS
-
-check this [PR](https://github.com/NixOS/nixpkgs/pull/231984) for an outdated example
+[![Packaging status](https://repology.org/badge/vertical-allrepos/waylyrics.svg)](https://repology.org/project/waylyrics/versions)
 
 # Prepare Dependencies
 

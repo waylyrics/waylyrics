@@ -1,12 +1,9 @@
 
 - [下载预编译二进制](#下载预编译二进制)
 - [通过包管理器安装](#通过包管理器安装)
-  - [Arch-based](#arch-based)
-  - [openSUSE (Leap \>= 15.5)](#opensuse-leap--155)
-  - [NixOS](#nixos)
 - [安装构建依赖](#安装构建依赖)
   - [Debian-based](#debian-based)
-  - [Arch-based](#arch-based-1)
+  - [Arch-based](#arch-based)
   - [其他RPM系发行版：](#其他rpm系发行版)
 - [编译](#编译)
   - [使用 stable 工具链](#使用-stable-工具链)
@@ -28,23 +25,7 @@
 
 # 通过包管理器安装
 
-## Arch-based
-
-```bash
-paru -S aur/waylyrics-git
-```
-
-Archlinuxcn也有 [Waylyrics-git](https://github.com/archlinuxcn/repo/tree/master/archlinuxcn/waylyrics-git) 的打包
-
-## openSUSE (Leap >= 15.5)
-
-```bash
-sudo zypper install waylyrics
-```
-
-## NixOS
-
-这个 [PR](https://github.com/NixOS/nixpkgs/pull/231984) 虽然坏了但是可以参考
+[![Packaging status](https://repology.org/badge/vertical-allrepos/waylyrics.svg)](https://repology.org/project/waylyrics/versions)
 
 # 安装构建依赖
 
