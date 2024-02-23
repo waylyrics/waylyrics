@@ -8,7 +8,9 @@
 - [Build](#build)
   - [With stable toolchain](#with-stable-toolchain)
   - [With nightly toolchain](#with-nightly-toolchain)
-  - [Compiling Schema](#compiling-schema)
+  - [Local install](#local-install)
+    - [Compiling Schema](#compiling-schema)
+    - [Desktop File](#desktop-file)
   - [Packging example](#packging-example)
 
 Releases are avaliable in [Actions](https://github.com/waylyrics/waylyrics/actions/workflows/smoketest.yml)
@@ -75,14 +77,19 @@ cargo +nightly build --release --locked --target-dir target
 
 Target binaries are placed in `target/release/`.
 
-## Compiling Schema
+## Local install
 
-To install the schema locally:
+### Compiling Schema
 
 ```bash
-mkdir -p ~/.local/share/glib-2.0/schemas
-cp io.poly000.waylyrics.gschema.xml ~/.local/share/glib-2.0/schemas/
+install -Dm644 io.poly000.waylyrics.gschema.xml -t ~/.local/share/glib-2.0/schemas/
 glib-compile-schemas ~/.local/share/glib-2.0/schemas/
+```
+
+### Desktop File
+
+```bash
+install -Dm644 io.poly000.waylyrics.desktop -t ~/.local/share/applications
 ```
 
 ## Packging example
@@ -90,7 +97,14 @@ glib-compile-schemas ~/.local/share/glib-2.0/schemas/
 An example packaging script:
 
 ```bash
-sudo install -m644 io.poly000.waylyrics.gschema.xml /usr/share/glib-2.0/schemas/
-sudo install -dm755 /usr/share/waylyrics/themes
-sudo cp -r themes/* /usr/share/waylyrics/themes/
+install -m644 io.poly000.waylyrics.gschema.xml /usr/share/glib-2.0/schemas/
+install -dm755 /usr/share/waylyrics/themes
+cp -r themes/* /usr/share/waylyrics/themes/
+
+cd locales
+for po in $(find . -type f -name '*.po')
+do
+    mkdir -p /usr/share/local/share/locale/${po#/*}
+    msgfmt -o /usr/share/local/share/locale/${po%.po}.mo ${po}
+done
 ```

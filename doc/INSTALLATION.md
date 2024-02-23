@@ -8,7 +8,10 @@
 - [编译](#编译)
   - [使用 stable 工具链](#使用-stable-工具链)
   - [使用 nightly 工具链](#使用-nightly-工具链)
-  - [编译Schema](#编译schema)
+  - [本地安装](#本地安装)
+    - [编译Schema](#编译schema)
+    - [本地化文件](#本地化文件)
+    - [Desktop 文件](#desktop-文件)
   - [打包](#打包)
 
 可以在 [Actions](https://github.com/waylyrics/waylyrics/actions/workflows/smoketest.yml) 下载发布
@@ -75,14 +78,30 @@ cargo +nightly build --release --locked --target-dir target
 
 生成的二进制会被放在 `target/release/`
 
-## 编译Schema
+## 本地安装
 
-本地安装schema:
+### 编译Schema
 
 ```bash
-mkdir -p ~/.local/share/glib-2.0/schemas
-cp io.poly000.waylyrics.gschema.xml ~/.local/share/glib-2.0/schemas/
+install -Dm644 io.poly000.waylyrics.gschema.xml -t ~/.local/share/glib-2.0/schemas/
 glib-compile-schemas ~/.local/share/glib-2.0/schemas/
+```
+
+### 本地化文件
+
+```bash
+cd locales
+for po in $(find . -type f -name '*.po')
+do
+    mkdir -p ~/.local/share/locale/${po#/*}
+    msgfmt -o ~/.local/share/locale/${po%.po}.mo ${po}
+done
+```
+
+### Desktop 文件
+
+```bash
+install -Dm644 io.poly000.waylyrics.desktop -t ~/.local/share/applications
 ```
 
 ## 打包
@@ -90,7 +109,14 @@ glib-compile-schemas ~/.local/share/glib-2.0/schemas/
 打包脚本样例：
 
 ```bash
-sudo install -m644 io.poly000.waylyrics.gschema.xml /usr/share/glib-2.0/schemas/
-sudo install -dm755 /usr/share/waylyrics/themes
-sudo cp -r themes/* /usr/share/waylyrics/themes/
+install -m644 io.poly000.waylyrics.gschema.xml /usr/share/glib-2.0/schemas/
+install -dm755 /usr/share/waylyrics/themes
+cp -r themes/* /usr/share/waylyrics/themes/
+
+cd locales
+for po in $(find . -type f -name '*.po')
+do
+    mkdir -p /usr/share/local/share/locale/${po#/*}
+    msgfmt -o /usr/share/local/share/locale/${po%.po}.mo ${po}
+done
 ```
