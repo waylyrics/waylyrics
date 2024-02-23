@@ -152,8 +152,8 @@
 ) {
     <span class="kw">match </span>window.imp().lyric_display_mode.get() {
         LyricDisplayMode::ShowBoth =&gt; {
-            set_lyric(window, translation, <span class="string">"above"</span>);
-            set_lyric(window, origin, <span class="string">"below"</span>);
+            set_lyric(window, translation.or(origin), <span class="string">"above"</span>);
+            set_lyric(window, translation.and(origin), <span class="string">"below"</span>);
         }
         LyricDisplayMode::ShowBothRev =&gt; {
             set_lyric(window, origin, <span class="string">"above"</span>);
