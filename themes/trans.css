@@ -14,7 +14,7 @@ window#main-window {
 label#above,
 label#below {
   padding: 10px;
-  color: hsl(0deg 0% 100%);
+  color: hsl(0, 0%, 100%);
   background: linear-gradient(135deg, hsla(197, 94%, 67%, 0.8),
       hsla(348, 79%, 81%, 0.8));
   border-radius: 10px;

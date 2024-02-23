@@ -45,8 +45,8 @@ fn set_lyric_with_mode(
 ) {
     match window.imp().lyric_display_mode.get() {
         LyricDisplayMode::ShowBoth => {
-            set_lyric(window, translation, "above");
-            set_lyric(window, origin, "below");
+            set_lyric(window, translation.or(origin), "above");
+            set_lyric(window, translation.and(origin), "below");
         }
         LyricDisplayMode::ShowBothRev => {
             set_lyric(window, origin, "above");
