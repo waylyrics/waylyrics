@@ -110,13 +110,15 @@ install -Dm644 io.poly000.waylyrics.desktop -t ~/.local/share/applications
 
 ```bash
 install -Dm644 io.poly000.waylyrics.gschema.xml -t /usr/share/glib-2.0/schemas/
+install -Dm644 "io.poly000.waylyrics.desktop" -t /usr/share/applications/
+install -Dm644 io.poly000.waylyrics.gschema.xml /usr/share/glib-2.0/schemas/
 install -dm755 /usr/share/waylyrics/themes
 cp -r themes/* /usr/share/waylyrics/themes/
 
 cd locales
 for po in $(find . -type f -name '*.po')
 do
-    mkdir -p /usr/share/local/share/locale/${po#/*}
-    msgfmt -o /usr/share/local/share/locale/${po%.po}.mo ${po}
+    mkdir -p /usr/share/locale/${po#/*}
+    msgfmt -o /usr/share/locale/${po%.po}.mo ${po}
 done
 ```
