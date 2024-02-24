@@ -109,7 +109,7 @@ install -Dm644 io.poly000.waylyrics.desktop -t ~/.local/share/applications
 打包脚本样例：
 
 ```bash
-install -m644 io.poly000.waylyrics.gschema.xml /usr/share/glib-2.0/schemas/
+install -Dm644 io.poly000.waylyrics.gschema.xml -t /usr/share/glib-2.0/schemas/
 install -dm755 /usr/share/waylyrics/themes
 cp -r themes/* /usr/share/waylyrics/themes/
 
