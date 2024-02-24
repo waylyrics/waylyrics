@@ -24,6 +24,8 @@ Simple universal on screen lyrics made with GTK4 and love.
 %setup -q -n waylyrics-master
 cargo --version
 
+%lang_package
+
 %build
 export WAYLYRICS_THEME_PRESETS_DIR=%{_datadir}/waylyrics/themes
 cargo build --release --locked --target-dir target
@@ -49,6 +51,7 @@ cp -r res/icons %{buildroot}%{_datadir}/
         msgfmt -o %{buildroot}%{_datadir}"/locale/${po%.po}.mo" ${po}
     done
 )
+%find_lang %{name} %{name}.lang
 
 rm %{buildroot}/usr/.crates.toml %{buildroot}/usr/.crates2.json
 
@@ -62,7 +65,8 @@ rm %{buildroot}/usr/.crates.toml %{buildroot}/usr/.crates2.json
 %{_datadir}/waylyrics/
 %{_datadir}/glib-2.0/schemas/io.poly000.waylyrics.gschema.xml
 %{_datadir}/icons/hicolor/scalable/apps/io.poly000.waylyrics.svg
-%{_datadir}/locale/zh_CN/LC_MESSAGES/waylyrics.mo
+
+%files lang -f %{name}.lang
 
 %changelog
 {{{ git_repo_changelog }}}
