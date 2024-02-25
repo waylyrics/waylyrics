@@ -76,7 +76,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 #### TUI
 
-- [go-musicfox](https://github.com/go-musicfox/go-musicfox), with [352bd99](https://github.com/go-musicfox/go-musicfox/commit/352bd9903f759eed98b1079fd44dc37a95da85d2) patch
+- [go-musicfox](https://github.com/go-musicfox/go-musicfox), after [fb7e486](https://github.com/go-musicfox/go-musicfox/commit/fb7e4865a39c9537f3868d62dae7c8690a9ca8c4)
 
 ### local
 
