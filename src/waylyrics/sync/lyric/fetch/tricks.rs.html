@@ -95,29 +95,21 @@
 <a href="#94" id="94">94</a>
 <a href="#95" id="95">95</a>
 <a href="#96" id="96">96</a>
-<a href="#97" id="97">97</a>
-<a href="#98" id="98">98</a>
-<a href="#99" id="99">99</a>
-<a href="#100" id="100">100</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::ffi::OsStr;
 <span class="kw">use </span>std::fs;
 <span class="kw">use </span>std::path::PathBuf;
 
 <span class="kw">use </span><span class="kw">crate</span>::log::{debug, error, warn};
-<span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{provider_fmt, Lyric, LyricOwned, LyricProvider};
+<span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{Lyric, LyricOwned, LyricProvider};
 <span class="kw">use </span><span class="kw">crate</span>::sync::interop::hint_from_player;
 <span class="kw">use </span><span class="kw">crate</span>::sync::TrackMeta;
 <span class="kw">use </span><span class="kw">crate</span>::LYRIC_PROVIDERS;
 
-<span class="kw">use </span>derivative::Derivative;
-
-<span class="attr">#[derive(Derivative)]
-#[derivative(Debug)]
+<span class="attr">#[derive(Debug)]
 </span><span class="kw">pub enum </span>LyricHint {
     SongId {
         song_id: String,
-        <span class="attr">#[derivative(Debug(format_with = <span class="string">"provider_fmt"</span>))]
-        </span>provider: Box&lt;<span class="kw">dyn </span>LyricProvider&gt;,
+        provider: <span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="kw">dyn </span>LyricProvider,
     },
     LyricFile(PathBuf),
     Metadata(TrackMeta),

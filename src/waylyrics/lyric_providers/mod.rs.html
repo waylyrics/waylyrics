@@ -112,7 +112,6 @@
 <a href="#111" id="111">111</a>
 <a href="#112" id="112">112</a>
 <a href="#113" id="113">113</a>
-<a href="#114" id="114">114</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>utils;
 <span class="kw">use </span>anyhow::Result;
 
@@ -175,16 +174,15 @@
     <span class="kw">fn </span>is_likely_songid(<span class="kw-2">&amp;</span><span class="self">self</span>, s: <span class="kw-2">&amp;</span>str) -&gt; bool;
 }
 
+<span class="kw">impl </span>Debug <span class="kw">for dyn </span>LyricProvider {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result {
+        f.write_str(<span class="self">self</span>.unique_name())
+    }
+}
+
 <span class="kw">pub trait </span>LyricParse {
     <span class="kw">fn </span>parse_lyric(<span class="kw-2">&amp;</span><span class="self">self</span>, store: <span class="kw-2">&amp;</span>LyricStore) -&gt; LyricOwned;
     <span class="kw">fn </span>parse_translated_lyric(<span class="kw-2">&amp;</span><span class="self">self</span>, store: <span class="kw-2">&amp;</span>LyricStore) -&gt; LyricOwned;
-}
-
-<span class="kw">pub fn </span>provider_fmt(
-    p: <span class="kw">impl </span>AsRef&lt;<span class="kw">dyn </span>LyricProvider&gt;,
-    f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;,
-) -&gt; std::fmt::Result {
-    f.write_str(p.as_ref().unique_name())
 }
 
 <span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; Lyric&lt;<span class="lifetime">'a</span>&gt; {

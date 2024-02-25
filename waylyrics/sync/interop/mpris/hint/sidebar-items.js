@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["get_field_from_player","hint_from_player"]};
+window.SIDEBAR_ITEMS = {"fn":["hint_from_player"]};
