@@ -2,19 +2,39 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.2.11] - 2024-02-22
+## [0.2.12] - 2024-02-25
+
+### Documentation
+
+- Show packaging status
+- Update packaging docs
+- Fix install command for schema [ci skip]
+- Go-musicfox merged fix-position [ci skip]
+
+### Features
+
+- Set Priority::HIGH for lyric_scroll
+
+### Miscellaneous Tasks
+
+- Remove CSS stylelintrc
+- Release v0.2.12
+
+## [0.2.11] - 2024-02-23
 
 ### Bug Fixes
 
 - Restart in tray-icon set click-through
 - Use hsla for transparent window background
 - Hsl color format
+- Show_both mode place origin to above if no translation
 
 ### Documentation
 
 - Update changelog
 - Update changelog
 - Remove dead `flutter-netease-music`
+- Update changelog
 
 ### Miscellaneous Tasks
 
