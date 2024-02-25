@@ -55,7 +55,6 @@ md5 = "0.7.0"
 # utils
 regex = "1.10.3"
 xdg = "2.5.2"
-derivative = "2.2.0"
 strum = { version = "0.26.1", default-features = false, features = ["derive"] }
 sorensen = "0.2.0"
 

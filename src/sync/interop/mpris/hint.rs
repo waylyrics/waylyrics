@@ -24,7 +24,7 @@ pub fn hint_from_player() -> Option<LyricHint> {
                 .map(str::to_owned)
                 .map(|song_id| LyricHint::SongId {
                     song_id,
-                    provider: Box::new(Netease) as _,
+                    provider: &Netease,
                 }),
             ("feeluown", _) => meta
                 .url()?
@@ -32,7 +32,7 @@ pub fn hint_from_player() -> Option<LyricHint> {
                 .map(str::to_owned)
                 .map(|song_id| LyricHint::SongId {
                     song_id,
-                    provider: Box::new(Netease) as _,
+                    provider: &Netease,
                 })
                 .or_else(|| {
                     meta.url()?
@@ -40,7 +40,7 @@ pub fn hint_from_player() -> Option<LyricHint> {
                         .map(str::to_owned)
                         .map(|song_id| LyricHint::SongId {
                             song_id,
-                            provider: Box::new(QQMusic) as _,
+                            provider: &QQMusic,
                         })
                 }),
             ("YesPlayMusic", _) => meta
@@ -49,7 +49,7 @@ pub fn hint_from_player() -> Option<LyricHint> {
                 .map(str::to_owned)
                 .map(|song_id| LyricHint::SongId {
                     song_id,
-                    provider: Box::new(Netease) as _,
+                    provider: &Netease,
                 }),
             _ => meta.url().and_then(|meta_url| match meta_url {
                 _ if meta_url.starts_with("file://") => {

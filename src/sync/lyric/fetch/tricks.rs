@@ -3,20 +3,16 @@ use std::fs;
 use std::path::PathBuf;
 
 use crate::log::{debug, error, warn};
-use crate::lyric_providers::{provider_fmt, Lyric, LyricOwned, LyricProvider};
+use crate::lyric_providers::{Lyric, LyricOwned, LyricProvider};
 use crate::sync::interop::hint_from_player;
 use crate::sync::TrackMeta;
 use crate::LYRIC_PROVIDERS;
 
-use derivative::Derivative;
-
-#[derive(Derivative)]
-#[derivative(Debug)]
+#[derive(Debug)]
 pub enum LyricHint {
     SongId {
         song_id: String,
-        #[derivative(Debug(format_with = "provider_fmt"))]
-        provider: Box<dyn LyricProvider>,
+        provider: &'static dyn LyricProvider,
     },
     LyricFile(PathBuf),
     Metadata(TrackMeta),

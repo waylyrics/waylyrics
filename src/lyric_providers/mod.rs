@@ -60,16 +60,15 @@ pub trait LyricProvider: LyricParse + Send + Sync {
     fn is_likely_songid(&self, s: &str) -> bool;
 }
 
+impl Debug for dyn LyricProvider {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.unique_name())
+    }
+}
+
 pub trait LyricParse {
     fn parse_lyric(&self, store: &LyricStore) -> LyricOwned;
     fn parse_translated_lyric(&self, store: &LyricStore) -> LyricOwned;
-}
-
-pub fn provider_fmt(
-    p: impl AsRef<dyn LyricProvider>,
-    f: &mut std::fmt::Formatter<'_>,
-) -> std::fmt::Result {
-    f.write_str(p.as_ref().unique_name())
 }
 
 impl<'a> Lyric<'a> {
