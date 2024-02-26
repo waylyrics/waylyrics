@@ -83,20 +83,7 @@
 <a href="#82" id="82">82</a>
 <a href="#83" id="83">83</a>
 <a href="#84" id="84">84</a>
-<a href="#85" id="85">85</a>
-<a href="#86" id="86">86</a>
-<a href="#87" id="87">87</a>
-<a href="#88" id="88">88</a>
-<a href="#89" id="89">89</a>
-<a href="#90" id="90">90</a>
-<a href="#91" id="91">91</a>
-<a href="#92" id="92">92</a>
-<a href="#93" id="93">93</a>
-<a href="#94" id="94">94</a>
-<a href="#95" id="95">95</a>
-<a href="#96" id="96">96</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::ffi::OsStr;
-<span class="kw">use </span>std::fs;
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::fs;
 <span class="kw">use </span>std::path::PathBuf;
 
 <span class="kw">use </span><span class="kw">crate</span>::log::{debug, error, warn};
@@ -173,22 +160,11 @@
 ///
 /// `music_path` should be valid file if it's not empty
 ///
-</span><span class="kw">pub fn </span>get_lrc_path(music_path: PathBuf) -&gt; <span class="prelude-ty">Option</span>&lt;PathBuf&gt; {
-    <span class="kw">let </span>file_name = music_path.iter().last()<span class="question-mark">?</span>.as_encoded_bytes();
-
-    file_name
-        .iter()
-        .enumerate()
-        .rev()
-        .find(|<span class="kw-2">&amp;</span>(<span class="kw">_</span>, ch)| ch == <span class="kw-2">&amp;</span><span class="string">b'.'</span>)
-        .and_then(|(last_dot_pos, <span class="kw">_</span>)| {
-            <span class="kw">let </span><span class="kw-2">mut </span>lrc_file_name = file_name.split_at(last_dot_pos + <span class="number">1</span>).<span class="number">0</span>.to_vec();
-            lrc_file_name.extend_from_slice(<span class="string">"lrc"</span>.as_bytes());
-            <span class="kw">let </span>lrc_file_name = <span class="kw">unsafe </span>{ OsStr::from_encoded_bytes_unchecked(<span class="kw-2">&amp;</span>lrc_file_name) };
-
-            music_path
-                .parent()
-                .map(|music_dir| music_dir.join(lrc_file_name))
-        })
+</span><span class="kw">pub fn </span>get_lrc_path(<span class="kw-2">mut </span>music_path: PathBuf) -&gt; <span class="prelude-ty">Option</span>&lt;PathBuf&gt; {
+    <span class="kw">if </span>music_path.set_extension(<span class="string">"lrc"</span>) {
+        <span class="prelude-val">Some</span>(music_path)
+    } <span class="kw">else </span>{
+        <span class="prelude-val">None
+    </span>}
 }
 </code></pre></div></section></main></body></html>
