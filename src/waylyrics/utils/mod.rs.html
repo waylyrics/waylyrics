@@ -75,6 +75,9 @@
 <a href="#74" id="74">74</a>
 <a href="#75" id="75">75</a>
 <a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Result;
 <span class="kw">use </span>gtk::glib::subclass::types::ObjectSubclassIsExt;
 <span class="kw">use </span>std::path::PathBuf;
@@ -151,4 +154,6 @@
 
     <span class="prelude-val">Ok</span>((config_path, user_theme_dir))
 }
-</code></pre></div></section></main></body></html>
+
+<span class="kw">mod </span>shortcut;
+<span class="kw">pub use </span>shortcut::bind_shortcut;</code></pre></div></section></main></body></html>

@@ -135,10 +135,15 @@
 <a href="#134" id="134">134</a>
 <a href="#135" id="135">135</a>
 <a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
 </pre></div><pre class="rust"><code><span class="kw">use crate</span>::{
     app::search_window,
     log::{info, warn},
     sync::LyricState,
+    utils::bind_shortcut,
 };
 <span class="kw">use </span>glib_macros::clone;
 <span class="kw">use </span>gtk::{
@@ -148,7 +153,6 @@
     subclass::prelude::ObjectSubclassIsExt,
     Application,
 };
-<span class="kw">mod </span>utils;
 
 <span class="kw">use crate</span>::{
     app::{<span class="self">self</span>, dialog::show_dialog},
@@ -182,13 +186,17 @@
                 <span class="kw">let </span><span class="prelude-val">Some</span>(track) = metainfo.as_ref() <span class="kw">else </span>{
                     <span class="kw">return </span>Default::default();
                 };
-                <span class="kw">let </span>artists = track.artists.as_ref().map(|artists| {
-                    artists
-                        .iter()
-                        .map(String::as_str)
-                        .collect::&lt;Vec&lt;<span class="kw-2">&amp;</span>str&gt;&gt;()
-                        .join(<span class="string">","</span>)
-                }).unwrap_or_default();
+                <span class="kw">let </span>artists = track
+                    .artists
+                    .as_ref()
+                    .map(|artists| {
+                        artists
+                            .iter()
+                            .map(String::as_str)
+                            .collect::&lt;Vec&lt;<span class="kw-2">&amp;</span>str&gt;&gt;()
+                            .join(<span class="string">","</span>)
+                    })
+                    .unwrap_or_default();
                 <span class="kw">let </span>title = track.title.as_deref().unwrap_or_default().to_string();
                 <span class="kw">let </span>album = track.album.as_deref().unwrap_or_default().to_string();
                 (title, album, artists)
@@ -199,7 +207,7 @@
     });
     app.add_action(<span class="kw-2">&amp;</span>action);
 
-    utils::bind_shortcut(<span class="string">"app.search-lyric"</span>, wind, trigger);
+    bind_shortcut(<span class="string">"app.search-lyric"</span>, wind, trigger);
 }
 
 <span class="kw">pub fn </span>register_refetch_lyric(app: <span class="kw-2">&amp;</span>Application, window: <span class="kw-2">&amp;</span>app::Window, trigger: <span class="kw-2">&amp;</span>str) {
@@ -228,7 +236,7 @@
     });
     app.add_action(<span class="kw-2">&amp;</span>action);
 
-    utils::bind_shortcut(<span class="string">"app.refetch-lyric"</span>, window, trigger);
+    bind_shortcut(<span class="string">"app.refetch-lyric"</span>, window, trigger);
 }
 
 <span class="kw">pub fn </span>register_remove_lyric(app: <span class="kw-2">&amp;</span>Application, wind: <span class="kw-2">&amp;</span>app::Window) {

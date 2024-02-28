@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["ParseError"],"fn":["init_dirs","parse_time","reset_lyric_labels"]};
+window.SIDEBAR_ITEMS = {"enum":["ParseError"],"fn":["bind_shortcut","init_dirs","parse_time","reset_lyric_labels"],"mod":["shortcut"]};

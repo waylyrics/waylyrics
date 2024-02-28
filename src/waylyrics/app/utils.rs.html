@@ -87,7 +87,7 @@
 
 <span class="kw">use </span><span class="kw">super</span>::window;
 
-<span class="kw">pub fn </span>set_click_pass_through(window: <span class="kw-2">&amp;</span>window::Window, enabled: bool) {
+<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>set_click_pass_through(window: <span class="kw-2">&amp;</span>window::Window, enabled: bool) {
     <span class="kw">let </span>obj = window;
     <span class="kw">let </span><span class="prelude-val">Some</span>(surface) = obj.surface() <span class="kw">else </span>{
         <span class="kw">return</span>;
@@ -135,7 +135,7 @@
     );
 }
 
-<span class="kw">pub fn </span>has_filtered_word(text: <span class="kw-2">&amp;</span>str) -&gt; bool {
+<span class="kw">fn </span>has_filtered_word(text: <span class="kw-2">&amp;</span>str) -&gt; bool {
     EXCLUDED_REGEXES.with_borrow(|regex_set| regex_set.is_match(text))
 }
 

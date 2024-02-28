@@ -93,20 +93,6 @@
 <a href="#92" id="92">92</a>
 <a href="#93" id="93">93</a>
 <a href="#94" id="94">94</a>
-<a href="#95" id="95">95</a>
-<a href="#96" id="96">96</a>
-<a href="#97" id="97">97</a>
-<a href="#98" id="98">98</a>
-<a href="#99" id="99">99</a>
-<a href="#100" id="100">100</a>
-<a href="#101" id="101">101</a>
-<a href="#102" id="102">102</a>
-<a href="#103" id="103">103</a>
-<a href="#104" id="104">104</a>
-<a href="#105" id="105">105</a>
-<a href="#106" id="106">106</a>
-<a href="#107" id="107">107</a>
-<a href="#108" id="108">108</a>
 </pre></div><pre class="rust"><code><span class="attr">#[cfg(feature = <span class="string">"action-event"</span>)]
 </span><span class="kw">mod </span>event;
 
@@ -117,6 +103,7 @@
 
 <span class="kw">use </span><span class="kw">crate</span>::config::Align;
 <span class="kw">use </span><span class="kw">crate</span>::log::error;
+<span class="kw">use </span><span class="kw">crate</span>::utils::bind_shortcut;
 
 <span class="kw">use </span>glib_macros::clone;
 <span class="kw">use </span>gtk::gio::SimpleAction;
@@ -128,21 +115,14 @@
 
 <span class="kw">use </span><span class="kw">super</span>::set_lyric_align;
 
-<span class="kw">pub fn </span>register_switch_decoration(wind: <span class="kw-2">&amp;</span>Window, switch_decoration_trigger: <span class="kw-2">&amp;</span>str) {
+<span class="kw">pub fn </span>register_switch_decoration(wind: <span class="kw-2">&amp;</span>Window, trigger: <span class="kw-2">&amp;</span>str) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"switch-decoration"</span>, <span class="prelude-val">None</span>);
     action.connect_activate(<span class="macro">clone!</span>(@weak wind =&gt; <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
         wind.set_decorated(!wind.is_decorated());
     }));
     wind.add_action(<span class="kw-2">&amp;</span>action);
 
-    <span class="kw">let </span>shortcut = Shortcut::builder()
-        .action(<span class="kw-2">&amp;</span>NamedAction::new(<span class="string">"win.switch-decoration"</span>))
-        .trigger(<span class="kw-2">&amp;</span>ShortcutTrigger::parse_string(switch_decoration_trigger).unwrap())
-        .build();
-    <span class="kw">let </span>controller = ShortcutController::new();
-    controller.set_scope(gtk::ShortcutScope::Global);
-    controller.add_shortcut(shortcut);
-    wind.add_controller(controller);
+    bind_shortcut(<span class="string">"win.switch-decoration"</span>, wind, trigger);
 }
 
 <span class="kw">pub fn </span>register_reload_theme(app: <span class="kw-2">&amp;</span>Application, wind: <span class="kw-2">&amp;</span>Window, trigger: <span class="kw-2">&amp;</span>str) {
@@ -155,15 +135,7 @@
         });
     });
     app.add_action(<span class="kw-2">&amp;</span>action);
-
-    <span class="kw">let </span>shortcut = Shortcut::builder()
-        .action(<span class="kw-2">&amp;</span>NamedAction::new(<span class="string">"app.reload-theme"</span>))
-        .trigger(<span class="kw-2">&amp;</span>ShortcutTrigger::parse_string(trigger).unwrap())
-        .build();
-    <span class="kw">let </span>controller = ShortcutController::new();
-    controller.set_scope(gtk::ShortcutScope::Global);
-    controller.add_shortcut(shortcut);
-    wind.add_controller(controller);
+    bind_shortcut(<span class="string">"app.reload-theme"</span>, wind, trigger);
 }
 
 <span class="kw">pub fn </span>register_switch_passthrough(wind: <span class="kw-2">&amp;</span>Window, trigger: <span class="kw-2">&amp;</span>str) {
