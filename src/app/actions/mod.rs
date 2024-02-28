@@ -88,7 +88,7 @@ pub fn register_set_display_mode(wind: &Window) {
             return;
         };
         set_lyric_display_mode(&wind, display_mode);
-    });
+    }));
     wind.add_action(&action);
 }
 
