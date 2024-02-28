@@ -1,0 +1,29 @@
+/* 标题边框 */
+headerbar {
+  opacity: 0.5;
+}
+
+/* 主窗口 */
+window#main-window {
+  background-color: hsla(0, 0%, 0%, 0);
+
+  /* 减少 Gtk CSD 的阴影 */
+  box-shadow: 0 0 1px 0;
+}
+
+label#above,
+label#below {
+  padding: 3px;
+  color: hsl(0, 0%, 100%);
+  background: transparent;
+  text-shadow: rgb(52, 245, 255) 1px 0 10px;
+}
+
+label#above {
+  font-size: 28px;
+}
+
+label#below {
+  margin: 5px 0;
+  font-size: 24px;
+}
