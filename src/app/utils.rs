@@ -9,7 +9,7 @@ use gtk::{
 
 use super::window;
 
-pub fn set_click_pass_through(window: &window::Window, enabled: bool) {
+pub(super) fn set_click_pass_through(window: &window::Window, enabled: bool) {
     let obj = window;
     let Some(surface) = obj.surface() else {
         return;
@@ -57,7 +57,7 @@ pub fn merge_css(css: &str) {
     );
 }
 
-pub fn has_filtered_word(text: &str) -> bool {
+fn has_filtered_word(text: &str) -> bool {
     EXCLUDED_REGEXES.with_borrow(|regex_set| regex_set.is_match(text))
 }
 

@@ -8,6 +8,7 @@ use crate::app::{utils::set_click_pass_through, Window};
 
 use crate::config::Align;
 use crate::log::error;
+use crate::utils::bind_shortcut;
 
 use glib_macros::clone;
 use gtk::gio::SimpleAction;
@@ -19,21 +20,14 @@ use gtk::{
 
 use super::set_lyric_align;
 
-pub fn register_switch_decoration(wind: &Window, switch_decoration_trigger: &str) {
+pub fn register_switch_decoration(wind: &Window, trigger: &str) {
     let action = SimpleAction::new("switch-decoration", None);
     action.connect_activate(clone!(@weak wind => move |_, _| {
         wind.set_decorated(!wind.is_decorated());
     }));
     wind.add_action(&action);
 
-    let shortcut = Shortcut::builder()
-        .action(&NamedAction::new("win.switch-decoration"))
-        .trigger(&ShortcutTrigger::parse_string(switch_decoration_trigger).unwrap())
-        .build();
-    let controller = ShortcutController::new();
-    controller.set_scope(gtk::ShortcutScope::Global);
-    controller.add_shortcut(shortcut);
-    wind.add_controller(controller);
+    bind_shortcut("win.switch-decoration", wind, trigger);
 }
 
 pub fn register_reload_theme(app: &Application, wind: &Window, trigger: &str) {
@@ -46,15 +40,7 @@ pub fn register_reload_theme(app: &Application, wind: &Window, trigger: &str) {
         });
     });
     app.add_action(&action);
-
-    let shortcut = Shortcut::builder()
-        .action(&NamedAction::new("app.reload-theme"))
-        .trigger(&ShortcutTrigger::parse_string(trigger).unwrap())
-        .build();
-    let controller = ShortcutController::new();
-    controller.set_scope(gtk::ShortcutScope::Global);
-    controller.add_shortcut(shortcut);
-    wind.add_controller(controller);
+    bind_shortcut("app.reload-theme", wind, trigger);
 }
 
 pub fn register_switch_passthrough(wind: &Window, trigger: &str) {

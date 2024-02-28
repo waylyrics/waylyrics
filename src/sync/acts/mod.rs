@@ -2,6 +2,7 @@ use crate::{
     app::search_window,
     log::{info, warn},
     sync::LyricState,
+    utils::bind_shortcut,
 };
 use glib_macros::clone;
 use gtk::{
@@ -11,7 +12,6 @@ use gtk::{
     subclass::prelude::ObjectSubclassIsExt,
     Application,
 };
-mod utils;
 
 use crate::{
     app::{self, dialog::show_dialog},
@@ -45,13 +45,17 @@ pub fn register_search_lyric(app: &Application, wind: &app::Window, trigger: &st
                 let Some(track) = metainfo.as_ref() else {
                     return Default::default();
                 };
-                let artists = track.artists.as_ref().map(|artists| {
-                    artists
-                        .iter()
-                        .map(String::as_str)
-                        .collect::<Vec<&str>>()
-                        .join(",")
-                }).unwrap_or_default();
+                let artists = track
+                    .artists
+                    .as_ref()
+                    .map(|artists| {
+                        artists
+                            .iter()
+                            .map(String::as_str)
+                            .collect::<Vec<&str>>()
+                            .join(",")
+                    })
+                    .unwrap_or_default();
                 let title = track.title.as_deref().unwrap_or_default().to_string();
                 let album = track.album.as_deref().unwrap_or_default().to_string();
                 (title, album, artists)
@@ -62,7 +66,7 @@ pub fn register_search_lyric(app: &Application, wind: &app::Window, trigger: &st
     });
     app.add_action(&action);
 
-    utils::bind_shortcut("app.search-lyric", wind, trigger);
+    bind_shortcut("app.search-lyric", wind, trigger);
 }
 
 pub fn register_refetch_lyric(app: &Application, window: &app::Window, trigger: &str) {
@@ -91,7 +95,7 @@ pub fn register_refetch_lyric(app: &Application, window: &app::Window, trigger: 
     });
     app.add_action(&action);
 
-    utils::bind_shortcut("app.refetch-lyric", window, trigger);
+    bind_shortcut("app.refetch-lyric", window, trigger);
 }
 
 pub fn register_remove_lyric(app: &Application, wind: &app::Window) {

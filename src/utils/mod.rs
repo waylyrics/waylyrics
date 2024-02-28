@@ -74,3 +74,6 @@ pub fn init_dirs() -> Result<(PathBuf, PathBuf)> {
 
     Ok((config_path, user_theme_dir))
 }
+
+mod shortcut;
+pub use shortcut::bind_shortcut;
