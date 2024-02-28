@@ -77,9 +77,12 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 ## Unsupported Players
 
-| Player  | OSD | issue               |
-| ------- | --- | ------------------- |
-| qqmusic | O   | position stays on 0 |
+[listen1-desktop]: https://github.com/listen1/listen1_desktop
+
+| Player            | OSD | issue               |
+| ----------------- | --- | ------------------- |
+| qqmusic           | O   | position stays on 0 |
+| [listen1-desktop] | O   | position stays on 0 |
 
 ## Directories
 

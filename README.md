@@ -52,7 +52,6 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 [Electron-NCM]: https://github.com/Rocket1184/electron-netease-cloud-music
 [YesPlayMusic]: https://github.com/qier222/YesPlayMusic
 [youtube-music]: https://github.com/th-ch/youtube-music
-
 [go-musicfox]: https://github.com/go-musicfox/go-musicfox
 [fb7e486]: https://github.com/go-musicfox/go-musicfox/commit/fb7e4865a39c9537f3868d62dae7c8690a9ca8c4
 
@@ -77,9 +76,12 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 ## 无法使用的播放器
 
-| Player  | OSD | issue       | 备注 |
-| ------- | --- | ----------- | ---- |
-| qqmusic | O   | 位置一直为0 |      |
+[listen1-desktop]: https://github.com/listen1/listen1_desktop
+
+| Player            | OSD | issue       | 备注 |
+| ----------------- | --- | ----------- | ---- |
+| qqmusic           | O   | 位置一直为0 |      |
+| [listen1-desktop] | O   | 位置一直为0 |      |
 
 ## 目录
 
