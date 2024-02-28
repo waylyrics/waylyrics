@@ -58,22 +58,22 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 [mpv-mpris]: https://github.com/hoyon/mpv-mpris
 
-| 名称                      | 在线 | 框架      | 备注         |
-| ------------------------- | ---- | --------- | ------------ |
-| Firefox                   | O    | 浏览器    | 需要[插件]   |
-| Chrome                    | O    | 浏览器    |              |
-| [netease-cloud-music-gtk] | O    | GTK4      |              |
-| [amberol]                 | X    | GTK4      |              |
-| [lollypop]                | X    | GTK4      |              |
-| [FeelUOwn]                | O    | Qt5       | 3.9.12+      |
-| [VLC]                     | X    | Qt5       |              |
-| [Qcm]                     | O    | Qt6       |              |
-| [Telegram]                | O    | Qt6       |              |
-| [Electron-NCM]            | O    | Electron  |              |
-| [YesPlayMusic]            | O    | Electron  | 启用Shortcut |
-| [youtube-music]           | O    | Electron  |              |
-| [go-musicfox]             | O    | bubbletea | [fb7e486]后  |
-| mpv                       | O    | 原生      | [mpv-mpris]  |
+| 名称                      | 在线 | 框架      | 备注                            |
+| ------------------------- | ---- | --------- | ------------------------------- |
+| Firefox                   | O    | 浏览器    | 需要[插件]                      |
+| Chrome                    | O    | 浏览器    |                                 |
+| [netease-cloud-music-gtk] | O    | GTK4      | 2.3.0+                          |
+| [amberol]                 | X    | GTK4      |                                 |
+| [lollypop]                | X    | GTK4      |                                 |
+| [FeelUOwn]                | O    | Qt5       | 3.9.12+                         |
+| [VLC]                     | X    | Qt5       |                                 |
+| [Qcm]                     | O    | Qt6       |                                 |
+| [Telegram]                | O    | Qt6       |                                 |
+| [Electron-NCM]            | O    | Electron  |                                 |
+| [YesPlayMusic]            | O    | Electron  | R3Play会给标题加额外的后缀      |
+| [youtube-music]           | O    | Electron  | 启用Shortcut                    |
+| [go-musicfox]             | O    | bubbletea | [fb7e486]后，否则拖拽进度后错位 |
+| mpv                       | O    | 原生      | [mpv-mpris]                     |
 
 ## 无法使用的播放器
 
