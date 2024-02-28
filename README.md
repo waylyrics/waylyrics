@@ -14,16 +14,6 @@
   - [用法](#用法)
   - [依赖](#依赖)
   - [推荐的播放器](#推荐的播放器)
-    - [在线](#在线)
-      - [浏览器](#浏览器)
-      - [GTK+](#gtk)
-      - [Qt](#qt)
-      - [Electron](#electron)
-      - [TUI](#tui)
-    - [本地](#本地)
-      - [GTK+](#gtk-1)
-      - [原生](#原生)
-      - [Qt](#qt-1)
   - [无法使用的播放器](#无法使用的播放器)
   - [目录](#目录)
   - [替代品](#替代品)
@@ -49,49 +39,41 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 ## 推荐的播放器
 
-### 在线
+[插件]: https://addons.mozilla.org/en-US/firefox/addon/plasma-integration/
+[netease-cloud-music-gtk]: https://github.com/gmg137/netease-cloud-music-gtk
+[amberol]: https://gitlab.gnome.org/World/amberol
+[lollypop]: https://github.com/hamonikr/lollypop
 
-#### 浏览器
+[FeelUOwn]: https://github.com/feeluown/FeelUOwn/
+[Qcm]: https://github.com/hypengw/Qcm
+[Telegram]: https://t.me/Music163Bot
+[VLC]: https://www.videolan.org
 
-[plasma integration]: https://addons.mozilla.org/en-US/firefox/addon/plasma-integration/
+[Electron-NCM]: https://github.com/Rocket1184/electron-netease-cloud-music
+[YesPlayMusic]: https://github.com/qier222/YesPlayMusic
+[youtube-music]: https://github.com/th-ch/youtube-music
 
-- Chrome
-- Firefox，加[插件][plasma integration]
+[go-musicfox]: https://github.com/go-musicfox/go-musicfox
+[fb7e486]: https://github.com/go-musicfox/go-musicfox/commit/fb7e4865a39c9537f3868d62dae7c8690a9ca8c4
 
-#### GTK+
+[mpv-mpris]: https://github.com/hoyon/mpv-mpris
 
-- [netease-cloud-music-gtk](https://github.com/gmg137/netease-cloud-music-gtk)
-
-#### Qt
-
-- [FeelUOwn](https://github.com/feeluown/FeelUOwn/), 3.9.12+
-- [Qcm](https://github.com/hypengw/Qcm)
-- [Telegram](https://t.me/Music163Bot)
-
-#### Electron
-
-- [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
-- [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
-- [youtube-music](https://github.com/th-ch/youtube-music), 启用 Shortcut 插件
-
-#### TUI
-
-- [go-musicfox](https://github.com/go-musicfox/go-musicfox), 需要 [fb7e486](https://github.com/go-musicfox/go-musicfox/commit/fb7e4865a39c9537f3868d62dae7c8690a9ca8c4) 修改
-
-### 本地
-
-#### GTK+
-
-- [amberol](https://gitlab.gnome.org/World/amberol)
-- [lollypop](https://github.com/hamonikr/lollypop)
-
-#### 原生
-
-- mpv + [mpv-mpris](https://github.com/hoyon/mpv-mpris)
-
-#### Qt
-
-- [VLC](https://www.videolan.org)
+| 名称                      | 在线 | 框架      | 备注         |
+| ------------------------- | ---- | --------- | ------------ |
+| Firefox                   | O    | 浏览器    | 需要[插件]   |
+| Chrome                    | O    | 浏览器    |              |
+| [netease-cloud-music-gtk] | O    | GTK4      |              |
+| [amberol]                 | X    | GTK4      |              |
+| [lollypop]                | X    | GTK4      |              |
+| [FeelUOwn]                | O    | Qt5       | 3.9.12+      |
+| [VLC]                     | X    | Qt5       |              |
+| [Qcm]                     | O    | Qt6       |              |
+| [Telegram]                | O    | Qt6       |              |
+| [Electron-NCM]            | O    | Electron  |              |
+| [YesPlayMusic]            | O    | Electron  | 启用Shortcut |
+| [youtube-music]           | O    | Electron  |              |
+| [go-musicfox]             | O    | bubbletea | [fb7e486]后  |
+| mpv                       | O    | 原生      | [mpv-mpris]  |
 
 ## 无法使用的播放器
 

@@ -14,17 +14,7 @@
   - [Usage](#usage)
   - [Requirement](#requirement)
   - [Recommended Players](#recommended-players)
-    - [online](#online)
-      - [Browser](#browser)
-      - [GTK+](#gtk)
-      - [Qt](#qt)
-      - [Electron](#electron)
-      - [TUI](#tui)
-    - [local](#local)
-      - [GTK+](#gtk-1)
-      - [Native](#native)
-      - [Qt](#qt-1)
-  - [Players with bad MPRIS support](#players-with-bad-mpris-support)
+  - [Unsupported Players](#unsupported-players)
   - [Directories](#directories)
   - [Alternatives](#alternatives)
     - [Linux](#linux)
@@ -49,51 +39,43 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 ## Recommended Players
 
-### online
+[extension]: https://addons.mozilla.org/en-US/firefox/addon/plasma-integration/
+[netease-cloud-music-gtk]: https://github.com/gmg137/netease-cloud-music-gtk
+[amberol]: https://gitlab.gnome.org/World/amberol
+[lollypop]: https://github.com/hamonikr/lollypop
 
-#### Browser
+[FeelUOwn]: https://github.com/feeluown/FeelUOwn/
+[Qcm]: https://github.com/hypengw/Qcm
+[Telegram]: https://t.me/Music163Bot
+[VLC]: https://www.videolan.org
 
-[plasma integration]: https://addons.mozilla.org/en-US/firefox/addon/plasma-integration/
+[Electron-NCM]: https://github.com/Rocket1184/electron-netease-cloud-music
+[YesPlayMusic]: https://github.com/qier222/YesPlayMusic
+[youtube-music]: https://github.com/th-ch/youtube-music
 
-- Chrome
-- Firefox, with [plasma integration]
+[go-musicfox]: https://github.com/go-musicfox/go-musicfox
+[fb7e486]: https://github.com/go-musicfox/go-musicfox/commit/fb7e4865a39c9537f3868d62dae7c8690a9ca8c4
 
-#### GTK+
+[mpv-mpris]: https://github.com/hoyon/mpv-mpris
 
-- [netease-cloud-music-gtk](https://github.com/gmg137/netease-cloud-music-gtk)
+| Name                      | Online? | Framework | #                 |
+| ------------------------- | ------- | --------- | ----------------- |
+| Firefox                   | O       | Browser   | needs [extension] |
+| Chrome                    | O       | Browser   |                   |
+| [netease-cloud-music-gtk] | O       | GTK4      |                   |
+| [amberol]                 | X       | GTK4      |                   |
+| [lollypop]                | X       | GTK4      |                   |
+| [FeelUOwn]                | O       | Qt5       | 3.9.12+           |
+| [VLC]                     | X       | Qt5       |                   |
+| [Qcm]                     | O       | Qt6       |                   |
+| [Telegram]                | O       | Qt6       |                   |
+| [Electron-NCM]            | O       | Electron  |                   |
+| [YesPlayMusic]            | O       | Electron  | enable `Shortcut` |
+| [youtube-music]           | O       | Electron  |                   |
+| [go-musicfox]             | O       | bubbletea | after [fb7e486]   |
+| mpv                       | O       | Native    | load [mpv-mpris]  |
 
-#### Qt
-
-- [Qcm](https://github.com/hypengw/Qcm)
-- [FeelUOwn](https://github.com/feeluown/FeelUOwn/), with the latest code
-- [Telegram](https://t.me/Music163Bot)
-
-#### Electron
-
-- [Electron-NCM](https://github.com/Rocket1184/electron-netease-cloud-music)
-- [YesPlayMusic](https://github.com/qier222/YesPlayMusic)
-- [youtube-music](https://github.com/th-ch/youtube-music), enable ShortCut plugin
-
-#### TUI
-
-- [go-musicfox](https://github.com/go-musicfox/go-musicfox), after [fb7e486](https://github.com/go-musicfox/go-musicfox/commit/fb7e4865a39c9537f3868d62dae7c8690a9ca8c4)
-
-### local
-
-#### GTK+
-
-- [amberol](https://gitlab.gnome.org/World/amberol)
-- [lollypop](https://github.com/hamonikr/lollypop)
-
-#### Native
-
-- mpv + [mpv-mpris](https://github.com/hoyon/mpv-mpris)
-
-#### Qt
-
-- [VLC](https://www.videolan.org)
-
-## Players with bad MPRIS support
+## Unsupported Players
 
 | Player  | OSD | issue               |
 | ------- | --- | ------------------- |
