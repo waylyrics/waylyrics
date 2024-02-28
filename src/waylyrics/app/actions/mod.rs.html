@@ -113,7 +113,7 @@
     ShortcutTrigger,
 };
 
-<span class="kw">use </span><span class="kw">super</span>::set_lyric_align;
+<span class="kw">use super</span>::{set_lyric_display_mode, set_lyric_align};
 
 <span class="kw">pub fn </span>register_switch_decoration(wind: <span class="kw-2">&amp;</span>Window, trigger: <span class="kw-2">&amp;</span>str) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"switch-decoration"</span>, <span class="prelude-val">None</span>);
@@ -168,7 +168,7 @@
             <span class="macro">error!</span>(<span class="string">"unknown display_mode: {display_mode}"</span>);
             <span class="kw">return</span>;
         };
-        wind.imp().lyric_display_mode.set(display_mode);
+        set_lyric_display_mode(<span class="kw-2">&amp;</span>wind, display_mode);
     }));
     wind.add_action(<span class="kw-2">&amp;</span>action);
 }

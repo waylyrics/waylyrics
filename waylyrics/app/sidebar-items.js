@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["WINDOW_MIN_HEIGHT"],"fn":["build_main_window","get_label","get_labels","set_lyric_align"],"mod":["actions","dialog","search_window","utils","window"],"struct":["Window"]};
+window.SIDEBAR_ITEMS = {"constant":["WINDOW_MIN_HEIGHT"],"fn":["build_main_window","get_label","get_labels","set_label_classes","set_lyric_align","set_lyric_display_mode"],"mod":["actions","dialog","search_window","utils","window"],"struct":["Window"]};
