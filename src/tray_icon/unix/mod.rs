@@ -1,6 +1,9 @@
+use std::thread::sleep;
+use std::time::Duration;
 use std::{env, process};
 
 use async_channel::Sender;
+
 use gettextrs::gettext;
 use ksni::{Tray, TrayService};
 use rust_decimal::prelude::Zero;
@@ -85,6 +88,11 @@ impl Tray for TrayIcon {
                 icon_name: "input-mouse".into(),
                 activate: Box::new(|_| {
                     let _ = ui_action().send_blocking(UIAction::SwitchPassthrough);
+                    let dur = Duration::from_millis(200);
+                    sleep(dur);
+                    let _ = ui_action().send_blocking(UIAction::SwitchDecoration);
+                    sleep(dur);
+                    let _ = ui_action().send_blocking(UIAction::SwitchDecoration);
                 }),
                 ..Default::default()
             }
@@ -148,16 +156,7 @@ impl Tray for TrayIcon {
                 label: gettext("Restart"),
                 icon_name: "system-reboot".into(),
                 activate: Box::new(|_| {
-                    let my_path = env::args().nth(0).unwrap();
-                    let Ok(_) = process::Command::new("sh")
-                        .arg("-c")
-                        .arg(format!("sleep 1 && {my_path}"))
-                        .spawn()
-                    else {
-                        error!("failed to run waylyrics");
-                        return;
-                    };
-                    let _ = ui_action().send_blocking(UIAction::Quit);
+                    restart_myself();
                 }),
                 ..Default::default()
             }
@@ -188,4 +187,17 @@ fn ui_action() -> Sender<UIAction> {
 fn play_action() -> Sender<PlayAction> {
     let play_action = PLAY_ACTION.get().unwrap().clone();
     play_action
+}
+
+fn restart_myself() {
+    let my_path = env::args().nth(0).unwrap();
+    let Ok(_) = process::Command::new("sh")
+        .arg("-c")
+        .arg(format!("sleep 1 && {my_path}"))
+        .spawn()
+    else {
+        error!("failed to run waylyrics");
+        return;
+    };
+    let _ = ui_action().send_blocking(UIAction::Quit);
 }

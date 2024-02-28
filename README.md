@@ -76,7 +76,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 #### TUI
 
-- [go-musicfox](https://github.com/go-musicfox/go-musicfox), 需要 [352bd99](https://github.com/go-musicfox/go-musicfox/commit/352bd9903f759eed98b1079fd44dc37a95da85d2) 修改
+- [go-musicfox](https://github.com/go-musicfox/go-musicfox), 需要 [fb7e486](https://github.com/go-musicfox/go-musicfox/commit/fb7e4865a39c9537f3868d62dae7c8690a9ca8c4) 修改
 
 ### 本地
 
@@ -95,14 +95,9 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 ## 无法使用的播放器
 
-[flutter-netease-music]: https://github.com/boyan01/flutter-netease-music
-[youtube-music]: https://github.com/th-ch/youtube-music
-
-
-| Player                  | OSD | issue           | 备注 |
-| ----------------------- | --- | --------------- | ---- |
-| qqmusic                 | O   | 位置一直为0     |      |
-| [flutter-netease-music] | X   | 完全不支持mpris |      |
+| Player  | OSD | issue       | 备注 |
+| ------- | --- | ----------- | ---- |
+| qqmusic | O   | 位置一直为0 |      |
 
 ## 目录
 

@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use gtk::glib::ControlFlow;
+use gtk::glib::{ControlFlow, Priority};
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use gtk::{glib, prelude::*};
 use gtk::{glib::WeakRef, Application};
@@ -12,7 +12,7 @@ use crate::lyric_providers::{LyricLineOwned, LyricOwned};
 use crate::sync::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
 
 pub fn register_lyric_display(app: WeakRef<Application>, interval: Duration) {
-    glib::timeout_add_local(interval, move || {
+    glib::timeout_add_local_full(interval, Priority::HIGH, move || {
         let Some(app) = app.upgrade() else {
             return ControlFlow::Break;
         };
@@ -45,8 +45,8 @@ fn set_lyric_with_mode(
 ) {
     match window.imp().lyric_display_mode.get() {
         LyricDisplayMode::ShowBoth => {
-            set_lyric(window, translation, "above");
-            set_lyric(window, origin, "below");
+            set_lyric(window, translation.or(origin), "above");
+            set_lyric(window, translation.and(origin), "below");
         }
         LyricDisplayMode::ShowBothRev => {
             set_lyric(window, origin, "above");

@@ -1,22 +1,17 @@
-use std::ffi::OsStr;
 use std::fs;
 use std::path::PathBuf;
 
 use crate::log::{debug, error, warn};
-use crate::lyric_providers::{provider_fmt, Lyric, LyricOwned, LyricProvider};
+use crate::lyric_providers::{Lyric, LyricOwned, LyricProvider};
 use crate::sync::interop::hint_from_player;
 use crate::sync::TrackMeta;
 use crate::LYRIC_PROVIDERS;
 
-use derivative::Derivative;
-
-#[derive(Derivative)]
-#[derivative(Debug)]
+#[derive(Debug)]
 pub enum LyricHint {
     SongId {
         song_id: String,
-        #[derivative(Debug(format_with = "provider_fmt"))]
-        provider: Box<dyn LyricProvider>,
+        provider: &'static dyn LyricProvider,
     },
     LyricFile(PathBuf),
     Metadata(TrackMeta),
@@ -80,21 +75,10 @@ pub async fn get_lyric_hint_from_player() -> Option<LyricHintResult> {
 ///
 /// `music_path` should be valid file if it's not empty
 ///
-pub fn get_lrc_path(music_path: PathBuf) -> Option<PathBuf> {
-    let file_name = music_path.iter().last()?.as_encoded_bytes();
-
-    file_name
-        .iter()
-        .enumerate()
-        .rev()
-        .find(|&(_, ch)| ch == &b'.')
-        .and_then(|(last_dot_pos, _)| {
-            let mut lrc_file_name = file_name.split_at(last_dot_pos + 1).0.to_vec();
-            lrc_file_name.extend_from_slice("lrc".as_bytes());
-            let lrc_file_name = unsafe { OsStr::from_encoded_bytes_unchecked(&lrc_file_name) };
-
-            music_path
-                .parent()
-                .map(|music_dir| music_dir.join(lrc_file_name))
-        })
+pub fn get_lrc_path(mut music_path: PathBuf) -> Option<PathBuf> {
+    if music_path.set_extension("lrc") {
+        Some(music_path)
+    } else {
+        None
+    }
 }

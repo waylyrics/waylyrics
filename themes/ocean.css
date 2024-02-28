@@ -5,7 +5,7 @@ headerbar {
 
 /* 主窗口 */
 window#main-window {
-  background-color: hsl(0deg 0% 0% / 0%);
+  background-color: hsla(0, 0%, 0%, 0);
 
   /* 减少 Gtk CSD 的阴影 */
   box-shadow: 0 0 1px 0;
@@ -14,8 +14,8 @@ window#main-window {
 label#above,
 label#below {
   padding: 10px;
-  color: hsl(0deg 0% 100%);
-  background: linear-gradient(135deg, hsl(217deg 33% 43%), hsl(216deg 50% 37%));
+  color: hsl(0, 0%, 100%);
+  background: linear-gradient(135deg, hsl(217, 33%, 43%), hsl(216, 50%, 37%));
   border-radius: 10px;
 }
 

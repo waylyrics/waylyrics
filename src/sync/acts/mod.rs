@@ -35,7 +35,6 @@ pub fn register_disconnect(app: &Application) {
     app.add_action(&action);
 }
 
-// TODO: code cleanup
 pub fn register_search_lyric(app: &Application, wind: &app::Window, trigger: &str) {
     let action = SimpleAction::new("search-lyric", None);
     let cache_lyrics = wind.imp().cache_lyrics.get();
@@ -43,23 +42,19 @@ pub fn register_search_lyric(app: &Application, wind: &app::Window, trigger: &st
         // Get current playing track
         let (title, album, artists) =
             TRACK_PLAYING_STATE.with_borrow(|TrackState { metainfo, .. }| {
-                metainfo
-                    .as_ref()
-                    .map(|track| {
-                        let artists = if let Some(artists) = track.artists.as_ref() {
-                            artists
-                                .iter()
-                                .map(|s| s.as_str())
-                                .collect::<Vec<&str>>()
-                                .join(",")
-                        } else {
-                            "".into()
-                        };
-                        let title = track.title.as_deref().unwrap_or_default();
-                        let album = track.album.as_deref().unwrap_or_default();
-                        (title.into(), album.into(), artists.into())
-                    })
-                    .unwrap_or(("".to_string(), "".to_string(), "".to_string()))
+                let Some(track) = metainfo.as_ref() else {
+                    return Default::default();
+                };
+                let artists = track.artists.as_ref().map(|artists| {
+                    artists
+                        .iter()
+                        .map(String::as_str)
+                        .collect::<Vec<&str>>()
+                        .join(",")
+                }).unwrap_or_default();
+                let title = track.title.as_deref().unwrap_or_default().to_string();
+                let album = track.album.as_deref().unwrap_or_default().to_string();
+                (title, album, artists)
             });
 
         let window = search_window::Window::new(title, album, artists, cache_lyrics);
