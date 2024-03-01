@@ -32,27 +32,31 @@ pub fn build_main_window(
 
     window.set_size_request(500, WINDOW_MIN_HEIGHT);
     window.set_title(Some(DEFAULT_TEXT));
+    window.set_icon_name(Some(crate::APP_ID));
     window.present();
 
-    let above_label = Label::builder().label("Waylyrics").name("above").build();
+    let above_label = Label::builder()
+        .label("Waylyrics")
+        .name("above")
+        .vexpand(true)
+        .build();
     let below_label = Label::builder()
         .label("")
         .name("below")
+        .vexpand(true)
         .visible(false)
         .build();
 
     for label in [&above_label, &below_label] {
         utils::setup_label(label, enable_filter_regex);
     }
-    above_label.set_vexpand(true);
-    below_label.set_vexpand(true);
 
     let verical_box = gtk::Box::builder()
         .baseline_position(gtk::BaselinePosition::Center)
         .orientation(gtk::Orientation::Vertical)
+        .valign(gtk::Align::Center)
+        .vexpand(true)
         .build();
-    verical_box.set_vexpand(true);
-    verical_box.set_valign(gtk::Align::Center);
 
     verical_box.insert_child_after(&above_label, gtk::Box::NONE);
     verical_box.insert_child_after(&below_label, Some(&above_label));
@@ -68,11 +72,9 @@ pub fn build_main_window(
         set_click_pass_through(window, clickthrough)
     });
 
-    window.set_icon_name(Some(crate::APP_ID));
-
     let display_mode = window.imp().lyric_display_mode.get();
     set_label_classes(&window, display_mode);
-  
+
     window
 }
 

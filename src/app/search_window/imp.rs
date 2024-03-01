@@ -1,7 +1,6 @@
 use std::cell::{Cell, RefCell};
 
 use glib::Properties;
-use glib_macros;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib};
