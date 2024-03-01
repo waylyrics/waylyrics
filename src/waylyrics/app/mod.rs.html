@@ -132,6 +132,8 @@
 <a href="#131" id="131">131</a>
 <a href="#132" id="132">132</a>
 <a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>search_window;
 <span class="kw">mod </span>window;
 
@@ -166,27 +168,31 @@
 
     window.set_size_request(<span class="number">500</span>, WINDOW_MIN_HEIGHT);
     window.set_title(<span class="prelude-val">Some</span>(DEFAULT_TEXT));
+    window.set_icon_name(<span class="prelude-val">Some</span>(<span class="kw">crate</span>::APP_ID));
     window.present();
 
-    <span class="kw">let </span>above_label = Label::builder().label(<span class="string">"Waylyrics"</span>).name(<span class="string">"above"</span>).build();
+    <span class="kw">let </span>above_label = Label::builder()
+        .label(<span class="string">"Waylyrics"</span>)
+        .name(<span class="string">"above"</span>)
+        .vexpand(<span class="bool-val">true</span>)
+        .build();
     <span class="kw">let </span>below_label = Label::builder()
         .label(<span class="string">""</span>)
         .name(<span class="string">"below"</span>)
+        .vexpand(<span class="bool-val">true</span>)
         .visible(<span class="bool-val">false</span>)
         .build();
 
     <span class="kw">for </span>label <span class="kw">in </span>[<span class="kw-2">&amp;</span>above_label, <span class="kw-2">&amp;</span>below_label] {
         utils::setup_label(label, enable_filter_regex);
     }
-    above_label.set_vexpand(<span class="bool-val">true</span>);
-    below_label.set_vexpand(<span class="bool-val">true</span>);
 
     <span class="kw">let </span>verical_box = gtk::Box::builder()
         .baseline_position(gtk::BaselinePosition::Center)
         .orientation(gtk::Orientation::Vertical)
+        .valign(gtk::Align::Center)
+        .vexpand(<span class="bool-val">true</span>)
         .build();
-    verical_box.set_vexpand(<span class="bool-val">true</span>);
-    verical_box.set_valign(gtk::Align::Center);
 
     verical_box.insert_child_after(<span class="kw-2">&amp;</span>above_label, gtk::Box::NONE);
     verical_box.insert_child_after(<span class="kw-2">&amp;</span>below_label, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>above_label));
@@ -202,11 +208,9 @@
         set_click_pass_through(window, clickthrough)
     });
 
-    window.set_icon_name(<span class="prelude-val">Some</span>(<span class="kw">crate</span>::APP_ID));
-
     <span class="kw">let </span>display_mode = window.imp().lyric_display_mode.get();
     set_label_classes(<span class="kw-2">&amp;</span>window, display_mode);
-  
+
     window
 }
 
