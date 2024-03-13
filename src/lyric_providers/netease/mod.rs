@@ -10,7 +10,7 @@ use ncmapi::types::{LyricResp, SearchSongResp};
 
 use crate::tokio_spawn;
 
-use super::{default_search_query, Lyric, LyricOwned, LyricStore};
+use super::{default_search_query, Lyric, LyricLineOwned, LyricOwned, LyricStore};
 
 #[derive(Clone, Copy)]
 pub struct Netease;
@@ -111,8 +111,26 @@ impl super::LyricParse for Netease {
     }
 
     fn parse_translated_lyric(&self, store: &LyricStore) -> LyricOwned {
-        let lyric = store.tlyric.as_deref();
-        verify_lyric(lyric).into_owned()
+        let olyric = self.parse_lyric(store);
+        let tlyric = store.tlyric.as_deref();
+        let mut tlyric = verify_lyric(tlyric).into_owned();
+        if let (LyricOwned::LineTimestamp(tlyric), LyricOwned::LineTimestamp(olyric)) =
+            (&mut tlyric, &olyric)
+        {
+            let last_t = tlyric.last();
+            if let Some(next_line_time) = last_t.and_then(|t| {
+                olyric
+                    .iter()
+                    .find(|o| o.start_time > t.start_time)
+                    .map(|o| o.start_time.clone())
+            }) {
+                tlyric.push(LyricLineOwned {
+                    text: String::default(),
+                    start_time: next_line_time,
+                });
+            }
+        }
+        tlyric
     }
 }
 
