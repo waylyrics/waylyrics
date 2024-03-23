@@ -22,6 +22,9 @@ thread_local! {
     pub static THEME_PATH: RefCell<PathBuf> = RefCell::new(PathBuf::new());
     pub static EXCLUDED_REGEXES: RefCell<RegexSet> = RefCell::new(RegexSet::empty());
     pub static MAIN_WINDOW: RefCell<Option<Window>> = const { RefCell::new(None) };
+
+    pub static PLAYER_IDENTITY_BLACKLIST: RefCell<Vec<String>> = RefCell::new(Default::default());
+    pub static PLAYER_NAME_BLACKLIST: RefCell<Vec<String>> = RefCell::new(Default::default());
 }
 
 pub static LYRIC_PROVIDERS: OnceLock<Vec<&'static dyn LyricProvider>> = OnceLock::new();

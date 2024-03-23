@@ -68,6 +68,12 @@ pub struct Config {
     #[cfg(feature = "tray-icon")]
     pub show_tray_icon: bool,
 
+    /// player with these name will be ignored
+    pub player_name_blacklist: Vec<String>,
+
+    /// player with these identity will be ignored
+    pub player_identity_blacklist: Vec<String>,
+
     /// shortcuts when focusing on waylyrics
     /// for global ones, please install the `.desktop` file
     /// also check trigger format at https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html
@@ -118,6 +124,8 @@ impl Default for Config {
             show_default_text_on_idle: true,
             #[cfg(feature = "tray-icon")]
             show_tray_icon: true,
+            player_name_blacklist: vec!["firefox".into()],
+            player_identity_blacklist: vec![],
         }
     }
 }

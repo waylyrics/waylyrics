@@ -15,7 +15,10 @@ use waylyrics::lyric_providers::qqmusic::QQMusic;
 use waylyrics::lyric_providers::utils::get_provider;
 use waylyrics::lyric_providers::LyricProvider;
 use waylyrics::utils::init_dirs;
-use waylyrics::{utils, EXCLUDED_REGEXES, LYRIC_PROVIDERS, MAIN_WINDOW, PACKAGE_NAME, THEME_PATH};
+use waylyrics::{
+    utils, EXCLUDED_REGEXES, LYRIC_PROVIDERS, MAIN_WINDOW, PACKAGE_NAME, PLAYER_IDENTITY_BLACKLIST,
+    PLAYER_NAME_BLACKLIST, THEME_PATH,
+};
 
 use waylyrics::log;
 use waylyrics::sync::*;
@@ -89,6 +92,8 @@ fn build_ui(app: &Application) -> Result<()> {
         show_default_text_on_idle,
         #[cfg(feature = "tray-icon")]
         show_tray_icon,
+        player_name_blacklist,
+        player_identity_blacklist,
     } = config;
 
     #[cfg(feature = "tray-icon")]
@@ -145,6 +150,8 @@ fn build_ui(app: &Application) -> Result<()> {
     setup_providers(lyric_search_source);
 
     MAIN_WINDOW.set(Some(wind));
+    PLAYER_IDENTITY_BLACKLIST.set(player_identity_blacklist);
+    PLAYER_NAME_BLACKLIST.set(player_name_blacklist);
 
     Ok(())
 }
