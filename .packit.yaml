@@ -1,8 +1,0 @@
-specfile_path: waylyrics.spec
-
-files_to_sync:
-  - waylyrics.spec
-  - .packit.yaml
-
-upstream_package_name: waylyrics
-downstream_package_name: waylyrics

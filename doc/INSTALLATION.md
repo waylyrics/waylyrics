@@ -30,6 +30,8 @@
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/waylyrics.svg)](https://repology.org/project/waylyrics/versions)
 
+另，Fedora用户可以使用 [yohane-shiro/waylyrics](https://copr.fedorainfracloud.org/coprs/yohane-shiro/waylyrics/)
+
 # 安装构建依赖
 
 ## Debian-based

@@ -29,6 +29,8 @@ You can also place themes to `${XDG_DATA_HOME}/_themes/`, waylyrics will try thi
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/waylyrics.svg)](https://repology.org/project/waylyrics/versions)
 
+Fedora users may use [yohane-shiro/waylyrics](https://copr.fedorainfracloud.org/coprs/yohane-shiro/waylyrics/) in Fedora Copr.
+
 # Prepare Dependencies
 
 ## Debian-based
