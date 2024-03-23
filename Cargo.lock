@@ -2853,7 +2853,7 @@ checksum = "4f186bd2dcf04330886ce82d6f33dd75a7bfcf69ecf5763b89fcde53b6ac9838"
 
 [[package]]
 name = "waylyrics"
-version = "0.2.12"
+version = "0.2.13"
 dependencies = [
  "anyhow",
  "async-channel",
