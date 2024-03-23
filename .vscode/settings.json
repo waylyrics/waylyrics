@@ -1,5 +1,0 @@
-{
-    "rust-analyzer.cargo.extraEnv": {
-        "WAYLYRICS_THEME_PRESETS_DIR": "/usr/share/waylyrics/themes",
-    }
-}
