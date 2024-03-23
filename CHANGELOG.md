@@ -2,6 +2,47 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.13] - 2024-03-23
+
+### Documentation
+
+- Update changelog
+- List recommended players in chart [ci skip]
+- Complain some bad support [ci skip]
+- Intro listen1 [ci skip]
+
+### Features
+
+- Add theme no-background [ci skip]
+- Fix secondary lyric will not end
+- Blacklist players by name/identity
+
+### Miscellaneous Tasks
+
+- Fix missing bracket
+- Bump mio from 0.8.10 to 0.8.11
+- Release v0.2.13
+
+### Refactor
+
+- Remove unneeded player_meta helper
+- Implement Debug for dyn LyricProvider
+- Do not set display mode manually
+- Remove repeated bind-shortcut code
+- Use builder api in widget setup
+
+### Revert
+
+- "Update README.md"
+
+### Build
+
+- Update reqwest to 0.12
+
+### Enhance
+
+- Replace extension with PathBuf::set_extension
+
 ## [0.2.12] - 2024-02-25
 
 ### Documentation
@@ -67,6 +108,7 @@ All notable changes to this project will be documented in this file.
 - Set mouse click-through in GSettings
 - New style
 - (optional) select labels by translation/origin
+- Select labels by origin/translation in theme
 
 ### Miscellaneous Tasks
 
