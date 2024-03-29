@@ -18,7 +18,7 @@ use gtk::{
     ShortcutTrigger,
 };
 
-use super::{set_lyric_display_mode, set_lyric_align};
+use super::set_lyric_align;
 
 pub fn register_switch_decoration(wind: &Window, trigger: &str) {
     let action = SimpleAction::new("switch-decoration", None);
@@ -73,7 +73,7 @@ pub fn register_set_display_mode(wind: &Window) {
             error!("unknown display_mode: {display_mode}");
             return;
         };
-        set_lyric_display_mode(&wind, display_mode);
+        wind.imp().lyric_display_mode.set(display_mode);
     }));
     wind.add_action(&action);
 }
