@@ -58,22 +58,22 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 [mpv-mpris]: https://github.com/hoyon/mpv-mpris
 
-| Name                      | Online? | Framework | #                                               |
-| ------------------------- | ------- | --------- | ----------------------------------------------- |
-| Firefox                   | O       | Browser   | needs [extension]                               |
-| Chrome                    | O       | Browser   |                                                 |
-| [netease-cloud-music-gtk] | O       | GTK4      | 2.3.0+                                          |
-| [amberol]                 | X       | GTK4      |                                                 |
-| [lollypop]                | X       | GTK4      |                                                 |
-| [FeelUOwn]                | O       | Qt5       | 3.9.12+                                         |
-| [VLC]                     | X       | Qt5       |                                                 |
-| [Qcm]                     | O       | Qt6       |                                                 |
-| [Telegram]                | O       | Qt6       |                                                 |
-| [Electron-NCM]            | O       | Electron  |                                                 |
-| [YesPlayMusic]            | O       | Electron  | R3Play appends unexpected suffixs to title      |
-| [youtube-music]           | O       | Electron  | enable `Shortcut`                               |
-| [go-musicfox]             | O       | bubbletea | before [fb7e486], their position is passed time |
-| mpv                       | O       | Native    | load [mpv-mpris]                                |
+| Name                      | Online? | Framework | #                                          |
+| ------------------------- | ------- | --------- | ------------------------------------------ |
+| Firefox                   | O       | Browser   | needs [extension]                          |
+| Chrome                    | O       | Browser   |                                            |
+| [netease-cloud-music-gtk] | O       | GTK4      | 2.3.0+                                     |
+| [amberol]                 | X       | GTK4      |                                            |
+| [lollypop]                | X       | GTK4      |                                            |
+| [FeelUOwn]                | O       | Qt5       | 3.9.12+                                    |
+| [VLC]                     | X       | Qt5       |                                            |
+| [Qcm]                     | O       | Qt6       |                                            |
+| [Telegram]                | O       | Qt6       |                                            |
+| [Electron-NCM]            | O       | Electron  |                                            |
+| [YesPlayMusic]            | O       | Electron  | R3Play appends unexpected suffixs to title |
+| [youtube-music]           | O       | Electron  | enable `Shortcut`                          |
+| [go-musicfox]             | O       | bubbletea | 4.3.2+                                     |
+| mpv                       | O       | Native    | load [mpv-mpris]                           |
 
 ## Unsupported Players
 
