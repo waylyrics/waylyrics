@@ -10,6 +10,8 @@ license-file = "LICENSE"
 lto = "thin"
 strip = true
 panic = "abort"
+codegen-units = 1
+opt-level = "s"
 
 [profile.dev]
 panic = "abort"
