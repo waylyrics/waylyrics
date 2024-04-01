@@ -450,9 +450,9 @@ dependencies = [
 
 [[package]]
 name = "documented"
-version = "0.3.0"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e2f2016be31b2ee8ca5950d0b985e53d2802bbe646634e41cdf70f668fc66049"
+checksum = "168a8a9e81bdf54c695ae4a8d23edf26642cfb5f496b40f96b299f0ba450bbf0"
 dependencies = [
  "documented-derive",
  "phf",
@@ -461,9 +461,9 @@ dependencies = [
 
 [[package]]
 name = "documented-derive"
-version = "0.3.0"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "83095afc77f3f21d50be46d608d0a1cfa463cc97e4f3aedab871d6e0baf91870"
+checksum = "32a05a87357eb1ee985e30d52f208d36a794d472930fa5ec3ddf8bf743353fbf"
 dependencies = [
  "quote 1.0.35",
  "syn 2.0.57",
