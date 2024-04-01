@@ -123,7 +123,7 @@ Typically,
 
 | Name        | Stack                | Player Support                                                                                      | #   |
 | ----------- | -------------------- | --------------------------------------------------------------------------------------------------- | --- |
-| [AutoLyric] | Unknown              | Windows Media Player<br>Foobar2000<br>AIMP<br>Winamp                                                |     |
+| [AutoLyric] | C++                  | Windows Media Player<br>Foobar2000<br>AIMP<br>Winamp                                                |     |
 | [Lyricify]  | UWP/C#(4+)<br>C#(3-) | Spotify<br>iTunes<br>Apple Music<br>Music Center<br>QQ Music<br>Netease Cloud Music<br>YesPlayMusic |     |
 
 ## Credit

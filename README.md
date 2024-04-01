@@ -122,7 +122,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 | 名称       | 技术栈               | 播放器支持                                                                                          | 备注 |
 | ---------- | -------------------- | --------------------------------------------------------------------------------------------------- | ---- |
-| [可道歌词] | Unknown              | Windows Media Player<br>Foobar2000<br>AIMP<br>Winamp                                                |      |
+| [可道歌词] | C++                  | Windows Media Player<br>Foobar2000<br>AIMP<br>Winamp                                                |      |
 | [Lyricify] | UWP/C#(4+)<br>C#(3-) | Spotify<br>iTunes<br>Apple Music<br>Music Center<br>QQ Music<br>Netease Cloud Music<br>YesPlayMusic |      |
 
 ## Credit
