@@ -53,14 +53,7 @@ pub fn register_switch_passthrough(wind: &Window, trigger: &str) {
     }));
     wind.add_action(&action);
 
-    let shortcut = Shortcut::builder()
-        .action(&NamedAction::new("win.switch-passthrough"))
-        .trigger(&ShortcutTrigger::parse_string(trigger).unwrap())
-        .build();
-    let controller = ShortcutController::new();
-    controller.set_scope(gtk::ShortcutScope::Global);
-    controller.add_shortcut(shortcut);
-    wind.add_controller(controller);
+    bind_shortcut("win.switch-passthrough", wind, trigger);
 }
 
 pub fn register_set_display_mode(wind: &Window) {
