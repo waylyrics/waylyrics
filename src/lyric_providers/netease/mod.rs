@@ -122,7 +122,7 @@ impl super::LyricParse for Netease {
                 olyric
                     .iter()
                     .find(|o| o.start_time > t.start_time)
-                    .map(|o| o.start_time.clone())
+                    .map(|o| o.start_time)
             }) {
                 tlyric.push(LyricLineOwned {
                     text: String::default(),

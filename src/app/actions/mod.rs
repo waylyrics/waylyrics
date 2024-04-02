@@ -13,10 +13,7 @@ use crate::utils::bind_shortcut;
 use glib_macros::clone;
 use gtk::gio::SimpleAction;
 use gtk::glib::{self, VariantTy};
-use gtk::{
-    prelude::*, subclass::prelude::*, Application, NamedAction, Shortcut, ShortcutController,
-    ShortcutTrigger,
-};
+use gtk::{prelude::*, subclass::prelude::*, Application};
 
 use super::set_lyric_align;
 

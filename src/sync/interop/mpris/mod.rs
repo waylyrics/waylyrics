@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 
 mod sync_task;
-pub use sync_task::register_sync_task;
+pub use sync_task::{reconnect_player, try_sync_track};
 
 mod hint;
 pub use hint::hint_from_player;

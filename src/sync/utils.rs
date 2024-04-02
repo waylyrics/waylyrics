@@ -70,7 +70,7 @@ pub fn match_likely_lyric<'a>(
                 .max_by_key(|(_, likelihood)| (likelihood * 1024.) as u32)
                 .map(|(s, _)| (s, 1))
         })
-        .or(search_result.first().and_then(|song| Some((song, 2))))
+        .or(search_result.first().map(|song| (song, 2)))
         .map(|(song, weight)| (song.id.as_str(), weight))
 }
 
@@ -91,9 +91,9 @@ pub fn fuzzy_match_song(
     r_singer: &[char],
 ) -> f64 {
     let title_likelihood = distance(title, r_title);
-    let singer_likelihood = || distance(singer.unwrap_or_default(), r_singer) as f64;
+    let singer_likelihood = || distance(singer.unwrap_or_default(), r_singer);
     let album_likelihood =
-        || distance(album.unwrap_or_default(), r_album.unwrap_or_default()) as f64;
+        || distance(album.unwrap_or_default(), r_album.unwrap_or_default());
     match (singer, album) {
         (Some(_), Some(_)) => {
             title_likelihood * 0.6 + singer_likelihood() * 0.3 + album_likelihood() * 0.1

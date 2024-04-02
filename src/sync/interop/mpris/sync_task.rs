@@ -1,10 +1,6 @@
 use std::time::{Duration, SystemTime};
 
-use gtk::{
-    glib::{self, subclass::types::ObjectSubclassIsExt, WeakRef},
-    prelude::*,
-    Application,
-};
+use gtk::glib::subclass::types::ObjectSubclassIsExt;
 
 use crate::{log::*, sync::lyric::fetch::LyricHint};
 use mpris::{PlaybackStatus, Player, ProgressTracker};
@@ -25,59 +21,23 @@ use utils::{find_next_player, need_fetch_lyric};
 
 use crate::{
     app,
-    sync::{utils::clean_lyric, TrackMeta, TrackState, TRACK_PLAYING_STATE},
+    sync::{TrackMeta, TRACK_PLAYING_STATE},
     utils::reset_lyric_labels,
 };
 
 use super::hint_from_player;
 
-pub fn register_sync_task(app: WeakRef<Application>, interval: Duration) {
-    glib::timeout_add_local(interval, move || {
-        let Some(app) = app.upgrade() else {
-            return glib::ControlFlow::Break;
+pub fn reconnect_player() -> bool {
+    PLAYER_FINDER.with_borrow(|player_finder| {
+        let Some(player) = find_next_player(player_finder) else {
+            PLAYER.set(None);
+            return false;
         };
 
-        let mut windows = app.windows();
-        if windows.is_empty() {
-            return glib::ControlFlow::Continue;
-        }
-        let window: app::Window = windows.remove(0).downcast().unwrap();
-
-        match sync_track(&window) {
-            Err(PlayerStatus::Missing) => {
-                PLAYER_FINDER.with_borrow(|player_finder| {
-                    let Some(player) = find_next_player(player_finder) else {
-                        PLAYER.set(None);
-                        return;
-                    };
-
-                    info!("connected to player: {}", player.identity());
-                    PLAYER.set(Some(player));
-                });
-                reset_lyric_labels(&window);
-                clean_lyric(&window);
-                TRACK_PLAYING_STATE.take();
-            }
-            Err(PlayerStatus::Unsupported(kind)) => {
-                app::get_label(&window, "above").set_label("Unsupported Player");
-                app::get_label(&window, "below").set_label(kind);
-
-                clean_lyric(&window);
-                error!(kind);
-            }
-            Err(PlayerStatus::Paused) => {
-                TRACK_PLAYING_STATE.with_borrow_mut(|TrackState { paused, .. }| *paused = true)
-            }
-            Err(PlayerStatus::Stopped) => {
-                reset_lyric_labels(&window);
-                clean_lyric(&window);
-                TRACK_PLAYING_STATE.take();
-            }
-            _ => (),
-        }
-
-        glib::ControlFlow::Continue
-    });
+        info!("connected to player: {}", player.identity());
+        PLAYER.set(Some(player));
+        true
+    })
 }
 
 fn sync_position(player: &Player, window: &app::Window) -> Result<(), PlayerStatus> {
@@ -102,7 +62,7 @@ fn sync_position(player: &Player, window: &app::Window) -> Result<(), PlayerStat
     Ok(())
 }
 
-fn sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
+pub fn try_sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
     let meta = PLAYER.with_borrow(|player| {
         let player = player.as_ref().ok_or(PlayerStatus::Missing)?;
 

@@ -62,7 +62,5 @@ pub fn find_next_player(player_finder: &PlayerFinder) -> Option<Player> {
             p.track_progress(0)
                 .is_ok_and(|mut t| t.tick().progress.playback_status() == PlaybackStatus::Playing)
         })
-        .filter(|p| !identity_blacklisted(p))
-        .filter(|p| !name_blacklisted(p))
-        .next()
+        .filter(|p| !identity_blacklisted(p)).find(|p| !name_blacklisted(p))
 }

@@ -53,7 +53,7 @@ pub fn hint_from_player() -> Option<LyricHint> {
                 }),
             _ => meta.url().and_then(|meta_url| match meta_url {
                 _ if meta_url.starts_with("file://") => {
-                    let music_path = url::Url::from_str(&meta_url)
+                    let music_path = url::Url::from_str(meta_url)
                         .ok()
                         .and_then(|music_uri| music_uri.to_file_path().ok())?;
                     get_lrc_path(music_path)

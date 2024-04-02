@@ -112,7 +112,7 @@ impl super::LyricProvider for QQMusic {
                             if !s.is_empty() {
                                 s.push(',')
                             }
-                            s += &op;
+                            s += op;
                             s
                         },
                     ),

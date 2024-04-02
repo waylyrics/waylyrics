@@ -177,7 +177,8 @@ impl Tray for TrayIcon {
 pub fn start_tray_service() -> Option<()> {
     let service = TrayService::new(TrayIcon::default());
 
-    Some(service.spawn())
+    service.spawn();
+    Some(())
 }
 
 fn ui_action() -> Sender<UIAction> {
@@ -190,7 +191,7 @@ fn play_action() -> Sender<PlayAction> {
 }
 
 fn restart_myself() {
-    let my_path = env::args().nth(0).unwrap();
+    let my_path = env::args().next().unwrap();
     let Ok(_) = process::Command::new("sh")
         .arg("-c")
         .arg(format!("sleep 1 && {my_path}"))

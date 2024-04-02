@@ -49,7 +49,7 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
 
     let (mut results, artists_str, title) = tokio_spawn!(async move {
         let mut set = JoinSet::new();
-        for (idx, provider) in providers.into_iter().enumerate() {
+        for (idx, provider) in providers.iter().enumerate() {
             let title = title.clone();
             let artists = artists.clone();
             let album = album.clone();
@@ -64,7 +64,7 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
                     Some(artists.join(","))
                 };
                 let search_result = provider
-                    .search_song_detailed(album.unwrap_or_default(), &artists, &title)
+                    .search_song_detailed(album.unwrap_or_default(), &artists, title)
                     .await;
                 search_result.map(|songs| {
                     match_likely_lyric(
