@@ -1,7 +1,7 @@
 use std::cell::Cell;
 use std::time::SystemTime;
 
-use gettextrs::gettext;
+use crate::utils::gettext;
 use gio::Settings;
 use glib_macros::clone;
 use gtk::gio::MenuItem;

@@ -7,6 +7,13 @@ use crate::app::{get_label, Window};
 use crate::config::Config;
 use crate::DEFAULT_TEXT;
 
+pub fn gettext(msg: impl Into<String>) -> String {
+    #[cfg(feature = "i18n")]
+    return gettextrs::gettext(msg.into());
+    #[cfg(not(feature = "i18n"))]
+    return msg.into();
+}
+
 pub fn reset_lyric_labels(window: &Window) {
     let tip = if window.imp().show_default_text_on_idle.get() {
         DEFAULT_TEXT
@@ -50,9 +57,11 @@ pub enum ParseError {
 }
 
 pub fn init_dirs() -> Result<(PathBuf, PathBuf)> {
-    let xdg_dirs = xdg::BaseDirectories::with_prefix("waylyrics")?;
-    let config_home = xdg_dirs.get_config_home();
-    let cache_dir = xdg_dirs.get_cache_home();
+    let proj_dirs =
+        directories::ProjectDirs::from("io", "poly000", "waylyrics").expect("can't get proj_dirs!");
+    let config_home = proj_dirs.config_dir();
+    let cache_dir = proj_dirs.cache_dir();
+
     crate::CACHE_DIR.set(
         cache_dir
             .to_str()
@@ -63,7 +72,7 @@ pub fn init_dirs() -> Result<(PathBuf, PathBuf)> {
     std::fs::create_dir_all(&config_home)?;
     std::fs::create_dir_all(&cache_dir)?;
     let config_path = config_home.join("config.toml");
-    let user_theme_dir = xdg_dirs.get_data_home().join("_themes");
+    let user_theme_dir = proj_dirs.data_dir().join("_themes");
 
     if !config_path.exists() {
         std::fs::write(&config_path, toml::to_string(&Config::default())?)?;

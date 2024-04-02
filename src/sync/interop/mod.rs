@@ -35,7 +35,25 @@ pub use unix::*;
 #[cfg(target_os = "windows")]
 mod smtc;
 #[cfg(target_os = "windows")]
-mod windows {}
+mod windows {
+    use super::{OsImp, PlayerId, PlayerStatus};
+    use crate::sync::lyric::fetch::LyricHint;
+    pub fn clean_player() {}
+    pub fn connect_player_with_id(player_id: impl AsRef<str>) {}
+    pub fn hint_from_player() -> Option<LyricHint> {
+        None
+    }
+    pub fn list_players() -> Vec<PlayerId> {
+        Vec::new()
+    }
+    pub(super) fn reconnect_player() -> bool {
+        false
+    }
+    /// call `update_lyric` when we fetched new metadata
+    pub(super) fn try_sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
+        Ok(())
+    }
+}
 #[cfg(target_os = "windows")]
 pub use windows::*;
 

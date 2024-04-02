@@ -4,7 +4,7 @@ use std::sync::Arc;
 
 use crate::log::{error, info};
 use crate::lyric_providers::SongInfo;
-use gettextrs::gettext;
+use crate::utils::gettext;
 use glib::Object;
 use gtk::glib::{clone, IntoGStr};
 use gtk::subclass::prelude::*;

@@ -4,7 +4,7 @@ use std::{env, process};
 
 use async_channel::Sender;
 
-use gettextrs::gettext;
+use crate::utils::gettext;
 use ksni::{Tray, TrayService};
 use rust_decimal::prelude::Zero;
 use strum::IntoEnumIterator;

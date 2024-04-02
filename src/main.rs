@@ -1,7 +1,6 @@
 use std::fs;
 use std::path::PathBuf;
 
-use gettextrs::TextDomain;
 use gtk::prelude::*;
 use gtk::{glib, Application};
 
@@ -40,17 +39,21 @@ use app::actions::{
 pub const THEME_PRESETS_DIR: Option<&str> = option_env!("WAYLYRICS_THEME_PRESETS_DIR");
 
 fn main() -> Result<glib::ExitCode> {
-    let _ = TextDomain::new(PACKAGE_NAME).init();
+    #[cfg(feature = "i18n")]
+    let _ = gettextrs::TextDomain::new(PACKAGE_NAME).init();
 
-    Registry::default()
+    let registry = Registry::default()
         .with(
             EnvFilter::builder()
                 .with_default_directive(LevelFilter::INFO.into())
                 .from_env()?,
         )
-        .with(fmt::Layer::new())
-        .with(tracing_journald::layer()?)
-        .init();
+        .with(fmt::Layer::new());
+
+    #[cfg(feature = "journald")]
+    registry.with(tracing_journald::layer()?).init();
+    #[cfg(not(feature = "journald"))]
+    registry.init();
 
     log::info!("process id: {}", std::process::id());
 
