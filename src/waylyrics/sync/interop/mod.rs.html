@@ -32,6 +32,7 @@
 <a href="#30" id="30">30</a>
 <a href="#31" id="31">31</a>
 <a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
 </pre></div><pre class="rust"><code><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>common;
 <span class="kw">pub use </span>common::register_sync_task;
 
@@ -41,7 +42,8 @@
 </span><span class="kw">use </span>mpris::try_sync_track;
 <span class="attr">#[cfg(unix)]
 </span><span class="kw">pub use </span>mpris::{
-    clean_player, connect_player_with_id, hint_from_player, list_player_names, reconnect_player,
+    clean_player, connect_player_with_id, hint_from_player, list_players,
+    reconnect_player,
 };
 
 <span class="attr">#[cfg(target_os = <span class="string">"windows"</span>)]

@@ -219,7 +219,7 @@
 <span class="kw">use </span><span class="kw">crate</span>::sync::{PlayAction, PLAY_ACTION};
 
 <span class="kw">use </span><span class="kw">crate</span>::config::{Align, LyricDisplayMode};
-<span class="kw">use </span><span class="kw">crate</span>::sync::{list_player_names, PlayerId};
+<span class="kw">use </span><span class="kw">crate</span>::sync::{list_players, PlayerId};
 
 <span class="kw">use </span><span class="kw">crate</span>::log::error;
 <span class="kw">use crate</span>::{APP_ID, PACKAGE_NAME};
@@ -237,7 +237,7 @@
     <span class="kw">fn </span>menu(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;ksni::MenuItem&lt;<span class="self">Self</span>&gt;&gt; {
         <span class="kw">use </span>ksni::menu::<span class="kw-2">*</span>;
 
-        <span class="kw">let </span>players = list_player_names();
+        <span class="kw">let </span>players = list_players();
 
         <span class="macro">vec!</span>[
             SubMenu {
