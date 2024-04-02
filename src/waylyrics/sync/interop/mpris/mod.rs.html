@@ -79,13 +79,29 @@
 <a href="#77" id="77">77</a>
 <a href="#78" id="78">78</a>
 <a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::RefCell;
 
 <span class="kw">mod </span>sync_task;
-<span class="kw">pub use </span>sync_task::{reconnect_player, try_sync_track};
+<span class="kw">use </span>sync_task::{reconnect_player, try_sync_track};
 
 <span class="kw">mod </span>hint;
-<span class="kw">pub use </span>hint::hint_from_player;
+<span class="kw">use </span>hint::hint_from_player;
 
 <span class="kw">use </span>mpris::{Metadata, Player, PlayerFinder};
 
@@ -96,30 +112,46 @@
 
 <span class="kw">use </span><span class="kw">super</span>::PlayerId;
 
-<span class="kw">pub fn </span>clean_player() {
-    PLAYER.take();
-}
+<span class="kw">pub struct </span>MPRIS;
 
-<span class="kw">pub fn </span>connect_player_with_id(player_id: <span class="kw">impl </span>AsRef&lt;str&gt;) {
-    <span class="kw">let </span>player_id = player_id.as_ref();
+<span class="kw">impl </span><span class="kw">super</span>::OsImp <span class="kw">for </span>MPRIS {
+    <span class="kw">fn </span>clean_player() {
+        PLAYER.take();
+    }
 
-    PLAYER_FINDER.with_borrow(|player_finder| {
-        <span class="kw">if let </span><span class="prelude-val">Ok</span>(player) = player_finder.find_by_name(player_id) {
-            PLAYER.set(<span class="prelude-val">Some</span>(player));
-        } <span class="kw">else </span>{
-            <span class="macro">error!</span>(<span class="string">"cannot connect to: {player_id}"</span>);
-        }
-    });
-}
+    <span class="kw">fn </span>connect_player_with_id(player_id: <span class="kw">impl </span>AsRef&lt;str&gt;) {
+        <span class="kw">let </span>player_id = player_id.as_ref();
 
-<span class="kw">pub fn </span>list_players() -&gt; Vec&lt;PlayerId&gt; {
-    find_players()
-        .iter()
-        .map(|p| PlayerId {
-            player_name: p.identity().to_owned(),
-            inner_id: p.identity().to_owned(),
-        })
-        .collect()
+        PLAYER_FINDER.with_borrow(|player_finder| {
+            <span class="kw">if let </span><span class="prelude-val">Ok</span>(player) = player_finder.find_by_name(player_id) {
+                PLAYER.set(<span class="prelude-val">Some</span>(player));
+            } <span class="kw">else </span>{
+                <span class="macro">error!</span>(<span class="string">"cannot connect to: {player_id}"</span>);
+            }
+        });
+    }
+
+    <span class="kw">fn </span>hint_from_player() -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw">crate</span>::sync::lyric::fetch::LyricHint&gt; {
+        hint_from_player()
+    }
+
+    <span class="kw">fn </span>list_players() -&gt; Vec&lt;PlayerId&gt; {
+        find_players()
+            .iter()
+            .map(|p| PlayerId {
+                player_name: p.identity().to_owned(),
+                inner_id: p.identity().to_owned(),
+            })
+            .collect()
+    }
+
+    <span class="kw">fn </span>reconnect_player() -&gt; bool {
+        reconnect_player()
+    }
+
+    <span class="kw">fn </span>try_sync_track(window: <span class="kw-2">&amp;</span><span class="kw">crate</span>::app::Window) -&gt; <span class="prelude-ty">Result</span>&lt;(), PlayerStatus&gt; {
+        try_sync_track(window)
+    }
 }
 
 <span class="macro">thread_local! </span>{
