@@ -13,7 +13,7 @@ use crate::app::actions::{UIAction, UI_ACTION};
 use crate::sync::{PlayAction, PLAY_ACTION};
 
 use crate::config::{Align, LyricDisplayMode};
-use crate::sync::{list_player_names, PlayerId};
+use crate::sync::{list_players, PlayerId};
 
 use crate::log::error;
 use crate::{APP_ID, PACKAGE_NAME};
@@ -31,7 +31,7 @@ impl Tray for TrayIcon {
     fn menu(&self) -> Vec<ksni::MenuItem<Self>> {
         use ksni::menu::*;
 
-        let players = list_player_names();
+        let players = list_players();
 
         vec![
             SubMenu {

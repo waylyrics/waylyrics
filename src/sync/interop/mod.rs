@@ -7,7 +7,8 @@ mod mpris;
 use mpris::try_sync_track;
 #[cfg(unix)]
 pub use mpris::{
-    clean_player, connect_player_with_id, hint_from_player, list_player_names, reconnect_player,
+    clean_player, connect_player_with_id, hint_from_player, list_players,
+    reconnect_player,
 };
 
 #[cfg(target_os = "windows")]

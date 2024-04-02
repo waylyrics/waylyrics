@@ -13,7 +13,7 @@ use std::sync::OnceLock;
 
 use crate::app::utils::set_click_pass_through;
 use crate::config::{Align, LyricDisplayMode};
-use crate::sync::list_player_names;
+use crate::sync::list_players;
 
 #[derive(Default)]
 pub struct Window {
@@ -115,7 +115,7 @@ impl ObjectImpl for Window {
             player_menu.remove_all();
 
             let section = gio::Menu::new();
-            let players = list_player_names();
+            let players = list_players();
             if !players.is_empty() {
                 let disconnect =
                     MenuItem::new(Some(&gettext("Disconnect")), Some("app.disconnect"));

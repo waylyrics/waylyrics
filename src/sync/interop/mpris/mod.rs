@@ -31,7 +31,7 @@ pub fn connect_player_with_id(player_id: impl AsRef<str>) {
     });
 }
 
-pub fn list_player_names() -> Vec<PlayerId> {
+pub fn list_players() -> Vec<PlayerId> {
     find_players()
         .iter()
         .map(|p| PlayerId {
