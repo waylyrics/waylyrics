@@ -9,6 +9,7 @@ use crate::sync::interop::PlayerStatus;
 use crate::{
     glib_spawn,
     sync::{
+        interop::common::need_fetch_lyric,
         interop::common::update_lyric,
         interop::mpris::{PLAYER, PLAYER_FINDER},
         lyric::scroll::refresh_lyric,
@@ -17,7 +18,7 @@ use crate::{
 use anyhow::Result;
 
 mod utils;
-use utils::{find_next_player, need_fetch_lyric};
+use utils::find_next_player;
 
 use crate::{
     app,
