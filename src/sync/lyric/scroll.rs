@@ -1,9 +1,8 @@
 use std::time::Duration;
 
+use gtk::glib::{self, WeakRef};
 use gtk::glib::{ControlFlow, Priority};
 use gtk::subclass::prelude::ObjectSubclassIsExt;
-use gtk::{glib, prelude::*};
-use gtk::{glib::WeakRef, Application};
 
 use crate::app::{self, get_label};
 use crate::config::LyricDisplayMode;
@@ -11,17 +10,11 @@ use crate::lyric_providers::{LyricLineOwned, LyricOwned};
 
 use crate::sync::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
 
-pub fn register_lyric_display(app: WeakRef<Application>, interval: Duration) {
+pub fn register_lyric_display(app: WeakRef<app::Window>, interval: Duration) {
     glib::timeout_add_local_full(interval, Priority::HIGH, move || {
-        let Some(app) = app.upgrade() else {
+        let Some(window) = app.upgrade() else {
             return ControlFlow::Break;
         };
-
-        let mut windows = app.windows();
-        if windows.is_empty() {
-            return ControlFlow::Continue;
-        }
-        let window: app::Window = windows.remove(0).downcast().unwrap();
 
         if TRACK_PLAYING_STATE.with_borrow(
             |TrackState {
@@ -88,15 +81,17 @@ pub fn refresh_lyric(window: &app::Window) {
                     LyricOwned::LineTimestamp(origin_lyric),
                     LyricOwned::LineTimestamp(translation_lyric),
                 ) => {
-                    let translation =
-                        crate::lyric_providers::utils::find_next_lyric(&elapsed, translation_lyric);
+                    let translation = crate::lyric_providers::utils::find_next_lyric(
+                        &elapsed,
+                        &translation_lyric,
+                    );
                     let origin =
-                        crate::lyric_providers::utils::find_next_lyric(&elapsed, origin_lyric);
+                        crate::lyric_providers::utils::find_next_lyric(&elapsed, &origin_lyric);
                     set_lyric_with_mode(window, translation, origin);
                 }
                 (LyricOwned::LineTimestamp(origin_lyric), _) => {
                     let origin =
-                        crate::lyric_providers::utils::find_next_lyric(&elapsed, origin_lyric);
+                        crate::lyric_providers::utils::find_next_lyric(&elapsed, &origin_lyric);
                     set_lyric_with_mode(window, None, origin);
                 }
                 _ => (),
