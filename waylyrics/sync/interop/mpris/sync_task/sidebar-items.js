@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["register_sync_task","sync_position","sync_track"],"mod":["utils"]};
+window.SIDEBAR_ITEMS = {"fn":["reconnect_player","sync_position","try_sync_track"],"mod":["utils"]};

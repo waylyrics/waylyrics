@@ -177,7 +177,7 @@
                 .max_by_key(|(<span class="kw">_</span>, likelihood)| (likelihood * <span class="number">1024.</span>) <span class="kw">as </span>u32)
                 .map(|(s, <span class="kw">_</span>)| (s, <span class="number">1</span>))
         })
-        .or(search_result.first().and_then(|song| <span class="prelude-val">Some</span>((song, <span class="number">2</span>))))
+        .or(search_result.first().map(|song| (song, <span class="number">2</span>)))
         .map(|(song, weight)| (song.id.as_str(), weight))
 }
 
@@ -198,9 +198,9 @@
     r_singer: <span class="kw-2">&amp;</span>[char],
 ) -&gt; f64 {
     <span class="kw">let </span>title_likelihood = distance(title, r_title);
-    <span class="kw">let </span>singer_likelihood = || distance(singer.unwrap_or_default(), r_singer) <span class="kw">as </span>f64;
+    <span class="kw">let </span>singer_likelihood = || distance(singer.unwrap_or_default(), r_singer);
     <span class="kw">let </span>album_likelihood =
-        || distance(album.unwrap_or_default(), r_album.unwrap_or_default()) <span class="kw">as </span>f64;
+        || distance(album.unwrap_or_default(), r_album.unwrap_or_default());
     <span class="kw">match </span>(singer, album) {
         (<span class="prelude-val">Some</span>(<span class="kw">_</span>), <span class="prelude-val">Some</span>(<span class="kw">_</span>)) =&gt; {
             title_likelihood * <span class="number">0.6 </span>+ singer_likelihood() * <span class="number">0.3 </span>+ album_likelihood() * <span class="number">0.1

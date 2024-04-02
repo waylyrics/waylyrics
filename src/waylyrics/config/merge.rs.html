@@ -22,18 +22,28 @@
 <a href="#20" id="20">20</a>
 <a href="#21" id="21">21</a>
 <a href="#22" id="22">22</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Result;
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt::Write;
+
+<span class="kw">use </span>anyhow::Result;
 <span class="kw">use </span>documented::DocumentedFields;
-<span class="kw">use </span>toml_edit::Document;
+<span class="kw">use </span>toml_edit::DocumentMut;
 
 <span class="kw">use </span><span class="kw">crate</span>::config::Config;
 
 <span class="kw">pub fn </span>append_comments(toml: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;String&gt; {
-    <span class="kw">let </span><span class="kw-2">mut </span>new_doc = toml.parse::&lt;Document&gt;()<span class="question-mark">?</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>new_doc = toml.parse::&lt;DocumentMut&gt;()<span class="question-mark">?</span>;
 
     <span class="kw">for </span>(<span class="kw-2">mut </span>field, item) <span class="kw">in </span>new_doc.iter_mut() {
-        <span class="kw">if let </span><span class="prelude-val">Ok</span>(doc) = Config::get_field_docs(field.replace(<span class="string">"-"</span>, <span class="string">"_"</span>)) {
-            <span class="kw">let </span>doc = doc.lines().map(|l| <span class="macro">format!</span>(<span class="string">"\n# {l}"</span>)).collect::&lt;String&gt;();
+        <span class="kw">if let </span><span class="prelude-val">Ok</span>(doc) = Config::get_field_docs(field.replace(<span class="string">'-'</span>, <span class="string">"_"</span>)) {
+            <span class="kw">let </span>doc = doc.lines().fold(String::new(), |<span class="kw-2">mut </span>s, l| {
+                <span class="kw">let _ </span>= <span class="macro">write!</span>(<span class="kw-2">&amp;mut </span>s, <span class="string">"\n# {l}"</span>);
+                s
+            });
             <span class="kw">match </span>item {
                 toml_edit::Item::Value(<span class="kw">_</span>) =&gt; field.leaf_decor_mut().set_prefix(doc + <span class="string">"\n"</span>),
                 toml_edit::Item::Table(t) =&gt; t.decor_mut().set_suffix(doc),

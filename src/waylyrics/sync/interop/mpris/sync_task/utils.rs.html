@@ -66,8 +66,6 @@
 <a href="#64" id="64">64</a>
 <a href="#65" id="65">65</a>
 <a href="#66" id="66">66</a>
-<a href="#67" id="67">67</a>
-<a href="#68" id="68">68</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::log::<span class="kw-2">*</span>;
 <span class="kw">use </span>mpris::{PlaybackStatus, Player, PlayerFinder};
 
@@ -132,8 +130,6 @@
             p.track_progress(<span class="number">0</span>)
                 .is_ok_and(|<span class="kw-2">mut </span>t| t.tick().progress.playback_status() == PlaybackStatus::Playing)
         })
-        .filter(|p| !identity_blacklisted(p))
-        .filter(|p| !name_blacklisted(p))
-        .next()
+        .filter(|p| !identity_blacklisted(p)).find(|p| !name_blacklisted(p))
 }
 </code></pre></div></section></main></body></html>

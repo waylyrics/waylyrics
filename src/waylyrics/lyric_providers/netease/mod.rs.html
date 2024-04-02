@@ -272,7 +272,7 @@
                 olyric
                     .iter()
                     .find(|o| o.start_time &gt; t.start_time)
-                    .map(|o| o.start_time.clone())
+                    .map(|o| o.start_time)
             }) {
                 tlyric.push(LyricLineOwned {
                     text: String::default(),

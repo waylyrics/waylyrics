@@ -203,6 +203,7 @@
 <a href="#201" id="201">201</a>
 <a href="#202" id="202">202</a>
 <a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::thread::sleep;
 <span class="kw">use </span>std::time::Duration;
 <span class="kw">use </span>std::{env, process};
@@ -382,7 +383,8 @@
 <span class="kw">pub fn </span>start_tray_service() -&gt; <span class="prelude-ty">Option</span>&lt;()&gt; {
     <span class="kw">let </span>service = TrayService::new(TrayIcon::default());
 
-    <span class="prelude-val">Some</span>(service.spawn())
+    service.spawn();
+    <span class="prelude-val">Some</span>(())
 }
 
 <span class="kw">fn </span>ui_action() -&gt; Sender&lt;UIAction&gt; {
@@ -395,7 +397,7 @@
 }
 
 <span class="kw">fn </span>restart_myself() {
-    <span class="kw">let </span>my_path = env::args().nth(<span class="number">0</span>).unwrap();
+    <span class="kw">let </span>my_path = env::args().next().unwrap();
     <span class="kw">let </span><span class="prelude-val">Ok</span>(<span class="kw">_</span>) = process::Command::new(<span class="string">"sh"</span>)
         .arg(<span class="string">"-c"</span>)
         .arg(<span class="macro">format!</span>(<span class="string">"sleep 1 &amp;&amp; {my_path}"</span>))

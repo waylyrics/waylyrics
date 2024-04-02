@@ -122,7 +122,7 @@
                 }),
             <span class="kw">_ </span>=&gt; meta.url().and_then(|meta_url| <span class="kw">match </span>meta_url {
                 <span class="kw">_ if </span>meta_url.starts_with(<span class="string">"file://"</span>) =&gt; {
-                    <span class="kw">let </span>music_path = url::Url::from_str(<span class="kw-2">&amp;</span>meta_url)
+                    <span class="kw">let </span>music_path = url::Url::from_str(meta_url)
                         .ok()
                         .and_then(|music_uri| music_uri.to_file_path().ok())<span class="question-mark">?</span>;
                     get_lrc_path(music_path)

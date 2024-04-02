@@ -202,7 +202,7 @@
 
     <span class="kw">let </span>(<span class="kw-2">mut </span>results, artists_str, title) = <span class="macro">tokio_spawn!</span>(<span class="kw">async move </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>set = JoinSet::new();
-        <span class="kw">for </span>(idx, provider) <span class="kw">in </span>providers.into_iter().enumerate() {
+        <span class="kw">for </span>(idx, provider) <span class="kw">in </span>providers.iter().enumerate() {
             <span class="kw">let </span>title = title.clone();
             <span class="kw">let </span>artists = artists.clone();
             <span class="kw">let </span>album = album.clone();
@@ -217,7 +217,7 @@
                     <span class="prelude-val">Some</span>(artists.join(<span class="string">","</span>))
                 };
                 <span class="kw">let </span>search_result = provider
-                    .search_song_detailed(album.unwrap_or_default(), <span class="kw-2">&amp;</span>artists, <span class="kw-2">&amp;</span>title)
+                    .search_song_detailed(album.unwrap_or_default(), <span class="kw-2">&amp;</span>artists, title)
                     .<span class="kw">await</span>;
                 search_result.map(|songs| {
                     match_likely_lyric(
