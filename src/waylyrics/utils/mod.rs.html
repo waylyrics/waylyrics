@@ -79,6 +79,15 @@
 <a href="#77" id="77">77</a>
 <a href="#78" id="78">78</a>
 <a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Result;
 <span class="kw">use </span>gtk::glib::subclass::types::ObjectSubclassIsExt;
 <span class="kw">use </span>std::path::PathBuf;
@@ -87,6 +96,13 @@
 <span class="kw">use </span><span class="kw">crate</span>::app::{get_label, Window};
 <span class="kw">use </span><span class="kw">crate</span>::config::Config;
 <span class="kw">use </span><span class="kw">crate</span>::DEFAULT_TEXT;
+
+<span class="kw">pub fn </span>gettext(msg: <span class="kw">impl </span>Into&lt;String&gt;) -&gt; String {
+    <span class="attr">#[cfg(feature = <span class="string">"i18n"</span>)]
+    </span><span class="kw">return </span>gettextrs::gettext(msg.into());
+    <span class="attr">#[cfg(not(feature = <span class="string">"i18n"</span>))]
+    </span><span class="kw">return </span>msg.into();
+}
 
 <span class="kw">pub fn </span>reset_lyric_labels(window: <span class="kw-2">&amp;</span>Window) {
     <span class="kw">let </span>tip = <span class="kw">if </span>window.imp().show_default_text_on_idle.get() {
@@ -131,9 +147,11 @@
 }
 
 <span class="kw">pub fn </span>init_dirs() -&gt; <span class="prelude-ty">Result</span>&lt;(PathBuf, PathBuf)&gt; {
-    <span class="kw">let </span>xdg_dirs = xdg::BaseDirectories::with_prefix(<span class="string">"waylyrics"</span>)<span class="question-mark">?</span>;
-    <span class="kw">let </span>config_home = xdg_dirs.get_config_home();
-    <span class="kw">let </span>cache_dir = xdg_dirs.get_cache_home();
+    <span class="kw">let </span>proj_dirs =
+        directories::ProjectDirs::from(<span class="string">"io"</span>, <span class="string">"poly000"</span>, <span class="string">"waylyrics"</span>).expect(<span class="string">"can't get proj_dirs!"</span>);
+    <span class="kw">let </span>config_home = proj_dirs.config_dir();
+    <span class="kw">let </span>cache_dir = proj_dirs.cache_dir();
+
     <span class="kw">crate</span>::CACHE_DIR.set(
         cache_dir
             .to_str()
@@ -144,7 +162,7 @@
     std::fs::create_dir_all(<span class="kw-2">&amp;</span>config_home)<span class="question-mark">?</span>;
     std::fs::create_dir_all(<span class="kw-2">&amp;</span>cache_dir)<span class="question-mark">?</span>;
     <span class="kw">let </span>config_path = config_home.join(<span class="string">"config.toml"</span>);
-    <span class="kw">let </span>user_theme_dir = xdg_dirs.get_data_home().join(<span class="string">"_themes"</span>);
+    <span class="kw">let </span>user_theme_dir = proj_dirs.data_dir().join(<span class="string">"_themes"</span>);
 
     <span class="kw">if </span>!config_path.exists() {
         std::fs::write(<span class="kw-2">&amp;</span>config_path, toml::to_string(<span class="kw-2">&amp;</span>Config::default())<span class="question-mark">?</span>)<span class="question-mark">?</span>;
@@ -157,4 +175,5 @@
 }
 
 <span class="kw">mod </span>shortcut;
-<span class="kw">pub use </span>shortcut::bind_shortcut;</code></pre></div></section></main></body></html>
+<span class="kw">pub use </span>shortcut::bind_shortcut;
+</code></pre></div></section></main></body></html>
