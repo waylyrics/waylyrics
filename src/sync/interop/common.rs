@@ -19,7 +19,7 @@ use crate::{
     log::*,
     sync::{
         interop::PlayerStatus,
-        lyric::{cache, fetch},
+        lyric::{cache::{self, get_cache_path}, fetch},
         utils::clean_lyric,
         TrackMeta, TrackState, TRACK_PLAYING_STATE,
     },
@@ -90,4 +90,33 @@ pub fn register_sync_task(app: WeakRef<Application>, interval: Duration) {
 
         glib::ControlFlow::Continue
     });
+}
+
+pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
+    TRACK_PLAYING_STATE.with_borrow_mut(
+        |TrackState {
+             metainfo,
+             cache_path,
+             ..
+         }| {
+            let track_meta_playing = metainfo.as_ref().cloned();
+            trace!("got track_id: {track_meta:#?}");
+
+            // workarounds for issue [#109](https://github.com/waylyrics/waylyrics/issues/109)
+            // skip comparing length
+            let need = !track_meta_playing.is_some_and(|p| {
+                TrackMeta { length: None, ..p }
+                    == TrackMeta {
+                        length: None,
+                        ..track_meta.clone()
+                    }
+            });
+
+            if need {
+                *metainfo = Some(track_meta.clone());
+                *cache_path = get_cache_path(track_meta);
+            }
+            need
+        },
+    )
 }

@@ -38,7 +38,7 @@ thread_local! {
     static LYRIC: RefCell<LyricState> = const { RefCell::new(LyricState { origin: LyricOwned::None, translation: LyricOwned::None }) };
     /// A global variable that contains current playing state (excluding lyrics)
     /// including: track_id, paused, cache_path
-    static TRACK_PLAYING_STATE: RefCell<TrackState> = RefCell::new(Default::default());
+    pub static TRACK_PLAYING_STATE: RefCell<TrackState> = RefCell::new(Default::default());
 }
 
 mod acts;

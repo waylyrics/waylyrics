@@ -24,7 +24,6 @@ mod unix {
     pub(super) fn reconnect_player() -> bool {
         MPRIS::reconnect_player()
     }
-    /// call `update_lyric` when we fetched new metadata
     pub(super) fn try_sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
         MPRIS::try_sync_track(window)
     }
@@ -36,22 +35,26 @@ pub use unix::*;
 mod smtc;
 #[cfg(target_os = "windows")]
 mod windows {
+    use super::smtc::GSMTC;
     use super::{OsImp, PlayerId, PlayerStatus};
     use crate::sync::lyric::fetch::LyricHint;
-    pub fn clean_player() {}
-    pub fn connect_player_with_id(player_id: impl AsRef<str>) {}
+    pub fn clean_player() {
+        GSMTC::clean_player()
+    }
+    pub fn connect_player_with_id(player_id: impl AsRef<str>) {
+        GSMTC::connect_player_with_id(player_id)
+    }
     pub fn hint_from_player() -> Option<LyricHint> {
-        None
+        GSMTC::hint_from_player()
     }
     pub fn list_players() -> Vec<PlayerId> {
-        Vec::new()
+        GSMTC::list_players()
     }
     pub(super) fn reconnect_player() -> bool {
-        false
+        GSMTC::reconnect_player()
     }
-    /// call `update_lyric` when we fetched new metadata
     pub(super) fn try_sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
-        Ok(())
+        GSMTC::try_sync_track(window)
     }
 }
 #[cfg(target_os = "windows")]
@@ -63,7 +66,10 @@ pub trait OsImp {
     fn hint_from_player() -> Option<LyricHint>;
     fn list_players() -> Vec<PlayerId>;
     fn reconnect_player() -> bool;
-    /// call `update_lyric` when we fetched new metadata
+    /// This function should:
+    ///     call `update_lyric` when fetched new metadata
+    ///     update window.imp().lyric_start
+    ///     update TRACK_PLAYING_STATE
     fn try_sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus>;
 }
 

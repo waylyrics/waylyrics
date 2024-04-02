@@ -21,6 +21,7 @@ use utils::{find_next_player, need_fetch_lyric};
 
 use crate::{
     app,
+    sync::interop::common::need_fetch_lyric,
     sync::{TrackMeta, TRACK_PLAYING_STATE},
     utils::reset_lyric_labels,
 };
