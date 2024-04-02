@@ -54,6 +54,12 @@ paru -S gtk4 libxcb mimalloc
 cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pango-devel gettext
 ```
 
+## Windows
+
+请查阅 [gtk book](https://gtk-rs.org/gtk4-rs/stable/latest/book/installation_windows.html#install-gtk-4) 安装 gtk4
+
+如果要使用 MSVC 请启用 `--no-default-features` ，gettext-rs 不支持 Windows MSVC 编译
+
 # 编译
 
 ```bash

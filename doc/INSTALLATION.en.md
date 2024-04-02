@@ -53,6 +53,12 @@ Please install dependencies in below:
 cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pango-devel gettext
 ```
 
+## Windows
+
+To setup gtk4, please check [gtk book](https://gtk-rs.org/gtk4-rs/stable/latest/book/installation_windows.html#install-gtk-4).
+
+Also you need to pass `--no-default-features` if not using a `-gnu` target because gettext-rs doesn't support Windows MSVC for now.
+
 # Build
 
 ```bash
