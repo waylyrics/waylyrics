@@ -62,6 +62,7 @@ fn sync_position(player: &Player, window: &app::Window) -> Result<(), PlayerStat
     Ok(())
 }
 
+/// call `update_lyric` when we fetched new metadata
 pub fn try_sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
     let meta = PLAYER.with_borrow(|player| {
         let player = player.as_ref().ok_or(PlayerStatus::Missing)?;
@@ -104,7 +105,7 @@ pub fn try_sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
 
     if need_fetch_lyric(&meta) {
         let window = gtk::prelude::ObjectExt::downgrade(window);
-        crate::log::debug!("spawned update_lyric from sync_track");
+        crate::log::debug!("spawned update_lyric from try_sync_track");
         glib_spawn!(async move {
             let Some(window) = window.upgrade() else {
                 return;

@@ -1,10 +1,10 @@
 use std::cell::RefCell;
 
 mod sync_task;
-pub use sync_task::{reconnect_player, try_sync_track};
+use sync_task::{reconnect_player, try_sync_track};
 
 mod hint;
-pub use hint::hint_from_player;
+use hint::hint_from_player;
 
 use mpris::{Metadata, Player, PlayerFinder};
 
@@ -15,30 +15,46 @@ use crate::sync::TrackMeta;
 
 use super::PlayerId;
 
-pub fn clean_player() {
-    PLAYER.take();
-}
+pub struct MPRIS;
 
-pub fn connect_player_with_id(player_id: impl AsRef<str>) {
-    let player_id = player_id.as_ref();
+impl super::OsImp for MPRIS {
+    fn clean_player() {
+        PLAYER.take();
+    }
 
-    PLAYER_FINDER.with_borrow(|player_finder| {
-        if let Ok(player) = player_finder.find_by_name(player_id) {
-            PLAYER.set(Some(player));
-        } else {
-            error!("cannot connect to: {player_id}");
-        }
-    });
-}
+    fn connect_player_with_id(player_id: impl AsRef<str>) {
+        let player_id = player_id.as_ref();
 
-pub fn list_players() -> Vec<PlayerId> {
-    find_players()
-        .iter()
-        .map(|p| PlayerId {
-            player_name: p.identity().to_owned(),
-            inner_id: p.identity().to_owned(),
-        })
-        .collect()
+        PLAYER_FINDER.with_borrow(|player_finder| {
+            if let Ok(player) = player_finder.find_by_name(player_id) {
+                PLAYER.set(Some(player));
+            } else {
+                error!("cannot connect to: {player_id}");
+            }
+        });
+    }
+
+    fn hint_from_player() -> Option<crate::sync::lyric::fetch::LyricHint> {
+        hint_from_player()
+    }
+
+    fn list_players() -> Vec<PlayerId> {
+        find_players()
+            .iter()
+            .map(|p| PlayerId {
+                player_name: p.identity().to_owned(),
+                inner_id: p.identity().to_owned(),
+            })
+            .collect()
+    }
+
+    fn reconnect_player() -> bool {
+        reconnect_player()
+    }
+
+    fn try_sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
+        try_sync_track(window)
+    }
 }
 
 thread_local! {
