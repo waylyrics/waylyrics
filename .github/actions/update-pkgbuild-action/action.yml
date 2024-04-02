@@ -1,0 +1,17 @@
+name: 'Update PKGBUILD'
+description: 'Convert tag lile v1.0.0 to pkgver like 1.0.0 and update .SRCINFO'
+inputs:
+  tag:
+    description: 'The tag like v1.0.0'
+    required: true
+  dir:
+    description: 'The directory contains PKGBUILD'
+    required: false
+    default: '.'
+outputs:
+  pkgver:
+    description: 'The converted pkgver'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

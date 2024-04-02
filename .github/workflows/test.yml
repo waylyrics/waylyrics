@@ -71,3 +71,35 @@ jobs:
       with:
         name: linux-x86_64
         path: amd64-linux-gnu.tar.gz
+
+  update-aur-pkgbuild:
+    name: 'Update AUR PKGBUILD'
+    runs-on: 'ubuntu-latest'
+    if: github.event_name == 'push' && github.ref_type == 'tag'
+    needs: 'build'
+    steps:
+      - name: 'Setup Git'
+        run: |
+          echo -e "${{ secrets.AUR_PRIVATE_KEY }}" | install -Dm600 /dev/stdin ~/.ssh/id_ed25519
+          chmod 700 ~/.ssh
+          ssh-keyscan aur.archlinux.org >> ~/.ssh/known_hosts
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+      - name: 'Checkout'
+        uses: actions/checkout@v4
+      - name: 'Clone AUR repository'
+        run: git clone "ssh://aur@aur.archlinux.org/waylyrics.git"
+      - name: 'Generate pkgver'
+        id: pkgver
+        uses: ./.github/actions/update-pkgbuild-action
+        with:
+          tag: ${{ github.ref_name }}
+          dir: waylyrics
+      - name: 'Show diff'
+        run: git -C waylyrics diff
+      - name: 'Commit'
+        run: |
+          git -C waylyrics add .
+          git -C waylyrics commit -m "Bump version to ${{ steps.pkgver.outputs.pkgver }}"
+      - name: 'Push'
+        run: git -C waylyrics push origin master
