@@ -175,14 +175,14 @@ fn update_position(
     window: &crate::app::Window,
     timeline_properties: &GSMTCSessionTimelineProperties,
 ) -> Result<(), PlayerStatus> {
-    let positions = timeline_properties
+    let position: Duration = timeline_properties
         .Position()
         .map_err(|e| {
             error!("try_sync_track failed: {e}");
             PlayerStatus::Unsupported("failed to get Position!")
         })?
         .into();
-    trace!("got position: {positions}");
+    trace!("got position: {:.02}s", position.as_secs_f64());
     let start = SystemTime::now()
         .checked_sub(position)
         .ok_or(PlayerStatus::Unsupported("Infinite Position"))?;
