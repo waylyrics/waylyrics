@@ -120,12 +120,17 @@ impl OsImp for GSMTC {
             PlayerStatus::Unsupported("failed to get PlaybackStatus!")
         })?;
         trace!("PlaybackStatus = {}", playback_status.0);
-        match playback_status.0 - 1 {
+        match playback_status.0 {
+            // Closed
             0 => Err(PlayerStatus::Missing)?,
+            // Opened
             1 => Err(PlayerStatus::Paused)?,
-            2 => Err(PlayerStatus::Stopped)?,
-            3 => (),
-            4 => Err(PlayerStatus::Paused)?,
+            // Changing
+            2 => Err(PlayerStatus::Paused)?,
+            3 => Err(PlayerStatus::Stopped)?,
+            // Playing
+            4 => (),
+            5 => Err(PlayerStatus::Paused)?,
             s @ _ => panic!("unknown PlaybackStatus {s}!"),
         }
         let media_properties = media_properties(&session).map_err(|e| {
@@ -137,10 +142,7 @@ impl OsImp for GSMTC {
         let title = media_properties.Title().ok().map(|t| t.to_string());
         let artist = media_properties.Artist().ok().map(|t| t.to_string());
 
-        let length = timeline_properties
-            .EndTime()
-            .ok()
-            .map(|t| Duration::from_micros(t.Duration as u64 / 10));
+        let length = timeline_properties.EndTime().ok().map(Duration::from);
 
         let new_trackmeta = TrackMeta {
             unique_song_id: None,
@@ -173,16 +175,14 @@ fn update_position(
     window: &crate::app::Window,
     timeline_properties: &GSMTCSessionTimelineProperties,
 ) -> Result<(), PlayerStatus> {
-    let position_us = (timeline_properties
+    let positions = timeline_properties
         .Position()
         .map_err(|e| {
             error!("try_sync_track failed: {e}");
             PlayerStatus::Unsupported("failed to get Position!")
         })?
-        .Duration) as u64
-        / 10;
-    trace!("got position: {position_us}");
-    let position = Duration::from_micros(position_us);
+        .into();
+    trace!("got position: {positions}");
     let start = SystemTime::now()
         .checked_sub(position)
         .ok_or(PlayerStatus::Unsupported("Infinite Position"))?;
