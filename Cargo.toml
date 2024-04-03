@@ -104,7 +104,12 @@ mpris = "2.0.1"
 dbus = { version = "0.1.0", package = "dbus-dummy" }
 ksni = { version = "0.1.0", package = "ksni-dummy", optional = true }
 windows = { version = "0.54.0", features = [
+    # SMTC
     "Media_Control",
     "Foundation_Collections",
     "Storage_Streams",
+    # Surface operation
+    "Win32_Foundation",
+    "Win32_UI_WindowsAndMessaging",
 ] }
+gdk4-win32 = { version = "0.8.1" }

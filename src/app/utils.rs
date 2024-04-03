@@ -1,15 +1,54 @@
 use crate::EXCLUDED_REGEXES;
 
-use gtk::{
-    cairo::{RectangleInt, Region},
-    prelude::*,
-    subclass::prelude::*,
-    Label,
-};
+use gtk::{prelude::*, Label};
 
 use super::window;
 
+#[cfg(target_os = "windows")]
 pub(super) fn set_click_pass_through(window: &window::Window, enabled: bool) {
+    fn set_window_click_through(hwnd: isize, enabled: bool) {
+        use windows::Win32::Foundation::HWND;
+        use windows::Win32::UI::WindowsAndMessaging::{
+            GetWindowLongPtrW, SetWindowLongPtrW, GWL_EXSTYLE,
+        };
+        let hwnd = HWND(hwnd);
+
+        const WS_EX_TRANSPARENT: isize = 0x00000020;
+        const WS_EX_LAYERED: isize = 0x00080000;
+        unsafe {
+            let ex_style = GetWindowLongPtrW(hwnd, GWL_EXSTYLE);
+            if enabled {
+                SetWindowLongPtrW(
+                    hwnd,
+                    GWL_EXSTYLE,
+                    ex_style | WS_EX_TRANSPARENT | WS_EX_LAYERED,
+                );
+            } else {
+                SetWindowLongPtrW(
+                    hwnd,
+                    GWL_EXSTYLE,
+                    ex_style & !WS_EX_TRANSPARENT & !WS_EX_LAYERED,
+                );
+            }
+        }
+    }
+
+    let Some(surface) = window.surface().and_downcast::<gdk4_win32::Win32Surface>() else {
+        return;
+    };
+
+    let handle = surface.handle();
+
+    set_window_click_through(handle.0, enabled);
+}
+
+#[cfg(not(target_os = "windows"))]
+pub(super) fn set_click_pass_through(window: &window::Window, enabled: bool) {
+    use gtk::{
+        cairo::{RectangleInt, Region},
+        subclass::prelude::*,
+    };
+
     let obj = window;
     let Some(surface) = obj.surface() else {
         return;
