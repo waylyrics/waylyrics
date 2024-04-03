@@ -1,4 +1,3 @@
-#![windows_subsystem = "windows"]
 use std::fs;
 use std::path::PathBuf;
 
@@ -135,7 +134,7 @@ fn build_ui(app: &Application) -> Result<()> {
     );
 
     register_sync_task(ObjectExt::downgrade(app), player_sync_interval);
-    register_lyric_display(ObjectExt::downgrade(app), lyric_update_interval);
+    register_lyric_display(ObjectExt::downgrade(&wind), lyric_update_interval);
     register_actions(app, &wind, triggers);
 
     #[cfg(feature = "action-event")]

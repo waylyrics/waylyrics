@@ -103,3 +103,8 @@ mpris = "2.0.1"
 [target.'cfg(windows)'.dependencies]
 dbus = { version = "0.1.0", package = "dbus-dummy" }
 ksni = { version = "0.1.0", package = "ksni-dummy", optional = true }
+windows = { version = "0.54.0", features = [
+    "Media_Control",
+    "Foundation_Collections",
+    "Storage_Streams",
+] }

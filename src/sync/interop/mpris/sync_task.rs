@@ -5,24 +5,23 @@ use gtk::glib::subclass::types::ObjectSubclassIsExt;
 use crate::{log::*, sync::lyric::fetch::LyricHint};
 use mpris::{PlaybackStatus, Player, ProgressTracker};
 
-use crate::sync::interop::PlayerStatus;
+use anyhow::Result;
+
+mod utils;
+use utils::find_next_player;
+
 use crate::{
+    app,
+    utils::reset_lyric_labels,
     glib_spawn,
+    sync::{TrackMeta, TRACK_PLAYING_STATE},
     sync::{
+        interop::PlayerStatus,
+        interop::common::need_fetch_lyric,
         interop::common::update_lyric,
         interop::mpris::{PLAYER, PLAYER_FINDER},
         lyric::scroll::refresh_lyric,
     },
-};
-use anyhow::Result;
-
-mod utils;
-use utils::{find_next_player, need_fetch_lyric};
-
-use crate::{
-    app,
-    sync::{TrackMeta, TRACK_PLAYING_STATE},
-    utils::reset_lyric_labels,
 };
 
 use super::hint_from_player;
