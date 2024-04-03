@@ -16,9 +16,11 @@
   - [Recommended Players](#recommended-players)
   - [Unsupported Players](#unsupported-players)
   - [Directories](#directories)
+    - [Linux/Unix](#linuxunix)
+    - [Windows](#windows)
   - [Alternatives](#alternatives)
     - [Linux](#linux)
-    - [Windows](#windows)
+    - [Windows](#windows-1)
   - [Credit](#credit)
   - [License](#license)
 
@@ -86,13 +88,21 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 ## Directories
 
-Typically,
+### Linux/Unix
 
 ```
 ~/.cache/waylyrics/XX/...
 ~/.config/waylyrics/...
 # waylyrics will first try load theme here, if not exists, load from global template.
 ~/.local/share/waylyrics/_themes/...
+```
+
+### Windows
+
+```
+%AppData%\poly000\waylyrics\config
+%AppData%\poly000\waylyrics\data
+%LocalAppData%\poly000\waylyrics\cache
 ```
 
 ## Alternatives

@@ -16,9 +16,11 @@
   - [推荐的播放器](#推荐的播放器)
   - [无法使用的播放器](#无法使用的播放器)
   - [目录](#目录)
+    - [Linux/Unix](#linuxunix)
+    - [Windows](#windows)
   - [替代品](#替代品)
     - [Linux](#linux)
-    - [Windows](#windows)
+    - [Windows](#windows-1)
   - [Credit](#credit)
   - [License](#license)
 
@@ -87,11 +89,21 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 一般情况会创建的目录（可能被用户XDG设置影响）
 
+### Linux/Unix
+
 ```
 ~/.cache/waylyrics/XX/...
 ~/.config/waylyrics/...
 # waylyrics 会首先尝试在这里加载主题，找不到的话就从全局模板目录找
 ~/.local/share/waylyrics/_themes/...
+```
+
+### Windows
+
+```
+%AppData%\poly000\waylyrics\config
+%AppData%\poly000\waylyrics\data
+%LocalAppData%\poly000\waylyrics\cache
 ```
 
 ## 替代品
