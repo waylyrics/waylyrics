@@ -10,6 +10,8 @@ then
     then
         cd "$INPUT_DIR" || exit
     fi
+    echo "Reseting pkgrel in PKGBUILD..."
+    sed -i "s/pkgrel=.*/pkgrel=1/" PKGBUILD
     echo "Updating pkgver in PKGBUILD..."
     sed -i "s/pkgver=.*/pkgver=$pkgver/" PKGBUILD
     echo "Updating checksums in PKGBUILD..."
