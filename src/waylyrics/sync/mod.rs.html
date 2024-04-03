@@ -95,7 +95,7 @@
     <span class="kw">static </span>LYRIC: RefCell&lt;LyricState&gt; = <span class="kw">const </span>{ RefCell::new(LyricState { origin: LyricOwned::None, translation: LyricOwned::None }) };
     <span class="doccomment">/// A global variable that contains current playing state (excluding lyrics)
     /// including: track_id, paused, cache_path
-    </span><span class="kw">static </span>TRACK_PLAYING_STATE: RefCell&lt;TrackState&gt; = RefCell::new(Default::default());
+    </span><span class="kw">pub static </span>TRACK_PLAYING_STATE: RefCell&lt;TrackState&gt; = RefCell::new(Default::default());
 }
 
 <span class="kw">mod </span>acts;

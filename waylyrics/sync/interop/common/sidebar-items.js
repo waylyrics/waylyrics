@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["register_sync_task","update_lyric"]};
+window.SIDEBAR_ITEMS = {"fn":["need_fetch_lyric","register_sync_task","update_lyric"]};

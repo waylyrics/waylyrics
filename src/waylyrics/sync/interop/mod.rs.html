@@ -82,6 +82,12 @@
 <a href="#80" id="80">80</a>
 <a href="#81" id="81">81</a>
 <a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::sync::lyric::fetch::LyricHint;
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">mod </span>common;
@@ -108,8 +114,7 @@
     <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>reconnect_player() -&gt; bool {
         MPRIS::reconnect_player()
     }
-    <span class="doccomment">/// call `update_lyric` when we fetched new metadata
-    </span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>try_sync_track(window: <span class="kw-2">&amp;</span><span class="kw">crate</span>::app::Window) -&gt; <span class="prelude-ty">Result</span>&lt;(), PlayerStatus&gt; {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>try_sync_track(window: <span class="kw-2">&amp;</span><span class="kw">crate</span>::app::Window) -&gt; <span class="prelude-ty">Result</span>&lt;(), PlayerStatus&gt; {
         MPRIS::try_sync_track(window)
     }
 }
@@ -120,22 +125,26 @@
 </span><span class="kw">mod </span>smtc;
 <span class="attr">#[cfg(target_os = <span class="string">"windows"</span>)]
 </span><span class="kw">mod </span>windows {
+    <span class="kw">use </span><span class="kw">super</span>::smtc::GSMTC;
     <span class="kw">use super</span>::{OsImp, PlayerId, PlayerStatus};
     <span class="kw">use </span><span class="kw">crate</span>::sync::lyric::fetch::LyricHint;
-    <span class="kw">pub fn </span>clean_player() {}
-    <span class="kw">pub fn </span>connect_player_with_id(player_id: <span class="kw">impl </span>AsRef&lt;str&gt;) {}
+    <span class="kw">pub fn </span>clean_player() {
+        GSMTC::clean_player()
+    }
+    <span class="kw">pub fn </span>connect_player_with_id(player_id: <span class="kw">impl </span>AsRef&lt;str&gt;) {
+        GSMTC::connect_player_with_id(player_id)
+    }
     <span class="kw">pub fn </span>hint_from_player() -&gt; <span class="prelude-ty">Option</span>&lt;LyricHint&gt; {
-        <span class="prelude-val">None
-    </span>}
+        GSMTC::hint_from_player()
+    }
     <span class="kw">pub fn </span>list_players() -&gt; Vec&lt;PlayerId&gt; {
-        Vec::new()
+        GSMTC::list_players()
     }
     <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>reconnect_player() -&gt; bool {
-        <span class="bool-val">false
-    </span>}
-    <span class="doccomment">/// call `update_lyric` when we fetched new metadata
-    </span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>try_sync_track(window: <span class="kw-2">&amp;</span><span class="kw">crate</span>::app::Window) -&gt; <span class="prelude-ty">Result</span>&lt;(), PlayerStatus&gt; {
-        <span class="prelude-val">Ok</span>(())
+        GSMTC::reconnect_player()
+    }
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>try_sync_track(window: <span class="kw-2">&amp;</span><span class="kw">crate</span>::app::Window) -&gt; <span class="prelude-ty">Result</span>&lt;(), PlayerStatus&gt; {
+        GSMTC::try_sync_track(window)
     }
 }
 <span class="attr">#[cfg(target_os = <span class="string">"windows"</span>)]
@@ -147,7 +156,10 @@
     <span class="kw">fn </span>hint_from_player() -&gt; <span class="prelude-ty">Option</span>&lt;LyricHint&gt;;
     <span class="kw">fn </span>list_players() -&gt; Vec&lt;PlayerId&gt;;
     <span class="kw">fn </span>reconnect_player() -&gt; bool;
-    <span class="doccomment">/// call `update_lyric` when we fetched new metadata
+    <span class="doccomment">/// This function should:
+    ///     call `update_lyric` when fetched new metadata
+    ///     update window.imp().lyric_start
+    ///     update TRACK_PLAYING_STATE
     </span><span class="kw">fn </span>try_sync_track(window: <span class="kw-2">&amp;</span><span class="kw">crate</span>::app::Window) -&gt; <span class="prelude-ty">Result</span>&lt;(), PlayerStatus&gt;;
 }
 
