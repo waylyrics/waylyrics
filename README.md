@@ -14,13 +14,15 @@
   - [用法](#用法)
   - [依赖](#依赖)
   - [推荐的播放器](#推荐的播放器)
+    - [Linux](#linux)
+    - [Windows](#windows)
   - [无法使用的播放器](#无法使用的播放器)
   - [目录](#目录)
     - [Linux/Unix](#linuxunix)
-    - [Windows](#windows)
-  - [替代品](#替代品)
-    - [Linux](#linux)
     - [Windows](#windows-1)
+  - [替代品](#替代品)
+    - [Linux](#linux-1)
+    - [Windows](#windows-2)
   - [Credit](#credit)
   - [License](#license)
 
@@ -40,6 +42,8 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 - 需要你的wm允许你设置窗口置顶
 
 ## 推荐的播放器
+
+### Linux
 
 [插件]: https://addons.mozilla.org/en-US/firefox/addon/plasma-integration/
 [netease-cloud-music-gtk]: https://github.com/gmg137/netease-cloud-music-gtk
@@ -75,6 +79,12 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 | [youtube-music]           | O    | Electron  | 启用Shortcut               |
 | [go-musicfox]             | O    | bubbletea | 4.3.2+                     |
 | mpv                       | O    | 原生      | [mpv-mpris]                |
+
+### Windows
+
+| 名称       | 在线 | 框架 | 备注   |
+| ---------- | ---- | ---- | ------ |
+| [FeelUOwn] | O    | Qt5  | 4.0.1+ |
 
 ## 无法使用的播放器
 

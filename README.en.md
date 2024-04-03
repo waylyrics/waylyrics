@@ -14,13 +14,15 @@
   - [Usage](#usage)
   - [Requirement](#requirement)
   - [Recommended Players](#recommended-players)
+    - [Linux](#linux)
+    - [Windows](#windows)
   - [Unsupported Players](#unsupported-players)
   - [Directories](#directories)
     - [Linux/Unix](#linuxunix)
-    - [Windows](#windows)
-  - [Alternatives](#alternatives)
-    - [Linux](#linux)
     - [Windows](#windows-1)
+  - [Alternatives](#alternatives)
+    - [Linux](#linux-1)
+    - [Windows](#windows-2)
   - [Credit](#credit)
   - [License](#license)
 
@@ -40,6 +42,8 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 - In particular, a wm allows you set windows as top-level
 
 ## Recommended Players
+
+### Linux
 
 [extension]: https://addons.mozilla.org/en-US/firefox/addon/plasma-integration/
 [netease-cloud-music-gtk]: https://github.com/gmg137/netease-cloud-music-gtk
@@ -76,6 +80,12 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 | [youtube-music]           | O       | Electron  | enable `Shortcut`                          |
 | [go-musicfox]             | O       | bubbletea | 4.3.2+                                     |
 | mpv                       | O       | Native    | load [mpv-mpris]                           |
+
+### Windows
+
+| Name       | Online? | Framework | #      |
+| ---------- | ------- | --------- | ------ |
+| [FeelUOwn] | O       | Qt5       | 4.0.1+ |
 
 ## Unsupported Players
 
