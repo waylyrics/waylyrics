@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 ## [unreleased]
 
+### 📚 Documentation
+
+- *(readme)* The only compatible player on windows
+
+### Build
+
+- Add icon for win32 build
+
+## [0.2.15] - 2024-04-03
+
+### 🚀 Features
+
+- Full mouse click-through for windows
+
 ### 🐛 Bug Fixes
 
 - Misuse of `windows-rs`
@@ -12,10 +26,12 @@ All notable changes to this project will be documented in this file.
 ### 📚 Documentation
 
 - *(readme)* Intro windows user directories
+- *(changelog)* Update changelog
 
 ### ⚙️ Miscellaneous Tasks
 
 - Reset pkgrel after a pkgver bump
+- Release v0.2.15
 
 ## [0.2.14] - 2024-04-03
 
