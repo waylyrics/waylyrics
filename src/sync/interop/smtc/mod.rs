@@ -61,6 +61,7 @@ impl OsImp for GSMTC {
             return;
         };
         if let Ok(mut guard) = SESSION.write() {
+            info!("connected to {}", player_id.as_ref());
             guard.replace(session);
         }
     }
@@ -103,6 +104,12 @@ impl OsImp for GSMTC {
             return Ok(());
         };
 
+        let timeline_properties = session.GetTimelineProperties().map_err(|e| {
+            error!("try_sync_track failed: {e}");
+            PlayerStatus::Unsupported("failed to get TimelineProperties!")
+        })?;
+        update_position(window, &timeline_properties)?;
+
         let playback_info = session.GetPlaybackInfo().map_err(|e| {
             error!("try_sync_track failed: {e}");
             PlayerStatus::Unsupported("failed to get PlaybackInfo!")
@@ -113,18 +120,14 @@ impl OsImp for GSMTC {
             PlayerStatus::Unsupported("failed to get PlaybackStatus!")
         })?;
         trace!("PlaybackStatus = {}", playback_status.0);
-        match playback_status.0 {
+        match playback_status.0 - 1 {
             0 => Err(PlayerStatus::Missing)?,
             1 => Err(PlayerStatus::Paused)?,
-            4 => Err(PlayerStatus::Paused)?,
-            3 => (),
             2 => Err(PlayerStatus::Stopped)?,
+            3 => (),
+            4 => Err(PlayerStatus::Paused)?,
             s @ _ => panic!("unknown PlaybackStatus {s}!"),
         }
-        let timeline_properties = session.GetTimelineProperties().map_err(|e| {
-            error!("try_sync_track failed: {e}");
-            PlayerStatus::Unsupported("failed to get TimelineProperties!")
-        })?;
         let media_properties = media_properties(&session).map_err(|e| {
             error!("try_sync_track failed: {e}");
             PlayerStatus::Unsupported("failed to get MediaProperties!")
@@ -134,11 +137,10 @@ impl OsImp for GSMTC {
         let title = media_properties.Title().ok().map(|t| t.to_string());
         let artist = media_properties.Artist().ok().map(|t| t.to_string());
 
-        update_position(window, &timeline_properties)?;
         let length = timeline_properties
             .EndTime()
             .ok()
-            .map(|t| Duration::from_micros(t.Duration as u64));
+            .map(|t| Duration::from_micros(t.Duration as u64 / 10));
 
         let new_trackmeta = TrackMeta {
             unique_song_id: None,
@@ -177,7 +179,8 @@ fn update_position(
             error!("try_sync_track failed: {e}");
             PlayerStatus::Unsupported("failed to get Position!")
         })?
-        .Duration) as u64;
+        .Duration) as u64
+        / 10;
     trace!("got position: {position_us}");
     let position = Duration::from_micros(position_us);
     let start = SystemTime::now()
