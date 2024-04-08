@@ -1,6 +1,6 @@
-#[cfg(target_os = "unix")]
+#[cfg(unix)]
 pub use unix::*;
-#[cfg(target_os = "unix")]
+#[cfg(unix)]
 mod unix;
 
 #[cfg(target_os = "windows")]

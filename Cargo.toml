@@ -94,13 +94,13 @@ vendored = ["dbus/vendored"]
 action-event = ["dep:async-channel"]
 net-test = []
 
-[target.'cfg(target_os="unix")'.dependencies]
+[target.'cfg(unix)'.dependencies]
 # MPRIS integration
 dbus = "0.9.7"
 ksni = { version = "0.2.1", optional = true }
 mpris = "2.0.1"
 
-[target.'cfg(target_os="windows")'.dependencies]
+[target.'cfg(target_os = "windows")'.dependencies]
 tray-icon2 = { version = "0.13.1", optional = true }
 windows = { version = "0.54.0", features = [
     # SMTC
