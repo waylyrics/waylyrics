@@ -181,13 +181,11 @@ pub fn start_tray_service() -> Option<()> {
     Some(())
 }
 
-fn ui_action() -> Sender<UIAction> {
-    let ui_action = UI_ACTION.get().unwrap().clone();
-    ui_action
+fn ui_action() -> &'static Sender<UIAction> {
+    UI_ACTION.get().unwrap()
 }
-fn play_action() -> Sender<PlayAction> {
-    let play_action = PLAY_ACTION.get().unwrap().clone();
-    play_action
+fn play_action() -> &'static Sender<PlayAction> {
+    PLAY_ACTION.get().unwrap()
 }
 
 fn restart_myself() {

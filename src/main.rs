@@ -15,7 +15,7 @@ use waylyrics::lyric_providers::utils::get_provider;
 use waylyrics::lyric_providers::LyricProvider;
 use waylyrics::utils::init_dirs;
 use waylyrics::{
-    utils, EXCLUDED_REGEXES, LYRIC_PROVIDERS, MAIN_WINDOW, PACKAGE_NAME, PLAYER_IDENTITY_BLACKLIST,
+    utils, EXCLUDED_REGEXES, LYRIC_PROVIDERS, MAIN_WINDOW, PLAYER_IDENTITY_BLACKLIST,
     PLAYER_NAME_BLACKLIST, THEME_PATH,
 };
 
@@ -40,7 +40,7 @@ pub const THEME_PRESETS_DIR: Option<&str> = option_env!("WAYLYRICS_THEME_PRESETS
 
 fn main() -> Result<glib::ExitCode> {
     #[cfg(feature = "i18n")]
-    let _ = gettextrs::TextDomain::new(PACKAGE_NAME).init();
+    let _ = gettextrs::TextDomain::new(waylyrics::PACKAGE_NAME).init();
 
     let registry = Registry::default()
         .with(
@@ -60,6 +60,8 @@ fn main() -> Result<glib::ExitCode> {
     let app = Application::builder()
         .application_id(waylyrics::APP_ID)
         .build();
+
+    log::info!("successfully created application!");
 
     app.connect_activate(|app| {
         if let Err(e) = build_ui(app) {
@@ -101,7 +103,8 @@ fn build_ui(app: &Application) -> Result<()> {
 
     #[cfg(feature = "tray-icon")]
     if show_tray_icon {
-        start_tray_service();
+        let result = start_tray_service();
+        log::info!("tray-icon status: {result:?}");
     }
 
     let player_sync_interval = parse_time(&player_sync_interval)?;

@@ -85,7 +85,7 @@ gettext-rs = { version = "0.7.0", features = [
 
 [features]
 default = ["mimalloc", "net-test", "tray-icon", "i18n", "journald"]
-tray-icon = ["action-event", "dep:ksni"]
+tray-icon = ["action-event", "dep:ksni", "dep:tray-icon2"]
 i18n = ["dep:gettext-rs"]
 journald = ["dep:tracing-journald"]
 
@@ -94,15 +94,14 @@ vendored = ["dbus/vendored"]
 action-event = ["dep:async-channel"]
 net-test = []
 
-[target.'cfg(unix)'.dependencies]
+[target.'cfg(target_os="unix")'.dependencies]
 # MPRIS integration
 dbus = "0.9.7"
 ksni = { version = "0.2.1", optional = true }
 mpris = "2.0.1"
 
-[target.'cfg(windows)'.dependencies]
-dbus = { version = "0.1.0", package = "dbus-dummy" }
-ksni = { version = "0.1.0", package = "ksni-dummy", optional = true }
+[target.'cfg(target_os="windows")'.dependencies]
+tray-icon2 = { version = "0.13.1", optional = true }
 windows = { version = "0.54.0", features = [
     # SMTC
     "Media_Control",
