@@ -85,7 +85,7 @@ gettext-rs = { version = "0.7.0", features = [
 
 [features]
 default = ["mimalloc", "net-test", "tray-icon", "i18n", "journald"]
-tray-icon = ["action-event", "dep:ksni", "dep:tray-icon2"]
+tray-icon = ["action-event", "dep:ksni", "dep:tray-icon"]
 i18n = ["dep:gettext-rs"]
 journald = ["dep:tracing-journald"]
 
@@ -101,7 +101,7 @@ ksni = { version = "0.2.1", optional = true }
 mpris = "2.0.1"
 
 [target.'cfg(target_os = "windows")'.dependencies]
-tray-icon2 = { version = "0.13.1", optional = true }
+tray-icon = { version = "0.13.4", optional = true }
 windows = { version = "0.54.0", features = [
     # SMTC
     "Media_Control",

@@ -1,7 +1,7 @@
 use anyhow::Result;
 use async_channel::Sender;
 use std::process;
-use tray_icon2::{
+use tray_icon::{
     menu::{Menu, MenuEvent, MenuId, MenuItemBuilder},
     Icon, TrayIconBuilder,
 };
