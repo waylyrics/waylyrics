@@ -1,7 +1,9 @@
+use std::{env::args, process::Command};
+
 use anyhow::Result;
 use async_channel::Sender;
 use tray_icon::{
-    menu::{Menu, MenuEvent, MenuId, MenuItemBuilder},
+    menu::{Menu, MenuEvent, MenuItemBuilder},
     Icon, TrayIconBuilder,
 };
 
@@ -11,47 +13,59 @@ use crate::{
 };
 
 const EXIT: &str = "exit";
+const RESTART: &str = "restart";
 const SEARCH_LYRIC: &str = "search-lyric";
 const SWITCH_PASSTHROUGH: &str = "switch-passthrough";
 const SWITCH_DECORATION: &str = "switch-decoration";
 
 pub fn start_tray_service() -> Result<()> {
+    let icon = Icon::from_resource_name("icon0", None)?;
+    let menu = build_tray_menu()?;
+    let tray_icon = TrayIconBuilder::new()
+        .with_tooltip(env!("CARGO_PKG_DESCRIPTION"))
+        .with_icon(icon)
+        .with_menu(Box::new(menu))
+        .build()?;
+
+    std::thread::spawn(menu_event_handler);
+    std::mem::forget(tray_icon);
+    Ok(())
+}
+
+fn build_tray_menu() -> Result<Menu> {
     let search_lyric = MenuItemBuilder::new()
         .text("Search lyric")
-        .id(MenuId::new(SEARCH_LYRIC))
+        .id(SEARCH_LYRIC.into())
         .enabled(true)
         .build();
     let switch_decoration = MenuItemBuilder::new()
         .text("Toggle decoration")
-        .id(MenuId::new(SWITCH_DECORATION))
+        .id(SWITCH_DECORATION.into())
         .enabled(true)
         .build();
     let switch_passthrough = MenuItemBuilder::new()
         .text("Toggle passthrough")
-        .id(MenuId::new(SWITCH_PASSTHROUGH))
+        .id(SWITCH_PASSTHROUGH.into())
+        .enabled(true)
+        .build();
+    let restart = MenuItemBuilder::new()
+        .text("Restart")
+        .id(RESTART.into())
         .enabled(true)
         .build();
     let exit = MenuItemBuilder::new()
         .text("Exit")
-        .id(MenuId::new(EXIT))
+        .id(EXIT.into())
         .enabled(true)
         .build();
 
-    let menu = Menu::with_items(&[
+    Ok(Menu::with_items(&[
         &search_lyric,
         &switch_decoration,
         &switch_passthrough,
+        &restart,
         &exit,
-    ])?;
-    let tray_icon = TrayIconBuilder::new()
-        .with_tooltip(env!("CARGO_PKG_DESCRIPTION"))
-        .with_icon(Icon::from_resource_name("icon0", None)?)
-        .with_menu(Box::new(menu))
-        .build()?;
-
-    std::mem::forget(tray_icon);
-    std::thread::spawn(menu_event_handler);
-    Ok(())
+    ])?)
 }
 
 fn menu_event_handler() {
@@ -59,6 +73,15 @@ fn menu_event_handler() {
         match event.id().0.as_str() {
             SEARCH_LYRIC => {
                 let _ = play_action().send_blocking(PlayAction::SearchLyric);
+            }
+            RESTART => {
+                let _ = Command::new("powershell")
+                    .arg("-WindowStyle")
+                    .arg("1")
+                    .arg("-Command")
+                    .arg(&format!("sleep 5; start {}", args().next().unwrap()))
+                    .spawn();
+                let _ = ui_action().send_blocking(UIAction::Quit);
             }
             EXIT => {
                 let _ = ui_action().send_blocking(UIAction::Quit);
