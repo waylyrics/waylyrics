@@ -83,10 +83,10 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 ### Windows
 
-| Name       | Online? | Framework | #                                                         |
-| ---------- | ------- | --------- | --------------------------------------------------------- |
-| [FeelUOwn] | O       | Qt5       | 4.0.1+                                                    |
-| 媒体播放器 | X       | UWP       | it will not update timeline <br> immediately after a seek |
+| Name         | Online? | Framework | #                                                         |
+| ------------ | ------- | --------- | --------------------------------------------------------- |
+| [FeelUOwn]   | O       | Qt5       | 4.0.1+                                                    |
+| Media Player | X       | UWP       | it will not update timeline <br> immediately after a seek |
 
 ## Unsupported Players
 
