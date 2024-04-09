@@ -2,15 +2,53 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [0.2.17] - 2024-04-09
+
+### 🚀 Features
+
+- Restart in tray-icon for windows
+
+### 🐛 Bug Fixes
+
+- Gtk4 freezes on `Window::close` on windows
+
+### 📚 Documentation
+
+- *(readme)* Update missing translation
+
+### ⚙️ Miscellaneous Tasks
+
+- Switch to upstream `tray-icon`
+- Release v0.2.17
+
+### Enhance
+
+- Support LastUpdateTime on windows
+
+## [0.2.16] - 2024-04-08
+
+### 🚀 Features
+
+- Initial tray-icon support for windows
+
+### 🐛 Bug Fixes
+
+- Feature gate for unix should be `cfg(unix)`
 
 ### 📚 Documentation
 
 - *(readme)* The only compatible player on windows
+- *(changelog)* Update changelog
+
+### ⚙️ Miscellaneous Tasks
+
+- *(test)* Cleanup unused imports
+- Release v0.2.16
 
 ### Build
 
 - Add icon for win32 build
+- *(deps)* Bump h2 from 0.4.3 to 0.4.4
 
 ## [0.2.15] - 2024-04-03
 
