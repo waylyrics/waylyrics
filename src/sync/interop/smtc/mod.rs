@@ -175,6 +175,9 @@ fn update_position(
     window: &crate::app::Window,
     timeline_properties: &GSMTCSessionTimelineProperties,
 ) -> Result<(), PlayerStatus> {
+    // days from 1601-01-01 to 1970-01-01
+    const UNIX_EPOCH_UNIVERSAL_TIME_DIFF_DAY: u64 = 134774;
+
     let position: Duration = timeline_properties
         .Position()
         .map_err(|e| {
@@ -183,9 +186,32 @@ fn update_position(
         })?
         .into();
     trace!("got position: {:.02}s", position.as_secs_f64());
-    let start = SystemTime::now()
-        .checked_sub(position)
-        .ok_or(PlayerStatus::Unsupported("Infinite Position"))?;
+    let start = match timeline_properties.LastUpdatedTime() {
+        Ok(update_time) => {
+            // UniversalTime is times of 100ns
+            // that since UTC 1601.01.01
+            let update_time_us = update_time.UniversalTime / 10;
+            // update_time - unix_univer_diff = time since unix epoch
+            let update_time = Duration::from_micros(update_time_us as _)
+                - Duration::from_secs(UNIX_EPOCH_UNIVERSAL_TIME_DIFF_DAY * 24 * 60 * 60);
+            SystemTime::UNIX_EPOCH
+                .checked_add(update_time)
+                .ok_or(PlayerStatus::Unsupported(
+                    "Bug from WinRT: infinite LastUpdateTime!",
+                ))?
+                .checked_sub(position)
+                .ok_or(PlayerStatus::Unsupported("Infinite position!"))?
+        }
+        Err(_) => SystemTime::now()
+            .checked_sub(position)
+            .ok_or(PlayerStatus::Unsupported("Infinite position!"))?,
+    };
+
+    debug!(
+        "start time: {:?}",
+        start.duration_since(SystemTime::UNIX_EPOCH)
+    );
+
     let offset = window.imp().lyric_offset_ms.get();
     let start_time = if offset.is_negative() {
         start.checked_sub(Duration::from_millis(offset.unsigned_abs()))
