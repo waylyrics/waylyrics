@@ -155,6 +155,16 @@ fn build_ui(app: &Application) -> Result<()> {
 
     setup_providers(lyric_search_source);
 
+    #[cfg(target_os = "windows")]
+    // workaround for a GTK4 bug:
+    // GTK4 will freeze on close request on windows
+    // so we just exit without actually call gtk_window_close
+    wind.connect_close_request(|wind| {
+        let save_state = wind.save_window_state();
+        log::info!("window state save status: {save_state:?}");
+        std::process::exit(0);
+    });
+
     MAIN_WINDOW.set(Some(wind));
     PLAYER_IDENTITY_BLACKLIST.set(player_identity_blacklist);
     PLAYER_NAME_BLACKLIST.set(player_name_blacklist);

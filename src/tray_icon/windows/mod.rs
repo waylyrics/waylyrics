@@ -1,6 +1,5 @@
 use anyhow::Result;
 use async_channel::Sender;
-use std::process;
 use tray_icon::{
     menu::{Menu, MenuEvent, MenuId, MenuItemBuilder},
     Icon, TrayIconBuilder,
@@ -62,7 +61,7 @@ fn menu_event_handler() {
                 let _ = play_action().send_blocking(PlayAction::SearchLyric);
             }
             EXIT => {
-                process::exit(0);
+                let _ = ui_action().send_blocking(UIAction::Quit);
             }
             SWITCH_DECORATION => {
                 let _ = ui_action().send_blocking(UIAction::SwitchDecoration);
