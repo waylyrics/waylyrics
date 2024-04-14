@@ -44,7 +44,7 @@ glib-macros = "0.19.2"
 # lyric providers + parse
 ncmapi = { git = "https://github.com/waylyrics/ncmapi-rs.git", rev = "6095abf7" }
 qqmusic-rs = { git = "https://github.com/waylyrics/qqmusic-rs.git", rev = "22e66ba" }
-lrc-nom = "0.2.0"
+lrc-nom = "0.3.0"
 
 # logging
 tracing = "0.1.40"
@@ -102,7 +102,7 @@ mpris = "2.0.1"
 
 [target.'cfg(target_os = "windows")'.dependencies]
 tray-icon = { version = "0.13.4", optional = true }
-windows = { version = "0.54.0", features = [
+windows = { version = "0.56.0", features = [
     # SMTC
     "Media_Control",
     "Foundation_Collections",
