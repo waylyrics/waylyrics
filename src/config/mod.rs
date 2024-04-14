@@ -64,6 +64,9 @@ pub struct Config {
     /// otherwise it just show nothing
     pub show_default_text_on_idle: bool,
 
+    /// if enabled, waylyrics will show lyric on `Pause`
+    pub show_lyric_on_pause: bool,
+
     /// whether to run tray-icon service
     #[cfg(feature = "tray-icon")]
     pub show_tray_icon: bool,
@@ -122,6 +125,7 @@ impl Default for Config {
             qqmusic_api_base_url: None,
             lyric_search_source: vec![Netease.unique_name().into()],
             show_default_text_on_idle: true,
+            show_lyric_on_pause: true,
             #[cfg(feature = "tray-icon")]
             show_tray_icon: true,
             player_name_blacklist: vec!["firefox".into()],

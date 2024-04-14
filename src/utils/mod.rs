@@ -14,12 +14,12 @@ pub fn gettext(msg: impl Into<String>) -> String {
     return msg.into();
 }
 
-pub fn reset_lyric_labels(window: &Window) {
-    let tip = if window.imp().show_default_text_on_idle.get() {
+pub fn reset_lyric_labels(window: &Window, tip: Option<&str>) {
+    let tip = tip.unwrap_or(if window.imp().show_default_text_on_idle.get() {
         DEFAULT_TEXT
     } else {
         ""
-    };
+    });
 
     get_label(window, "above").set_label(tip);
     get_label(window, "below").set_label("");

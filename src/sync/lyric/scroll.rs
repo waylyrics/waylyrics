@@ -9,6 +9,7 @@ use crate::config::LyricDisplayMode;
 use crate::lyric_providers::{LyricLineOwned, LyricOwned};
 
 use crate::sync::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
+use crate::utils::reset_lyric_labels;
 
 pub fn register_lyric_display(app: WeakRef<app::Window>, interval: Duration) {
     glib::timeout_add_local_full(interval, Priority::HIGH, move || {
@@ -16,16 +17,17 @@ pub fn register_lyric_display(app: WeakRef<app::Window>, interval: Duration) {
             return ControlFlow::Break;
         };
 
-        if TRACK_PLAYING_STATE.with_borrow(
+        let (paused, metainfo_not_found) = TRACK_PLAYING_STATE.with_borrow(
             |TrackState {
                  metainfo, paused, ..
-             }| *paused || metainfo.is_none(),
-        ) {
-            // no music is playing
+             }| (*paused, metainfo.is_none()),
+        );
+
+        if metainfo_not_found {
             return ControlFlow::Continue;
         }
 
-        refresh_lyric(&window);
+        refresh_lyric(&window, paused);
 
         ControlFlow::Continue
     });
@@ -65,7 +67,12 @@ fn set_lyric(window: &app::Window, text: Option<&LyricLineOwned>, position: &str
     get_label(window, position).set_label(text);
 }
 
-pub fn refresh_lyric(window: &app::Window) {
+pub fn refresh_lyric(window: &app::Window, paused: bool) {
+    if paused && !window.imp().show_lyric_on_pause.get() {
+        reset_lyric_labels(window, Some(""));
+        return;
+    }
+
     LYRIC.with_borrow(
         |LyricState {
              origin,

@@ -95,6 +95,7 @@ fn build_ui(app: &Application) -> Result<()> {
         qqmusic_api_base_url,
         lyric_search_source,
         show_default_text_on_idle,
+        show_lyric_on_pause,
         #[cfg(feature = "tray-icon")]
         show_tray_icon,
         player_name_blacklist,
@@ -134,6 +135,7 @@ fn build_ui(app: &Application) -> Result<()> {
         cache_lyrics,
         parse_time(length_toleration)?.as_millis(),
         show_default_text_on_idle,
+        show_lyric_on_pause,
     );
 
     register_sync_task(ObjectExt::downgrade(app), player_sync_interval);

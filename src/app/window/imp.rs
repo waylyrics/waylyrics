@@ -25,6 +25,7 @@ pub struct Window {
     pub lyric_align: Cell<Align>,
     pub lyric_display_mode: Cell<LyricDisplayMode>,
     pub show_default_text_on_idle: Cell<bool>,
+    pub show_lyric_on_pause: Cell<bool>,
 
     pub lyric_start: Cell<Option<SystemTime>>,
     pub lyric_offset_ms: Cell<i64>,

@@ -19,7 +19,10 @@ use crate::{
     log::*,
     sync::{
         interop::PlayerStatus,
-        lyric::{cache::{self, get_cache_path}, fetch},
+        lyric::{
+            cache::{self, get_cache_path},
+            fetch,
+        },
         utils::clean_lyric,
         TrackMeta, TrackState, TRACK_PLAYING_STATE,
     },
@@ -66,7 +69,7 @@ pub fn register_sync_task(app: WeakRef<Application>, interval: Duration) {
         match try_sync_track(&window) {
             Err(PlayerStatus::Missing) => {
                 reconnect_player();
-                reset_lyric_labels(&window);
+                reset_lyric_labels(&window, None);
                 clean_lyric(&window);
                 TRACK_PLAYING_STATE.take();
             }
@@ -81,7 +84,7 @@ pub fn register_sync_task(app: WeakRef<Application>, interval: Duration) {
                 TRACK_PLAYING_STATE.with_borrow_mut(|TrackState { paused, .. }| *paused = true)
             }
             Err(PlayerStatus::Stopped) => {
-                reset_lyric_labels(&window);
+                reset_lyric_labels(&window, None);
                 clean_lyric(&window);
                 TRACK_PLAYING_STATE.take();
             }

@@ -83,7 +83,7 @@ pub fn register_refetch_lyric(app: &Application, window: &app::Window, trigger: 
             let Some(wind) = MAIN_WINDOW.with_borrow(|wind| wind.as_ref().cloned()) else {
                 return;
             };
-            reset_lyric_labels(&wind);
+            reset_lyric_labels(&wind, None);
             if let Err(err) = update_lyric(&metainfo, &wind, true).await {
                 show_dialog(
                     Some(&wind),
@@ -115,7 +115,7 @@ pub fn register_remove_lyric(app: &Application, wind: &app::Window) {
             });
         }
         // Remove current lyric inside window
-        reset_lyric_labels(&window);
+        reset_lyric_labels(&window, None);
         info!("removed lyric");
     }));
     app.add_action(&action);

@@ -18,6 +18,7 @@ pub fn build_main_window(
     cache_lyrics: bool,
     length_toleration_ms: u128,
     show_default_text_on_idle: bool,
+    show_lyric_on_pause: bool,
 ) -> Window {
     let window = Window::new(
         app,
@@ -74,6 +75,7 @@ pub fn build_main_window(
         .imp()
         .show_default_text_on_idle
         .set(show_default_text_on_idle);
+    window.imp().show_lyric_on_pause.set(show_lyric_on_pause);
     window
 }
 
