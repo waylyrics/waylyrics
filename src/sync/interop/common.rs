@@ -88,7 +88,7 @@ pub fn register_sync_task(app: WeakRef<Application>, interval: Duration) {
                 clean_lyric(&window);
                 TRACK_PLAYING_STATE.take();
             }
-            _ => (),
+            _ => TRACK_PLAYING_STATE.with_borrow_mut(|TrackState { paused, .. }| *paused = false),
         }
 
         glib::ControlFlow::Continue
