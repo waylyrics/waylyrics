@@ -6,6 +6,7 @@ use gtk::subclass::prelude::ObjectSubclassIsExt;
 
 use crate::app::{self, get_label};
 use crate::config::LyricDisplayMode;
+use crate::log::*;
 use crate::lyric_providers::{LyricLineOwned, LyricOwned};
 
 use crate::sync::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
@@ -27,6 +28,7 @@ pub fn register_lyric_display(app: WeakRef<app::Window>, interval: Duration) {
             return ControlFlow::Continue;
         }
 
+        trace!("refresh lyric with paused = {paused}");
         refresh_lyric(&window, paused);
 
         ControlFlow::Continue

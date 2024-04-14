@@ -1,4 +1,3 @@
-use crate::log::*;
 use mpris::{PlaybackStatus, Player, PlayerFinder};
 
 use crate::{PLAYER_IDENTITY_BLACKLIST, PLAYER_NAME_BLACKLIST};

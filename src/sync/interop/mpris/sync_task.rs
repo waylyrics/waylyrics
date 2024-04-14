@@ -109,13 +109,13 @@ pub fn try_sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
             let Some(window) = window.upgrade() else {
                 return;
             };
-            reset_lyric_labels(&window);
+            reset_lyric_labels(&window, None);
             if let Err(e) = update_lyric(&meta, &window, false).await {
                 error!("{e} occurs fetching lyric")
             }
         });
     }
 
-    refresh_lyric(window);
+    refresh_lyric(window, false);
     Ok(())
 }
