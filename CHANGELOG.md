@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.18] - 2024-04-14
+
+### 🚀 Features
+
+- Hide lyric on pause
+
+### 🐛 Bug Fixes
+
+- Set paused as false after resumed to playing
+
+### 📚 Documentation
+
+- *(changelog)* Update changelog
+
+### ⚙️ Miscellaneous Tasks
+
+- Release v0.2.18
+
+### Log
+
+- Print control status at trace level
+
 ## [0.2.17] - 2024-04-09
 
 ### 🚀 Features
