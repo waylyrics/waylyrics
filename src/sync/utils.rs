@@ -127,10 +127,10 @@ pub fn fuzzy_match_song(
     let album_likelihood = || distance(album.unwrap_or_default(), r_album.unwrap_or_default());
     match (singer, album) {
         (Some(_), Some(_)) => {
-            title_likelihood * 0.6 + singer_likelihood() * 0.3 + album_likelihood() * 0.1
+            title_likelihood * 0.4 + singer_likelihood() * 0.2 + album_likelihood() * 0.4
         }
         (Some(_), None) => title_likelihood * 0.7 + singer_likelihood() * 0.3,
-        (None, Some(_)) => title_likelihood * 0.9 + album_likelihood() * 0.1,
+        (None, Some(_)) => title_likelihood * 0.8 + album_likelihood() * 0.2,
         (None, None) => title_likelihood,
     }
 }
