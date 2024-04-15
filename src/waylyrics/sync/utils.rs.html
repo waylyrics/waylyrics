@@ -265,10 +265,10 @@
     <span class="kw">let </span>album_likelihood = || distance(album.unwrap_or_default(), r_album.unwrap_or_default());
     <span class="kw">match </span>(singer, album) {
         (<span class="prelude-val">Some</span>(<span class="kw">_</span>), <span class="prelude-val">Some</span>(<span class="kw">_</span>)) =&gt; {
-            title_likelihood * <span class="number">0.6 </span>+ singer_likelihood() * <span class="number">0.3 </span>+ album_likelihood() * <span class="number">0.1
+            title_likelihood * <span class="number">0.4 </span>+ singer_likelihood() * <span class="number">0.2 </span>+ album_likelihood() * <span class="number">0.4
         </span>}
         (<span class="prelude-val">Some</span>(<span class="kw">_</span>), <span class="prelude-val">None</span>) =&gt; title_likelihood * <span class="number">0.7 </span>+ singer_likelihood() * <span class="number">0.3</span>,
-        (<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="kw">_</span>)) =&gt; title_likelihood * <span class="number">0.9 </span>+ album_likelihood() * <span class="number">0.1</span>,
+        (<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="kw">_</span>)) =&gt; title_likelihood * <span class="number">0.8 </span>+ album_likelihood() * <span class="number">0.2</span>,
         (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; title_likelihood,
     }
 }
