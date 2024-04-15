@@ -5,6 +5,7 @@
   - [Debian-based](#debian-based)
   - [Arch-based](#arch-based)
   - [Other RPM-based disturbution](#other-rpm-based-disturbution)
+  - [Windows](#windows)
 - [Build](#build)
   - [With stable toolchain](#with-stable-toolchain)
   - [With nightly toolchain](#with-nightly-toolchain)
@@ -58,6 +59,8 @@ cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pan
 To setup gtk4, please check [gtk book](https://gtk-rs.org/gtk4-rs/stable/latest/book/installation_windows.html#install-gtk-4).
 
 Also you need to pass `--no-default-features` if not using a `-gnu` target because gettext-rs doesn't support Windows MSVC for now.
+
+For `opencc`, you should copy their precompiled release to `%systemdrive%\gtk-build\gtk\x64\release`
 
 # Build
 

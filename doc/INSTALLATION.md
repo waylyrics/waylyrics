@@ -5,6 +5,7 @@
   - [Debian-based](#debian-based)
   - [Arch-based](#arch-based)
   - [其他RPM系发行版：](#其他rpm系发行版)
+  - [Windows](#windows)
 - [编译](#编译)
   - [使用 stable 工具链](#使用-stable-工具链)
   - [使用 nightly 工具链](#使用-nightly-工具链)
@@ -59,6 +60,8 @@ cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pan
 请查阅 [gtk book](https://gtk-rs.org/gtk4-rs/stable/latest/book/installation_windows.html#install-gtk-4) 安装 gtk4
 
 如果要使用 MSVC 请启用 `--no-default-features` ，gettext-rs 不支持 Windows MSVC 编译
+
+对于 `opencc` ，则需要你复制他们的预构建发布至 `%systemdrive%\gtk-build\gtk\x64\release` 。
 
 # 编译
 

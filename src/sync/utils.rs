@@ -3,7 +3,7 @@ use std::{path::PathBuf, time::Duration};
 use gtk::subclass::prelude::*;
 use sorensen::distance;
 
-use crate::log::trace;
+use crate::log::*;
 use crate::{app, lyric_providers::SongInfo};
 
 use super::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
@@ -34,15 +34,35 @@ pub fn match_likely_lyric<'a>(
         .or_else(|| {
             // if we get only title, it is likely
             // the player is giving messy title, which is not applicable
-            // to fuzzt-match. so we skip fuzzy-match and use
+            // to fuzzy-match. so we skip fuzzy-match and use
             // the first result instead
             if album.is_none() && singer.is_none() {
                 return None;
             }
 
+            #[cfg(feature = "opencc")]
+            let Ok(opencc) = opencc_rust::OpenCC::new("t2s.json") else {
+                error!("opencc enabled but missing t2s.json dictionary");
+                return None;
+            };
+
+            #[cfg(feature = "opencc")]
+            let title: Vec<char> = opencc.convert(title).chars().collect();
+            #[cfg(not(feature = "opencc"))]
             let title: Vec<char> = title.chars().collect();
-            let album: Option<Vec<char>> = album.map(|a| a.chars().collect());
-            let singer: Option<Vec<char>> = singer.map(|s| s.chars().collect());
+
+            let album: Option<Vec<char>> = album.map(|a| {
+                #[cfg(feature = "opencc")]
+                return opencc.convert(a).chars().collect();
+                #[cfg(not(feature = "opencc"))]
+                return a.chars().collect();
+            });
+            let singer: Option<Vec<char>> = singer.map(|s| {
+                #[cfg(feature = "opencc")]
+                return opencc.convert(s).chars().collect();
+                #[cfg(not(feature = "opencc"))]
+                return s.chars().collect();
+            });
             search_result
                 .iter()
                 .map(
@@ -56,11 +76,23 @@ pub fn match_likely_lyric<'a>(
                             &title,
                             album.as_deref(),
                             singer.as_deref(),
+                            #[cfg(feature = "opencc")]
+                            &opencc.convert(r_title).chars().collect::<Vec<_>>(),
+                            #[cfg(feature = "opencc")]
+                            r_album
+                                .as_ref()
+                                .map(|a| opencc.convert(a).chars().collect::<Vec<_>>())
+                                .as_deref(),
+                            #[cfg(feature = "opencc")]
+                            &opencc.convert(r_singer).chars().collect::<Vec<_>>(),
+                            #[cfg(not(feature = "opencc"))]
                             &r_title.chars().collect::<Vec<_>>(),
+                            #[cfg(not(feature = "opencc"))]
                             r_album
                                 .as_ref()
                                 .map(|a| a.chars().collect::<Vec<_>>())
                                 .as_deref(),
+                            #[cfg(not(feature = "opencc"))]
                             &r_singer.chars().collect::<Vec<_>>(),
                         );
                         trace!("p={likelihood} for {s:?}");
@@ -92,8 +124,7 @@ pub fn fuzzy_match_song(
 ) -> f64 {
     let title_likelihood = distance(title, r_title);
     let singer_likelihood = || distance(singer.unwrap_or_default(), r_singer);
-    let album_likelihood =
-        || distance(album.unwrap_or_default(), r_album.unwrap_or_default());
+    let album_likelihood = || distance(album.unwrap_or_default(), r_album.unwrap_or_default());
     match (singer, album) {
         (Some(_), Some(_)) => {
             title_likelihood * 0.6 + singer_likelihood() * 0.3 + album_likelihood() * 0.1

@@ -2213,6 +2213,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3fdb12b2476b595f9358c5161aa467c2438859caa136dec86c26fdd2efe17b92"
 
 [[package]]
+name = "opencc-rust"
+version = "1.1.18"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "93236c9c3fb3e36c0cf4467731aabf338fd4831d4fad072a47cb2d4757e47303"
+dependencies = [
+ "libc",
+ "pkg-config",
+]
+
+[[package]]
 name = "openssl"
 version = "0.10.64"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3813,6 +3823,7 @@ dependencies = [
  "mpris",
  "ncmapi",
  "once_cell",
+ "opencc-rust",
  "qqmusic-rs",
  "regex",
  "reqwest",
