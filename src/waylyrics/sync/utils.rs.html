@@ -105,12 +105,43 @@
 <a href="#103" id="103">103</a>
 <a href="#104" id="104">104</a>
 <a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{path::PathBuf, time::Duration};
 
 <span class="kw">use </span>gtk::subclass::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>sorensen::distance;
 
-<span class="kw">use </span><span class="kw">crate</span>::log::trace;
+<span class="kw">use </span><span class="kw">crate</span>::log::<span class="kw-2">*</span>;
 <span class="kw">use crate</span>::{app, lyric_providers::SongInfo};
 
 <span class="kw">use super</span>::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
@@ -141,15 +172,35 @@
         .or_else(|| {
             <span class="comment">// if we get only title, it is likely
             // the player is giving messy title, which is not applicable
-            // to fuzzt-match. so we skip fuzzy-match and use
+            // to fuzzy-match. so we skip fuzzy-match and use
             // the first result instead
             </span><span class="kw">if </span>album.is_none() &amp;&amp; singer.is_none() {
                 <span class="kw">return </span><span class="prelude-val">None</span>;
             }
 
-            <span class="kw">let </span>title: Vec&lt;char&gt; = title.chars().collect();
-            <span class="kw">let </span>album: <span class="prelude-ty">Option</span>&lt;Vec&lt;char&gt;&gt; = album.map(|a| a.chars().collect());
-            <span class="kw">let </span>singer: <span class="prelude-ty">Option</span>&lt;Vec&lt;char&gt;&gt; = singer.map(|s| s.chars().collect());
+            <span class="attr">#[cfg(feature = <span class="string">"opencc"</span>)]
+            </span><span class="kw">let </span><span class="prelude-val">Ok</span>(opencc) = opencc_rust::OpenCC::new(<span class="string">"t2s.json"</span>) <span class="kw">else </span>{
+                <span class="macro">error!</span>(<span class="string">"opencc enabled but missing t2s.json dictionary"</span>);
+                <span class="kw">return </span><span class="prelude-val">None</span>;
+            };
+
+            <span class="attr">#[cfg(feature = <span class="string">"opencc"</span>)]
+            </span><span class="kw">let </span>title: Vec&lt;char&gt; = opencc.convert(title).chars().collect();
+            <span class="attr">#[cfg(not(feature = <span class="string">"opencc"</span>))]
+            </span><span class="kw">let </span>title: Vec&lt;char&gt; = title.chars().collect();
+
+            <span class="kw">let </span>album: <span class="prelude-ty">Option</span>&lt;Vec&lt;char&gt;&gt; = album.map(|a| {
+                <span class="attr">#[cfg(feature = <span class="string">"opencc"</span>)]
+                </span><span class="kw">return </span>opencc.convert(a).chars().collect();
+                <span class="attr">#[cfg(not(feature = <span class="string">"opencc"</span>))]
+                </span><span class="kw">return </span>a.chars().collect();
+            });
+            <span class="kw">let </span>singer: <span class="prelude-ty">Option</span>&lt;Vec&lt;char&gt;&gt; = singer.map(|s| {
+                <span class="attr">#[cfg(feature = <span class="string">"opencc"</span>)]
+                </span><span class="kw">return </span>opencc.convert(s).chars().collect();
+                <span class="attr">#[cfg(not(feature = <span class="string">"opencc"</span>))]
+                </span><span class="kw">return </span>s.chars().collect();
+            });
             search_result
                 .iter()
                 .map(
@@ -163,12 +214,24 @@
                             <span class="kw-2">&amp;</span>title,
                             album.as_deref(),
                             singer.as_deref(),
-                            <span class="kw-2">&amp;</span>r_title.chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
-                            r_album
+                            <span class="attr">#[cfg(feature = <span class="string">"opencc"</span>)]
+                            </span><span class="kw-2">&amp;</span>opencc.convert(r_title).chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
+                            <span class="attr">#[cfg(feature = <span class="string">"opencc"</span>)]
+                            </span>r_album
+                                .as_ref()
+                                .map(|a| opencc.convert(a).chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;())
+                                .as_deref(),
+                            <span class="attr">#[cfg(feature = <span class="string">"opencc"</span>)]
+                            </span><span class="kw-2">&amp;</span>opencc.convert(r_singer).chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
+                            <span class="attr">#[cfg(not(feature = <span class="string">"opencc"</span>))]
+                            </span><span class="kw-2">&amp;</span>r_title.chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
+                            <span class="attr">#[cfg(not(feature = <span class="string">"opencc"</span>))]
+                            </span>r_album
                                 .as_ref()
                                 .map(|a| a.chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;())
                                 .as_deref(),
-                            <span class="kw-2">&amp;</span>r_singer.chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
+                            <span class="attr">#[cfg(not(feature = <span class="string">"opencc"</span>))]
+                            </span><span class="kw-2">&amp;</span>r_singer.chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
                         );
                         <span class="macro">trace!</span>(<span class="string">"p={likelihood} for {s:?}"</span>);
                         (s, likelihood)
@@ -199,8 +262,7 @@
 ) -&gt; f64 {
     <span class="kw">let </span>title_likelihood = distance(title, r_title);
     <span class="kw">let </span>singer_likelihood = || distance(singer.unwrap_or_default(), r_singer);
-    <span class="kw">let </span>album_likelihood =
-        || distance(album.unwrap_or_default(), r_album.unwrap_or_default());
+    <span class="kw">let </span>album_likelihood = || distance(album.unwrap_or_default(), r_album.unwrap_or_default());
     <span class="kw">match </span>(singer, album) {
         (<span class="prelude-val">Some</span>(<span class="kw">_</span>), <span class="prelude-val">Some</span>(<span class="kw">_</span>)) =&gt; {
             title_likelihood * <span class="number">0.6 </span>+ singer_likelihood() * <span class="number">0.3 </span>+ album_likelihood() * <span class="number">0.1
