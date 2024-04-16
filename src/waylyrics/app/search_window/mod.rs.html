@@ -393,6 +393,18 @@
 <a href="#391" id="391">391</a>
 <a href="#392" id="392">392</a>
 <a href="#393" id="393">393</a>
+<a href="#394" id="394">394</a>
+<a href="#395" id="395">395</a>
+<a href="#396" id="396">396</a>
+<a href="#397" id="397">397</a>
+<a href="#398" id="398">398</a>
+<a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>imp;
 
 <span class="kw">use </span>std::sync::Arc;
@@ -519,7 +531,7 @@
             .set_placeholder_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Enter album..."</span>)));
         imp.input_album.set_tooltip_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"album"</span>)));
         imp.input_artists
-            .set_placeholder_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Enter artists..."</span>)));
+            .set_placeholder_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Enter artists split by '/'..."</span>)));
         imp.input_artists
             .set_tooltip_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"artists"</span>)));
 
@@ -533,12 +545,13 @@
     }
 
     <span class="kw">async fn </span>search(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="kw">let </span>buffer = <span class="self">self</span>.imp().input_title.buffer();
-        <span class="kw">let </span>query_title = Arc::new(buffer.text().to_string());
-        <span class="kw">let </span>buffer = <span class="self">self</span>.imp().input_album.buffer();
-        <span class="kw">let </span>query_album = Arc::new(buffer.text().to_string());
-        <span class="kw">let </span>buffer = <span class="self">self</span>.imp().input_artists.buffer();
-        <span class="kw">let </span>query_artists = Arc::new(buffer.text().to_string());
+        <span class="kw">let </span>title = <span class="self">self</span>.imp().input_title.buffer();
+        <span class="kw">let </span>query_title = Arc::new(title.text().to_string());
+        <span class="kw">let </span>album = <span class="self">self</span>.imp().input_album.buffer();
+        <span class="kw">let </span>query_album = Arc::new(album.text().to_string());
+        <span class="kw">let </span>artists = <span class="self">self</span>.imp().input_artists.buffer();
+        <span class="kw">let </span>query_artists = Arc::new(artists.text().to_string());
+
         <span class="kw">if </span>[<span class="kw-2">&amp;</span>query_album, <span class="kw-2">&amp;</span>query_artists, <span class="kw-2">&amp;</span>query_title]
             .iter()
             .all(|q| q.is_empty())
@@ -553,24 +566,35 @@
 
         <span class="kw">let </span>_title = query_title.clone();
         <span class="kw">let </span>_album = query_album.clone();
-        <span class="kw">let </span>_artists = query_artists.clone();
+        <span class="kw">let </span>_artists = Arc::new(
+            query_artists
+                .split(<span class="string">"/"</span>)
+                .map(|s| s.trim())
+                .map(str::to_owned)
+                .collect::&lt;Vec&lt;String&gt;&gt;(),
+        );
         <span class="kw">let </span><span class="kw-2">mut </span>results = <span class="macro">tokio_spawn!</span>(<span class="kw">async move </span>{
             <span class="kw">let </span><span class="kw-2">mut </span>set = JoinSet::new();
-            <span class="kw">let </span>query = <span class="macro">format!</span>(<span class="string">"{_title} {_album} {_artists}"</span>);
             <span class="kw">for </span>(idx, provider) <span class="kw">in </span>providers.iter().enumerate() {
-                <span class="kw">let </span>query = query.clone();
                 <span class="kw">let </span>provider_id = provider.unique_name();
-                set.spawn(
-                    <span class="kw">async move </span>{ (provider.search_song(<span class="kw-2">&amp;</span>query).<span class="kw">await</span>, provider_id, idx, query) },
-                );
+                <span class="kw">let </span>album = _album.clone();
+                <span class="kw">let </span>title = _title.clone();
+                <span class="kw">let </span>artists = _artists.clone();
+                set.spawn(<span class="kw">async move </span>{
+                    <span class="kw">let </span>artists = artists.iter().map(|a| <span class="kw-2">&amp;**</span>a).collect::&lt;Vec&lt;<span class="kw-2">&amp;</span>str&gt;&gt;();
+                    <span class="kw">let </span>result = provider
+                        .search_song_detailed(<span class="kw-2">&amp;</span>album, <span class="kw-2">&amp;</span>artists, <span class="kw-2">&amp;</span>title)
+                        .<span class="kw">await</span>;
+                    (result, provider_id, idx, title)
+                });
             }
 
-            <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>((search_result, provider_name, idx, query))) = set.join_next().<span class="kw">await </span>{
+            <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>((search_result, provider_name, idx, title))) = set.join_next().<span class="kw">await </span>{
                 <span class="kw">let </span>tracks = <span class="kw">match </span>search_result {
                     <span class="prelude-val">Ok</span>(songs) =&gt; songs,
                     <span class="prelude-val">Err</span>(e) =&gt; {
                         <span class="comment">// TODO: to show errors to users in GUI
-                        </span><span class="macro">error!</span>(<span class="string">"{e} occurs when search {query} on {}"</span>, provider_name);
+                        </span><span class="macro">error!</span>(<span class="string">"{e} occurs when searching {title} on {}"</span>, provider_name);
                         <span class="kw">continue</span>;
                     }
                 };
