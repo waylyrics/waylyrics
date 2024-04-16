@@ -124,7 +124,7 @@ impl Window {
             .set_placeholder_text(Some(&gettext("Enter album...")));
         imp.input_album.set_tooltip_text(Some(&gettext("album")));
         imp.input_artists
-            .set_placeholder_text(Some(&gettext("Enter artists...")));
+            .set_placeholder_text(Some(&gettext("Enter artists split by '/'...")));
         imp.input_artists
             .set_tooltip_text(Some(&gettext("artists")));
 
@@ -138,12 +138,13 @@ impl Window {
     }
 
     async fn search(&self) {
-        let buffer = self.imp().input_title.buffer();
-        let query_title = Arc::new(buffer.text().to_string());
-        let buffer = self.imp().input_album.buffer();
-        let query_album = Arc::new(buffer.text().to_string());
-        let buffer = self.imp().input_artists.buffer();
-        let query_artists = Arc::new(buffer.text().to_string());
+        let title = self.imp().input_title.buffer();
+        let query_title = Arc::new(title.text().to_string());
+        let album = self.imp().input_album.buffer();
+        let query_album = Arc::new(album.text().to_string());
+        let artists = self.imp().input_artists.buffer();
+        let query_artists = Arc::new(artists.text().to_string());
+
         if [&query_album, &query_artists, &query_title]
             .iter()
             .all(|q| q.is_empty())
@@ -158,24 +159,35 @@ impl Window {
 
         let _title = query_title.clone();
         let _album = query_album.clone();
-        let _artists = query_artists.clone();
+        let _artists = Arc::new(
+            query_artists
+                .split("/")
+                .map(|s| s.trim())
+                .map(str::to_owned)
+                .collect::<Vec<String>>(),
+        );
         let mut results = tokio_spawn!(async move {
             let mut set = JoinSet::new();
-            let query = format!("{_title} {_album} {_artists}");
             for (idx, provider) in providers.iter().enumerate() {
-                let query = query.clone();
                 let provider_id = provider.unique_name();
-                set.spawn(
-                    async move { (provider.search_song(&query).await, provider_id, idx, query) },
-                );
+                let album = _album.clone();
+                let title = _title.clone();
+                let artists = _artists.clone();
+                set.spawn(async move {
+                    let artists = artists.iter().map(|a| &**a).collect::<Vec<&str>>();
+                    let result = provider
+                        .search_song_detailed(&album, &artists, &title)
+                        .await;
+                    (result, provider_id, idx, title)
+                });
             }
 
-            while let Some(Ok((search_result, provider_name, idx, query))) = set.join_next().await {
+            while let Some(Ok((search_result, provider_name, idx, title))) = set.join_next().await {
                 let tracks = match search_result {
                     Ok(songs) => songs,
                     Err(e) => {
                         // TODO: to show errors to users in GUI
-                        error!("{e} occurs when search {query} on {}", provider_name);
+                        error!("{e} occurs when searching {title} on {}", provider_name);
                         continue;
                     }
                 };
