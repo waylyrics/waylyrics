@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["ARTIST_ALIASES"],"static":["ARTIST_ALIAS_MAP"]};

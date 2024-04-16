@@ -159,8 +159,8 @@
             .into(),
     );
 
-    std::fs::create_dir_all(<span class="kw-2">&amp;</span>config_home)<span class="question-mark">?</span>;
-    std::fs::create_dir_all(<span class="kw-2">&amp;</span>cache_dir)<span class="question-mark">?</span>;
+    std::fs::create_dir_all(config_home)<span class="question-mark">?</span>;
+    std::fs::create_dir_all(cache_dir)<span class="question-mark">?</span>;
     <span class="kw">let </span>config_path = config_home.join(<span class="string">"config.toml"</span>);
     <span class="kw">let </span>user_theme_dir = proj_dirs.data_dir().join(<span class="string">"_themes"</span>);
 

@@ -204,15 +204,15 @@
                 ) =&gt; {
                     <span class="kw">let </span>translation = <span class="kw">crate</span>::lyric_providers::utils::find_next_lyric(
                         <span class="kw-2">&amp;</span>elapsed,
-                        <span class="kw-2">&amp;</span>translation_lyric,
+                        translation_lyric,
                     );
                     <span class="kw">let </span>origin =
-                        <span class="kw">crate</span>::lyric_providers::utils::find_next_lyric(<span class="kw-2">&amp;</span>elapsed, <span class="kw-2">&amp;</span>origin_lyric);
+                        <span class="kw">crate</span>::lyric_providers::utils::find_next_lyric(<span class="kw-2">&amp;</span>elapsed, origin_lyric);
                     set_lyric_with_mode(window, translation, origin);
                 }
                 (LyricOwned::LineTimestamp(origin_lyric), <span class="kw">_</span>) =&gt; {
                     <span class="kw">let </span>origin =
-                        <span class="kw">crate</span>::lyric_providers::utils::find_next_lyric(<span class="kw-2">&amp;</span>elapsed, <span class="kw-2">&amp;</span>origin_lyric);
+                        <span class="kw">crate</span>::lyric_providers::utils::find_next_lyric(<span class="kw-2">&amp;</span>elapsed, origin_lyric);
                     set_lyric_with_mode(window, <span class="prelude-val">None</span>, origin);
                 }
                 <span class="kw">_ </span>=&gt; (),

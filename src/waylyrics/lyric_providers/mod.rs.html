@@ -113,8 +113,13 @@
 <a href="#111" id="111">111</a>
 <a href="#112" id="112">112</a>
 <a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>utils;
 <span class="kw">use </span>anyhow::Result;
+
+<span class="kw">pub mod </span>dict;
 
 <span class="kw">pub mod </span>netease;
 <span class="kw">pub mod </span>qqmusic;
@@ -122,6 +127,7 @@
 <span class="kw">use </span>std::{fmt::Debug, time::Duration};
 
 <span class="kw">use </span>serde::{Deserialize, Serialize};
+
 
 <span class="attr">#[derive(Debug)]
 </span><span class="kw">pub enum </span>Lyric&lt;<span class="lifetime">'a</span>&gt; {
