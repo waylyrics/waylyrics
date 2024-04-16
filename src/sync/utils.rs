@@ -26,10 +26,10 @@ pub fn match_likely_lyric<'a>(
         .and_then(|leng| {
             search_result
                 .iter()
-                .find(|SongInfo { length, .. }| {
-                    length.as_millis().abs_diff(leng.as_millis()) <= length_toleration_ms
-                })
-                .map(|song| (song, 1))
+                .map(|song| (song, song.length.as_millis().abs_diff(leng.as_millis())))
+                .filter(|(_, length_diff)| *length_diff <= length_toleration_ms)
+                .min_by_key(|(_, length_diff)| *length_diff)
+                .map(|(s, _)| (s, 0))
         })
         .or_else(|| {
             // if we get only title, it is likely
@@ -100,7 +100,7 @@ pub fn match_likely_lyric<'a>(
                     },
                 )
                 .max_by_key(|(_, likelihood)| (likelihood * 1024.) as u32)
-                .map(|(s, _)| (s, 0))
+                .map(|(s, _)| (s, 1))
         })
         .or(search_result.first().map(|song| (song, 2)))
         .map(|(song, weight)| (song.id.as_str(), weight))
