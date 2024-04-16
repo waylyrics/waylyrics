@@ -1,12 +1,15 @@
 pub mod utils;
 use anyhow::Result;
 
+pub mod dict;
+
 pub mod netease;
 pub mod qqmusic;
 
 use std::{fmt::Debug, time::Duration};
 
 use serde::{Deserialize, Serialize};
+
 
 #[derive(Debug)]
 pub enum Lyric<'a> {

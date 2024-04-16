@@ -92,15 +92,15 @@ pub fn refresh_lyric(window: &app::Window, paused: bool) {
                 ) => {
                     let translation = crate::lyric_providers::utils::find_next_lyric(
                         &elapsed,
-                        &translation_lyric,
+                        translation_lyric,
                     );
                     let origin =
-                        crate::lyric_providers::utils::find_next_lyric(&elapsed, &origin_lyric);
+                        crate::lyric_providers::utils::find_next_lyric(&elapsed, origin_lyric);
                     set_lyric_with_mode(window, translation, origin);
                 }
                 (LyricOwned::LineTimestamp(origin_lyric), _) => {
                     let origin =
-                        crate::lyric_providers::utils::find_next_lyric(&elapsed, &origin_lyric);
+                        crate::lyric_providers::utils::find_next_lyric(&elapsed, origin_lyric);
                     set_lyric_with_mode(window, None, origin);
                 }
                 _ => (),

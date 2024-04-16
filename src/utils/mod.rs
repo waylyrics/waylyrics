@@ -69,8 +69,8 @@ pub fn init_dirs() -> Result<(PathBuf, PathBuf)> {
             .into(),
     );
 
-    std::fs::create_dir_all(&config_home)?;
-    std::fs::create_dir_all(&cache_dir)?;
+    std::fs::create_dir_all(config_home)?;
+    std::fs::create_dir_all(cache_dir)?;
     let config_path = config_home.join("config.toml");
     let user_theme_dir = proj_dirs.data_dir().join("_themes");
 

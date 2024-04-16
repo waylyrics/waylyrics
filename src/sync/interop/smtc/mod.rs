@@ -131,7 +131,7 @@ impl OsImp for GSMTC {
             // Playing
             4 => (),
             5 => Err(PlayerStatus::Paused)?,
-            s @ _ => panic!("unknown PlaybackStatus {s}!"),
+            s => panic!("unknown PlaybackStatus {s}!"),
         }
         let media_properties = media_properties(&session).map_err(|e| {
             error!("try_sync_track failed: {e}");

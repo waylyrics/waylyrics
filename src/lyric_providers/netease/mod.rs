@@ -10,7 +10,9 @@ use ncmapi::types::{LyricResp, SearchSongResp};
 
 use crate::tokio_spawn;
 
-use super::{default_search_query, Lyric, LyricLineOwned, LyricOwned, LyricStore};
+use super::{
+    default_search_query, dict::ARTIST_ALIAS_MAP, Lyric, LyricLineOwned, LyricOwned, LyricStore,
+};
 
 #[derive(Clone, Copy)]
 pub struct Netease;
@@ -31,7 +33,11 @@ impl super::LyricProvider for Netease {
         artists: &[&str],
         title: &str,
     ) -> Result<Vec<super::SongInfo>> {
-        let keyword = default_search_query(album, artists, title);
+        let artists = artists
+            .iter()
+            .map(|&a| *ARTIST_ALIAS_MAP.get(&*a.to_lowercase()).unwrap_or(&a))
+            .collect::<Vec<&str>>();
+        let keyword = default_search_query(album, &artists, title);
         self.search_song(&keyword).await
     }
 
