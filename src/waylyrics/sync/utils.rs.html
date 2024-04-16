@@ -167,7 +167,7 @@
                 .find(|SongInfo { length, .. }| {
                     length.as_millis().abs_diff(leng.as_millis()) &lt;= length_toleration_ms
                 })
-                .map(|song| (song, <span class="number">0</span>))
+                .map(|song| (song, <span class="number">1</span>))
         })
         .or_else(|| {
             <span class="comment">// if we get only title, it is likely
@@ -238,7 +238,7 @@
                     },
                 )
                 .max_by_key(|(<span class="kw">_</span>, likelihood)| (likelihood * <span class="number">1024.</span>) <span class="kw">as </span>u32)
-                .map(|(s, <span class="kw">_</span>)| (s, <span class="number">1</span>))
+                .map(|(s, <span class="kw">_</span>)| (s, <span class="number">0</span>))
         })
         .or(search_result.first().map(|song| (song, <span class="number">2</span>)))
         .map(|(song, weight)| (song.id.as_str(), weight))
