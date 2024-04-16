@@ -53,7 +53,7 @@ pub fn register_search_lyric(app: &Application, wind: &app::Window, trigger: &st
                             .iter()
                             .map(String::as_str)
                             .collect::<Vec<&str>>()
-                            .join(",")
+                            .join("/")
                     })
                     .unwrap_or_default();
                 let title = track.title.as_deref().unwrap_or_default().to_string();
