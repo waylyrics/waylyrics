@@ -40,7 +40,22 @@ pub const THEME_PRESETS_DIR: Option<&str> = option_env!("WAYLYRICS_THEME_PRESETS
 
 fn main() -> Result<glib::ExitCode> {
     #[cfg(feature = "i18n")]
-    let _ = gettextrs::TextDomain::new(waylyrics::PACKAGE_NAME).init();
+    {
+        let textdomain = gettextrs::TextDomain::new(waylyrics::PACKAGE_NAME);
+
+        #[cfg(target_os = "windows")]
+        let result = textdomain.push("../share").init();
+        #[cfg(not(target_os = "windows"))]
+        let result = textdomain.init();
+
+        match result {
+            Err(e) => log::error!("failed to bind textdomain: {e}"),
+            Ok(domain) => log::info!(
+                "bind to textdomain: {:?}",
+                domain.as_ref().map(|s| String::from_utf8_lossy(&s))
+            ),
+        }
+    }
 
     let registry = Registry::default()
         .with(

@@ -1,9 +1,6 @@
 /target
 
-config.toml
-style.css
-cache
-
 .vscode
-
 dhat.out.*
+
+*.mo

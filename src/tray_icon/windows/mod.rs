@@ -10,6 +10,7 @@ use tray_icon::{
 use crate::{
     app::actions::{UIAction, UI_ACTION},
     sync::{PlayAction, PLAY_ACTION},
+    utils::gettext,
 };
 
 const EXIT: &str = "exit";
@@ -34,27 +35,27 @@ pub fn start_tray_service() -> Result<()> {
 
 fn build_tray_menu() -> Result<Menu> {
     let search_lyric = MenuItemBuilder::new()
-        .text("Search lyric")
+        .text(gettext("Search lyric"))
         .id(SEARCH_LYRIC.into())
         .enabled(true)
         .build();
     let switch_decoration = MenuItemBuilder::new()
-        .text("Toggle decoration")
+        .text(gettext("Toggle Decoration"))
         .id(SWITCH_DECORATION.into())
         .enabled(true)
         .build();
     let switch_passthrough = MenuItemBuilder::new()
-        .text("Toggle passthrough")
+        .text(gettext("Toggle Passthrough"))
         .id(SWITCH_PASSTHROUGH.into())
         .enabled(true)
         .build();
     let restart = MenuItemBuilder::new()
-        .text("Restart")
+        .text(gettext("Restart"))
         .id(RESTART.into())
         .enabled(true)
         .build();
     let exit = MenuItemBuilder::new()
-        .text("Exit")
+        .text(gettext("Quit"))
         .id(EXIT.into())
         .enabled(true)
         .build();
