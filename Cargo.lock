@@ -3817,7 +3817,7 @@ checksum = "af190c94f2773fdb3729c55b007a722abb5384da03bc0986df4c289bf5567e96"
 
 [[package]]
 name = "waylyrics"
-version = "0.2.18"
+version = "0.2.19"
 dependencies = [
  "ahash 0.8.11",
  "anyhow",
