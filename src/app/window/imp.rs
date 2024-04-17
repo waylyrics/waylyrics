@@ -137,7 +137,7 @@ impl ObjectImpl for Window {
 
         for display_mode in <LyricDisplayMode as strum::IntoEnumIterator>::iter() {
             let display_mode_str = display_mode.to_string();
-            let item = MenuItem::new(Some(&gettext(&display_mode_str)), None);
+            let item = MenuItem::new(Some(&gettext(&display_mode_str).replace("_", "__")), None);
             item.set_action_and_target_value(
                 Some("win.set-display-mode"),
                 Some(&display_mode_str.to_variant()),
