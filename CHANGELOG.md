@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.19] - 2024-04-17
+
+### 🚀 Features
+
+- Convert zh-hans/zh-hant in fuzzy match with opencc
+- Use song_search_detailed in search box to apply aliases
+
+### 🐛 Bug Fixes
+
+- Use '/' as splitte on searchbox creating
+- Underscore not showing in display mode menu
+- *(i18n)* Load i18n on windows
+
+### 📚 Documentation
+
+- *(changelog)* Update changelog
+- *(build)* Gettext-rs on windows cannot builds out-of-box with MSVC
+
+### ⚙️ Miscellaneous Tasks
+
+- Bump dependencies
+- Release v0.2.19
+
+### Build
+
+- *(windows)* Add build script
+- Enable i18n for msvc build
+
+### Enhance
+
+- Fine-tune fuzzy match factor
+- Make fuzzy-match weight more than length based match
+- Apply alias for artist name on `netease`
+
 ## [0.2.18] - 2024-04-14
 
 ### 🚀 Features
