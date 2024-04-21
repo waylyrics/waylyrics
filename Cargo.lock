@@ -2075,9 +2075,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "ncmapi"
+name = "ncmapi2"
 version = "0.1.13"
-source = "git+https://github.com/waylyrics/ncmapi-rs.git?rev=6095abf7#6095abf7e54eedbb716676d311e0741b4ac2482e"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dcd3c218f2db46fc0b26ac6263d3005b96c82d5ebec0d349c3c902eef8bd660c"
 dependencies = [
  "aes",
  "base64",
@@ -2610,7 +2611,8 @@ dependencies = [
 [[package]]
 name = "qqmusic-rs"
 version = "0.1.0"
-source = "git+https://github.com/waylyrics/qqmusic-rs.git?rev=22e66ba#22e66ba62e63d97c6dffb45400655404e6f06b93"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c7698cb357cfa1a75f5a2071469345ede01a6c4ee83a2ff2a88f9e481893f341"
 dependencies = [
  "serde",
  "serde_json",
@@ -3835,7 +3837,7 @@ dependencies = [
  "md5",
  "mimalloc",
  "mpris",
- "ncmapi",
+ "ncmapi2",
  "once_cell",
  "opencc-rust",
  "qqmusic-rs",

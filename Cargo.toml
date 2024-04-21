@@ -42,8 +42,8 @@ gtk = { version = "0.8.0", package = "gtk4" }
 glib-macros = "0.19.2"
 
 # lyric providers + parse
-ncmapi = { git = "https://github.com/waylyrics/ncmapi-rs.git", rev = "6095abf7" }
-qqmusic-rs = { git = "https://github.com/waylyrics/qqmusic-rs.git", rev = "22e66ba" }
+ncmapi = { version = "0.1.13", package = "ncmapi2" }
+qqmusic-rs = { version = "0.1.0" }
 lrc-nom = "0.3.0"
 
 # logging
