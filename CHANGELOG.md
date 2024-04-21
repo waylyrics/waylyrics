@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.20] - 2024-04-21
+
+### 📚 Documentation
+
+- *(changelog)* Update changelog
+
+### ⚙️ Miscellaneous Tasks
+
+- Release v0.2.20
+
+### Build
+
+- Remove git dependencies
+
 ## [0.2.19] - 2024-04-17
 
 ### 🚀 Features
