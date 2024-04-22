@@ -70,8 +70,10 @@ fn set_lyric(window: &app::Window, text: Option<&LyricLineOwned>, position: &str
 }
 
 pub fn refresh_lyric(window: &app::Window, paused: bool) {
-    if paused && !window.imp().show_lyric_on_pause.get() {
-        reset_lyric_labels(window, Some(""));
+    if paused {
+        if !window.imp().show_lyric_on_pause.get() {
+            reset_lyric_labels(window, Some(""));
+        }
         return;
     }
 
