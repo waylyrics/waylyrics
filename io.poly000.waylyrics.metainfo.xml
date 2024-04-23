@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.poly000.waylyrics</id>
+  <name>Waylyrics</name>
+  <summary>The furry way to show desktop lyrics</summary>
+
+  <developer id="io.poly000">
+      <name>mokurin000</name>
+  </developer>
+
+  <url type="homepage">https://github.com/waylyrics/waylyrics</url>
+  <url type="bugtracker">https://github.com/waylyrics/waylyrics/issues</url>
+
+  <metadata_license>CC-BY-4.0</metadata_license>
+  <project_license>MIT</project_license>
+
+  <description>
+    <p>The furry way to show desktop lyrics</p>
+  </description>
+
+  <launchable type="desktop-id">io.poly000.waylyrics</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://github.com/waylyrics/waylyrics/raw/master/img/en-cn.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/waylyrics/waylyrics/raw/master/img/ja-cn.png</image>
+    </screenshot>
+  </screenshots>
+
+  <releases>
+    <release version="0.2.21" date="2024-04-23">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.2.21</url>
+        <description>
+            <p>Bug Fixes</p>
+                <ul>
+                    <li>Stop lyric update when show_lyric_on_pause not set on pause</li>
+                </ul>
+        </description>
+    </release>
+  </releases>
+  <content_rating type="oars-1.1"/>
+</component>
