@@ -11,17 +11,16 @@ mod utils;
 use utils::find_next_player;
 
 use crate::{
-    app,
-    utils::reset_lyric_labels,
-    glib_spawn,
-    sync::{TrackMeta, TRACK_PLAYING_STATE},
+    app, glib_spawn,
     sync::{
-        interop::PlayerStatus,
         interop::common::need_fetch_lyric,
         interop::common::update_lyric,
         interop::mpris::{PLAYER, PLAYER_FINDER},
+        interop::PlayerStatus,
         lyric::scroll::refresh_lyric,
     },
+    sync::{TrackMeta, TRACK_PLAYING_STATE},
+    utils::reset_lyric_labels,
 };
 
 use super::hint_from_player;
@@ -48,6 +47,18 @@ fn sync_position(player: &Player, window: &app::Window) -> Result<(), PlayerStat
         .ok_or(PlayerStatus::Unsupported(
             "Position is greater than SystemTime",
         ))?;
+
+    if let Some(s) = window.imp().lyric_start.get() {
+        let eplased = s.elapsed().unwrap_or_default();
+        let diff: String = if eplased > position {
+            format!("{:?}", eplased - position)
+        } else {
+            format!("-{:?}", position - eplased)
+        };
+        debug!("expected position: {:?}", s.elapsed());
+        debug!("actual position: {:?}", position);
+        debug!("diff (expected - actual): {}", diff);
+    }
 
     let offset = window.imp().lyric_offset_ms.get();
     let start = if offset.is_negative() {
