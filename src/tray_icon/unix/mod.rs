@@ -55,7 +55,7 @@ impl Tray for TrayIcon {
             }
             .into(),
             SubMenu {
-                label: gettext("Lyric Align"),
+                label: gettext("Lyric Alignment"),
                 icon_name: "format-justify-left".into(),
                 submenu: Align::iter()
                     .map(|lyric_align| {

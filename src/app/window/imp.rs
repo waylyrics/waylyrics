@@ -88,7 +88,7 @@ impl ObjectImpl for Window {
             &self.display_mode_menu,
         );
         ui_section.append_submenu(
-            Some(&gettext("Lyric Align")), //
+            Some(&gettext("Lyric Alignment")), //
             &self.align_mode_menu,
         );
         ui_section.append_item(&passthrough);

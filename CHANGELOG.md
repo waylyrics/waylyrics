@@ -341,7 +341,7 @@ All notable changes to this project will be documented in this file.
 
 - Only show set-lyric button when avaliable
 - Show icons on tray-icon menu
-- [**breaking**] Set lyric align mode on run time
+- [**breaking**] Set lyric alignment mode on run time
 
 ### 📚 Documentation
 
@@ -358,7 +358,7 @@ All notable changes to this project will be documented in this file.
 
 - Translate length to 时长
 - Translate display_mode
-- Translate lyric align
+- Translate lyric alignment
 
 ## [0.2.8] - 2024-02-20
 

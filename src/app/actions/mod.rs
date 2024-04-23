@@ -75,7 +75,7 @@ pub fn register_set_lyric_align(wind: &Window) {
             return;
         };
         let Ok(align): Result<Align, _> = align.parse() else {
-            error!("unknown lyric align: {align}");
+            error!("unknown lyric alignment: {align}");
             return;
         };
         set_lyric_align(&wind, align);

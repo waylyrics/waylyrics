@@ -19,7 +19,7 @@ pub enum UIAction {
     SwitchDecoration,
     /// set new lyric display mode
     SetDisplayMode(String),
-    /// set new lyric align mode
+    /// set new lyric alignment mode
     SetLyricAlign(String),
     /// Quit Waylyrics
     Quit,
