@@ -19,7 +19,7 @@
     </key>
     <key name="lyric-align-mode" type="s">
       <default>"Center"</default>
-      <summary>lyric align mode</summary>
+      <summary>lyric alignment mode</summary>
     </key>
     <key name="lyric-display-mode" type="s">
       <default>"show_both"</default>

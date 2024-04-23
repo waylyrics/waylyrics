@@ -103,7 +103,7 @@ msgid "Lyric Display Mode"
 msgstr "显示模式"
 
 #: ../src/app/window/imp.rs:91 ../src/tray_icon/unix/mod.rs:58
-msgid "Lyric Align"
+msgid "Lyric Alignment"
 msgstr "对齐方式"
 
 #: ../src/app/window/imp.rs:101 ../src/app/window/imp.rs:113
