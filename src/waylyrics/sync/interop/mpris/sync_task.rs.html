@@ -189,9 +189,9 @@
         } <span class="kw">else </span>{
             <span class="macro">format!</span>(<span class="string">"-{:?}"</span>, position - eplased)
         };
-        <span class="macro">debug!</span>(<span class="string">"expected position: {:?}"</span>, s.elapsed());
-        <span class="macro">debug!</span>(<span class="string">"actual position: {:?}"</span>, position);
-        <span class="macro">debug!</span>(<span class="string">"diff (expected - actual): {}"</span>, diff);
+        <span class="macro">trace!</span>(<span class="string">"expected position: {:?}"</span>, s.elapsed());
+        <span class="macro">trace!</span>(<span class="string">"actual position: {:?}"</span>, position);
+        <span class="macro">trace!</span>(<span class="string">"diff (expected - actual): {}"</span>, diff);
     }
 
     <span class="kw">let </span>offset = window.imp().lyric_offset_ms.get();
