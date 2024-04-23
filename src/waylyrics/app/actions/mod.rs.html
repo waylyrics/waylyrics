@@ -161,7 +161,7 @@
             <span class="kw">return</span>;
         };
         <span class="kw">let </span><span class="prelude-val">Ok</span>(align): <span class="prelude-ty">Result</span>&lt;Align, <span class="kw">_</span>&gt; = align.parse() <span class="kw">else </span>{
-            <span class="macro">error!</span>(<span class="string">"unknown lyric align: {align}"</span>);
+            <span class="macro">error!</span>(<span class="string">"unknown lyric alignment: {align}"</span>);
             <span class="kw">return</span>;
         };
         set_lyric_align(<span class="kw-2">&amp;</span>wind, align);
