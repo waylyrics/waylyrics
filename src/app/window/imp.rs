@@ -6,7 +6,7 @@ use gio::Settings;
 use glib_macros::clone;
 use gtk::gio::MenuItem;
 use gtk::glib::Propagation;
-use gtk::prelude::ToVariant;
+use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib, ApplicationWindow, PopoverMenu};
 use std::sync::OnceLock;
@@ -52,6 +52,8 @@ impl ObjectImpl for Window {
         // Load latest window state
         let obj = self.obj();
         obj.setup_settings();
+        // set titlebar before loading state: whether to show it is a state
+        obj.set_titlebar(Some(&self.headerbar));
         obj.load_window_state();
 
         self.headerbar.set_decoration_layout(Some("menu:close"));

@@ -26,7 +26,6 @@ impl Window {
         let window: Self = Object::builder().property("application", app).build();
         let imp = window.imp();
 
-        window.set_titlebar(Some(&imp.headerbar));
         window.set_widget_name("main-window");
 
         imp.cache_lyrics.set(cache_lyrics);
