@@ -153,7 +153,7 @@ fn build_ui(app: &Application) -> Result<()> {
         show_lyric_on_pause,
     );
 
-    register_sync_task(ObjectExt::downgrade(app), player_sync_interval);
+    register_sync_task(ObjectExt::downgrade(&wind), player_sync_interval);
     register_lyric_display(ObjectExt::downgrade(&wind), lyric_update_interval);
     register_actions(app, &wind, triggers);
 

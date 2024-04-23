@@ -6,16 +6,12 @@ use std::sync::OnceLock;
 
 use std::time::Duration;
 
-use gtk::{
-    glib::{self, WeakRef},
-    prelude::*,
-    Application,
-};
+use gtk::glib::{self, WeakRef};
 
 use anyhow::Result;
 
 use crate::{
-    app,
+    app::{self, Window},
     log::*,
     sync::{
         interop::PlayerStatus,
@@ -54,17 +50,11 @@ pub async fn update_lyric(
     Ok(())
 }
 
-pub fn register_sync_task(app: WeakRef<Application>, interval: Duration) {
+pub fn register_sync_task(wind: WeakRef<Window>, interval: Duration) {
     glib::timeout_add_local(interval, move || {
-        let Some(app) = app.upgrade() else {
-            return glib::ControlFlow::Break;
-        };
-
-        let mut windows = app.windows();
-        if windows.is_empty() {
+        let Some(window) = wind.upgrade() else {
             return glib::ControlFlow::Continue;
-        }
-        let window: app::Window = windows.remove(0).downcast().unwrap();
+        };
 
         match try_sync_track(&window) {
             Err(PlayerStatus::Missing) => {
