@@ -55,9 +55,9 @@ fn sync_position(player: &Player, window: &app::Window) -> Result<(), PlayerStat
         } else {
             format!("-{:?}", position - eplased)
         };
-        debug!("expected position: {:?}", s.elapsed());
-        debug!("actual position: {:?}", position);
-        debug!("diff (expected - actual): {}", diff);
+        trace!("expected position: {:?}", s.elapsed());
+        trace!("actual position: {:?}", position);
+        trace!("diff (expected - actual): {}", diff);
     }
 
     let offset = window.imp().lyric_offset_ms.get();
