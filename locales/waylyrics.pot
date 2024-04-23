@@ -138,19 +138,19 @@ msgstr ""
 
 #: ../src/app/window/imp.rs:140 ../src/tray_icon/unix/mod.rs:42
 msgid "show_both"
-msgstr "Source + Translation"
+msgstr ""
 
 #: ../src/app/window/imp.rs:140 ../src/tray_icon/unix/mod.rs:42
 msgid "show_both_rev"
-msgstr "Translation + Source"
+msgstr ""
 
 #: ../src/app/window/imp.rs:140 ../src/tray_icon/unix/mod.rs:42
 msgid "origin"
-msgstr "Source Only"
+msgstr ""
 
 #: ../src/app/window/imp.rs:140 ../src/tray_icon/unix/mod.rs:42
 msgid "prefer_translation"
-msgstr "Prefer Translation"
+msgstr ""
 
 #: ../src/app/window/imp.rs:150 ../src/tray_icon/unix/mod.rs:62
 msgid "Center"
