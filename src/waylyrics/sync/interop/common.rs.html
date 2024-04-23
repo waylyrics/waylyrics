@@ -115,16 +115,6 @@
 <a href="#113" id="113">113</a>
 <a href="#114" id="114">114</a>
 <a href="#115" id="115">115</a>
-<a href="#116" id="116">116</a>
-<a href="#117" id="117">117</a>
-<a href="#118" id="118">118</a>
-<a href="#119" id="119">119</a>
-<a href="#120" id="120">120</a>
-<a href="#121" id="121">121</a>
-<a href="#122" id="122">122</a>
-<a href="#123" id="123">123</a>
-<a href="#124" id="124">124</a>
-<a href="#125" id="125">125</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Error;
 <span class="kw">use </span>gtk::subclass::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>tokio::sync::Mutex;
@@ -133,16 +123,12 @@
 
 <span class="kw">use </span>std::time::Duration;
 
-<span class="kw">use </span>gtk::{
-    glib::{<span class="self">self</span>, WeakRef},
-    prelude::<span class="kw-2">*</span>,
-    Application,
-};
+<span class="kw">use </span>gtk::glib::{<span class="self">self</span>, WeakRef};
 
 <span class="kw">use </span>anyhow::Result;
 
 <span class="kw">use crate</span>::{
-    app,
+    app::{<span class="self">self</span>, Window},
     log::<span class="kw-2">*</span>,
     sync::{
         interop::PlayerStatus,
@@ -181,17 +167,11 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="kw">pub fn </span>register_sync_task(app: WeakRef&lt;Application&gt;, interval: Duration) {
+<span class="kw">pub fn </span>register_sync_task(wind: WeakRef&lt;Window&gt;, interval: Duration) {
     glib::timeout_add_local(interval, <span class="kw">move </span>|| {
-        <span class="kw">let </span><span class="prelude-val">Some</span>(app) = app.upgrade() <span class="kw">else </span>{
-            <span class="kw">return </span>glib::ControlFlow::Break;
-        };
-
-        <span class="kw">let </span><span class="kw-2">mut </span>windows = app.windows();
-        <span class="kw">if </span>windows.is_empty() {
+        <span class="kw">let </span><span class="prelude-val">Some</span>(window) = wind.upgrade() <span class="kw">else </span>{
             <span class="kw">return </span>glib::ControlFlow::Continue;
-        }
-        <span class="kw">let </span>window: app::Window = windows.remove(<span class="number">0</span>).downcast().unwrap();
+        };
 
         <span class="kw">match </span>try_sync_track(<span class="kw-2">&amp;</span>window) {
             <span class="prelude-val">Err</span>(PlayerStatus::Missing) =&gt; {
