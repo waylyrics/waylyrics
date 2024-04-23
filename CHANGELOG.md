@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### 🐛 Bug Fixes
+
+- Stop lyric update when show_lyric_on_pause not set on pause
+
+### 📚 Documentation
+
+- *(changelog)* Update changelog
+
+### ⚙️ Miscellaneous Tasks
+
+- Release v0.2.21
+
 ## [0.2.20] - 2024-04-21
 
 ### 📚 Documentation
