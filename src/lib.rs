@@ -15,7 +15,7 @@ pub mod utils;
 
 pub const DEFAULT_TEXT: &str = "Waylyrics";
 pub const PACKAGE_NAME: &str = env!("CARGO_PKG_NAME");
-pub const APP_ID: &str = "io.poly000.waylyrics";
+pub const APP_ID: &str = "io.github.waylyrics.Waylyrics";
 
 thread_local! {
     pub static CACHE_DIR: RefCell<String> = const { RefCell::new(String::new()) };

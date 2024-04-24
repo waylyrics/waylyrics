@@ -6,7 +6,7 @@ Name=Waylyrics
 Comment=desktop lyrics with QQMusic/NetEase Cloud Music source
 Comment[zh]=桌面歌词（使用QQ音乐/网易云音乐歌词）
 Exec=/usr/bin/waylyrics
-Icon=io.poly000.waylyrics
+Icon=io.github.waylyrics.Waylyrics
 Terminal=false
 Categories=Audio;AudioVideo;GTK;Player;
 Actions=Launch;Search;ToggleClickPassthrough;ToggleGTKDecoration;RefetchLyric;ReloadTheme;RemoveLyric;
@@ -15,29 +15,29 @@ Keywords=desktop lyric;
 [Desktop Action Search]
 Name=Search lyric
 Name[zh]=搜索歌词
-Exec=gdbus call -e -d io.poly000.waylyrics -o /io/poly000/waylyrics -m org.gtk.Actions.Activate "search-lyric" [] {}
+Exec=gdbus call -e -d io.github.waylyrics.Waylyrics -o /io/github/waylyrics/Waylyrics -m org.gtk.Actions.Activate "search-lyric" [] {}
 
 [Desktop Action ToggleClickPassthrough]
 Name=Toggle mouse clickthrough
 Name[zh]=切换鼠标点击穿透
-Exec=gdbus call -e -d io.poly000.waylyrics -o /io/poly000/waylyrics/window/1 -m org.gtk.Actions.Activate "switch-passthrough" [] {}
+Exec=gdbus call -e -d io.github.waylyrics.Waylyrics -o /io/github/waylyrics/Waylyrics/window/1 -m org.gtk.Actions.Activate "switch-passthrough" [] {}
 
 [Desktop Action ToggleGTKDecoration]
 Name=Toggle GTK+ Decoration
 Name[zh]=开关 GTK+ 边框
-Exec=gdbus call -e -d io.poly000.waylyrics -o /io/poly000/waylyrics/window/1 -m org.gtk.Actions.Activate "switch-decoration" [] {}
+Exec=gdbus call -e -d io.github.waylyrics.Waylyrics -o /io/github/waylyrics/Waylyrics/window/1 -m org.gtk.Actions.Activate "switch-decoration" [] {}
 
 [Desktop Action RefetchLyric]
 Name=Refetch lyric
 Name[zh]=重新下载歌词
-Exec=gdbus call -e -d io.poly000.waylyrics -o /io/poly000/waylyrics -m org.gtk.Actions.Activate "refetch-lyric" [] {}
+Exec=gdbus call -e -d io.github.waylyrics.Waylyrics -o /io/github/waylyrics/Waylyrics -m org.gtk.Actions.Activate "refetch-lyric" [] {}
 
 [Desktop Action RemoveLyric]
 Name=Remove lyric
 Name[zh]=删除此首歌词
-Exec=gdbus call -e -d io.poly000.waylyrics -o /io/poly000/waylyrics -m org.gtk.Actions.Activate "remove-lyric" [] {}
+Exec=gdbus call -e -d io.github.waylyrics.Waylyrics -o /io/github/waylyrics/Waylyrics -m org.gtk.Actions.Activate "remove-lyric" [] {}
 
 [Desktop Action ReloadTheme]
 Name=Reload theme
 Name[zh]=重新加载歌词
-Exec=gdbus call -e -d io.poly000.waylyrics -o /io/poly000/waylyrics -m org.gtk.Actions.Activate "reload-theme" [] {}
+Exec=gdbus call -e -d io.github.waylyrics.Waylyrics -o /io/github/waylyrics/Waylyrics -m org.gtk.Actions.Activate "reload-theme" [] {}

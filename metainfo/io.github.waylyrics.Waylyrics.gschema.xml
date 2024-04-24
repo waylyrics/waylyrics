@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schemalist>
-  <schema id="io.poly000.waylyrics" path="/io/poly000/waylyrics/">
+  <schema id="io.github.waylyrics.Waylyrics" path="/io/github/waylyrics/Waylyrics/">
     <key name="window-width" type="i">
       <default>1200</default>
       <summary>Default window width</summary>

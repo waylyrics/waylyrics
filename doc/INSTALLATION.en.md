@@ -93,14 +93,14 @@ Target binaries are placed in `target/release/`.
 ### Compiling Schema
 
 ```bash
-install -Dm644 io.poly000.waylyrics.gschema.xml -t ~/.local/share/glib-2.0/schemas/
+install -Dm644 io.github.waylyrics.Waylyrics.gschema.xml -t ~/.local/share/glib-2.0/schemas/
 glib-compile-schemas ~/.local/share/glib-2.0/schemas/
 ```
 
 ### Desktop File
 
 ```bash
-install -Dm644 io.poly000.waylyrics.desktop -t ~/.local/share/applications
+install -Dm644 io.github.waylyrics.Waylyrics.desktop -t ~/.local/share/applications
 ```
 
 ## Packging example
@@ -108,7 +108,7 @@ install -Dm644 io.poly000.waylyrics.desktop -t ~/.local/share/applications
 An example packaging script:
 
 ```bash
-install -Dm644 io.poly000.waylyrics.gschema.xml -t /usr/share/glib-2.0/schemas/
+install -Dm644 io.github.waylyrics.Waylyrics.gschema.xml -t /usr/share/glib-2.0/schemas/
 install -dm755 /usr/share/waylyrics/themes
 cp -r themes/* /usr/share/waylyrics/themes/
 
