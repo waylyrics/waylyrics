@@ -6,10 +6,40 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes
 
+- *(i18n)* En_US translation
+- Set titlebar before set decorated
+- *(ci)* New schema path
+
+### 🚜 Refactor
+
+- Pass WeakRef<Window> to register_sync_task
+
+### 📚 Documentation
+
+- *(install)* Update packaging script
+
+### ⚙️ Miscellaneous Tasks
+
+- Release v0.3.0
+
+### ◀️ Revert
+
+- "Translate display modes"
+
+### Log
+
+- Mpris position delay
+- Set time diff log level to TRACE so we will not flood debug log
+
+## [0.2.21] - 2024-04-23
+
+### 🐛 Bug Fixes
+
 - Stop lyric update when show_lyric_on_pause not set on pause
 
 ### 📚 Documentation
 
+- *(changelog)* Update changelog
 - *(changelog)* Update changelog
 
 ### ⚙️ Miscellaneous Tasks
@@ -341,7 +371,7 @@ All notable changes to this project will be documented in this file.
 
 - Only show set-lyric button when avaliable
 - Show icons on tray-icon menu
-- [**breaking**] Set lyric alignment mode on run time
+- [**breaking**] Set lyric align mode on run time
 
 ### 📚 Documentation
 
@@ -358,7 +388,7 @@ All notable changes to this project will be documented in this file.
 
 - Translate length to 时长
 - Translate display_mode
-- Translate lyric alignment
+- Translate lyric align
 
 ## [0.2.8] - 2024-02-20
 
