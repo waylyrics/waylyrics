@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [0.3.0] - 2024-04-24
 
 ### 🐛 Bug Fixes
 
@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 ### 📚 Documentation
 
 - *(install)* Update packaging script
+- *(changelog)* Update changelog
 
 ### ⚙️ Miscellaneous Tasks
 
