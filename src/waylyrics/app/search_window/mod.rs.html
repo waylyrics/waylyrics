@@ -405,6 +405,16 @@
 <a href="#403" id="403">403</a>
 <a href="#404" id="404">404</a>
 <a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>imp;
 
 <span class="kw">use </span>std::sync::Arc;
@@ -468,6 +478,12 @@
         window.imp().input_artists.buffer().set_text(artists);
 
         window.imp().use_cache.set(use_cache);
+
+        window
+            .imp()
+            .result_list
+            .set_widget_name(<span class="string">"search-window-column"</span>);
+
         window
     }
 
@@ -518,11 +534,15 @@
         imp.column_length.set_title(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Length"</span>)));
         imp.column_source.set_title(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Source"</span>)));
 
-        imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.column_title);
-        imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.column_singer);
-        imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.column_album);
-        imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.column_length);
-        imp.result_list.append_column(<span class="kw-2">&amp;</span>imp.column_source);
+        <span class="kw">for </span>column <span class="kw">in </span>[
+            <span class="kw-2">&amp;</span>imp.column_title,
+            <span class="kw-2">&amp;</span>imp.column_singer,
+            <span class="kw-2">&amp;</span>imp.column_album,
+            <span class="kw-2">&amp;</span>imp.column_length,
+            <span class="kw-2">&amp;</span>imp.column_source,
+        ] {
+            imp.result_list.append_column(column);
+        }
 
         imp.input_title
             .set_placeholder_text(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Enter title..."</span>)));
