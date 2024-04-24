@@ -94,7 +94,7 @@ cargo +nightly build --release --locked --target-dir target
 ### 编译Schema
 
 ```bash
-install -Dm644 io.github.waylyrics.Waylyrics.gschema.xml -t ~/.local/share/glib-2.0/schemas/
+install -Dm644 metainfo/io.github.waylyrics.Waylyrics.gschema.xml -t ~/.local/share/glib-2.0/schemas/
 glib-compile-schemas ~/.local/share/glib-2.0/schemas/
 ```
 
@@ -112,7 +112,7 @@ done
 ### Desktop 文件
 
 ```bash
-install -Dm644 io.github.waylyrics.Waylyrics.desktop -t ~/.local/share/applications
+install -Dm644 metainfo/io.github.waylyrics.Waylyrics.desktop -t ~/.local/share/applications
 ```
 
 ## 打包
@@ -120,11 +120,11 @@ install -Dm644 io.github.waylyrics.Waylyrics.desktop -t ~/.local/share/applicati
 打包脚本样例：
 
 ```bash
-install -Dm644 io.github.waylyrics.Waylyrics.gschema.xml -t /usr/share/glib-2.0/schemas/
-install -Dm644 "io.github.waylyrics.Waylyrics.desktop" -t /usr/share/applications/
-install -Dm644 io.github.waylyrics.Waylyrics.gschema.xml /usr/share/glib-2.0/schemas/
+install -Dm644 metainfo/io.github.waylyrics.Waylyrics.gschema.xml -t /usr/share/glib-2.0/schemas/
+install -Dm644 metainfo/"io.github.waylyrics.Waylyrics.desktop" -t /usr/share/applications/
 install -dm755 /usr/share/waylyrics/themes
 cp -r themes/* /usr/share/waylyrics/themes/
+cp -r res/icons /usr/share/icons
 
 cd locales
 for po in $(find . -type f -name '*.po')
