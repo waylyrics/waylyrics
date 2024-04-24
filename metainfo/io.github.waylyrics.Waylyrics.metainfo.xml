@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
   <id>io.github.waylyrics.Waylyrics</id>
+  <replaces>
+      <id>io.poly000.waylyrics</id>
+  </replaces>
+
   <name>Waylyrics</name>
   <summary>The furry way to show desktop lyrics</summary>
+  <launchable type="desktop-id">io.github.waylyrics.Waylyrics.desktop</launchable>
 
-  <developer id="io.poly000">
+  <developer id="io.github.waylyrics">
       <name>mokurin000</name>
   </developer>
 
@@ -21,14 +26,30 @@
   <launchable type="desktop-id">io.github.waylyrics.Waylyrics</launchable>
   <screenshots>
     <screenshot type="default">
-      <image>https://github.com/waylyrics/waylyrics/raw/master/img/en-cn.png</image>
+      <image>https://github.com/waylyrics/waylyrics/raw/v0.3.0/img/en-cn.png</image>
     </screenshot>
     <screenshot>
-      <image>https://github.com/waylyrics/waylyrics/raw/master/img/ja-cn.png</image>
+      <image>https://github.com/waylyrics/waylyrics/raw/v0.3.0/img/ja-cn.png</image>
     </screenshot>
   </screenshots>
 
   <releases>
+    <release version="0.3.0" date="2024-04-24">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.0</url>
+        <description>
+            <p>Bug Fixes</p>
+                <ul>
+                    <li>Set titlebar before set decorated</li>
+                    <li>CI: New schema path</li>
+                    <li>i18n: en_US translation</li>
+                    <li>Fix: missing icon for search window under wayland</li>
+                </ul>
+            <p>BREAKING CHANGE</p>
+            <ul>
+                    <li>We moved .gschema.xml and .desktop to metainfo/, and we changed APP_ID from io.poly000.waylyrics to io.github.waylyrics.Waylyrics to hit the requirement of flathub.</li>
+            </ul>
+        </description>
+    </release>
     <release version="0.2.21" date="2024-04-23">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.2.21</url>
         <description>
