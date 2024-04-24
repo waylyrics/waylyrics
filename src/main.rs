@@ -76,6 +76,8 @@ fn main() -> Result<glib::ExitCode> {
         .application_id(waylyrics::APP_ID)
         .build();
 
+    glib::set_prgname(Some(waylyrics::APP_ID));
+
     log::info!("successfully created application!");
 
     app.connect_activate(|app| {
