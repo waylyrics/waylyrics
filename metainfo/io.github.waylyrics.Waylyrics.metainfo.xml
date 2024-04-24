@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
   <id>io.github.waylyrics.Waylyrics</id>
+  <replaces>
+      <id>io.poly000.waylyrics</id>
+  </replaces>
+
   <name>Waylyrics</name>
   <summary>The furry way to show desktop lyrics</summary>
+  <launchable type="desktop-id">io.github.waylyrics.Waylyrics.desktop</launchable>
 
   <developer id="io.github.waylyrics">
       <name>mokurin000</name>
