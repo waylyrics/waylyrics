@@ -1,4 +1,4 @@
-name: test
+name: Build, Test & upload
 
 on:
   [push, pull_request]
@@ -20,8 +20,8 @@ jobs:
 
     - name: Install deps
       run: |
-        sudo apt update
-        sudo apt install -y --no-install-recommends libgtk-4-dev libdbus-1-dev pkg-config weston
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends libgtk-4-dev libdbus-1-dev pkg-config weston
     - uses: Swatinem/rust-cache@v2
     - name: Test
       run: cargo test
