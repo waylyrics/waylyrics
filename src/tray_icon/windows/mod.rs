@@ -71,7 +71,8 @@ fn build_tray_menu() -> Result<Menu> {
 
 fn menu_event_handler() {
     while let Ok(event) = MenuEvent::receiver().recv() {
-        match event.id().0.as_str() {
+        let (event, _) = event.id();
+        match event.as_str() {
             SEARCH_LYRIC => {
                 let _ = play_action().send_blocking(PlayAction::SearchLyric);
             }
