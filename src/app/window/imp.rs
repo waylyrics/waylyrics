@@ -93,9 +93,11 @@ impl ObjectImpl for Window {
             Some(&gettext("Lyric Alignment")), //
             &self.align_mode_menu,
         );
-        ui_section.append_item(&passthrough);
-        ui_section.append_item(&hide_decoration);
-        ui_section.append_item(&reload_theme);
+
+	for item in [&passthrough, &hide_decoration, &reload_theme] {
+	    ui_section.append_item(item);
+	}
+
         self.menu.append_section(None, &ui_section);
 
         let play_section = gio::Menu::default();
@@ -103,9 +105,11 @@ impl ObjectImpl for Window {
             Some(&gettext("Select Player")), //
             &self.player_menu,
         );
-        play_section.append_item(&search_lyric);
-        play_section.append_item(&remove_lyric);
-        play_section.append_item(&refetch_lyric);
+
+	for item in [&search_lyric, &remove_lyric, &refetch_lyric] {
+	    play_section.append_item(item);
+	}
+
         self.menu.append_section(None, &play_section);
 
         popover.set_menu_model(Some(&self.menu));
