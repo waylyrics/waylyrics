@@ -30,7 +30,7 @@ jobs:
     - name: Installation
       run: |
         sudo mkdir -p /usr/share/waylyrics
-        sudo install -m644 io.github.waylyrics.Waylyrics.gschema.xml /usr/share/glib-2.0/schemas/
+        sudo install -m644 metainfo/io.github.waylyrics.Waylyrics.gschema.xml /usr/share/glib-2.0/schemas/
         sudo install -dm755 ${WAYLYRICS_THEME_PRESETS_DIR}
         sudo cp -r themes/* ${WAYLYRICS_THEME_PRESETS_DIR}/
 
@@ -59,7 +59,7 @@ jobs:
       shell: bash
       run: |
         tar -cvzf amd64-linux-gnu.tar.gz target/release/waylyrics \
-        LICENSE res io.github.waylyrics.Waylyrics.gschema.xml
+        LICENSE res metainfo/io.github.waylyrics.Waylyrics.{gschema.xml,desktop}
         
     - name: Declare some variables # https://stackoverflow.com/a/61699863
       id: vars
