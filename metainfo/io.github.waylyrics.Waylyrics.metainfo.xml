@@ -34,6 +34,15 @@
   </screenshots>
 
   <releases>
+    <release version="0.3.1" date="2024-04-24">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.1</url>
+        <description>
+          <p>Features</p>
+            <ul>
+              <li>Set search-window ColumnView row padding in themes</li>
+            </ul>
+        </description>
+    </release>
     <release version="0.3.0" date="2024-04-24">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.0</url>
         <description>
