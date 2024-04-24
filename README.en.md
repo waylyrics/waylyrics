@@ -32,7 +32,7 @@ Check [INSTALLATION.en.md](doc/INSTALLATION.en.md)
 
 ## Usage
 
-Also check [desktop file](io.github.waylyrics.Waylyrics.desktop)
+Also check [desktop file](metainfo/io.github.waylyrics.Waylyrics.desktop)
 
 https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871c67e/src/config.rs#L67-L71
 
