@@ -11,6 +11,12 @@ window#main-window {
   box-shadow: 0 0 1px 0;
 }
 
+/* 搜索窗口 */
+columnview#search-window-column listview row {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
 label#above,
 label#below {
   padding: 10px;

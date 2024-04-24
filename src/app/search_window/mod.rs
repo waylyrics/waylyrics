@@ -61,6 +61,12 @@ impl Window {
         window.imp().input_artists.buffer().set_text(artists);
 
         window.imp().use_cache.set(use_cache);
+
+        window
+            .imp()
+            .result_list
+            .set_widget_name("search-window-column");
+
         window
     }
 
@@ -111,11 +117,15 @@ impl Window {
         imp.column_length.set_title(Some(&gettext("Length")));
         imp.column_source.set_title(Some(&gettext("Source")));
 
-        imp.result_list.append_column(&imp.column_title);
-        imp.result_list.append_column(&imp.column_singer);
-        imp.result_list.append_column(&imp.column_album);
-        imp.result_list.append_column(&imp.column_length);
-        imp.result_list.append_column(&imp.column_source);
+        for column in [
+            &imp.column_title,
+            &imp.column_singer,
+            &imp.column_album,
+            &imp.column_length,
+            &imp.column_source,
+        ] {
+            imp.result_list.append_column(column);
+        }
 
         imp.input_title
             .set_placeholder_text(Some(&gettext("Enter title...")));
