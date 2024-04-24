@@ -207,7 +207,7 @@ fn update_position(
             .ok_or(PlayerStatus::Unsupported("Infinite position!"))?,
     };
 
-    debug!(
+    trace!(
         "start time: {:?}",
         start.duration_since(SystemTime::UNIX_EPOCH)
     );
