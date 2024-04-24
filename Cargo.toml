@@ -100,7 +100,7 @@ net-test = []
 [target.'cfg(unix)'.dependencies]
 # MPRIS integration
 dbus = "0.9.7"
-ksni = { version = "0.2.1", optional = true }
+ksni = { git = "https://github.com/waylyrics/ksni.git", optional = true }
 mpris = "2.0.1"
 
 [target.'cfg(target_os = "windows")'.dependencies]
