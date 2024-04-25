@@ -6,7 +6,7 @@
   </replaces>
 
   <name>Waylyrics</name>
-  <summary>The furry way to show desktop lyrics</summary>
+  <summary>A furry way to show desktop lyrics</summary>
   <launchable type="desktop-id">io.github.waylyrics.Waylyrics.desktop</launchable>
 
   <developer id="io.github.waylyrics">
@@ -26,10 +26,9 @@
   <launchable type="desktop-id">io.github.waylyrics.Waylyrics</launchable>
   <screenshots>
     <screenshot type="default">
+      <caption>Main UI</caption>
+      <caption xml:lang="zh">主界面</caption>
       <image>https://github.com/waylyrics/waylyrics/raw/v0.3.0/img/en-cn.png</image>
-    </screenshot>
-    <screenshot>
-      <image>https://github.com/waylyrics/waylyrics/raw/v0.3.0/img/ja-cn.png</image>
     </screenshot>
   </screenshots>
 
