@@ -155,7 +155,7 @@
         <span class="kw">return</span>;
     };
 
-    <span class="kw">let </span>(handle, <span class="kw">_</span>) = surface.handle();
+    <span class="kw">let </span>handle = surface.handle().<span class="number">0</span>;
 
     set_window_click_through(handle, enabled);
 }
