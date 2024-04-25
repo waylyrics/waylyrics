@@ -182,6 +182,10 @@
 <a href="#180" id="180">180</a>
 <a href="#181" id="181">181</a>
 <a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::Cell;
 <span class="kw">use </span>std::time::SystemTime;
 
@@ -277,9 +281,11 @@
             <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Lyric Alignment"</span>)), <span class="comment">//
             </span><span class="kw-2">&amp;</span><span class="self">self</span>.align_mode_menu,
         );
-        ui_section.append_item(<span class="kw-2">&amp;</span>passthrough);
-        ui_section.append_item(<span class="kw-2">&amp;</span>hide_decoration);
-        ui_section.append_item(<span class="kw-2">&amp;</span>reload_theme);
+
+	<span class="kw">for </span>item <span class="kw">in </span>[<span class="kw-2">&amp;</span>passthrough, <span class="kw-2">&amp;</span>hide_decoration, <span class="kw-2">&amp;</span>reload_theme] {
+	    ui_section.append_item(item);
+	}
+
         <span class="self">self</span>.menu.append_section(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>ui_section);
 
         <span class="kw">let </span>play_section = gio::Menu::default();
@@ -287,9 +293,11 @@
             <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Select Player"</span>)), <span class="comment">//
             </span><span class="kw-2">&amp;</span><span class="self">self</span>.player_menu,
         );
-        play_section.append_item(<span class="kw-2">&amp;</span>search_lyric);
-        play_section.append_item(<span class="kw-2">&amp;</span>remove_lyric);
-        play_section.append_item(<span class="kw-2">&amp;</span>refetch_lyric);
+
+	<span class="kw">for </span>item <span class="kw">in </span>[<span class="kw-2">&amp;</span>search_lyric, <span class="kw-2">&amp;</span>remove_lyric, <span class="kw-2">&amp;</span>refetch_lyric] {
+	    play_section.append_item(item);
+	}
+
         <span class="self">self</span>.menu.append_section(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>play_section);
 
         popover.set_menu_model(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.menu));

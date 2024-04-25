@@ -510,9 +510,9 @@
         imp.vbox
             .set_properties(<span class="kw-2">&amp;</span>[(<span class="string">"orientation"</span>, <span class="kw-2">&amp;</span>gtk::Orientation::Vertical)]);
 
-        imp.vbox.append(<span class="kw-2">&amp;</span>imp.input_title);
-        imp.vbox.append(<span class="kw-2">&amp;</span>imp.input_artists);
-        imp.vbox.append(<span class="kw-2">&amp;</span>imp.input_album);
+        <span class="kw">for </span>entry <span class="kw">in </span>[<span class="kw-2">&amp;</span>imp.input_title, <span class="kw-2">&amp;</span>imp.input_artists, <span class="kw-2">&amp;</span>imp.input_album] {
+            imp.vbox.append(entry);
+        }
 
         imp.vbox.append(<span class="kw-2">&amp;</span>imp.result_scrolled_window);
         imp.vbox.append(<span class="kw-2">&amp;</span>imp.set_button);
