@@ -9,7 +9,7 @@ Exec=/usr/bin/waylyrics
 Icon=io.github.waylyrics.Waylyrics
 Terminal=false
 Categories=Audio;AudioVideo;GTK;Player;
-Actions=Launch;Search;ToggleClickPassthrough;ToggleGTKDecoration;RefetchLyric;ReloadTheme;RemoveLyric;
+Actions=Search;ToggleClickPassthrough;ToggleGTKDecoration;RefetchLyric;ReloadTheme;RemoveLyric;
 Keywords=desktop lyric;
 
 [Desktop Action Search]
