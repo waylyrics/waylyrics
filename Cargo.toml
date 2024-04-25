@@ -17,7 +17,7 @@ opt-level = "s"
 panic = "abort"
 
 [profile.test]
-debug = "none"
+debug = false
 incremental = true
 lto = "off"
 
