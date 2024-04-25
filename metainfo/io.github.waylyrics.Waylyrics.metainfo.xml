@@ -30,6 +30,11 @@
       <caption xml:lang="zh">主界面</caption>
       <image>https://github.com/waylyrics/waylyrics/raw/v0.3.0/img/en-cn.png</image>
     </screenshot>
+    <screenshot type="default">
+      <caption>Search Lyrics</caption>
+      <caption xml:lang="zh">搜索歌词</caption>
+      <image>https://github.com/waylyrics/waylyrics/raw/cd71ecce41d862588c7a1e5051db854f3b35df95/img/search-window.jpg</image>
+    </screenshot>
   </screenshots>
 
   <releases>
