@@ -1,7 +1,10 @@
 use anyhow::Result;
+use gtk::glib::Variant;
 use std::path::PathBuf;
 
 use crate::log::{debug, error, info, warn};
+use crate::GTK_APPLICATION;
+use gtk::prelude::*;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use serde::{Deserialize, Serialize};
 
@@ -77,17 +80,32 @@ pub async fn fetch_lyric_cached(
 
     let result = fetch_lyric(track_meta, window).await;
     if result.is_ok() {
-        update_lyric_cache(&cache_path);
+        if update_lyric_cache(&cache_path) {
+            let app = GTK_APPLICATION
+                .with_borrow(|app| app.as_ref().cloned())
+                .expect("GApplication was not set");
+            if let Some(dbus_conn) = app.dbus_connection() {
+                let _ = dbus_conn.emit_signal(
+                    None,
+                    "/io/github/waylyrics/Waylyrics",
+                    crate::APP_ID,
+                    "NewLyricCache",
+                    Some(&Variant::tuple_from_iter([cache_path
+                        .to_string_lossy()
+                        .to_variant()])),
+                );
+            }
+        }
     }
     result
 }
 
 /// Using olyric and tlyric inside LYRIC to update corresponding cache file.
-pub fn update_lyric_cache(cache_path: &PathBuf) {
+pub fn update_lyric_cache(cache_path: &PathBuf) -> bool {
     let cache_dir = cache_path.parent().unwrap();
     if let Err(e) = std::fs::create_dir_all(cache_dir) {
         error!("cannot create cache dir {cache_dir:?}: {e}");
-        return;
+        return false;
     }
 
     LYRIC.with_borrow(
@@ -95,8 +113,9 @@ pub fn update_lyric_cache(cache_path: &PathBuf) {
              origin,
              translation,
          }| {
+            // do not cache empty lyric
             if (&LyricOwned::None, &LyricOwned::None) == (origin, translation) {
-                return;
+                return false;
             }
 
             let Err(e) = std::fs::write(
@@ -109,12 +128,13 @@ pub fn update_lyric_cache(cache_path: &PathBuf) {
                 .expect("cannot serialize lyrics!"),
             ) else {
                 info!("cached to {cache_path:?}");
-                return;
+                return true;
             };
 
             error!("cannot write cache {cache_path:?}: {e}");
+            false
         },
-    );
+    )
 }
 
 #[derive(Deserialize, Serialize)]

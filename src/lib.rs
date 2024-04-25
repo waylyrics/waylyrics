@@ -1,7 +1,7 @@
 use std::{cell::RefCell, path::PathBuf, sync::OnceLock};
 
 use app::Window;
-use gtk::glib::MainContext;
+use gtk::{glib::MainContext, Application};
 use lyric_providers::LyricProvider;
 use once_cell::sync::Lazy;
 use regex::RegexSet;
@@ -22,6 +22,7 @@ thread_local! {
     pub static THEME_PATH: RefCell<PathBuf> = RefCell::new(PathBuf::new());
     pub static EXCLUDED_REGEXES: RefCell<RegexSet> = RefCell::new(RegexSet::empty());
     pub static MAIN_WINDOW: RefCell<Option<Window>> = const { RefCell::new(None) };
+    pub static GTK_APPLICATION: RefCell<Option<Application>> = const { RefCell::new(None) };
 
     pub static PLAYER_IDENTITY_BLACKLIST: RefCell<Vec<String>> = RefCell::new(Default::default());
     pub static PLAYER_NAME_BLACKLIST: RefCell<Vec<String>> = RefCell::new(Default::default());
