@@ -34,6 +34,26 @@
   </screenshots>
 
   <releases>
+    <release version="0.3.2" date="2024-04-25">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.2</url>
+        <description>
+          <h3>🐛 Bug Fixes</h3>
+          <ul>
+          <li><em>(readme)</em> Broken link of desktop file</li>
+          <li>Enum tuple variant cannot be destrcucted by tuple matching</li>
+          </ul>
+          <h3>⚙️ Miscellaneous Tasks</h3>
+          <ul>
+          <li>Make extracting values from tuples more readable</li>
+          <li>Use for loop to refactor entries appending in imp.vbox</li>
+          <li>Use for loop to refactor items appending in ui_section &amp; play_section</li>
+          </ul>
+          <h3>Log</h3>
+          <ul>
+          <li><em>(tray)</em> Do not flood start_time on smtc</li>
+          </ul>
+        </description>
+    </release>
     <release version="0.3.1" date="2024-04-24">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.1</url>
         <description>
