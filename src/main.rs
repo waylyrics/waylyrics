@@ -15,7 +15,7 @@ use waylyrics::lyric_providers::utils::get_provider;
 use waylyrics::lyric_providers::LyricProvider;
 use waylyrics::utils::init_dirs;
 use waylyrics::{
-    utils, EXCLUDED_REGEXES, GTK_APPLICATION, LYRIC_PROVIDERS, MAIN_WINDOW,
+    utils, EXCLUDED_REGEXES, GTK_DBUS_CONNECTION, LYRIC_PROVIDERS, MAIN_WINDOW,
     PLAYER_IDENTITY_BLACKLIST, PLAYER_NAME_BLACKLIST, THEME_PATH,
 };
 
@@ -75,7 +75,6 @@ fn main() -> Result<glib::ExitCode> {
     let app = Application::builder()
         .application_id(waylyrics::APP_ID)
         .build();
-    GTK_APPLICATION.set(Some(app.clone()));
 
     glib::set_prgname(Some(waylyrics::APP_ID));
 
@@ -85,6 +84,11 @@ fn main() -> Result<glib::ExitCode> {
         if let Err(e) = build_ui(app) {
             log::error!("failed to start: {e}");
         }
+    });
+
+    app.connect_startup(|a| {
+        let dbus_conn = a.dbus_connection();
+        GTK_DBUS_CONNECTION.set(dbus_conn);
     });
 
     Ok(app.run())

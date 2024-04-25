@@ -3,7 +3,7 @@ use gtk::glib::Variant;
 use std::path::PathBuf;
 
 use crate::log::{debug, error, info, warn};
-use crate::GTK_APPLICATION;
+use crate::GTK_DBUS_CONNECTION;
 use gtk::prelude::*;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use serde::{Deserialize, Serialize};
@@ -81,20 +81,18 @@ pub async fn fetch_lyric_cached(
     let result = fetch_lyric(track_meta, window).await;
     if result.is_ok() {
         if update_lyric_cache(&cache_path) {
-            let app = GTK_APPLICATION
-                .with_borrow(|app| app.as_ref().cloned())
+            let dbus_conn = GTK_DBUS_CONNECTION
+                .with_borrow(|conn| conn.as_ref().cloned())
                 .expect("GApplication was not set");
-            if let Some(dbus_conn) = app.dbus_connection() {
-                let _ = dbus_conn.emit_signal(
-                    None,
-                    "/io/github/waylyrics/Waylyrics",
-                    crate::APP_ID,
-                    "NewLyricCache",
-                    Some(&Variant::tuple_from_iter([cache_path
-                        .to_string_lossy()
-                        .to_variant()])),
-                );
-            }
+            let _ = dbus_conn.emit_signal(
+                None,
+                "/io/github/waylyrics/Waylyrics",
+                crate::APP_ID,
+                "NewLyricCache",
+                Some(&Variant::tuple_from_iter([cache_path
+                    .to_string_lossy()
+                    .to_variant()])),
+            );
         }
     }
     result
