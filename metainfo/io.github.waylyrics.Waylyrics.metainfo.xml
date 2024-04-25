@@ -34,6 +34,15 @@
   </screenshots>
 
   <releases>
+    <release version="0.3.3" date="2024-04-25">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.3</url>
+        <description>
+          <p>Miscellaneous Tasks</p>
+            <ul>
+              <li><em>(desktopfile)</em> Remove action `Launch`</li>
+            </ul>
+        </description>
+    </release>
     <release version="0.3.2" date="2024-04-25">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.2</url>
         <description>
