@@ -3,7 +3,7 @@ use std::{env::args, process::Command};
 use anyhow::Result;
 use async_channel::Sender;
 use tray_icon::{
-    menu::{Menu, MenuEvent, MenuItemBuilder},
+    menu::{Menu, MenuEvent, MenuId, MenuItemBuilder},
     Icon, TrayIconBuilder,
 };
 
@@ -71,7 +71,7 @@ fn build_tray_menu() -> Result<Menu> {
 
 fn menu_event_handler() {
     while let Ok(event) = MenuEvent::receiver().recv() {
-        let (event, _) = event.id();
+        let MenuId(event) = event.id();
         match event.as_str() {
             SEARCH_LYRIC => {
                 let _ = play_action().send_blocking(PlayAction::SearchLyric);

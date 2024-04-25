@@ -37,7 +37,7 @@ pub(super) fn set_click_pass_through(window: &window::Window, enabled: bool) {
         return;
     };
 
-    let (handle, _) = surface.handle();
+    let handle = surface.handle().0;
 
     set_window_click_through(handle, enabled);
 }

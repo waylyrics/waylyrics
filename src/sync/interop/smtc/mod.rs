@@ -9,6 +9,7 @@ use tokio::runtime::Runtime;
 use windows::Media::Control::GlobalSystemMediaTransportControlsSession as GSMTCSession;
 use windows::Media::Control::GlobalSystemMediaTransportControlsSessionManager as GSMTCSessionManager;
 use windows::Media::Control::GlobalSystemMediaTransportControlsSessionMediaProperties as GSMTCSessionMediaProperties;
+use windows::Media::Control::GlobalSystemMediaTransportControlsSessionPlaybackStatus as GSMTCSessionPlaybackStatus;
 use windows::Media::Control::GlobalSystemMediaTransportControlsSessionTimelineProperties as GSMTCSessionTimelineProperties;
 
 use crate::glib_spawn;
@@ -115,7 +116,7 @@ impl OsImp for GSMTC {
             PlayerStatus::Unsupported("failed to get PlaybackInfo!")
         })?;
 
-        let (playback_status, _) = playback_info.PlaybackStatus().map_err(|e| {
+        let GSMTCSessionPlaybackStatus(playback_status) = playback_info.PlaybackStatus().map_err(|e| {
             error!("try_sync_track failed: {e}");
             PlayerStatus::Unsupported("failed to get PlaybackStatus!")
         })?;
