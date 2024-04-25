@@ -93,9 +93,9 @@ impl Window {
         imp.vbox
             .set_properties(&[("orientation", &gtk::Orientation::Vertical)]);
 
-        imp.vbox.append(&imp.input_title);
-        imp.vbox.append(&imp.input_artists);
-        imp.vbox.append(&imp.input_album);
+        for entry in [&imp.input_title, &imp.input_artists, &imp.input_album] {
+            imp.vbox.append(entry);
+        }
 
         imp.vbox.append(&imp.result_scrolled_window);
         imp.vbox.append(&imp.set_button);
