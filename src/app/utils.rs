@@ -37,9 +37,9 @@ pub(super) fn set_click_pass_through(window: &window::Window, enabled: bool) {
         return;
     };
 
-    let handle = surface.handle();
+    let (handle, _) = surface.handle();
 
-    set_window_click_through(handle.0, enabled);
+    set_window_click_through(handle, enabled);
 }
 
 #[cfg(not(target_os = "windows"))]
