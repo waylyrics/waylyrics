@@ -151,14 +151,12 @@
 <a href="#149" id="149">149</a>
 <a href="#150" id="150">150</a>
 <a href="#151" id="151">151</a>
-<a href="#152" id="152">152</a>
-<a href="#153" id="153">153</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Result;
 <span class="kw">use </span>gtk::glib::Variant;
 <span class="kw">use </span>std::path::PathBuf;
 
 <span class="kw">use </span><span class="kw">crate</span>::log::{debug, error, info, warn};
-<span class="kw">use </span><span class="kw">crate</span>::GTK_APPLICATION;
+<span class="kw">use </span><span class="kw">crate</span>::GTK_DBUS_CONNECTION;
 <span class="kw">use </span>gtk::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>gtk::subclass::prelude::ObjectSubclassIsExt;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
@@ -236,20 +234,18 @@
     <span class="kw">let </span>result = fetch_lyric(track_meta, window).<span class="kw">await</span>;
     <span class="kw">if </span>result.is_ok() {
         <span class="kw">if </span>update_lyric_cache(<span class="kw-2">&amp;</span>cache_path) {
-            <span class="kw">let </span>app = GTK_APPLICATION
-                .with_borrow(|app| app.as_ref().cloned())
+            <span class="kw">let </span>dbus_conn = GTK_DBUS_CONNECTION
+                .with_borrow(|conn| conn.as_ref().cloned())
                 .expect(<span class="string">"GApplication was not set"</span>);
-            <span class="kw">if let </span><span class="prelude-val">Some</span>(dbus_conn) = app.dbus_connection() {
-                <span class="kw">let _ </span>= dbus_conn.emit_signal(
-                    <span class="prelude-val">None</span>,
-                    <span class="string">"/io/github/waylyrics/Waylyrics"</span>,
-                    <span class="kw">crate</span>::APP_ID,
-                    <span class="string">"NewLyricCache"</span>,
-                    <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>Variant::tuple_from_iter([cache_path
-                        .to_string_lossy()
-                        .to_variant()])),
-                );
-            }
+            <span class="kw">let _ </span>= dbus_conn.emit_signal(
+                <span class="prelude-val">None</span>,
+                <span class="string">"/io/github/waylyrics/Waylyrics"</span>,
+                <span class="kw">crate</span>::APP_ID,
+                <span class="string">"NewLyricCache"</span>,
+                <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>Variant::tuple_from_iter([cache_path
+                    .to_string_lossy()
+                    .to_variant()])),
+            );
         }
     }
     result
