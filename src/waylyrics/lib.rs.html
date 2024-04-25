@@ -55,10 +55,11 @@
 <a href="#53" id="53">53</a>
 <a href="#54" id="54">54</a>
 <a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{cell::RefCell, path::PathBuf, sync::OnceLock};
 
 <span class="kw">use </span>app::Window;
-<span class="kw">use </span>gtk::glib::MainContext;
+<span class="kw">use </span>gtk::{glib::MainContext, Application};
 <span class="kw">use </span>lyric_providers::LyricProvider;
 <span class="kw">use </span>once_cell::sync::Lazy;
 <span class="kw">use </span>regex::RegexSet;
@@ -79,6 +80,7 @@
     <span class="kw">pub static </span>THEME_PATH: RefCell&lt;PathBuf&gt; = RefCell::new(PathBuf::new());
     <span class="kw">pub static </span>EXCLUDED_REGEXES: RefCell&lt;RegexSet&gt; = RefCell::new(RegexSet::empty());
     <span class="kw">pub static </span>MAIN_WINDOW: RefCell&lt;<span class="prelude-ty">Option</span>&lt;Window&gt;&gt; = <span class="kw">const </span>{ RefCell::new(<span class="prelude-val">None</span>) };
+    <span class="kw">pub static </span>GTK_APPLICATION: RefCell&lt;<span class="prelude-ty">Option</span>&lt;Application&gt;&gt; = <span class="kw">const </span>{ RefCell::new(<span class="prelude-val">None</span>) };
 
     <span class="kw">pub static </span>PLAYER_IDENTITY_BLACKLIST: RefCell&lt;Vec&lt;String&gt;&gt; = RefCell::new(Default::default());
     <span class="kw">pub static </span>PLAYER_NAME_BLACKLIST: RefCell&lt;Vec&lt;String&gt;&gt; = RefCell::new(Default::default());

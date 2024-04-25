@@ -133,10 +133,33 @@
 <a href="#131" id="131">131</a>
 <a href="#132" id="132">132</a>
 <a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Result;
+<span class="kw">use </span>gtk::glib::Variant;
 <span class="kw">use </span>std::path::PathBuf;
 
 <span class="kw">use </span><span class="kw">crate</span>::log::{debug, error, info, warn};
+<span class="kw">use </span><span class="kw">crate</span>::GTK_APPLICATION;
+<span class="kw">use </span>gtk::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>gtk::subclass::prelude::ObjectSubclassIsExt;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 
@@ -212,17 +235,32 @@
 
     <span class="kw">let </span>result = fetch_lyric(track_meta, window).<span class="kw">await</span>;
     <span class="kw">if </span>result.is_ok() {
-        update_lyric_cache(<span class="kw-2">&amp;</span>cache_path);
+        <span class="kw">if </span>update_lyric_cache(<span class="kw-2">&amp;</span>cache_path) {
+            <span class="kw">let </span>app = GTK_APPLICATION
+                .with_borrow(|app| app.as_ref().cloned())
+                .expect(<span class="string">"GApplication was not set"</span>);
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(dbus_conn) = app.dbus_connection() {
+                <span class="kw">let _ </span>= dbus_conn.emit_signal(
+                    <span class="prelude-val">None</span>,
+                    <span class="string">"/io/github/waylyrics/Waylyrics"</span>,
+                    <span class="kw">crate</span>::APP_ID,
+                    <span class="string">"NewLyricCache"</span>,
+                    <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>Variant::tuple_from_iter([cache_path
+                        .to_string_lossy()
+                        .to_variant()])),
+                );
+            }
+        }
     }
     result
 }
 
 <span class="doccomment">/// Using olyric and tlyric inside LYRIC to update corresponding cache file.
-</span><span class="kw">pub fn </span>update_lyric_cache(cache_path: <span class="kw-2">&amp;</span>PathBuf) {
+</span><span class="kw">pub fn </span>update_lyric_cache(cache_path: <span class="kw-2">&amp;</span>PathBuf) -&gt; bool {
     <span class="kw">let </span>cache_dir = cache_path.parent().unwrap();
     <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = std::fs::create_dir_all(cache_dir) {
         <span class="macro">error!</span>(<span class="string">"cannot create cache dir {cache_dir:?}: {e}"</span>);
-        <span class="kw">return</span>;
+        <span class="kw">return </span><span class="bool-val">false</span>;
     }
 
     LYRIC.with_borrow(
@@ -230,8 +268,9 @@
              origin,
              translation,
          }| {
-            <span class="kw">if </span>(<span class="kw-2">&amp;</span>LyricOwned::None, <span class="kw-2">&amp;</span>LyricOwned::None) == (origin, translation) {
-                <span class="kw">return</span>;
+            <span class="comment">// do not cache empty lyric
+            </span><span class="kw">if </span>(<span class="kw-2">&amp;</span>LyricOwned::None, <span class="kw-2">&amp;</span>LyricOwned::None) == (origin, translation) {
+                <span class="kw">return </span><span class="bool-val">false</span>;
             }
 
             <span class="kw">let </span><span class="prelude-val">Err</span>(e) = std::fs::write(
@@ -244,12 +283,13 @@
                 .expect(<span class="string">"cannot serialize lyrics!"</span>),
             ) <span class="kw">else </span>{
                 <span class="macro">info!</span>(<span class="string">"cached to {cache_path:?}"</span>);
-                <span class="kw">return</span>;
+                <span class="kw">return </span><span class="bool-val">true</span>;
             };
 
             <span class="macro">error!</span>(<span class="string">"cannot write cache {cache_path:?}: {e}"</span>);
-        },
-    );
+            <span class="bool-val">false
+        </span>},
+    )
 }
 
 <span class="attr">#[derive(Deserialize, Serialize)]
