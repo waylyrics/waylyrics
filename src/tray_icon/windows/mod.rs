@@ -15,6 +15,7 @@ use crate::{
 
 const EXIT: &str = "exit";
 const RESTART: &str = "restart";
+const REFETCH_LYRIC: &str = "refetch-lyric";
 const SEARCH_LYRIC: &str = "search-lyric";
 const SWITCH_PASSTHROUGH: &str = "switch-passthrough";
 const SWITCH_DECORATION: &str = "switch-decoration";
@@ -37,6 +38,11 @@ fn build_tray_menu() -> Result<Menu> {
     let search_lyric = MenuItemBuilder::new()
         .text(gettext("Search lyric"))
         .id(SEARCH_LYRIC.into())
+        .enabled(true)
+        .build();
+    let refetch_lyric = MenuItemBuilder::new()
+        .text(gettext("Refetch lyric"))
+        .id(REFETCH_LYRIC.into())
         .enabled(true)
         .build();
     let switch_decoration = MenuItemBuilder::new()
@@ -62,6 +68,7 @@ fn build_tray_menu() -> Result<Menu> {
 
     Ok(Menu::with_items(&[
         &search_lyric,
+        &refetch_lyric,
         &switch_decoration,
         &switch_passthrough,
         &restart,
@@ -75,6 +82,9 @@ fn menu_event_handler() {
         match event.as_str() {
             SEARCH_LYRIC => {
                 let _ = play_action().send_blocking(PlayAction::SearchLyric);
+            }
+            REFETCH_LYRIC => {
+                let _ = play_action().send_blocking(PlayAction::RefetchLyric);
             }
             RESTART => {
                 let _ = Command::new("powershell")
