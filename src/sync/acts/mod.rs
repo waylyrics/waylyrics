@@ -69,6 +69,34 @@ pub fn register_search_lyric(app: &Application, wind: &app::Window, trigger: &st
     bind_shortcut("app.search-lyric", wind, trigger);
 }
 
+/// update lyric, but do not ignore cache
+pub fn register_reload_lyric(app: &Application) {
+    let action = SimpleAction::new("reload-lyric", None);
+    action.connect_activate(move |_, _| {
+        let metainfo = TRACK_PLAYING_STATE
+            .with_borrow(|TrackState { metainfo, .. }| metainfo.as_ref().cloned());
+        let Some(metainfo) = metainfo else {
+            return;
+        };
+
+        crate::log::debug!("spawned update_lyric from reload-lyric action");
+        glib_spawn!(async move {
+            let Some(wind) = MAIN_WINDOW.with_borrow(|wind| wind.as_ref().cloned()) else {
+                return;
+            };
+            reset_lyric_labels(&wind, None);
+            if let Err(err) = update_lyric(&metainfo, &wind, false).await {
+                show_dialog(
+                    Some(&wind),
+                    &format!("cannot refetch lyric: {err:?}"),
+                    gtk::MessageType::Error,
+                )
+            }
+        });
+    });
+    app.add_action(&action);
+}
+
 pub fn register_refetch_lyric(app: &Application, window: &app::Window, trigger: &str) {
     let action = SimpleAction::new("refetch-lyric", None);
     action.connect_activate(move |_, _| {

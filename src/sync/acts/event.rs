@@ -13,6 +13,7 @@ use crate::log::debug;
 pub enum PlayAction {
     Connect(String),
     Disconnect,
+    ReloadLyric,
     RefetchLyric,
     RemoveLyric,
     SearchLyric,
@@ -27,6 +28,7 @@ fn register_play_action(app: WeakRef<Application>) -> Sender<PlayAction> {
             let (action_name, parameter) = match action {
                 PlayAction::Connect(player_id) => ("connect", Some(player_id.to_variant())),
                 PlayAction::Disconnect => ("disconnect", None),
+                PlayAction::ReloadLyric => ("reload-lyric", None),
                 PlayAction::RefetchLyric => ("refetch-lyric", None),
                 PlayAction::RemoveLyric => ("remove-lyric", None),
                 PlayAction::SearchLyric => ("search-lyric", None),

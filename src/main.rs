@@ -211,6 +211,7 @@ fn register_actions(
     register_reload_theme(app, wind, &reload_theme);
     register_search_lyric(app, wind, &search_lyric);
     register_remove_lyric(app, wind);
+    register_reload_lyric(app);
     register_refetch_lyric(app, wind, &refetch_lyric);
 }
 
