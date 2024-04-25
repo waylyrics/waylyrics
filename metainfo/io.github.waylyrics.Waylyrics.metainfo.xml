@@ -38,6 +38,16 @@
   </screenshots>
 
   <releases>
+    <release version="0.3.5" date="2024-04-25">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.5</url>
+        <description>
+          <p>Features</p>
+            <ul>
+              <li>Reload lyric from cache by `reload-lyric` action</li>
+              <li>Emit `NewLyricCache` signal on lyric cache update</li>
+            </ul>
+        </description>
+    </release>
     <release version="0.3.4" date="2024-04-25">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.4</url>
         <description>
