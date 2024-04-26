@@ -6,6 +6,7 @@ use crate::lyric_providers::qqmusic::QQMusic;
 use crate::sync::interop::mpris::PLAYER;
 use crate::sync::lyric::fetch::tricks::get_lrc_path;
 use crate::sync::lyric::fetch::LyricHint;
+use crate::sync::ENABLE_LOCAL_LYRIC;
 
 pub fn hint_from_player() -> Option<LyricHint> {
     PLAYER.with_borrow(|player| {
