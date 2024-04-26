@@ -1,8 +1,8 @@
-#[cfg(feature = "net-test")]
+#[cfg(not(feature = "offline-test"))]
 use anyhow::Result;
 
 /// This test cannot be run from offline environment!
-#[cfg(feature = "net-test")]
+#[cfg(not(feature = "offline-test"))]
 #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
 async fn get_netease_lyric() -> Result<()> {
     use std::time::Duration;
