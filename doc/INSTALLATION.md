@@ -31,7 +31,9 @@
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/waylyrics.svg)](https://repology.org/project/waylyrics/versions)
 
-另，Fedora用户可以使用 [yohane-shiro/waylyrics](https://copr.fedorainfracloud.org/coprs/yohane-shiro/waylyrics/)
+另，Fedora 用户可以使用 [yohane-shiro/waylyrics](https://copr.fedorainfracloud.org/coprs/yohane-shiro/waylyrics/)
+
+Arch Linux 用户可以使用 [archlinuxcn](https://github.com/archlinuxcn/repo) 源安装
 
 # 安装构建依赖
 
