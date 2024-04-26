@@ -31,9 +31,19 @@
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/waylyrics.svg)](https://repology.org/project/waylyrics/versions)
 
-另，Fedora 用户可以使用 [yohane-shiro/waylyrics](https://copr.fedorainfracloud.org/coprs/yohane-shiro/waylyrics/)
+## Fedora Copr
+
+Fedora 用户可以使用 [yohane-shiro/waylyrics](https://copr.fedorainfracloud.org/coprs/yohane-shiro/waylyrics)
+
+## archlinuxcn
 
 Arch Linux 用户可以使用 [archlinuxcn](https://github.com/archlinuxcn/repo) 源安装
+
+## Flatpak
+
+<a href='https://flathub.org/apps/io.github.waylyrics.Waylyrics'>
+    <img width='240' alt='Download on Flathub' src='https://flathub.org/api/badge?locale=zh-Hans'/>
+</a>
 
 # 安装构建依赖
 

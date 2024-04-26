@@ -30,9 +30,19 @@ You can also place themes to `${XDG_DATA_HOME}/_themes/`, waylyrics will try thi
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/waylyrics.svg)](https://repology.org/project/waylyrics/versions)
 
+## Fedora Copr
+
 Fedora users may use [yohane-shiro/waylyrics](https://copr.fedorainfracloud.org/coprs/yohane-shiro/waylyrics/) in Fedora Copr.
 
+## archlinuxcn
+
 Arch Linux users may use [archlinuxcn](https://github.com/archlinuxcn/repo).
+
+## Flatpak
+
+<a href='https://flathub.org/apps/io.github.waylyrics.Waylyrics'>
+    <img width='240' alt='Download on Flathub' src='https://flathub.org/api/badge'/>
+</a>
 
 # Prepare Dependencies
 
