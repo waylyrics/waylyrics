@@ -94,9 +94,9 @@ impl ObjectImpl for Window {
             &self.align_mode_menu,
         );
 
-	for item in [&passthrough, &hide_decoration, &reload_theme] {
-	    ui_section.append_item(item);
-	}
+        for item in [&passthrough, &hide_decoration, &reload_theme] {
+            ui_section.append_item(item);
+        }
 
         self.menu.append_section(None, &ui_section);
 
@@ -106,9 +106,9 @@ impl ObjectImpl for Window {
             &self.player_menu,
         );
 
-	for item in [&search_lyric, &remove_lyric, &refetch_lyric] {
-	    play_section.append_item(item);
-	}
+        for item in [&search_lyric, &remove_lyric, &refetch_lyric] {
+            play_section.append_item(item);
+        }
 
         self.menu.append_section(None, &play_section);
 

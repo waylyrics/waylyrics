@@ -49,6 +49,11 @@ pub struct Config {
     /// if enabled, lyrics match one or more `filter_regex` will be hidden
     pub enable_filter_regex: bool,
 
+    /// if enabled, when waylyrics find `xesam:url`
+    /// starts with `file://` and no any other hint was matched,
+    /// waylyrics will try to read the `.lrc` file has same filename
+    pub enable_local_lyric: bool,
+
     /// hide lyric if it matches any of these regexies
     /// inspired by LyricX's filter list
     pub filter_regexies: Vec<String>,
@@ -120,6 +125,7 @@ impl Default for Config {
             theme: "default".into(),
             cache_lyrics: true,
             enable_filter_regex: false,
+            enable_local_lyric: true,
             filter_regexies: default_filter_regexies(),
             triggers: Triggers::default(),
             qqmusic_api_base_url: None,

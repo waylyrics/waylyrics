@@ -116,10 +116,11 @@ impl OsImp for GSMTC {
             PlayerStatus::Unsupported("failed to get PlaybackInfo!")
         })?;
 
-        let GSMTCSessionPlaybackStatus(playback_status) = playback_info.PlaybackStatus().map_err(|e| {
-            error!("try_sync_track failed: {e}");
-            PlayerStatus::Unsupported("failed to get PlaybackStatus!")
-        })?;
+        let GSMTCSessionPlaybackStatus(playback_status) =
+            playback_info.PlaybackStatus().map_err(|e| {
+                error!("try_sync_track failed: {e}");
+                PlayerStatus::Unsupported("failed to get PlaybackStatus!")
+            })?;
         trace!("PlaybackStatus = {}", playback_status);
         match playback_status {
             // Closed

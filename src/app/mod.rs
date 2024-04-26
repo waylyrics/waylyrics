@@ -25,6 +25,7 @@ pub fn build_main_window(
         cache_lyrics,
         length_toleration_ms,
         show_default_text_on_idle,
+        show_lyric_on_pause,
     );
 
     window.set_size_request(500, WINDOW_MIN_HEIGHT);
@@ -70,12 +71,7 @@ pub fn build_main_window(
     });
 
     window.set_icon_name(Some(crate::APP_ID));
-    window.imp().length_toleration_ms.set(length_toleration_ms);
-    window
-        .imp()
-        .show_default_text_on_idle
-        .set(show_default_text_on_idle);
-    window.imp().show_lyric_on_pause.set(show_lyric_on_pause);
+
     window
 }
 

@@ -27,7 +27,6 @@ thread_local! {
     pub static PLAYER_IDENTITY_BLACKLIST: RefCell<Vec<String>> = RefCell::new(Default::default());
     pub static PLAYER_NAME_BLACKLIST: RefCell<Vec<String>> = RefCell::new(Default::default());
 }
-
 pub static LYRIC_PROVIDERS: OnceLock<Vec<&'static dyn LyricProvider>> = OnceLock::new();
 
 static MAIN_CONTEXT: Lazy<MainContext> = Lazy::new(gtk::glib::MainContext::default);

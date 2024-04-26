@@ -1,5 +1,6 @@
 use std::cell::RefCell;
 use std::path::PathBuf;
+use std::sync::OnceLock;
 use std::time::Duration;
 
 use crate::lyric_providers::LyricOwned;
@@ -40,6 +41,8 @@ thread_local! {
     /// including: track_id, paused, cache_path
     pub static TRACK_PLAYING_STATE: RefCell<TrackState> = RefCell::new(Default::default());
 }
+
+pub static ENABLE_LOCAL_LYRIC: OnceLock<bool> = OnceLock::new();
 
 mod acts;
 pub use acts::{

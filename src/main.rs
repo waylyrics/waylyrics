@@ -122,6 +122,7 @@ fn build_ui(app: &Application) -> Result<()> {
         show_tray_icon,
         player_name_blacklist,
         player_identity_blacklist,
+        enable_local_lyric,
     } = config;
 
     #[cfg(feature = "tray-icon")]
@@ -188,6 +189,8 @@ fn build_ui(app: &Application) -> Result<()> {
         log::info!("window state save status: {save_state:?}");
         std::process::exit(0);
     });
+
+    let _ = ENABLE_LOCAL_LYRIC.set(enable_local_lyric);
 
     MAIN_WINDOW.set(Some(wind));
     PLAYER_IDENTITY_BLACKLIST.set(player_identity_blacklist);
