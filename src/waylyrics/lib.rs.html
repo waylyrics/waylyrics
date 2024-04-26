@@ -55,7 +55,6 @@
 <a href="#53" id="53">53</a>
 <a href="#54" id="54">54</a>
 <a href="#55" id="55">55</a>
-<a href="#56" id="56">56</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{cell::RefCell, path::PathBuf, sync::OnceLock};
 
 <span class="kw">use </span>app::Window;
@@ -85,7 +84,6 @@
     <span class="kw">pub static </span>PLAYER_IDENTITY_BLACKLIST: RefCell&lt;Vec&lt;String&gt;&gt; = RefCell::new(Default::default());
     <span class="kw">pub static </span>PLAYER_NAME_BLACKLIST: RefCell&lt;Vec&lt;String&gt;&gt; = RefCell::new(Default::default());
 }
-
 <span class="kw">pub static </span>LYRIC_PROVIDERS: OnceLock&lt;Vec&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="kw">dyn </span>LyricProvider&gt;&gt; = OnceLock::new();
 
 <span class="kw">static </span>MAIN_CONTEXT: Lazy&lt;MainContext&gt; = Lazy::new(gtk::glib::MainContext::default);

@@ -282,9 +282,9 @@
             </span><span class="kw-2">&amp;</span><span class="self">self</span>.align_mode_menu,
         );
 
-	<span class="kw">for </span>item <span class="kw">in </span>[<span class="kw-2">&amp;</span>passthrough, <span class="kw-2">&amp;</span>hide_decoration, <span class="kw-2">&amp;</span>reload_theme] {
-	    ui_section.append_item(item);
-	}
+        <span class="kw">for </span>item <span class="kw">in </span>[<span class="kw-2">&amp;</span>passthrough, <span class="kw-2">&amp;</span>hide_decoration, <span class="kw-2">&amp;</span>reload_theme] {
+            ui_section.append_item(item);
+        }
 
         <span class="self">self</span>.menu.append_section(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>ui_section);
 
@@ -294,9 +294,9 @@
             </span><span class="kw-2">&amp;</span><span class="self">self</span>.player_menu,
         );
 
-	<span class="kw">for </span>item <span class="kw">in </span>[<span class="kw-2">&amp;</span>search_lyric, <span class="kw-2">&amp;</span>remove_lyric, <span class="kw-2">&amp;</span>refetch_lyric] {
-	    play_section.append_item(item);
-	}
+        <span class="kw">for </span>item <span class="kw">in </span>[<span class="kw-2">&amp;</span>search_lyric, <span class="kw-2">&amp;</span>remove_lyric, <span class="kw-2">&amp;</span>refetch_lyric] {
+            play_section.append_item(item);
+        }
 
         <span class="self">self</span>.menu.append_section(<span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>play_section);
 

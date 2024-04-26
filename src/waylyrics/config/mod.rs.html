@@ -160,6 +160,12 @@
 <a href="#158" id="158">158</a>
 <a href="#159" id="159">159</a>
 <a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>documented::DocumentedFields;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 <span class="kw">use </span>strum::{EnumIter, EnumString};
@@ -210,6 +216,11 @@
 
     <span class="doccomment">/// if enabled, lyrics match one or more `filter_regex` will be hidden
     </span><span class="kw">pub </span>enable_filter_regex: bool,
+
+    <span class="doccomment">/// if enabled, when waylyrics find `xesam:url`
+    /// starts with `file://` and no any other hint was matched,
+    /// waylyrics will try to read the `.lrc` file has same filename
+    </span><span class="kw">pub </span>enable_local_lyric: bool,
 
     <span class="doccomment">/// hide lyric if it matches any of these regexies
     /// inspired by LyricX's filter list
@@ -282,6 +293,7 @@
             theme: <span class="string">"default"</span>.into(),
             cache_lyrics: <span class="bool-val">true</span>,
             enable_filter_regex: <span class="bool-val">false</span>,
+            enable_local_lyric: <span class="bool-val">true</span>,
             filter_regexies: default_filter_regexies(),
             triggers: Triggers::default(),
             qqmusic_api_base_url: <span class="prelude-val">None</span>,

@@ -91,6 +91,8 @@
 <a href="#89" id="89">89</a>
 <a href="#90" id="90">90</a>
 <a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>imp;
 
 <span class="kw">use </span>gio::Settings;
@@ -115,6 +117,7 @@
         cache_lyrics: bool,
         length_toleration_ms: u128,
         show_default_text_on_idle: bool,
+        show_lyric_on_pause: bool,
     ) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>window: <span class="self">Self </span>= Object::builder().property(<span class="string">"application"</span>, app).build();
         <span class="kw">let </span>imp = window.imp();
@@ -124,6 +127,7 @@
         imp.cache_lyrics.set(cache_lyrics);
         imp.length_toleration_ms.set(length_toleration_ms);
         imp.show_default_text_on_idle.set(show_default_text_on_idle);
+        imp.show_lyric_on_pause.set(show_lyric_on_pause);
 
         window
     }

@@ -55,8 +55,12 @@
 <a href="#53" id="53">53</a>
 <a href="#54" id="54">54</a>
 <a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::RefCell;
 <span class="kw">use </span>std::path::PathBuf;
+<span class="kw">use </span>std::sync::OnceLock;
 <span class="kw">use </span>std::time::Duration;
 
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::LyricOwned;
@@ -97,6 +101,8 @@
     /// including: track_id, paused, cache_path
     </span><span class="kw">pub static </span>TRACK_PLAYING_STATE: RefCell&lt;TrackState&gt; = RefCell::new(Default::default());
 }
+
+<span class="kw">pub static </span>ENABLE_LOCAL_LYRIC: OnceLock&lt;bool&gt; = OnceLock::new();
 
 <span class="kw">mod </span>acts;
 <span class="kw">pub use </span>acts::{
