@@ -32,6 +32,8 @@ You can also place themes to `${XDG_DATA_HOME}/_themes/`, waylyrics will try thi
 
 Fedora users may use [yohane-shiro/waylyrics](https://copr.fedorainfracloud.org/coprs/yohane-shiro/waylyrics/) in Fedora Copr.
 
+Arch Linux users may use [archlinuxcn](https://github.com/archlinuxcn/repo).
+
 # Prepare Dependencies
 
 ## Debian-based
