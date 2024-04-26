@@ -86,7 +86,7 @@ gettext-rs = { version = "0.7.0", features = [
 opencc-rust = { version = "1.1", optional = true }
 
 [features]
-default = ["mimalloc", "net-test", "tray-icon", "i18n", "journald"]
+default = ["mimalloc", "tray-icon", "i18n", "journald"]
 tray-icon = ["action-event", "dep:ksni", "dep:tray-icon"]
 i18n = ["dep:gettext-rs"]
 journald = ["dep:tracing-journald"]
@@ -95,7 +95,7 @@ opencc = ["dep:opencc-rust"]
 mimalloc = ["dep:mimalloc"]
 vendored = ["dbus/vendored"]
 action-event = ["dep:async-channel"]
-net-test = []
+offline-test = []
 
 [target.'cfg(unix)'.dependencies]
 # MPRIS integration
