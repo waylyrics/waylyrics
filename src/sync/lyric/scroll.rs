@@ -54,8 +54,7 @@ fn set_lyric_with_mode(
             set_lyric(window, None, "below");
         }
         LyricDisplayMode::PreferTranslation => {
-            let text = translation.or(origin);
-            set_lyric(window, text, "above");
+            set_lyric(window, translation.or(origin), "above");
             set_lyric(window, None, "below");
         }
     }
