@@ -381,7 +381,7 @@
 <span class="kw">pub fn </span>start_tray_service() -&gt; <span class="prelude-ty">Option</span>&lt;()&gt; {
     <span class="kw">let </span>service = TrayService::new(TrayIcon::default());
 
-    service.spawn();
+    service.spawn_without_dbus_name();
     <span class="prelude-val">Some</span>(())
 }
 
