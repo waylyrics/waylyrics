@@ -100,7 +100,7 @@ offline-test = []
 [target.'cfg(unix)'.dependencies]
 # MPRIS integration
 dbus = "0.9.7"
-ksni = { git = "https://github.com/waylyrics/ksni.git", optional = true }
+ksni = { version = "0.2.2", optional = true }
 mpris = "2.0.1"
 
 [target.'cfg(target_os = "windows")'.dependencies]

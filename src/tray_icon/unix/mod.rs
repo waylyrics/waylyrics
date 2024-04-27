@@ -177,7 +177,7 @@ impl Tray for TrayIcon {
 pub fn start_tray_service() -> Option<()> {
     let service = TrayService::new(TrayIcon::default());
 
-    service.spawn();
+    service.spawn_without_dbus_name();
     Some(())
 }
 

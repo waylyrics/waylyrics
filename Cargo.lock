@@ -1782,8 +1782,9 @@ dependencies = [
 
 [[package]]
 name = "ksni"
-version = "0.2.1"
-source = "git+https://github.com/waylyrics/ksni.git#af6fa6e6e29b7cb3779f98c1ca3aaeb8744ef4c4"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4934310bdd016e55725482b8d35ac0c16fd058c1b955d8959aa2d953b918c85b"
 dependencies = [
  "dbus",
  "dbus-codegen",
