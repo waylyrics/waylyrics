@@ -6,7 +6,7 @@
   </replaces>
 
   <name>Waylyrics</name>
-  <summary>A furry way to show desktop lyrics</summary>
+  <summary>Show desktop lyrics in a furry way</summary>
   <launchable type="desktop-id">io.github.waylyrics.Waylyrics.desktop</launchable>
 
   <developer id="io.github.waylyrics">
