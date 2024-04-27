@@ -54,7 +54,7 @@ pub fn hint_from_player() -> Option<LyricHint> {
                 }),
             _ => meta.url().and_then(|meta_url| match meta_url {
                 _ if meta_url.starts_with("file://") => {
-                    if *ENABLE_LOCAL_LYRIC
+                    if !*ENABLE_LOCAL_LYRIC
                         .get()
                         .expect("enable-local-lyric was not set!")
                     {
