@@ -1,4 +1,4 @@
-use lrc_nom::{parse, LrcParseError};
+use lrc_nom::{parse_single, LrcParseError};
 use std::time::Duration;
 
 use super::{LyricLine, LyricLineOwned, LyricProvider};
@@ -12,8 +12,10 @@ pub fn lrc_iter<'a>(
     lyric_lines: impl Iterator<Item = &'a str>,
 ) -> Result<Vec<LyricLine<'a>>, LrcParseError> {
     let filtered_lines = lyric_lines.filter(|l| l.starts_with('['));
-    let mut lrc_vec: Vec<_> = parse(filtered_lines)?
-        .into_iter()
+    let mut lrc_vec: Vec<_> = filtered_lines
+        .enumerate()
+        .filter_map(|(line_num, line)| parse_single(line, line_num).ok())
+        .flatten()
         .filter_map(|lrc_item| match lrc_item {
             lrc_nom::LrcItem::Metadata(_) => None,
             lrc_nom::LrcItem::Lyric(lyric, timestamps) => {

@@ -94,12 +94,13 @@ Author: poly000
     }
 
     #[test]
-    #[should_panic]
-    fn ill_formed_tag() {
+    fn ill_formed_tag() -> Result<()> {
         let lrc = r#"
-[ Hello there ]
+[SAYONARA]
 "#;
-        lrc_iter(lrc.lines()).unwrap();
+        let lyrics = lrc_iter(lrc.lines())?;
+        assert!(lyrics.is_empty());
+        Ok(())
     }
 
     #[test]
