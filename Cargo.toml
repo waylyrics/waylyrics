@@ -8,7 +8,6 @@ license-file = "LICENSE"
 
 [profile.release]
 lto = "thin"
-strip = true
 panic = "abort"
 codegen-units = 1
 opt-level = "s"
