@@ -221,6 +221,10 @@ fn register_actions(
     register_remove_lyric(app, wind);
     register_reload_lyric(app);
     register_refetch_lyric(app, wind, &refetch_lyric);
+    #[cfg(feature = "import-lyric")]
+    register_import_original_lyric(app, wind);
+    #[cfg(feature = "import-lyric")]
+    register_import_translated_lyric(app, wind);
 }
 
 fn setup_providers(providers_enabled: Vec<String>) {

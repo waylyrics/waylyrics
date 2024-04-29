@@ -18,14 +18,15 @@ use crate::{
     glib_spawn,
     lyric_providers::LyricOwned,
     sync::{
-        interop::clean_player, interop::common::update_lyric, lyric::cache::update_lyric_cache,
-        TrackState, LYRIC, TRACK_PLAYING_STATE,
+        interop::clean_player, interop::common::update_lyric, TrackState, LYRIC,
+        TRACK_PLAYING_STATE,
     },
     utils::reset_lyric_labels,
     MAIN_WINDOW,
 };
 
 use crate::sync::interop::connect_player_with_id;
+mod utils;
 
 pub fn register_disconnect(app: &Application) {
     let action = SimpleAction::new("disconnect", None);
@@ -90,7 +91,7 @@ pub fn register_reload_lyric(app: &Application) {
                     Some(&wind),
                     &format!("cannot refetch lyric: {err:?}"),
                     gtk::MessageType::Error,
-                )
+                );
             }
         });
     });
@@ -117,7 +118,7 @@ pub fn register_refetch_lyric(app: &Application, window: &app::Window, trigger: 
                     Some(&wind),
                     &format!("cannot refetch lyric: {err:?}"),
                     gtk::MessageType::Error,
-                )
+                );
             }
         });
     });
@@ -128,23 +129,89 @@ pub fn register_refetch_lyric(app: &Application, window: &app::Window, trigger: 
 
 pub fn register_remove_lyric(app: &Application, wind: &app::Window) {
     let action = SimpleAction::new("remove-lyric", None);
-    let cache_lyrics = wind.imp().cache_lyrics.get();
     action.connect_activate(clone!(@weak wind as window => move |_, _| {
         // Clear current lyric
         let origin = LyricOwned::LineTimestamp(vec![]);
         let translation = LyricOwned::None;
         LYRIC.set(LyricState{ origin, translation });
+        let cache_lyrics = window.imp().cache_lyrics.get();
         // Update cache
         if cache_lyrics {
-            TRACK_PLAYING_STATE.with_borrow(|TrackState{ cache_path, ..}| {
-                if let Some(cache_path) = cache_path {
-                    update_lyric_cache(cache_path);
-                }
-            });
+            utils::update_cache();
         }
         // Remove current lyric inside window
         reset_lyric_labels(&window, None);
         info!("removed lyric");
+    }));
+    app.add_action(&action);
+}
+
+#[cfg(feature = "import-lrc")]
+pub fn register_import_original_lyric(app: &Application, wind: &app::Window) {
+    use crate::log::error;
+    use crate::lyric_providers::{utils::lrc_iter, Lyric};
+
+    let action = SimpleAction::new("import-original-lyric", None);
+    action.connect_activate(clone!(@weak wind as window => move |_, _| {
+        glib_spawn!(async move {
+            let lrc_file = rfd::AsyncFileDialog::new().add_filter("Simple LRC", &["lrc"]).pick_file().await;
+            let Some(lrc_file) = lrc_file else {
+                return;
+            };
+            let lrc = match String::from_utf8(lrc_file.read().await) {
+                Ok(lrc) => lrc,
+                Err(e) => {
+                    let error_msg = format!( "failed to read LRC in UTF-8: {e}");
+                    error!(error_msg);
+                    show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
+                    return;
+                }
+            };
+            if let Ok(lyric) = lrc_iter(lrc.lines()) {
+                LYRIC.with_borrow_mut(|LyricState { origin, .. }|{
+                    *origin = Lyric::LineTimestamp(lyric).into_owned();
+                });
+            }
+            let cache_lyrics = window.imp().cache_lyrics.get();
+            if cache_lyrics {
+                utils::update_cache();
+            }
+        });
+    }));
+    app.add_action(&action);
+}
+
+#[cfg(feature = "import-lrc")]
+pub fn register_import_translated_lyric(app: &Application, wind: &app::Window) {
+    use crate::log::error;
+    use crate::lyric_providers::{utils::lrc_iter, Lyric};
+
+    let action = SimpleAction::new("import-translated-lyric", None);
+    action.connect_activate(clone!(@weak wind as window => move |_, _| {
+        glib_spawn!(async move {
+            let lrc_file = rfd::AsyncFileDialog::new().add_filter("Simple LRC", &["lrc"]).pick_file().await;
+            let Some(lrc_file) = lrc_file else {
+                return;
+            };
+            let lrc = match String::from_utf8(lrc_file.read().await) {
+                Ok(lrc) => lrc,
+                Err(e) => {
+                    let error_msg = format!( "failed to read LRC in UTF-8: {e}");
+                    error!(error_msg);
+                    show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
+                    return;
+                }
+            };
+            if let Ok(lyric) = lrc_iter(lrc.lines()) {
+                LYRIC.with_borrow_mut(|LyricState { translation, .. }|{
+                    *translation = Lyric::LineTimestamp(lyric).into_owned();
+                });
+            }
+            let cache_lyrics = window.imp().cache_lyrics.get();
+            if cache_lyrics {
+                utils::update_cache();
+            }
+        });
     }));
     app.add_action(&action);
 }

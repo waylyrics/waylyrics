@@ -49,6 +49,8 @@ pub use acts::{
     register_connect, register_disconnect, register_refetch_lyric, register_reload_lyric,
     register_remove_lyric, register_search_lyric,
 };
+#[cfg(feature = "import-lyric")]
+pub use acts::{register_import_original_lyric, register_import_translated_lyric};
 
 #[cfg(feature = "action-event")]
 pub use acts::{init_play_action_channel, PlayAction, PLAY_ACTION};
