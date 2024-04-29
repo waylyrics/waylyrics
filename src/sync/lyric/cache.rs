@@ -65,6 +65,18 @@ pub async fn fetch_lyric_cached(
                     tlyric: translation,
                     offset,
                 }) => {
+                    let dbus_conn = GTK_DBUS_CONNECTION
+                        .with_borrow(|conn| conn.as_ref().cloned())
+                        .expect("GApplication was not set");
+                    let _ = dbus_conn.emit_signal(
+                        None,
+                        "/io/github/waylyrics/Waylyrics",
+                        crate::APP_ID,
+                        "LoadLyricCache",
+                        Some(&Variant::tuple_from_iter([cache_path
+                            .to_string_lossy()
+                            .to_variant()])),
+                    );
                     LYRIC.set(LyricState {
                         origin,
                         translation,
