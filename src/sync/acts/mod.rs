@@ -146,7 +146,7 @@ pub fn register_remove_lyric(app: &Application, wind: &app::Window) {
     app.add_action(&action);
 }
 
-#[cfg(feature = "import-lrc")]
+#[cfg(feature = "import-lyric")]
 pub fn register_import_original_lyric(app: &Application, wind: &app::Window) {
     use crate::log::error;
     use crate::lyric_providers::{utils::lrc_iter, Lyric};
@@ -181,7 +181,7 @@ pub fn register_import_original_lyric(app: &Application, wind: &app::Window) {
     app.add_action(&action);
 }
 
-#[cfg(feature = "import-lrc")]
+#[cfg(feature = "import-lyric")]
 pub fn register_import_translated_lyric(app: &Application, wind: &app::Window) {
     use crate::log::error;
     use crate::lyric_providers::{utils::lrc_iter, Lyric};
