@@ -168,6 +168,73 @@
 <a href="#166" id="166">166</a>
 <a href="#167" id="167">167</a>
 <a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
 </pre></div><pre class="rust"><code><span class="kw">use crate</span>::{
     app::search_window,
     log::{info, warn},
@@ -188,14 +255,15 @@
     glib_spawn,
     lyric_providers::LyricOwned,
     sync::{
-        interop::clean_player, interop::common::update_lyric, lyric::cache::update_lyric_cache,
-        TrackState, LYRIC, TRACK_PLAYING_STATE,
+        interop::clean_player, interop::common::update_lyric, TrackState, LYRIC,
+        TRACK_PLAYING_STATE,
     },
     utils::reset_lyric_labels,
     MAIN_WINDOW,
 };
 
 <span class="kw">use </span><span class="kw">crate</span>::sync::interop::connect_player_with_id;
+<span class="kw">mod </span>utils;
 
 <span class="kw">pub fn </span>register_disconnect(app: <span class="kw-2">&amp;</span>Application) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"disconnect"</span>, <span class="prelude-val">None</span>);
@@ -260,7 +328,7 @@
                     <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>wind),
                     <span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">"cannot refetch lyric: {err:?}"</span>),
                     gtk::MessageType::Error,
-                )
+                );
             }
         });
     });
@@ -287,7 +355,7 @@
                     <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>wind),
                     <span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">"cannot refetch lyric: {err:?}"</span>),
                     gtk::MessageType::Error,
-                )
+                );
             }
         });
     });
@@ -298,23 +366,89 @@
 
 <span class="kw">pub fn </span>register_remove_lyric(app: <span class="kw-2">&amp;</span>Application, wind: <span class="kw-2">&amp;</span>app::Window) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"remove-lyric"</span>, <span class="prelude-val">None</span>);
-    <span class="kw">let </span>cache_lyrics = wind.imp().cache_lyrics.get();
     action.connect_activate(<span class="macro">clone!</span>(@weak wind <span class="kw">as </span>window =&gt; <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
         <span class="comment">// Clear current lyric
         </span><span class="kw">let </span>origin = LyricOwned::LineTimestamp(<span class="macro">vec!</span>[]);
         <span class="kw">let </span>translation = LyricOwned::None;
         LYRIC.set(LyricState{ origin, translation });
+        <span class="kw">let </span>cache_lyrics = window.imp().cache_lyrics.get();
         <span class="comment">// Update cache
         </span><span class="kw">if </span>cache_lyrics {
-            TRACK_PLAYING_STATE.with_borrow(|TrackState{ cache_path, ..}| {
-                <span class="kw">if let </span><span class="prelude-val">Some</span>(cache_path) = cache_path {
-                    update_lyric_cache(cache_path);
-                }
-            });
+            utils::update_cache();
         }
         <span class="comment">// Remove current lyric inside window
         </span>reset_lyric_labels(<span class="kw-2">&amp;</span>window, <span class="prelude-val">None</span>);
         <span class="macro">info!</span>(<span class="string">"removed lyric"</span>);
+    }));
+    app.add_action(<span class="kw-2">&amp;</span>action);
+}
+
+<span class="attr">#[cfg(feature = <span class="string">"import-lyric"</span>)]
+</span><span class="kw">pub fn </span>register_import_original_lyric(app: <span class="kw-2">&amp;</span>Application, wind: <span class="kw-2">&amp;</span>app::Window) {
+    <span class="kw">use </span><span class="kw">crate</span>::log::error;
+    <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{utils::lrc_iter, Lyric};
+
+    <span class="kw">let </span>action = SimpleAction::new(<span class="string">"import-original-lyric"</span>, <span class="prelude-val">None</span>);
+    action.connect_activate(<span class="macro">clone!</span>(@weak wind <span class="kw">as </span>window =&gt; <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
+        <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
+            <span class="kw">let </span>lrc_file = rfd::AsyncFileDialog::new().add_filter(<span class="string">"Simple LRC"</span>, <span class="kw-2">&amp;</span>[<span class="string">"lrc"</span>]).pick_file().<span class="kw">await</span>;
+            <span class="kw">let </span><span class="prelude-val">Some</span>(lrc_file) = lrc_file <span class="kw">else </span>{
+                <span class="kw">return</span>;
+            };
+            <span class="kw">let </span>lrc = <span class="kw">match </span>String::from_utf8(lrc_file.read().<span class="kw">await</span>) {
+                <span class="prelude-val">Ok</span>(lrc) =&gt; lrc,
+                <span class="prelude-val">Err</span>(e) =&gt; {
+                    <span class="kw">let </span>error_msg = <span class="macro">format!</span>( <span class="string">"failed to read LRC in UTF-8: {e}"</span>);
+                    <span class="macro">error!</span>(error_msg);
+                    show_dialog(gtk::Window::NONE, <span class="kw-2">&amp;</span>error_msg, gtk::MessageType::Error);
+                    <span class="kw">return</span>;
+                }
+            };
+            <span class="kw">if let </span><span class="prelude-val">Ok</span>(lyric) = lrc_iter(lrc.lines()) {
+                LYRIC.with_borrow_mut(|LyricState { origin, .. }|{
+                    <span class="kw-2">*</span>origin = Lyric::LineTimestamp(lyric).into_owned();
+                });
+            }
+            <span class="kw">let </span>cache_lyrics = window.imp().cache_lyrics.get();
+            <span class="kw">if </span>cache_lyrics {
+                utils::update_cache();
+            }
+        });
+    }));
+    app.add_action(<span class="kw-2">&amp;</span>action);
+}
+
+<span class="attr">#[cfg(feature = <span class="string">"import-lyric"</span>)]
+</span><span class="kw">pub fn </span>register_import_translated_lyric(app: <span class="kw-2">&amp;</span>Application, wind: <span class="kw-2">&amp;</span>app::Window) {
+    <span class="kw">use </span><span class="kw">crate</span>::log::error;
+    <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{utils::lrc_iter, Lyric};
+
+    <span class="kw">let </span>action = SimpleAction::new(<span class="string">"import-translated-lyric"</span>, <span class="prelude-val">None</span>);
+    action.connect_activate(<span class="macro">clone!</span>(@weak wind <span class="kw">as </span>window =&gt; <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
+        <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
+            <span class="kw">let </span>lrc_file = rfd::AsyncFileDialog::new().add_filter(<span class="string">"Simple LRC"</span>, <span class="kw-2">&amp;</span>[<span class="string">"lrc"</span>]).pick_file().<span class="kw">await</span>;
+            <span class="kw">let </span><span class="prelude-val">Some</span>(lrc_file) = lrc_file <span class="kw">else </span>{
+                <span class="kw">return</span>;
+            };
+            <span class="kw">let </span>lrc = <span class="kw">match </span>String::from_utf8(lrc_file.read().<span class="kw">await</span>) {
+                <span class="prelude-val">Ok</span>(lrc) =&gt; lrc,
+                <span class="prelude-val">Err</span>(e) =&gt; {
+                    <span class="kw">let </span>error_msg = <span class="macro">format!</span>( <span class="string">"failed to read LRC in UTF-8: {e}"</span>);
+                    <span class="macro">error!</span>(error_msg);
+                    show_dialog(gtk::Window::NONE, <span class="kw-2">&amp;</span>error_msg, gtk::MessageType::Error);
+                    <span class="kw">return</span>;
+                }
+            };
+            <span class="kw">if let </span><span class="prelude-val">Ok</span>(lyric) = lrc_iter(lrc.lines()) {
+                LYRIC.with_borrow_mut(|LyricState { translation, .. }|{
+                    <span class="kw-2">*</span>translation = Lyric::LineTimestamp(lyric).into_owned();
+                });
+            }
+            <span class="kw">let </span>cache_lyrics = window.imp().cache_lyrics.get();
+            <span class="kw">if </span>cache_lyrics {
+                utils::update_cache();
+            }
+        });
     }));
     app.add_action(<span class="kw-2">&amp;</span>action);
 }

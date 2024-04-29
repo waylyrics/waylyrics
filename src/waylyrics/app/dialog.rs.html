@@ -10,21 +10,11 @@
 <a href="#8" id="8">8</a>
 <a href="#9" id="9">9</a>
 <a href="#10" id="10">10</a>
-<a href="#11" id="11">11</a>
-<a href="#12" id="12">12</a>
-<a href="#13" id="13">13</a>
-<a href="#14" id="14">14</a>
-<a href="#15" id="15">15</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>gtk::{prelude::<span class="kw-2">*</span>, Window};
+</pre></div><pre class="rust"><code><span class="kw">use </span>gtk::{prelude::<span class="kw-2">*</span>, ButtonsType, Window};
 
 <span class="kw">pub fn </span>show_dialog(parent: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="kw">impl </span>IsA&lt;Window&gt;&gt;, msg: <span class="kw-2">&amp;</span>str, level: gtk::MessageType) {
-    <span class="kw">let </span>msg_dialog = gtk::MessageDialog::new(
-        parent,
-        gtk::DialogFlags::MODAL,
-        level,
-        gtk::ButtonsType::Ok,
-        msg,
-    );
+    <span class="kw">let </span>msg_dialog =
+        gtk::MessageDialog::new(parent, gtk::DialogFlags::MODAL, level, ButtonsType::Ok, msg);
     msg_dialog.connect_response(|dialog, <span class="kw">_</span>| {
         dialog.close();
     });

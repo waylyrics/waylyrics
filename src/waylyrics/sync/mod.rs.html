@@ -58,6 +58,8 @@
 <a href="#56" id="56">56</a>
 <a href="#57" id="57">57</a>
 <a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::RefCell;
 <span class="kw">use </span>std::path::PathBuf;
 <span class="kw">use </span>std::sync::OnceLock;
@@ -109,6 +111,8 @@
     register_connect, register_disconnect, register_refetch_lyric, register_reload_lyric,
     register_remove_lyric, register_search_lyric,
 };
+<span class="attr">#[cfg(feature = <span class="string">"import-lyric"</span>)]
+</span><span class="kw">pub use </span>acts::{register_import_original_lyric, register_import_translated_lyric};
 
 <span class="attr">#[cfg(feature = <span class="string">"action-event"</span>)]
 </span><span class="kw">pub use </span>acts::{init_play_action_channel, PlayAction, PLAY_ACTION};
