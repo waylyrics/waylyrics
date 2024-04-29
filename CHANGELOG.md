@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.7] - 2024-04-30
+
+### 🚀 Features
+
+- Emit LoadLyricCache signal on lyric cache load
+
 ## [0.3.6] - 2024-04-29
 
 ### 🚀 Features
@@ -31,6 +37,7 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Add archlinuxcn in installation guide
+- Release v0.3.6
 
 ### Build
 

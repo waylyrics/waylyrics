@@ -38,6 +38,15 @@
   </screenshots>
 
   <releases>
+    <release version="0.3.7" date="2024-04-30">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.6</url>
+        <description>
+          <p>Features</p>
+            <ul>
+              <li>Emit LoadLyricCache signal in fetch_lyric_cached</li>
+            </ul>
+        </description>
+    </release>
     <release version="0.3.6" date="2024-04-29">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.6</url>
         <description>
