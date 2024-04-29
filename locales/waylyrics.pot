@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: waylyrics 0.3.7\n"
+"Project-Id-Version: waylyrics 0.3.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-30 03:49+0800\n"
+"POT-Creation-Date: 2024-04-29 14:44-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -126,6 +126,10 @@ msgstr ""
 
 #: ../src/app/search_window/mod.rs:262
 msgid "No result was found."
+msgstr ""
+
+#: ../src/sync/acts/mod.rs:158 ../src/sync/acts/mod.rs:197
+msgid "Select a lyrics file"
 msgstr ""
 
 #: ../src/tray_icon/unix/mod.rs:78 ../src/tray_icon/windows/mod.rs:49

@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: waylyrics 0.2.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-30 03:49+0800\n"
-"PO-Revision-Date: 2024-04-30 03:50+0800\n"
-"Last-Translator: poly000 <1348292515@qq.com>\n"
+"POT-Creation-Date: 2024-04-29 14:44-0700\n"
+"PO-Revision-Date: 2024-04-29 14:59-0700\n"
+"Last-Translator: Integral <integral@member.fsf.org>\n"
 "Language-Team: \n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
@@ -127,6 +127,10 @@ msgstr ""
 
 #: ../src/app/search_window/mod.rs:262
 msgid "No result was found."
+msgstr ""
+
+#: ../src/sync/acts/mod.rs:158 ../src/sync/acts/mod.rs:197
+msgid "Select a lyrics file"
 msgstr ""
 
 #: ../src/tray_icon/unix/mod.rs:78 ../src/tray_icon/windows/mod.rs:49

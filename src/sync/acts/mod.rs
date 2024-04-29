@@ -2,7 +2,7 @@ use crate::{
     app::search_window,
     log::{info, warn},
     sync::LyricState,
-    utils::bind_shortcut,
+    utils::{bind_shortcut, gettext},
 };
 use glib_macros::clone;
 use gtk::{
@@ -154,7 +154,11 @@ pub fn register_import_original_lyric(app: &Application, wind: &app::Window) {
     let action = SimpleAction::new("import-original-lyric", None);
     action.connect_activate(clone!(@weak wind as window => move |_, _| {
         glib_spawn!(async move {
-            let lrc_file = rfd::AsyncFileDialog::new().add_filter("Simple LRC", &["lrc"]).pick_file().await;
+            let lrc_file = rfd::AsyncFileDialog::new()
+        .set_title(&gettext("Select a lyrics file"))
+        .add_filter("Simple LRC", &["lrc"])
+        .pick_file().await;
+
             let Some(lrc_file) = lrc_file else {
                 return;
             };
@@ -189,7 +193,11 @@ pub fn register_import_translated_lyric(app: &Application, wind: &app::Window) {
     let action = SimpleAction::new("import-translated-lyric", None);
     action.connect_activate(clone!(@weak wind as window => move |_, _| {
         glib_spawn!(async move {
-            let lrc_file = rfd::AsyncFileDialog::new().add_filter("Simple LRC", &["lrc"]).pick_file().await;
+            let lrc_file = rfd::AsyncFileDialog::new()
+        .set_title(&gettext("Select a lyrics file"))
+        .add_filter("Simple LRC", &["lrc"])
+        .pick_file().await;
+
             let Some(lrc_file) = lrc_file else {
                 return;
             };
