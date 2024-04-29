@@ -51,6 +51,14 @@
 <a href="#49" id="49">49</a>
 <a href="#50" id="50">50</a>
 <a href="#51" id="51">51</a>
+<a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>async_channel::Sender;
 <span class="kw">use </span>std::sync::OnceLock;
 
@@ -70,6 +78,10 @@
     RefetchLyric,
     RemoveLyric,
     SearchLyric,
+    <span class="attr">#[cfg(feature = <span class="string">"import-lyric"</span>)]
+    </span>ImportOriginalLyric,
+    <span class="attr">#[cfg(feature = <span class="string">"import-lyric"</span>)]
+    </span>ImportTranslatedLyric,
 }
 
 <span class="kw">fn </span>register_play_action(app: WeakRef&lt;Application&gt;) -&gt; Sender&lt;PlayAction&gt; {
@@ -85,6 +97,10 @@
                 PlayAction::RefetchLyric =&gt; (<span class="string">"refetch-lyric"</span>, <span class="prelude-val">None</span>),
                 PlayAction::RemoveLyric =&gt; (<span class="string">"remove-lyric"</span>, <span class="prelude-val">None</span>),
                 PlayAction::SearchLyric =&gt; (<span class="string">"search-lyric"</span>, <span class="prelude-val">None</span>),
+                <span class="attr">#[cfg(feature = <span class="string">"import-lyric"</span>)]
+                </span>PlayAction::ImportOriginalLyric =&gt; (<span class="string">"import-original-lyric"</span>, <span class="prelude-val">None</span>),
+                <span class="attr">#[cfg(feature = <span class="string">"import-lyric"</span>)]
+                </span>PlayAction::ImportTranslatedLyric =&gt; (<span class="string">"import-translated-lyric"</span>, <span class="prelude-val">None</span>),
             };
 
             <span class="kw">if let </span><span class="prelude-val">Some</span>(app) = app.upgrade() {

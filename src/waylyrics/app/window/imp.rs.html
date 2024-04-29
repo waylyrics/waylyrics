@@ -186,6 +186,21 @@
 <a href="#184" id="184">184</a>
 <a href="#185" id="185">185</a>
 <a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::Cell;
 <span class="kw">use </span>std::time::SystemTime;
 
@@ -226,6 +241,8 @@
     <span class="kw">pub </span>player_menu: gio::Menu,
     <span class="kw">pub </span>display_mode_menu: gio::Menu,
     <span class="kw">pub </span>align_mode_menu: gio::Menu,
+    <span class="attr">#[cfg(feature = <span class="string">"import-lyric"</span>)]
+    </span><span class="kw">pub </span>import_lyric_menu: gio::Menu,
 }
 
 <span class="attr">#[glib::object_subclass]
@@ -293,6 +310,19 @@
             <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Select Player"</span>)), <span class="comment">//
             </span><span class="kw-2">&amp;</span><span class="self">self</span>.player_menu,
         );
+
+        <span class="attr">#[cfg(feature = <span class="string">"import-lyric"</span>)]
+        </span>{
+            <span class="self">self</span>.import_lyric_menu.append(
+                <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Original Lyric"</span>)),
+                <span class="prelude-val">Some</span>(<span class="string">"app.import-original-lyric"</span>),
+            );
+            <span class="self">self</span>.import_lyric_menu.append(
+                <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Translated Lyric"</span>)),
+                <span class="prelude-val">Some</span>(<span class="string">"app.import-translated-lyric"</span>),
+            );
+            play_section.append_submenu(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Import Lyric"</span>)), <span class="kw-2">&amp;</span><span class="self">self</span>.import_lyric_menu);
+        }
 
         <span class="kw">for </span>item <span class="kw">in </span>[<span class="kw-2">&amp;</span>search_lyric, <span class="kw-2">&amp;</span>remove_lyric, <span class="kw-2">&amp;</span>refetch_lyric] {
             play_section.append_item(item);
