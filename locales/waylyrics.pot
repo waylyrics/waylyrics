@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: waylyrics 0.2.18\n"
+"Project-Id-Version: waylyrics 0.3.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-17 18:08+0800\n"
+"POT-Creation-Date: 2024-04-30 03:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,154 +17,166 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/app/search_window/mod.rs:57 ../src/app/window/imp.rs:69
-#: ../src/tray_icon/windows/mod.rs:38
-msgid "Search lyric"
-msgstr ""
-
-#: ../src/app/search_window/mod.rs:108
-msgid "Title"
-msgstr ""
-
-#: ../src/app/search_window/mod.rs:109
-msgid "Singer"
-msgstr ""
-
-#: ../src/app/search_window/mod.rs:110
-msgid "Album"
-msgstr ""
-
-#: ../src/app/search_window/mod.rs:111
-msgid "Length"
-msgstr ""
-
-#: ../src/app/search_window/mod.rs:112
-msgid "Source"
-msgstr ""
-
-#: ../src/app/search_window/mod.rs:121
-msgid "Enter title..."
-msgstr ""
-
-#: ../src/app/search_window/mod.rs:122
-msgid "title"
-msgstr ""
-
-#: ../src/app/search_window/mod.rs:124
-msgid "Enter album..."
-msgstr ""
-
-#: ../src/app/search_window/mod.rs:125
-msgid "album"
-msgstr ""
-
-#: ../src/app/search_window/mod.rs:127
-msgid "Enter artists split by '/'..."
-msgstr ""
-
-#: ../src/app/search_window/mod.rs:129
-msgid "artists"
-msgstr ""
-
-#: ../src/app/search_window/mod.rs:134
-msgid "Set as lyric"
-msgstr ""
-
-#: ../src/app/search_window/mod.rs:252
-msgid "No result was found."
-msgstr ""
-
-#: ../src/app/window/imp.rs:61
+#: ../src/app/window/imp.rs:65
 msgid "Hide Decoration"
 msgstr ""
 
-#: ../src/app/window/imp.rs:65 ../src/tray_icon/unix/mod.rs:87
-#: ../src/tray_icon/windows/mod.rs:48
+#: ../src/app/window/imp.rs:69 ../src/tray_icon/unix/mod.rs:87
+#: ../src/tray_icon/windows/mod.rs:54
 msgid "Toggle Passthrough"
 msgstr ""
 
-#: ../src/app/window/imp.rs:68 ../src/tray_icon/unix/mod.rs:101
+#: ../src/app/window/imp.rs:72 ../src/tray_icon/unix/mod.rs:101
 msgid "Reload theme"
 msgstr ""
 
-#: ../src/app/window/imp.rs:71
+#: ../src/app/window/imp.rs:73 ../src/app/search_window/mod.rs:57
+#: ../src/tray_icon/windows/mod.rs:39
+msgid "Search lyric"
+msgstr ""
+
+#: ../src/app/window/imp.rs:75 ../src/tray_icon/windows/mod.rs:44
 msgid "Refetch lyric"
 msgstr ""
 
-#: ../src/app/window/imp.rs:74
+#: ../src/app/window/imp.rs:78
 msgid "Remove lyric"
 msgstr ""
 
-#: ../src/app/window/imp.rs:76
+#: ../src/app/window/imp.rs:80
 msgid "Remove lyric forever"
 msgstr ""
 
-#: ../src/app/window/imp.rs:87 ../src/tray_icon/unix/mod.rs:38
+#: ../src/app/window/imp.rs:91 ../src/tray_icon/unix/mod.rs:38
 msgid "Lyric Display Mode"
 msgstr ""
 
-#: ../src/app/window/imp.rs:91 ../src/tray_icon/unix/mod.rs:58
+#: ../src/app/window/imp.rs:95 ../src/tray_icon/unix/mod.rs:58
 msgid "Lyric Alignment"
 msgstr ""
 
-#: ../src/app/window/imp.rs:101 ../src/app/window/imp.rs:113
+#: ../src/app/window/imp.rs:107 ../src/app/window/imp.rs:134
 #: ../src/tray_icon/unix/mod.rs:111
 msgid "Select Player"
 msgstr ""
 
-#: ../src/app/window/imp.rs:122
+#: ../src/app/window/imp.rs:114 ../src/tray_icon/unix/mod.rs:142
+msgid "Original Lyric"
+msgstr ""
+
+#: ../src/app/window/imp.rs:118 ../src/tray_icon/unix/mod.rs:150
+msgid "Translated Lyric"
+msgstr ""
+
+#: ../src/app/window/imp.rs:121 ../src/tray_icon/unix/mod.rs:138
+msgid "Import Lyric"
+msgstr ""
+
+#: ../src/app/window/imp.rs:143
 msgid "Disconnect"
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:78 ../src/tray_icon/windows/mod.rs:43
+#: ../src/app/search_window/mod.rs:114
+msgid "Title"
+msgstr ""
+
+#: ../src/app/search_window/mod.rs:115
+msgid "Singer"
+msgstr ""
+
+#: ../src/app/search_window/mod.rs:116
+msgid "Album"
+msgstr ""
+
+#: ../src/app/search_window/mod.rs:117
+msgid "Length"
+msgstr ""
+
+#: ../src/app/search_window/mod.rs:118
+msgid "Source"
+msgstr ""
+
+#: ../src/app/search_window/mod.rs:131
+msgid "Enter title..."
+msgstr ""
+
+#: ../src/app/search_window/mod.rs:132
+msgid "title"
+msgstr ""
+
+#: ../src/app/search_window/mod.rs:134
+msgid "Enter album..."
+msgstr ""
+
+#: ../src/app/search_window/mod.rs:135
+msgid "album"
+msgstr ""
+
+#: ../src/app/search_window/mod.rs:137
+msgid "Enter artists split by '/'..."
+msgstr ""
+
+#: ../src/app/search_window/mod.rs:139
+msgid "artists"
+msgstr ""
+
+#: ../src/app/search_window/mod.rs:144
+msgid "Set as lyric"
+msgstr ""
+
+#: ../src/app/search_window/mod.rs:262
+msgid "No result was found."
+msgstr ""
+
+#: ../src/tray_icon/unix/mod.rs:78 ../src/tray_icon/windows/mod.rs:49
 msgid "Toggle Decoration"
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:137
+#: ../src/tray_icon/unix/mod.rs:162
 msgid "Search Lyric"
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:146
+#: ../src/tray_icon/unix/mod.rs:171
 msgid "Refetch Lyric"
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:156 ../src/tray_icon/windows/mod.rs:53
+#: ../src/tray_icon/unix/mod.rs:181 ../src/tray_icon/windows/mod.rs:59
 msgid "Restart"
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:165 ../src/tray_icon/windows/mod.rs:58
+#: ../src/tray_icon/unix/mod.rs:190 ../src/tray_icon/windows/mod.rs:64
 msgid "Quit"
 msgstr ""
 
-#: ../src/app/window/imp.rs:140 ../src/tray_icon/unix/mod.rs:42
+#: ../src/app/window/imp.rs:161 ../src/tray_icon/unix/mod.rs:42
 msgid "show_both"
 msgstr ""
 
-#: ../src/app/window/imp.rs:140 ../src/tray_icon/unix/mod.rs:42
+#: ../src/app/window/imp.rs:161 ../src/tray_icon/unix/mod.rs:42
 msgid "show_both_rev"
 msgstr ""
 
-#: ../src/app/window/imp.rs:140 ../src/tray_icon/unix/mod.rs:42
+#: ../src/app/window/imp.rs:161 ../src/tray_icon/unix/mod.rs:42
 msgid "origin"
 msgstr ""
 
-#: ../src/app/window/imp.rs:140 ../src/tray_icon/unix/mod.rs:42
+#: ../src/app/window/imp.rs:161 ../src/tray_icon/unix/mod.rs:42
 msgid "prefer_translation"
 msgstr ""
 
-#: ../src/app/window/imp.rs:150 ../src/tray_icon/unix/mod.rs:62
+#: ../src/app/window/imp.rs:171 ../src/tray_icon/unix/mod.rs:62
 msgid "Center"
 msgstr ""
 
-#: ../src/app/window/imp.rs:150 ../src/tray_icon/unix/mod.rs:62
+#: ../src/app/window/imp.rs:171 ../src/tray_icon/unix/mod.rs:62
 msgid "Start"
 msgstr ""
 
-#: ../src/app/window/imp.rs:150 ../src/tray_icon/unix/mod.rs:62
+#: ../src/app/window/imp.rs:171 ../src/tray_icon/unix/mod.rs:62
 msgid "End"
 msgstr ""
 
-#: ../src/app/window/imp.rs:150 ../src/tray_icon/unix/mod.rs:62
+#: ../src/app/window/imp.rs:171 ../src/tray_icon/unix/mod.rs:62
 msgid "Fill"
 msgstr ""
 

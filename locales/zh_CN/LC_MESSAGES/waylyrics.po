@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: waylyrics 0.2.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-16 10:37+0800\n"
-"PO-Revision-Date: 2024-04-16 10:41+0800\n"
+"POT-Creation-Date: 2024-04-30 03:49+0800\n"
+"PO-Revision-Date: 2024-04-30 03:51+0800\n"
 "Last-Translator: poly000 <1348292515@qq.com>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -18,151 +18,165 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: ../src/app/search_window/mod.rs:57 ../src/app/window/imp.rs:69
-msgid "Search lyric"
-msgstr "搜索歌词"
-
-#: ../src/app/search_window/mod.rs:108
-msgid "Title"
-msgstr "标题"
-
-#: ../src/app/search_window/mod.rs:109
-msgid "Singer"
-msgstr "歌手"
-
-#: ../src/app/search_window/mod.rs:110
-msgid "Album"
-msgstr "专辑"
-
-#: ../src/app/search_window/mod.rs:111
-msgid "Length"
-msgstr "时长"
-
-#: ../src/app/search_window/mod.rs:112
-msgid "Source"
-msgstr "来源"
-
-#: ../src/app/search_window/mod.rs:121
-msgid "Enter title..."
-msgstr "输入标题…"
-
-#: ../src/app/search_window/mod.rs:122
-msgid "title"
-msgstr "标题"
-
-#: ../src/app/search_window/mod.rs:124
-msgid "Enter album..."
-msgstr "输入专辑…"
-
-#: ../src/app/search_window/mod.rs:125
-msgid "album"
-msgstr "专辑"
-
-#: ../src/app/search_window/mod.rs:127
-msgid "Enter artists split by '/'..."
-msgstr "输入歌手，以 '/' 分隔…"
-
-#: ../src/app/search_window/mod.rs:129
-msgid "artists"
-msgstr "歌手"
-
-#: ../src/app/search_window/mod.rs:134
-msgid "Set as lyric"
-msgstr "设为歌词"
-
-#: ../src/app/search_window/mod.rs:252
-msgid "No result was found."
-msgstr "搜索无结果。"
-
-#: ../src/app/window/imp.rs:61
+#: ../src/app/window/imp.rs:65
 msgid "Hide Decoration"
 msgstr "关闭边框"
 
-#: ../src/app/window/imp.rs:65 ../src/tray_icon/unix/mod.rs:87
+#: ../src/app/window/imp.rs:69 ../src/tray_icon/unix/mod.rs:87
+#: ../src/tray_icon/windows/mod.rs:54
 msgid "Toggle Passthrough"
 msgstr "开关穿透"
 
-#: ../src/app/window/imp.rs:68 ../src/tray_icon/unix/mod.rs:101
+#: ../src/app/window/imp.rs:72 ../src/tray_icon/unix/mod.rs:101
 msgid "Reload theme"
 msgstr "重载主题"
 
-#: ../src/app/window/imp.rs:71
+#: ../src/app/window/imp.rs:73 ../src/app/search_window/mod.rs:57
+#: ../src/tray_icon/windows/mod.rs:39
+msgid "Search lyric"
+msgstr "搜索歌词"
+
+#: ../src/app/window/imp.rs:75 ../src/tray_icon/windows/mod.rs:44
 msgid "Refetch lyric"
 msgstr "重下歌词"
 
-#: ../src/app/window/imp.rs:74
+#: ../src/app/window/imp.rs:78
 msgid "Remove lyric"
 msgstr "隐藏歌词"
 
-#: ../src/app/window/imp.rs:76
+#: ../src/app/window/imp.rs:80
 msgid "Remove lyric forever"
 msgstr "移除歌词"
 
-#: ../src/app/window/imp.rs:87 ../src/tray_icon/unix/mod.rs:38
+#: ../src/app/window/imp.rs:91 ../src/tray_icon/unix/mod.rs:38
 msgid "Lyric Display Mode"
 msgstr "显示模式"
 
-#: ../src/app/window/imp.rs:91 ../src/tray_icon/unix/mod.rs:58
+#: ../src/app/window/imp.rs:95 ../src/tray_icon/unix/mod.rs:58
 msgid "Lyric Alignment"
 msgstr "对齐方式"
 
-#: ../src/app/window/imp.rs:101 ../src/app/window/imp.rs:113
+#: ../src/app/window/imp.rs:107 ../src/app/window/imp.rs:134
 #: ../src/tray_icon/unix/mod.rs:111
 msgid "Select Player"
 msgstr "选择播放器"
 
-#: ../src/app/window/imp.rs:122
+#: ../src/app/window/imp.rs:114 ../src/tray_icon/unix/mod.rs:142
+msgid "Original Lyric"
+msgstr "原歌词"
+
+#: ../src/app/window/imp.rs:118 ../src/tray_icon/unix/mod.rs:150
+msgid "Translated Lyric"
+msgstr "翻译歌词"
+
+#: ../src/app/window/imp.rs:121 ../src/tray_icon/unix/mod.rs:138
+msgid "Import Lyric"
+msgstr "导入歌词"
+
+#: ../src/app/window/imp.rs:143
 msgid "Disconnect"
 msgstr "断开连接"
 
-#: ../src/tray_icon/unix/mod.rs:78
+#: ../src/app/search_window/mod.rs:114
+msgid "Title"
+msgstr "标题"
+
+#: ../src/app/search_window/mod.rs:115
+msgid "Singer"
+msgstr "歌手"
+
+#: ../src/app/search_window/mod.rs:116
+msgid "Album"
+msgstr "专辑"
+
+#: ../src/app/search_window/mod.rs:117
+msgid "Length"
+msgstr "时长"
+
+#: ../src/app/search_window/mod.rs:118
+msgid "Source"
+msgstr "来源"
+
+#: ../src/app/search_window/mod.rs:131
+msgid "Enter title..."
+msgstr "输入标题…"
+
+#: ../src/app/search_window/mod.rs:132
+msgid "title"
+msgstr "标题"
+
+#: ../src/app/search_window/mod.rs:134
+msgid "Enter album..."
+msgstr "输入专辑…"
+
+#: ../src/app/search_window/mod.rs:135
+msgid "album"
+msgstr "专辑"
+
+#: ../src/app/search_window/mod.rs:137
+msgid "Enter artists split by '/'..."
+msgstr "输入歌手，以 '/' 分隔…"
+
+#: ../src/app/search_window/mod.rs:139
+msgid "artists"
+msgstr "歌手"
+
+#: ../src/app/search_window/mod.rs:144
+msgid "Set as lyric"
+msgstr "设为歌词"
+
+#: ../src/app/search_window/mod.rs:262
+msgid "No result was found."
+msgstr "搜索无结果。"
+
+#: ../src/tray_icon/unix/mod.rs:78 ../src/tray_icon/windows/mod.rs:49
 msgid "Toggle Decoration"
 msgstr "开关边框"
 
-#: ../src/tray_icon/unix/mod.rs:137
+#: ../src/tray_icon/unix/mod.rs:162
 msgid "Search Lyric"
 msgstr "搜索歌词"
 
-#: ../src/tray_icon/unix/mod.rs:146
+#: ../src/tray_icon/unix/mod.rs:171
 msgid "Refetch Lyric"
 msgstr "重下歌词"
 
-#: ../src/tray_icon/unix/mod.rs:156
+#: ../src/tray_icon/unix/mod.rs:181 ../src/tray_icon/windows/mod.rs:59
 msgid "Restart"
 msgstr "重启"
 
-#: ../src/tray_icon/unix/mod.rs:165
+#: ../src/tray_icon/unix/mod.rs:190 ../src/tray_icon/windows/mod.rs:64
 msgid "Quit"
 msgstr "退出"
 
-#: ../src/app/window/imp.rs:140 ../src/tray_icon/unix/mod.rs:42
+#: ../src/app/window/imp.rs:161 ../src/tray_icon/unix/mod.rs:42
 msgid "show_both"
 msgstr "同时显示"
 
-#: ../src/app/window/imp.rs:140 ../src/tray_icon/unix/mod.rs:42
+#: ../src/app/window/imp.rs:161 ../src/tray_icon/unix/mod.rs:42
 msgid "show_both_rev"
 msgstr "同时显示（反）"
 
-#: ../src/app/window/imp.rs:140 ../src/tray_icon/unix/mod.rs:42
+#: ../src/app/window/imp.rs:161 ../src/tray_icon/unix/mod.rs:42
 msgid "origin"
 msgstr "仅原歌词"
 
-#: ../src/app/window/imp.rs:140 ../src/tray_icon/unix/mod.rs:42
+#: ../src/app/window/imp.rs:161 ../src/tray_icon/unix/mod.rs:42
 msgid "prefer_translation"
 msgstr "偏好翻译"
 
-#: ../src/app/window/imp.rs:150 ../src/tray_icon/unix/mod.rs:62
+#: ../src/app/window/imp.rs:171 ../src/tray_icon/unix/mod.rs:62
 msgid "Center"
 msgstr "居中对齐"
 
-#: ../src/app/window/imp.rs:150 ../src/tray_icon/unix/mod.rs:62
+#: ../src/app/window/imp.rs:171 ../src/tray_icon/unix/mod.rs:62
 msgid "Start"
 msgstr "向左对齐"
 
-#: ../src/app/window/imp.rs:150 ../src/tray_icon/unix/mod.rs:62
+#: ../src/app/window/imp.rs:171 ../src/tray_icon/unix/mod.rs:62
 msgid "End"
 msgstr "向右对齐"
 
-#: ../src/app/window/imp.rs:150 ../src/tray_icon/unix/mod.rs:62
+#: ../src/app/window/imp.rs:171 ../src/tray_icon/unix/mod.rs:62
 msgid "Fill"
 msgstr "填充对齐"
