@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: waylyrics 0.2.18\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-29 14:44-0700\n"
-"PO-Revision-Date: 2024-04-30 03:51+0800\n"
+"PO-Revision-Date: 2024-04-29 15:03-0700\n"
 "Last-Translator: poly000 <1348292515@qq.com>\n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -131,7 +131,7 @@ msgstr "搜索无结果。"
 
 #: ../src/sync/acts/mod.rs:158 ../src/sync/acts/mod.rs:197
 msgid "Select a lyrics file"
-msgstr "设为歌词"
+msgstr "选择歌词文件"
 
 #: ../src/tray_icon/unix/mod.rs:78 ../src/tray_icon/windows/mod.rs:49
 msgid "Toggle Decoration"
