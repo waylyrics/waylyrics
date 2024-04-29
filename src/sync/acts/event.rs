@@ -17,6 +17,10 @@ pub enum PlayAction {
     RefetchLyric,
     RemoveLyric,
     SearchLyric,
+    #[cfg(feature = "import-lyric")]
+    ImportOriginalLyric,
+    #[cfg(feature = "import-lyric")]
+    ImportTranslatedLyric,
 }
 
 fn register_play_action(app: WeakRef<Application>) -> Sender<PlayAction> {
@@ -32,6 +36,10 @@ fn register_play_action(app: WeakRef<Application>) -> Sender<PlayAction> {
                 PlayAction::RefetchLyric => ("refetch-lyric", None),
                 PlayAction::RemoveLyric => ("remove-lyric", None),
                 PlayAction::SearchLyric => ("search-lyric", None),
+                #[cfg(feature = "import-lyric")]
+                PlayAction::ImportOriginalLyric => ("import-original-lyric", None),
+                #[cfg(feature = "import-lyric")]
+                PlayAction::ImportTranslatedLyric => ("import-translated-lyric", None),
             };
 
             if let Some(app) = app.upgrade() {

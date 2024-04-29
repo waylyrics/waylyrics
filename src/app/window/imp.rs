@@ -38,6 +38,8 @@ pub struct Window {
     pub player_menu: gio::Menu,
     pub display_mode_menu: gio::Menu,
     pub align_mode_menu: gio::Menu,
+    #[cfg(feature = "import-lyric")]
+    pub import_lyric_menu: gio::Menu,
 }
 
 #[glib::object_subclass]
@@ -105,6 +107,19 @@ impl ObjectImpl for Window {
             Some(&gettext("Select Player")), //
             &self.player_menu,
         );
+
+        #[cfg(feature = "import-lyric")]
+        {
+            self.import_lyric_menu.append(
+                Some(&gettext("Original Lyric")),
+                Some("app.import-original-lyric"),
+            );
+            self.import_lyric_menu.append(
+                Some(&gettext("Translated Lyric")),
+                Some("app.import-translated-lyric"),
+            );
+            play_section.append_submenu(Some(&gettext("Import Lyric")), &self.import_lyric_menu);
+        }
 
         for item in [&search_lyric, &remove_lyric, &refetch_lyric] {
             play_section.append_item(item);

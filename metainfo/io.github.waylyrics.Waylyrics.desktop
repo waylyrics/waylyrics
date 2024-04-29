@@ -9,7 +9,7 @@ Exec=waylyrics
 Icon=io.github.waylyrics.Waylyrics
 Terminal=false
 Categories=Audio;AudioVideo;GTK;Player;
-Actions=Search;ToggleClickPassthrough;ToggleGTKDecoration;RefetchLyric;ReloadTheme;RemoveLyric;
+Actions=Search;ToggleClickPassthrough;ToggleGTKDecoration;RefetchLyric;ReloadTheme;RemoveLyric;ImportOriginalLyric;ImportTranslatedLyric;
 Keywords=desktop lyric;
 
 [Desktop Action Search]
@@ -41,3 +41,13 @@ Exec=gdbus call -e -d io.github.waylyrics.Waylyrics -o /io/github/waylyrics/Wayl
 Name=Reload theme
 Name[zh]=重新加载歌词
 Exec=gdbus call -e -d io.github.waylyrics.Waylyrics -o /io/github/waylyrics/Waylyrics -m org.gtk.Actions.Activate "reload-theme" [] {}
+
+[Desktop Action ImportOriginalLyric]
+Name=Import Original Lyric
+Name[zh]=导入原歌词
+Exec=gdbus call -e -d io.github.waylyrics.Waylyrics -o /io/github/waylyrics/Waylyrics -m org.gtk.Actions.Activate "import-original-lyric" [] {}
+
+[Desktop Action ImportTranslatedLyric]
+Name=Import Translated Lyric 
+Name[zh]=导入翻译歌词
+Exec=gdbus call -e -d io.github.waylyrics.Waylyrics -o /io/github/waylyrics/Waylyrics -m org.gtk.Actions.Activate "import-translated-lyric" [] {}
