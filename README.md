@@ -13,6 +13,7 @@
   - [构建/安装](#构建安装)
   - [用法](#用法)
   - [依赖](#依赖)
+  - [插件](#插件)
   - [推荐的播放器](#推荐的播放器)
     - [Linux](#linux)
     - [Windows](#windows)
@@ -40,6 +41,15 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 - 播放器需至少在MPRIS提供 Position，Metadata(有title)，PlaybackStatus
 - 需要你的wm允许你设置窗口置顶
+
+## 插件
+
+[waylyrics-sakura-translator]: https://github.com/WithourAI/waylyrics-sakura-translator
+[SakuraLLM]: https://github.com/SakuraLLM/Sakura-13B-Galgame
+
+| 插件                          | 简介                            | 版本    |
+| ----------------------------- | ------------------------------- | ------- |
+| [waylyrics-sakura-translator] | 日译中翻译插件，基于[SakuraLLM] | v0.3.6+ |
 
 ## 推荐的播放器
 

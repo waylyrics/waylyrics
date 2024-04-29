@@ -13,6 +13,7 @@
   - [Build/Install](#buildinstall)
   - [Usage](#usage)
   - [Requirement](#requirement)
+  - [Plugins](#plugins)
   - [Recommended Players](#recommended-players)
     - [Linux](#linux)
     - [Windows](#windows)
@@ -40,6 +41,15 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 - A player at least supports MPRIS PlaybackStatus, Position and Metadata(with title)
 - In particular, a wm allows you set windows as top-level
+
+## Plugins
+
+[waylyrics-sakura-translator]: https://github.com/WithourAI/waylyrics-sakura-translator
+[SakuraLLM]: https://github.com/SakuraLLM/Sakura-13B-Galgame
+
+| Plugin                        | Description                             | Version |
+| ----------------------------- | --------------------------------------- | ------- |
+| [waylyrics-sakura-translator] | ja->zh translator based on [SakuraLLM ] | v0.3.6+ |
 
 ## Recommended Players
 
