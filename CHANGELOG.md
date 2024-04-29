@@ -2,11 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.3.7] - 2024-04-30
+## [0.3.8] - 2024-04-30
+
+### 🚀 Features
+
+- Import local lrc in tray & csd menu
+
+### 📚 Documentation
+
+- *(readme)* Intro waylyrics-sakura-translator [ci skip]
+
+### Build
+
+- Do not strip binary by default [ci skip]
+
+### I18n
+
+- Translate 'import lyric' & translated/original lyric
+
+## [0.3.7] - 2024-04-29
 
 ### 🚀 Features
 
 - Emit LoadLyricCache signal on lyric cache load
+
+### ⚙️ Miscellaneous Tasks
+
+- Release v0.3.7
 
 ## [0.3.6] - 2024-04-29
 

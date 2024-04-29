@@ -38,8 +38,17 @@
   </screenshots>
 
   <releases>
+    <release version="0.3.8" date="2024-04-30">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.8</url>
+        <description>
+          <p>Features</p>
+            <ul>
+              <li>Import local lyric in tray and CSD menu</li>
+            </ul>
+        </description>
+    </release>
     <release version="0.3.7" date="2024-04-30">
-    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.6</url>
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.7</url>
         <description>
           <p>Features</p>
             <ul>
