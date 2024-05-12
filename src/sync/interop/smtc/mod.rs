@@ -144,7 +144,12 @@ impl OsImp for GSMTC {
         let title = media_properties.Title().ok().map(|t| t.to_string());
         let artist = media_properties.Artist().ok().map(|t| t.to_string());
 
-        let length = timeline_properties.EndTime().ok().map(Duration::from);
+        let mut length = timeline_properties.EndTime().ok().map(Duration::from);
+
+        // workaround: go-musicfox v4.4.0 will give zero EndTime
+        if length.is_some_and(|l| l.is_zero()) {
+            length = None;
+        }
 
         let new_trackmeta = TrackMeta {
             unique_song_id: None,
