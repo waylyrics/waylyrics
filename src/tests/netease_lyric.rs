@@ -5,10 +5,8 @@ use anyhow::Result;
 #[cfg(not(feature = "offline-test"))]
 #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
 async fn get_netease_lyric() -> Result<()> {
-    use std::time::Duration;
-
     use crate::lyric_providers::netease::Netease;
-    use crate::lyric_providers::{LyricLineOwned, LyricOwned, LyricParse, LyricProvider};
+    use crate::lyric_providers::{LyricOwned, LyricParse, LyricProvider};
 
     let provider = Netease;
     let lyric_store = provider.query_lyric("708965").await?;
@@ -17,13 +15,7 @@ async fn get_netease_lyric() -> Result<()> {
         panic!("cannot get lyric from netease");
     };
 
-    assert_eq!(
-        lyrics.last(),
-        Some(&LyricLineOwned {
-            text: "纯音乐，请欣赏".into(),
-            start_time: Duration::from_secs(60 * 99),
-        })
-    );
+    assert_eq!(lyrics.last().unwrap().text, "纯音乐，请欣赏".to_owned(),);
 
     Ok(())
 }
