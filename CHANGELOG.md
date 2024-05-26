@@ -2,7 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.3.8] - 2024-04-30
+## [0.3.9] - 2024-05-26
+
+### 🐛 Bug Fixes
+
+- *(test)* Do not test time
+- *(windows)* Auto connect to active player
+
+### 📚 Documentation
+
+- *(readme)* Intro musicfox, TUI music player supports SMTC [ci skip]
+
+### Build
+
+- Enable import lyric feature for windows
+
+### Enhance
+
+- Workaround for musicfox v4.4.0 [ci skip]
+
+## [0.3.8] - 2024-04-29
 
 ### 🚀 Features
 
@@ -11,6 +30,10 @@ All notable changes to this project will be documented in this file.
 ### 📚 Documentation
 
 - *(readme)* Intro waylyrics-sakura-translator [ci skip]
+
+### ⚙️ Miscellaneous Tasks
+
+- Release v0.3.8
 
 ### Build
 
