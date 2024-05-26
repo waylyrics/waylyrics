@@ -102,8 +102,14 @@ impl OsImp for GSMTC {
 
     fn try_sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
         let Some(session) = SESSION.read().unwrap().clone() else {
-            return Ok(());
+            // `PlayerStatus::Missing` if SESSION was not set
+            return Err(PlayerStatus::Missing);
         };
+
+        // `PlayStatus::Missing` if player terminates
+        session
+            .SourceAppUserModelId()
+            .map_err(|_| PlayerStatus::Missing)?;
 
         let timeline_properties = session.GetTimelineProperties().map_err(|e| {
             error!("try_sync_track failed: {e}");
