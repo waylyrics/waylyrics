@@ -40,7 +40,7 @@ pub const THEME_PRESETS_DIR: Option<&str> = option_env!("WAYLYRICS_THEME_PRESETS
 
 fn main() -> Result<glib::ExitCode> {
     #[cfg(feature = "i18n")]
-    {
+    let i18n_result = {
         let textdomain = gettextrs::TextDomain::new(waylyrics::PACKAGE_NAME);
 
         #[cfg(target_os = "windows")]
@@ -48,14 +48,8 @@ fn main() -> Result<glib::ExitCode> {
         #[cfg(not(target_os = "windows"))]
         let result = textdomain.init();
 
-        match result {
-            Err(e) => log::error!("failed to bind textdomain: {e}"),
-            Ok(domain) => log::info!(
-                "bind to textdomain: {:?}",
-                domain.as_ref().map(|s| String::from_utf8_lossy(&s))
-            ),
-        }
-    }
+        result
+    };
 
     let registry = Registry::default()
         .with(
@@ -69,6 +63,15 @@ fn main() -> Result<glib::ExitCode> {
     registry.with(tracing_journald::layer()?).init();
     #[cfg(not(feature = "journald"))]
     registry.init();
+
+    #[cfg(feature = "i18n")]
+    match i18n_result {
+        Err(e) => log::error!("failed to bind textdomain: {e}"),
+        Ok(domain) => log::info!(
+            "bind to textdomain: {:?}",
+            domain.as_ref().map(|s| String::from_utf8_lossy(&s))
+        ),
+    }
 
     log::info!("process id: {}", std::process::id());
 
