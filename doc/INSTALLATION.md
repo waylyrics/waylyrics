@@ -117,8 +117,8 @@ cargo +nightly build --release --locked --target-dir target
 ### 编译Schema
 
 ```bash
-install -Dm644 metainfo/io.github.waylyrics.Waylyrics.gschema.xml -t /usr/share/glib-2.0/schemas/
-glib-compile-schemas /usr/share/glib-2.0/schemas/
+install -Dm644 metainfo/io.github.waylyrics.Waylyrics.gschema.xml -t ~/.local/share/glib-2.0/schemas/
+glib-compile-schemas ~/.local/share/glib-2.0/schemas/
 ```
 
 ### 本地化文件
@@ -135,7 +135,7 @@ done
 ### Desktop 文件
 
 ```bash
-install -Dm644 metainfo/io.github.waylyrics.Waylyrics.desktop -t /usr/share/applications
+install -Dm644 metainfo/io.github.waylyrics.Waylyrics.desktop -t ~/.local/share/applications
 ```
 
 ## 打包
