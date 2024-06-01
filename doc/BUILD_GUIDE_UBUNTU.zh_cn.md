@@ -59,33 +59,22 @@ nano ~/.cargo/cofig
 #使用 nano 文本编辑器编辑用户目录下的 .cargo/config
 ```
 
-将下面文本内容复制进文本中
+将下面文本内容复制进文本中，此处文本表示的是[rsproxy.cn源](https://rsproxy.cn/#getStarted)
 
 ```toml
 [source.crates-io]
-registry = "https://github.com/rust-lang/crates.io-index"
-# 放到 `$HOME/.cargo/config` 文件中
-replace-with = 'sjtu' # 如：tuna、sjtu、ustc，或者 rustcc
-# 指定镜像，此处的 sjtu 是可以替换的。
-# 注：以下源配置一个即可，无需全部
-# 目前 sjtu 相对稳定些
-
-# 中国科学技术大学
-[source.ustc]
-registry = "https://mirrors.ustc.edu.cn/crates.io-index"
-
-# 上海交通大学
-[source.sjtu]
-registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index/"
-
-# 清华大学
-[source.tuna]
-registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
-
-# rustcc社区
-[source.rustcc]
-registry = "https://code.aliyun.com/rustcc/crates.io-index.git"
+replace-with = 'rsproxy-sparse'
+[source.rsproxy]
+registry = "https://rsproxy.cn/crates.io-index"
+[source.rsproxy-sparse]
+registry = "sparse+https://rsproxy.cn/index/"
+[registries.rsproxy]
+index = "https://rsproxy.cn/crates.io-index"
+[net]
+git-fetch-with-cli = true
 ```
+然后按下 Ctrl+X 进入退出模式，输入 "Y" 并一路回车就可以保存。
+
 
 ### 使用 stable 工具链
 ```shell
