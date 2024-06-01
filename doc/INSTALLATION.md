@@ -45,6 +45,17 @@ Arch Linux 用户可以使用 [archlinuxcn](https://github.com/archlinuxcn/repo)
     <img width='240' alt='Download on Flathub' src='https://flathub.org/api/badge?locale=zh-Hans'/>
 </a>
 
+## Spark Store (Ubuntu 22.04 LTS)
+
+<a href='https://www.spark-app.store/'>
+    <img width='120' alt='去星火商店下载' src='https://gitee.com/spark-store-project/spark-store/raw/dev/src/assets/tags/community.png'/>
+</a>
+
+Ubuntu 22.04 用户可以去星火商店安装，其他版本没有测试。
+```shell
+sudo aptss install waylyrics
+```
+
 # 安装构建依赖
 
 ## Debian-based
@@ -99,7 +110,7 @@ cargo build --release --locked --target-dir target
 cargo +nightly build --release --locked --target-dir target
 ```
 
-生成的二进制会被放在 `target/release/`
+生成的二进制会被放在 `./target/release/`
 
 ## 本地安装
 
@@ -132,11 +143,11 @@ install -Dm644 metainfo/io.github.waylyrics.Waylyrics.desktop -t ~/.local/share/
 打包脚本样例：
 
 ```bash
-install -Dm644 metainfo/io.github.waylyrics.Waylyrics.gschema.xml -t /usr/share/glib-2.0/schemas/
-install -Dm644 metainfo/"io.github.waylyrics.Waylyrics.desktop" -t /usr/share/applications/
+install -Dm644 ./metainfo/io.github.waylyrics.Waylyrics.gschema.xml -t /usr/share/glib-2.0/schemas/
+install -Dm644 ./metainfo/"io.github.waylyrics.Waylyrics.desktop" -t /usr/share/applications/
 install -dm755 /usr/share/waylyrics/themes
-cp -r themes/* /usr/share/waylyrics/themes/
-cp -r res/icons /usr/share/icons
+cp -r ./themes/* /usr/share/waylyrics/themes/
+cp -r ./res/icons/* /usr/share/icons/
 
 cd locales
 for po in $(find . -type f -name '*.po')
