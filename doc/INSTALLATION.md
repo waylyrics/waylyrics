@@ -48,7 +48,7 @@ Arch Linux 用户可以使用 [archlinuxcn](https://github.com/archlinuxcn/repo)
 ## Spark Store (Ubuntu 22.04 LTS)
 
 <a href='https://www.spark-app.store/'>
-    <img width='120' alt='Download on Flathub' src='https://gitee.com/spark-store-project/spark-store/raw/dev/src/assets/tags/community.png'/>
+    <img width='120' alt='去星火商店下载' src='https://gitee.com/spark-store-project/spark-store/raw/dev/src/assets/tags/community.png'/>
 </a>
 
 Ubuntu 22.04 用户可以去星火商店安装，其他版本没有测试。
