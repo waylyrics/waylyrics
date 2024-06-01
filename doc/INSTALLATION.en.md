@@ -117,14 +117,14 @@ Target binaries are placed in `./target/release/`.
 ### Compiling Schema
 
 ```bash
-install -Dm644 ./metainfo/io.github.waylyrics.Waylyrics.gschema.xml -t /usr/share/glib-2.0/schemas/
+install -Dm644 ./metainfo/io.github.waylyrics.Waylyrics.gschema.xml -t ~/.local/share/glib-2.0/schemas/
 glib-compile-schemas /usr/share/glib-2.0/schemas/
 ```
 
 ### Desktop File
 
 ```bash
-install -Dm644 ./metainfo/io.github.waylyrics.Waylyrics.desktop -t /usr/share/applications
+install -Dm644 ./metainfo/io.github.waylyrics.Waylyrics.desktop -t ~/.local/share/applications
 ```
 
 ## Packging example
