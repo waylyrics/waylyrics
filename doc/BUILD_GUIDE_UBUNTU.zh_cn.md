@@ -23,6 +23,11 @@
 
 这篇文档默认全局安装 Waylyrics ，高级玩家可以将部分文件放入 ~/.local/share 中。
 
+或者可以从[星火商店](https://spark-app.store/)安装已经编译好了的二进制包。
+```shell
+sudo aptss install waylyrics
+```
+
 ## 准备环境
 ```shell
 sudo apt-get install git build-essential libssl-dev libgtk-4-dev libdbus-1-dev libmimalloc-dev gettext cargo
