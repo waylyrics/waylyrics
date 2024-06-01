@@ -61,7 +61,7 @@ sudo aptss install waylyrics
 ## Debian-based
 
 ```bash
-sudo apt-get install libssl-dev libgtk-4-dev libdbus-1-dev libmimalloc-dev gettext cargo
+sudo apt-get install libssl-dev libgtk-4-dev libdbus-1-dev libmimalloc-dev gettext
 ```
 
 ## Arch-based
