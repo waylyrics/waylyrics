@@ -62,7 +62,7 @@ ahash = "0.8.11"
 rfd = { version = "0.14.1", optional = true }
 
 # error handling
-anyhow = "1.0.82"
+anyhow = "1.0.86"
 thiserror = "1.0.59"
 
 # networking
