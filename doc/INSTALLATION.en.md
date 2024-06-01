@@ -47,7 +47,7 @@ Arch Linux users may use [archlinuxcn](https://github.com/archlinuxcn/repo).
 ## Spark Store (Ubuntu 22.04 LTS)
 
 <a href='https://www.spark-app.store/'>
-    <img width='120' alt='Download on Flathub' src='https://gitee.com/spark-store-project/spark-store/raw/dev/src/assets/tags/community.png'/>
+    <img width='120' alt='Download at Spark Store' src='https://gitee.com/spark-store-project/spark-store/raw/dev/src/assets/tags/community.png'/>
 </a>
 
 Ubuntu 22.04 users can install from Spark Store
