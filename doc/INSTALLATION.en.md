@@ -44,6 +44,18 @@ Arch Linux users may use [archlinuxcn](https://github.com/archlinuxcn/repo).
     <img width='240' alt='Download on Flathub' src='https://flathub.org/api/badge'/>
 </a>
 
+## Spark Store (Ubuntu 22.04 LTS)
+
+<a href='https://www.spark-app.store/'>
+    <img width='120' alt='Download on Flathub' src='https://gitee.com/spark-store-project/spark-store/raw/dev/src/assets/tags/community.png'/>
+</a>
+
+Ubuntu 22.04 users can install from Spark Store
+```shell
+sudo aptss install waylyrics
+```
+
+
 # Prepare Dependencies
 
 ## Debian-based
@@ -98,21 +110,21 @@ cargo build --release --locked --target-dir target
 cargo +nightly build --release --locked --target-dir target
 ```
 
-Target binaries are placed in `target/release/`.
+Target binaries are placed in `./target/release/`.
 
 ## Local install
 
 ### Compiling Schema
 
 ```bash
-install -Dm644 metainfo/io.github.waylyrics.Waylyrics.gschema.xml -t ~/.local/share/glib-2.0/schemas/
-glib-compile-schemas ~/.local/share/glib-2.0/schemas/
+install -Dm644 ./metainfo/io.github.waylyrics.Waylyrics.gschema.xml -t /usr/share/glib-2.0/schemas/
+glib-compile-schemas /usr/share/glib-2.0/schemas/
 ```
 
 ### Desktop File
 
 ```bash
-install -Dm644 metainfo/io.github.waylyrics.Waylyrics.desktop -t ~/.local/share/applications
+install -Dm644 ./metainfo/io.github.waylyrics.Waylyrics.desktop -t /usr/share/applications
 ```
 
 ## Packging example
@@ -120,11 +132,11 @@ install -Dm644 metainfo/io.github.waylyrics.Waylyrics.desktop -t ~/.local/share/
 An example packaging script:
 
 ```bash
-install -Dm644 metainfo/io.github.waylyrics.Waylyrics.gschema.xml -t /usr/share/glib-2.0/schemas/
-install -Dm644 metainfo/io.github.waylyrics.Waylyrics.desktop -t /usr/share/applications
+install -Dm644 ./metainfo/io.github.waylyrics.Waylyrics.gschema.xml -t /usr/share/glib-2.0/schemas/
+install -Dm644 ./metainfo/io.github.waylyrics.Waylyrics.desktop -t /usr/share/applications
 install -dm755 /usr/share/waylyrics/themes
-cp -r themes/* /usr/share/waylyrics/themes/
-cp -r res/icons /usr/share/icons
+cp -r ./themes/* /usr/share/waylyrics/themes/
+cp -r ./res/icons /usr/share/icons
 
 cd locales
 for po in $(find . -type f -name '*.po')
