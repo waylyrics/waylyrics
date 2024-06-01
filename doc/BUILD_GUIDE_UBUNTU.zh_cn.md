@@ -30,7 +30,7 @@ sudo aptss install waylyrics
 
 ## 准备环境
 ```shell
-sudo apt-get install git build-essential libssl-dev libgtk-4-dev libdbus-1-dev libmimalloc-dev gettext cargo
+sudo apt-get install git nano build-essential libssl-dev libgtk-4-dev libdbus-1-dev libmimalloc-dev gettext cargo
 ```
 📣Tips：这里的 cargo 软件包会拉起 rustc 软件包，请注意这里的rustc 软件包版本需要 >= 1.73。高阶玩家可以自己搭建 rust 环境，不用从包管理器安装 cargo 。
 
@@ -51,6 +51,41 @@ export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 编译的时候有 stable 标准工具链，或者 nightly 每日更新工具链可以选择（小白不推荐 nightly ）。
 
 ⚠️Waring：第三次提醒您，请确保您的网络通畅，前方下载工具链需要大量流量。
+
+对于实在没有魔法的用户，我们这里提供 cargo 换源来下载工具链！
+
+```shell
+nano ~/.cargo/cofig
+#使用 nano 文本编辑器编辑用户目录下的 .cargo/config
+```
+
+将下面文本内容复制进文本中
+
+```toml
+[source.crates-io]
+registry = "https://github.com/rust-lang/crates.io-index"
+# 放到 `$HOME/.cargo/config` 文件中
+replace-with = 'sjtu' # 如：tuna、sjtu、ustc，或者 rustcc
+# 指定镜像，此处的 sjtu 是可以替换的。
+# 注：以下源配置一个即可，无需全部
+# 目前 sjtu 相对稳定些
+
+# 中国科学技术大学
+[source.ustc]
+registry = "https://mirrors.ustc.edu.cn/crates.io-index"
+
+# 上海交通大学
+[source.sjtu]
+registry = "https://mirrors.sjtug.sjtu.edu.cn/git/crates.io-index/"
+
+# 清华大学
+[source.tuna]
+registry = "https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git"
+
+# rustcc社区
+[source.rustcc]
+registry = "https://code.aliyun.com/rustcc/crates.io-index.git"
+```
 
 ### 使用 stable 工具链
 ```shell
