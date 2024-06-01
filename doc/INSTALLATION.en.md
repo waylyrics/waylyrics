@@ -118,7 +118,7 @@ Target binaries are placed in `./target/release/`.
 
 ```bash
 install -Dm644 ./metainfo/io.github.waylyrics.Waylyrics.gschema.xml -t ~/.local/share/glib-2.0/schemas/
-glib-compile-schemas /usr/share/glib-2.0/schemas/
+glib-compile-schemas ~/.local/share/glib-2.0/schemas/
 ```
 
 ### Desktop File
