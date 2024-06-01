@@ -147,7 +147,7 @@ install -Dm644 ./metainfo/io.github.waylyrics.Waylyrics.gschema.xml -t /usr/shar
 install -Dm644 ./metainfo/"io.github.waylyrics.Waylyrics.desktop" -t /usr/share/applications/
 install -dm755 /usr/share/waylyrics/themes
 cp -r ./themes/* /usr/share/waylyrics/themes/
-cp -r ./res/icons/hicolor /usr/share/icons/
+cp -r ./res/icons/* /usr/share/icons/
 
 cd locales
 for po in $(find . -type f -name '*.po')
