@@ -135,7 +135,7 @@ cp -r ./res/icons/* /usr/share/icons/
 我们需要在桌面有一个启动图标来操作 Waylyrics ，正好源码里面给我们提供了现成可用的 desktop 文件来使用，我们只需要将此文件复制到存储桌面图标的文件夹中就可以了。
 ```shell
 #请确认命令行的工作目录在项目目录下，而不是在子目录下，如 locales , metainfo 等文件夹
-cp ./metainfo/io.github.waylyrics.Waylyrics.desktop /usr/share/applications/
+sudo cp ./metainfo/io.github.waylyrics.Waylyrics.desktop /usr/share/applications/
 #复制 Waylyrics 的桌面文件到 /usr/share/applications/
 sudo chmod 644 /usr/share/applications/io.github.waylyrics.Waylyrics.desktop
 #设置桌面图标的权限为 644
