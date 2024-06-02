@@ -47,6 +47,15 @@ cd waylyrics
 export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 #设置 Waylyrics 主题目录的变量，后面会用到的
 ```
+💡Tips：高级玩家看过来喵！小白可以略过。
+```shell
+export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
+```
+这个环境变量是用来编译时指定 Waylyrics 加载主题的目录，你当然也可以自行发挥改成其他的，不过不指定这条变量的话， Waylyrics 会默认从  ${XDG_DATA_HOME}/_themes/ 加载主题哦。
+
+
+
+
 ## 开始编译
 编译的时候有 stable 标准工具链，或者 nightly 每日更新工具链可以选择（小白不推荐 nightly ）。
 
