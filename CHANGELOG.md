@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.10] - 2024-05-30
+
+### 🐛 Bug Fixes
+
+- *(log)* I18n bind result will not be logged
+
+### ⚙️ Miscellaneous Tasks
+
+- Release v0.3.10
+
 ## [0.3.9] - 2024-05-26
 
 ### 🐛 Bug Fixes
@@ -12,6 +22,10 @@ All notable changes to this project will be documented in this file.
 ### 📚 Documentation
 
 - *(readme)* Intro musicfox, TUI music player supports SMTC [ci skip]
+
+### ⚙️ Miscellaneous Tasks
+
+- Release v0.3.9
 
 ### Build
 
