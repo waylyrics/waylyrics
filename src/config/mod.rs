@@ -54,6 +54,10 @@ pub struct Config {
     /// waylyrics will try to read the `.lrc` file has same filename
     pub enable_local_lyric: bool,
 
+    /// if enabled, when waylyrics loads a local lyric file,
+    /// it will try to extract translated lyric
+    pub extract_translated_lyric: bool,
+
     /// hide lyric if it matches any of these regexies
     /// inspired by LyricX's filter list
     pub filter_regexies: Vec<String>,
@@ -136,6 +140,7 @@ impl Default for Config {
             show_tray_icon: true,
             player_name_blacklist: vec!["firefox".into()],
             player_identity_blacklist: vec![],
+            extract_translated_lyric: true,
         }
     }
 }

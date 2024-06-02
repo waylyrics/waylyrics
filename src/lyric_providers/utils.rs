@@ -28,6 +28,10 @@ pub fn lrc_iter<'a>(
         .flatten()
         .collect();
     // handling malformed LRC timestamp by sorting them here
+    //
+    // DO NOT use sort_unstable_by_key, we should let lyrics
+    // preserve original relative order, that extracting
+    // translation will work.
     lrc_vec.sort_by_key(|line| line.start_time);
 
     Ok(lrc_vec)

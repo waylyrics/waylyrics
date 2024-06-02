@@ -6,6 +6,7 @@ use gtk::{glib, Application};
 
 use anyhow::Result;
 
+use lyric::fetch::tricks::EXTRACT_TRANSLATED_LYRIC;
 use regex::RegexSet;
 use waylyrics::app::{self, build_main_window};
 use waylyrics::config::append_comments;
@@ -126,6 +127,7 @@ fn build_ui(app: &Application) -> Result<()> {
         player_name_blacklist,
         player_identity_blacklist,
         enable_local_lyric,
+        extract_translated_lyric,
     } = config;
 
     #[cfg(feature = "tray-icon")]
@@ -194,6 +196,7 @@ fn build_ui(app: &Application) -> Result<()> {
     });
 
     let _ = ENABLE_LOCAL_LYRIC.set(enable_local_lyric);
+    let _ = EXTRACT_TRANSLATED_LYRIC.set(extract_translated_lyric);
 
     MAIN_WINDOW.set(Some(wind));
     PLAYER_IDENTITY_BLACKLIST.set(player_identity_blacklist);

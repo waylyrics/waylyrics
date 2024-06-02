@@ -1,8 +1,9 @@
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
+use std::sync::OnceLock;
 
 use crate::log::{debug, error, warn};
-use crate::lyric_providers::{Lyric, LyricOwned, LyricProvider};
+use crate::lyric_providers::{Lyric, LyricLineOwned, LyricOwned, LyricProvider};
 use crate::sync::interop::hint_from_player;
 use crate::sync::TrackMeta;
 use crate::LYRIC_PROVIDERS;
@@ -52,43 +53,7 @@ pub async fn get_lyric_hint_from_player() -> Option<LyricHintResult> {
             Some(LyricHintResult::Lyric { olyric, tlyric })
         }
         Some(LyricHint::LyricFile(path)) => {
-            let olyric = fs::read_to_string(&path)
-                .map_err(|e| error!("cannot read lyric from hint: {e}"))
-                .ok()
-                .and_then(|lyric| {
-                    crate::lyric_providers::utils::lrc_iter(
-                        lyric.trim_start_matches('\u{feff}').lines(),
-                    )
-                    .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
-                    .map_err(|e| error!("cannot parse lyric from hint: {e}"))
-                    .ok()
-                })
-                .unwrap_or_default();
-            #[cfg(feature = "i18n-local-lyric")]
-            let tlyric = {
-                let mut translation_path = path;
-                let lang = sys_locale::get_locale();
-                translation_path.set_extension(&format!("{}.lrc", lang.as_deref().unwrap_or("zh")));
-                fs::read_to_string(&translation_path)
-                    .map_err(|e| error!("cannot read translated lyric from hint: {e}"))
-                    .ok()
-                    .and_then(|lyric| {
-                        crate::lyric_providers::utils::lrc_iter(
-                            lyric.trim_start_matches('\u{feff}').lines(),
-                        )
-                        .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
-                        .map_err(|e| error!("cannot parse lyric from hint: {e}"))
-                        .ok()
-                    })
-                    .unwrap_or_default()
-            };
-            #[cfg(not(feature = "i18n-local-lyric"))]
-            let tlyric = LyricOwned::None;
-
-            if olyric.is_none() && tlyric.is_none() {
-                return None;
-            }
-
+            let (olyric, tlyric) = load_local_lyric(&path)?;
             Some(LyricHintResult::Lyric { olyric, tlyric })
         }
 
@@ -106,4 +71,61 @@ pub fn get_lrc_path(mut music_path: PathBuf) -> Option<PathBuf> {
     } else {
         None
     }
+}
+
+pub static EXTRACT_TRANSLATED_LYRIC: OnceLock<bool> = OnceLock::new();
+
+fn load_local_lyric<P: AsRef<Path>>(path: P) -> Option<(LyricOwned, LyricOwned)> {
+    let olyric = fs::read_to_string(&path)
+        .map_err(|e| error!("cannot read lyric from hint: {e}"))
+        .ok()
+        .and_then(|lyric| {
+            crate::lyric_providers::utils::lrc_iter(lyric.trim_start_matches('\u{feff}').lines())
+                .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
+                .map_err(|e| error!("cannot parse lyric from hint: {e}"))
+                .ok()
+        })
+        .unwrap_or_default();
+    #[cfg(feature = "i18n-local-lyric")]
+    let mut tlyric = {
+        let mut translation_path = path.as_ref().to_owned();
+        let lang = sys_locale::get_locale();
+        translation_path.set_extension(&format!("{}.lrc", lang.as_deref().unwrap_or("zh")));
+        fs::read_to_string(&translation_path)
+            .map_err(|e| error!("cannot read translated lyric from hint: {e}"))
+            .ok()
+            .and_then(|lyric| {
+                crate::lyric_providers::utils::lrc_iter(
+                    lyric.trim_start_matches('\u{feff}').lines(),
+                )
+                .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
+                .map_err(|e| error!("cannot parse lyric from hint: {e}"))
+                .ok()
+            })
+            .unwrap_or_default()
+    };
+    #[cfg(not(feature = "i18n-local-lyric"))]
+    let mut tlyric = LyricOwned::None;
+
+    if tlyric.is_none() {
+        if let LyricOwned::LineTimestamp(lines) = &olyric {
+            let tlyric_lines = lines
+                .windows(2)
+                .filter_map(|l| <&[LyricLineOwned; 2]>::try_from(l).ok())
+                // this should work because we have sorted lyrics by timestamp
+                .filter(|&[a, b]| a == b)
+                .map(|[_, b]| b)
+                .cloned()
+                .collect::<Vec<_>>();
+            if !tlyric_lines.is_empty() {
+                tlyric = LyricOwned::LineTimestamp(tlyric_lines);
+            }
+        }
+    }
+
+    if olyric.is_none() && tlyric.is_none() {
+        return None;
+    }
+
+    Some((olyric, tlyric))
 }
