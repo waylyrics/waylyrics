@@ -55,7 +55,7 @@ export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 对于实在没有魔法的用户，我们这里提供 cargo 换源来下载工具链！
 
 ```shell
-nano ~/.cargo/cofig
+nano ~/.cargo/cofig.toml
 #使用 nano 文本编辑器编辑用户目录下的 .cargo/config
 ```
 
