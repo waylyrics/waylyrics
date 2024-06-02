@@ -118,6 +118,7 @@
 <a href="#116" id="116">116</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>utils;
 <span class="kw">use </span>anyhow::Result;
+<span class="kw">use </span>strum::EnumIs;
 
 <span class="kw">pub mod </span>dict;
 
@@ -127,7 +128,6 @@
 <span class="kw">use </span>std::{fmt::Debug, time::Duration};
 
 <span class="kw">use </span>serde::{Deserialize, Serialize};
-
 
 <span class="attr">#[derive(Debug)]
 </span><span class="kw">pub enum </span>Lyric&lt;<span class="lifetime">'a</span>&gt; {
@@ -142,7 +142,7 @@
     <span class="kw">pub </span>start_time: Duration,
 }
 
-<span class="attr">#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq, Default)]
+<span class="attr">#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq, Default, EnumIs)]
 #[serde(tag = <span class="string">"type"</span>, content = <span class="string">"content"</span>)]
 </span><span class="kw">pub enum </span>LyricOwned {
     <span class="attr">#[default]
