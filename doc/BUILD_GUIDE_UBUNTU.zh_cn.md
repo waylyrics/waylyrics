@@ -98,7 +98,7 @@ sudo chmod 755 /usr/bin/waylyrics
 sudo ln -s /usr/bin/waylyrics /bin/waylyrics
 #创建文件链接，让系统访问 /bin/waylyrics 直接访问 /usr/bin/waylyrics
 ```
-💡Tips：为什么不直接把文件放在 /bin 里面直接访问呢？其实这是可以的哟，不过我们为了规范每一个文件的位置，我们应当去自觉的把二进制文件放在 /usr/bin 里面，而不是直接丢入 /bin 里面，有疑问可以去看关于 HFS 的百科哦！
+💡Tips：为什么不直接把文件放在 /bin 里面直接访问呢？其实这是可以的哟，不过我们为了规范每一个文件的位置，我们应当去自觉的把二进制文件放在 /usr/bin 里面，而不是直接丢入 /bin 里面，有疑问可以去看关于 [/bin 和 /usr/bin](https://unix.stackexchange.com/questions/5915/difference-between-bin-and-usr-bin) 的讨论哦！
 
 ## 编译 schemas
 Waylyric 需要通过 GSettings API（GNOME桌面环境设置存储和检索系统的调用接口，因为 Waylyric 是 GTK 软件，所以需要调用此接口） 来允许应用程序读取和写入用户设置，让我们来开始编译 schemas 吧！
