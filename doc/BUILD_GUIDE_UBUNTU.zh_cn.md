@@ -89,7 +89,7 @@ cargo +nightly build --release --locked --target-dir target
 ```
 
 ## 复制二进制包到可执行文件文件夹下
-在 Linux 下， /bin 文件夹下放着很多可执行文件，比如 apt 、 grep 等命令，我们把 waylyrics 的二进制文件复制到 /bin 目录下，这样我们就可以直接使用 waylyrics 命令启动 Waylyrics 程序。
+在 Linux 下， /bin 文件夹下放着很多可执行文件，比如 apt 、 grep 等命令，我们把 waylyrics 的二进制文件复制到 /usr/bin 目录下，然后将我们编译好的软件创建符号链接指向 /bin ，这样我们就可以直接使用 waylyrics 命令启动 Waylyrics 程序。
 ```shell
 sudo cp ./target/release/waylyrics /usr/bin
 #复制 waylyrics 二进制文件到 /bin 目录下
