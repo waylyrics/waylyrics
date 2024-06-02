@@ -51,21 +51,46 @@ pub async fn get_lyric_hint_from_player() -> Option<LyricHintResult> {
 
             Some(LyricHintResult::Lyric { olyric, tlyric })
         }
-        Some(LyricHint::LyricFile(path)) => fs::read_to_string(path)
-            .map_err(|e| error!("cannot read lyric from hint: {e}"))
-            .ok()
-            .and_then(|lyric| {
-                crate::lyric_providers::utils::lrc_iter(
-                    lyric.trim_start_matches('\u{feff}').lines(),
-                )
-                .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
-                .map_err(|e| error!("cannot parse lyric from hint: {e}"))
+        Some(LyricHint::LyricFile(path)) => {
+            let olyric = fs::read_to_string(&path)
+                .map_err(|e| error!("cannot read lyric from hint: {e}"))
                 .ok()
-            })
-            .map(|lyric| LyricHintResult::Lyric {
-                olyric: lyric,
-                tlyric: LyricOwned::None,
-            }),
+                .and_then(|lyric| {
+                    crate::lyric_providers::utils::lrc_iter(
+                        lyric.trim_start_matches('\u{feff}').lines(),
+                    )
+                    .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
+                    .map_err(|e| error!("cannot parse lyric from hint: {e}"))
+                    .ok()
+                })
+                .unwrap_or_default();
+            #[cfg(feature = "i18n-local-lyric")]
+            let tlyric = {
+                let mut translation_path = path;
+                let lang = sys_locale::get_locale();
+                translation_path.set_extension(&format!("{}.lrc", lang.as_deref().unwrap_or("zh")));
+                fs::read_to_string(&translation_path)
+                    .map_err(|e| error!("cannot read translated lyric from hint: {e}"))
+                    .ok()
+                    .and_then(|lyric| {
+                        crate::lyric_providers::utils::lrc_iter(
+                            lyric.trim_start_matches('\u{feff}').lines(),
+                        )
+                        .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
+                        .map_err(|e| error!("cannot parse lyric from hint: {e}"))
+                        .ok()
+                    })
+                    .unwrap_or_default()
+            };
+            #[cfg(not(feature = "i18n-local-lyric"))]
+            let tlyric = LyricOwned::None;
+
+            if olyric.is_none() && tlyric.is_none() {
+                return None;
+            }
+
+            Some(LyricHintResult::Lyric { olyric, tlyric })
+        }
 
         _ => None,
     }

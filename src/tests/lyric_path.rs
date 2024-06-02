@@ -21,6 +21,13 @@ fn relative_path() {
 }
 
 #[test]
+fn relative_path_translation() {
+    let mut result = get_lrc_path(PathBuf::from("../test.mp3")).unwrap();
+    result.set_extension("zh.lrc");
+    assert_eq!(result, PathBuf::from("../test.zh.lrc"))
+}
+
+#[test]
 fn non_ascii() {
     let result = get_lrc_path(PathBuf::from("/测试/中文/你好.诶木披散"));
     assert_eq!(result, Some("/测试/中文/你好.lrc".into()))

@@ -1,5 +1,6 @@
 pub mod utils;
 use anyhow::Result;
+use strum::EnumIs;
 
 pub mod dict;
 
@@ -9,7 +10,6 @@ pub mod qqmusic;
 use std::{fmt::Debug, time::Duration};
 
 use serde::{Deserialize, Serialize};
-
 
 #[derive(Debug)]
 pub enum Lyric<'a> {
@@ -24,7 +24,7 @@ pub struct LyricLine<'a> {
     pub start_time: Duration,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq, Default)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq, Default, EnumIs)]
 #[serde(tag = "type", content = "content")]
 pub enum LyricOwned {
     #[default]

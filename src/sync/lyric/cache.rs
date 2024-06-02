@@ -124,7 +124,7 @@ pub fn update_lyric_cache(cache_path: &PathBuf) -> bool {
              translation,
          }| {
             // do not cache empty lyric
-            if (&LyricOwned::None, &LyricOwned::None) == (origin, translation) {
+            if origin.is_none() && translation.is_none() {
                 return false;
             }
 
