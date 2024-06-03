@@ -167,4 +167,6 @@ sudo chmod 755 -R /usr/share/waylyrics/themes/
 
 ## Waylyric 一些常见使用技巧
 ### 置顶歌词
-保持 Waylyrics 窗口状态，右键其标题栏，选择更多，选中置顶，然后关闭其窗口状态就可以实现歌词置顶。
+KDE用户：保持 Waylyrics 窗口状态，右键其标题栏，选择更多，选中置顶，然后关闭其窗口状态就可以实现歌词置顶。如果你想实现窗口持久置顶，请查阅此 [discuss](https://github.com/waylyrics/waylyrics/discussions/181) 。
+
+GNOME用户：保持 Waylyrics 窗口状态，右键其标题栏，点击置顶即可。因为 Waylyrics 是 GTK 应用，所以 Waylyrics 在 GNOME 桌面上更融合主题。
