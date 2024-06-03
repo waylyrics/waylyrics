@@ -31,6 +31,8 @@
 
 详阅 [INSTALLATION.md](doc/INSTALLATION.md)
 
+Ubuntu用户详阅 [BUILD_GUIDE_UBUNTU.zh_cn.md](doc/BUILD_GUIDE_UBUNTU.zh_cn.md)
+
 ## 用法
 
 另见 [desktop文件](metainfo/io.github.waylyrics.Waylyrics.desktop)
