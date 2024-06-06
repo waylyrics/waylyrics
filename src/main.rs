@@ -43,6 +43,7 @@ fn main() -> Result<glib::ExitCode> {
     #[cfg(feature = "i18n")]
     let i18n_result = {
         let textdomain = gettextrs::TextDomain::new(waylyrics::PACKAGE_NAME);
+        eprintln!("textdomain: {textdomain:#?}");
 
         #[cfg(target_os = "windows")]
         let result = textdomain.push("../share").init();
