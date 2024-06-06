@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.11] - 2024-06-03
+
+### 📚 Documentation
+
+- *(install)* User-fiendly version (#240)
+
+### Build
+
+- *(deps)* Bump async-channel from 2.2.1 to 2.3.1
+- *(deps)* Bump anyhow from 1.0.82 to 1.0.86
+- *(deps)* Bump the serde group with 2 updates
+- *(deps)* Bump mimalloc from 0.1.41 to 0.1.42
+- *(deps)* Bump toml_edit from 0.22.12 to 0.22.13
+
 ## [0.3.10] - 2024-05-30
 
 ### 🐛 Bug Fixes

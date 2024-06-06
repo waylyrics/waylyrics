@@ -38,8 +38,18 @@
   </screenshots>
 
   <releases>
+    <release version="0.3.11" date="2024-06-06">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.11</url>
+        <description>
+          <p>Features</p>
+            <ul>
+              <li>extract translated lyric from local LRC</li>
+              <li>try load local translated lyric with BCP-49 code</li>
+            </ul>
+        </description>
+    </release>
     <release version="0.3.10" date="2024-05-30">
-    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.9</url>
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.10</url>
         <description>
           <p>Bug Fixes</p>
             <ul>
