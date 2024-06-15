@@ -64,8 +64,8 @@ export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 对于实在没有魔法的用户，我们这里提供 cargo 换源来下载工具链！
 
 ```shell
-nano ~/.cargo/cofig.toml
-#使用 nano 文本编辑器编辑用户目录下的 .cargo/config
+nano ~/.cargo/config.toml
+#使用 nano 文本编辑器编辑用户目录下的 cargo配置文件
 ```
 
 将下面文本内容复制进文本中，此处文本表示的是[rsproxy.cn源](https://rsproxy.cn/#getStarted)
