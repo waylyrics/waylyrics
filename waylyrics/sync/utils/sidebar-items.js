@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["clean_lyric","fuzzy_match_song","get_lyric_cache_path","match_likely_lyric","set_current_lyric"]};
+window.SIDEBAR_ITEMS = {"fn":["clean_lyric","extract_lyric_lines","fuzzy_match_song","get_lyric_cache_path","match_likely_lyric","set_current_lyric"]};

@@ -127,15 +127,14 @@
 <a href="#127" id="127">127</a>
 <a href="#128" id="128">128</a>
 <a href="#129" id="129">129</a>
-<a href="#130" id="130">130</a>
-<a href="#131" id="131">131</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::fs;
 <span class="kw">use </span>std::path::{Path, PathBuf};
 <span class="kw">use </span>std::sync::OnceLock;
 
 <span class="kw">use </span><span class="kw">crate</span>::log::{debug, error, warn};
-<span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{Lyric, LyricLineOwned, LyricOwned, LyricProvider};
+<span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{Lyric, LyricOwned, LyricProvider};
 <span class="kw">use </span><span class="kw">crate</span>::sync::interop::hint_from_player;
+<span class="kw">use </span><span class="kw">crate</span>::sync::utils::extract_lyric_lines;
 <span class="kw">use </span><span class="kw">crate</span>::sync::TrackMeta;
 <span class="kw">use </span><span class="kw">crate</span>::LYRIC_PROVIDERS;
 
@@ -207,7 +206,7 @@
 <span class="kw">pub static </span>EXTRACT_TRANSLATED_LYRIC: OnceLock&lt;bool&gt; = OnceLock::new();
 
 <span class="kw">fn </span>load_local_lyric&lt;P: AsRef&lt;Path&gt;&gt;(path: P) -&gt; <span class="prelude-ty">Option</span>&lt;(LyricOwned, LyricOwned)&gt; {
-    <span class="kw">let </span>olyric = fs::read_to_string(<span class="kw-2">&amp;</span>path)
+    <span class="kw">let </span><span class="kw-2">mut </span>olyric = fs::read_to_string(<span class="kw-2">&amp;</span>path)
         .map_err(|e| <span class="macro">error!</span>(<span class="string">"cannot read lyric from hint: {e}"</span>))
         .ok()
         .and_then(|lyric| {
@@ -240,15 +239,12 @@
 
     <span class="kw">if </span>tlyric.is_none() &amp;&amp; EXTRACT_TRANSLATED_LYRIC.get().cloned().unwrap_or_default() {
         <span class="kw">if let </span>LyricOwned::LineTimestamp(lines) = <span class="kw-2">&amp;</span>olyric {
-            <span class="kw">let </span>tlyric_lines = lines
-                .windows(<span class="number">2</span>)
-                .filter_map(|l| &lt;<span class="kw-2">&amp;</span>[LyricLineOwned; <span class="number">2</span>]&gt;::try_from(l).ok())
-                <span class="comment">// this should work because we have sorted lyrics by timestamp
-                </span>.filter(|<span class="kw-2">&amp;</span>[a, b]| a == b)
-                .map(|[<span class="kw">_</span>, b]| b)
-                .cloned()
-                .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+            <span class="kw">let </span>tlyric_lines = extract_lyric_lines(lines, <span class="number">1</span>);
             <span class="kw">if </span>!tlyric_lines.is_empty() {
+                <span class="kw">let </span>olyric_lines = extract_lyric_lines(lines, <span class="number">0</span>);
+                <span class="macro">debug!</span>(<span class="string">"extracted original lyric: {olyric_lines:#?}"</span>);
+                <span class="macro">debug!</span>(<span class="string">"extracted translation lyric: {tlyric_lines:#?}"</span>);
+                olyric = LyricOwned::LineTimestamp(olyric_lines);
                 tlyric = LyricOwned::LineTimestamp(tlyric_lines);
             }
         }

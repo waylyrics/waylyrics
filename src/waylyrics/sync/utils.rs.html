@@ -134,12 +134,31 @@
 <a href="#134" id="134">134</a>
 <a href="#135" id="135">135</a>
 <a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{path::PathBuf, time::Duration};
 
 <span class="kw">use </span>gtk::subclass::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>sorensen::distance;
 
 <span class="kw">use </span><span class="kw">crate</span>::log::<span class="kw-2">*</span>;
+<span class="kw">use </span><span class="kw">crate</span>::lyric_providers::LyricLineOwned;
 <span class="kw">use crate</span>::{app, lyric_providers::SongInfo};
 
 <span class="kw">use super</span>::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
@@ -269,5 +288,22 @@
         (<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="kw">_</span>)) =&gt; title_likelihood * <span class="number">0.8 </span>+ album_likelihood() * <span class="number">0.2</span>,
         (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; title_likelihood,
     }
+}
+
+<span class="doccomment">/// target: 0, 1
+</span><span class="kw">pub fn </span>extract_lyric_lines(
+    lyric: <span class="kw">impl </span>AsRef&lt;[LyricLineOwned]&gt;,
+    target: usize,
+) -&gt; Vec&lt;LyricLineOwned&gt; {
+    <span class="kw">let </span>tlyric_lines = lyric
+        .as_ref()
+        .windows(<span class="number">2</span>)
+        .filter_map(|l| &lt;<span class="kw-2">&amp;</span>[LyricLineOwned; <span class="number">2</span>]&gt;::try_from(l).ok())
+        <span class="comment">// this should work because we have sorted lyrics by timestamp
+        </span>.filter(|<span class="kw-2">&amp;</span>[a, b]| a.start_time == b.start_time)
+        .map(|p| <span class="kw-2">&amp;</span>p[target])
+        .cloned()
+        .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+    tlyric_lines
 }
 </code></pre></div></section></main></body></html>
