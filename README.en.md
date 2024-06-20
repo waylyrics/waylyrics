@@ -70,9 +70,11 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 [youtube-music]: https://github.com/th-ch/youtube-music
 
 [go-musicfox]: https://github.com/go-musicfox/go-musicfox
-[fb7e486]: https://github.com/go-musicfox/go-musicfox/commit/fb7e4865a39c9537f3868d62dae7c8690a9ca8c4
 
 [mpv-mpris]: https://github.com/hoyon/mpv-mpris
+
+[mpd-mpris]: https://github.com/natsukagami/mpd-mpris
+[ncmpcpp]: https://github.com/ncmpcpp/ncmpcpp
 
 | Name                      | Online? | Framework | #                                          |
 | ------------------------- | ------- | --------- | ------------------------------------------ |
@@ -82,7 +84,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 | [amberol]                 | X       | GTK4      |                                            |
 | [lollypop]                | X       | GTK4      |                                            |
 | [FeelUOwn]                | O       | Qt5       | 3.9.12+                                    |
-| [VLC]                     | X       | Qt5       |                                            |
+| [VLC]                     | O       | Qt5       |                                            |
 | [Qcm]                     | O       | Qt6       |                                            |
 | [Telegram]                | O       | Qt6       |                                            |
 | [Electron-NCM]            | O       | Electron  |                                            |
@@ -90,6 +92,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 | [youtube-music]           | O       | Electron  | enable `Shortcut`                          |
 | [go-musicfox]             | O       | bubbletea | 4.3.2+                                     |
 | mpv                       | O       | Native    | load [mpv-mpris]                           |
+| [ncmpcpp]                 | X       | ncursew   | [mpd-mpris]                                |
 
 ### Windows
 
