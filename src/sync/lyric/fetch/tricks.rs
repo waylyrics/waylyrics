@@ -3,8 +3,9 @@ use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
 
 use crate::log::{debug, error, warn};
-use crate::lyric_providers::{Lyric, LyricLineOwned, LyricOwned, LyricProvider};
+use crate::lyric_providers::{Lyric, LyricOwned, LyricProvider};
 use crate::sync::interop::hint_from_player;
+use crate::sync::utils::extract_lyric_lines;
 use crate::sync::TrackMeta;
 use crate::LYRIC_PROVIDERS;
 
@@ -76,7 +77,7 @@ pub fn get_lrc_path(mut music_path: PathBuf) -> Option<PathBuf> {
 pub static EXTRACT_TRANSLATED_LYRIC: OnceLock<bool> = OnceLock::new();
 
 fn load_local_lyric<P: AsRef<Path>>(path: P) -> Option<(LyricOwned, LyricOwned)> {
-    let olyric = fs::read_to_string(&path)
+    let mut olyric = fs::read_to_string(&path)
         .map_err(|e| error!("cannot read lyric from hint: {e}"))
         .ok()
         .and_then(|lyric| {
@@ -109,15 +110,12 @@ fn load_local_lyric<P: AsRef<Path>>(path: P) -> Option<(LyricOwned, LyricOwned)>
 
     if tlyric.is_none() && EXTRACT_TRANSLATED_LYRIC.get().cloned().unwrap_or_default() {
         if let LyricOwned::LineTimestamp(lines) = &olyric {
-            let tlyric_lines = lines
-                .windows(2)
-                .filter_map(|l| <&[LyricLineOwned; 2]>::try_from(l).ok())
-                // this should work because we have sorted lyrics by timestamp
-                .filter(|&[a, b]| a == b)
-                .map(|[_, b]| b)
-                .cloned()
-                .collect::<Vec<_>>();
+            let tlyric_lines = extract_lyric_lines(lines, 1);
             if !tlyric_lines.is_empty() {
+                let olyric_lines = extract_lyric_lines(lines, 0);
+                debug!("extracted original lyric: {olyric_lines:#?}");
+                debug!("extracted translation lyric: {tlyric_lines:#?}");
+                olyric = LyricOwned::LineTimestamp(olyric_lines);
                 tlyric = LyricOwned::LineTimestamp(tlyric_lines);
             }
         }

@@ -4,6 +4,7 @@ use gtk::subclass::prelude::*;
 use sorensen::distance;
 
 use crate::log::*;
+use crate::lyric_providers::LyricLineOwned;
 use crate::{app, lyric_providers::SongInfo};
 
 use super::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
@@ -133,4 +134,21 @@ pub fn fuzzy_match_song(
         (None, Some(_)) => title_likelihood * 0.8 + album_likelihood() * 0.2,
         (None, None) => title_likelihood,
     }
+}
+
+/// target: 0, 1
+pub fn extract_lyric_lines(
+    lyric: impl AsRef<[LyricLineOwned]>,
+    target: usize,
+) -> Vec<LyricLineOwned> {
+    let tlyric_lines = lyric
+        .as_ref()
+        .windows(2)
+        .filter_map(|l| <&[LyricLineOwned; 2]>::try_from(l).ok())
+        // this should work because we have sorted lyrics by timestamp
+        .filter(|&[a, b]| a.start_time == b.start_time)
+        .map(|p| &p[target])
+        .cloned()
+        .collect::<Vec<_>>();
+    tlyric_lines
 }

@@ -57,4 +57,4 @@ pub use acts::{init_play_action_channel, PlayAction, PLAY_ACTION};
 
 pub use interop::register_sync_task;
 pub use interop::PlayerId;
-pub use utils::{fuzzy_match_song, get_lyric_cache_path, set_current_lyric};
+pub use utils::{extract_lyric_lines, fuzzy_match_song, get_lyric_cache_path, set_current_lyric};

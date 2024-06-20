@@ -2,7 +2,10 @@
 mod lrc {
     use std::time::Duration;
 
-    use crate::lyric_providers::{utils::lrc_iter, LyricLine, LyricLineOwned};
+    use crate::{
+        lyric_providers::{utils::lrc_iter, LyricLine, LyricLineOwned},
+        sync::extract_lyric_lines,
+    };
     use anyhow::Result;
 
     #[test]
@@ -153,6 +156,48 @@ Author: poly000
             })
         );
 
+        Ok(())
+    }
+
+    #[test]
+    fn extract_lyric() -> Result<()> {
+        let lrc = r#"
+[00:01.77]Please don't say "You are lazy"
+[00:01.77]请不要说“你很懒”
+[00:04.38]だって本当はcrazy
+[00:04.38]因为其实是非常疯狂的"#;
+        let lyrics = lrc_iter(lrc.lines())?
+            .into_iter()
+            .map(LyricLine::into_owned)
+            .collect::<Vec<_>>();
+        let tlyric = extract_lyric_lines(&lyrics, 1);
+        let olyric = extract_lyric_lines(&lyrics, 0);
+        assert_eq!(
+            tlyric,
+            vec![
+                LyricLineOwned {
+                    text: "请不要说“你很懒”".into(),
+                    start_time: Duration::from_millis(1770)
+                },
+                LyricLineOwned {
+                    text: "因为其实是非常疯狂的".into(),
+                    start_time: Duration::from_millis(4380)
+                }
+            ]
+        );
+        assert_eq!(
+            olyric,
+            vec![
+                LyricLineOwned {
+                    text: "Please don't say \"You are lazy\"".into(),
+                    start_time: Duration::from_millis(1770)
+                },
+                LyricLineOwned {
+                    text: "だって本当はcrazy".into(),
+                    start_time: Duration::from_millis(4380)
+                }
+            ]
+        );
         Ok(())
     }
 }
