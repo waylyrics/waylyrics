@@ -2,11 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.3.11] - 2024-06-03
+## [0.3.12] - 2024-06-20
+
+### 🐛 Bug Fixes
+
+- `extract-translated-lyric` flag is ignored
+- Extract lyric lines should compare start_time
+
+### 📚 Documentation
+
+- Fix typo
+
+### ⚙️ Miscellaneous Tasks
+
+- *(log)* Add log for textdomain to use
+
+## [0.3.11] - 2024-06-06
 
 ### 📚 Documentation
 
 - *(install)* User-fiendly version (#240)
+
+### ⚙️ Miscellaneous Tasks
+
+- Release v0.3.11
 
 ### Build
 
