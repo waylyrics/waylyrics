@@ -107,7 +107,7 @@ fn load_local_lyric<P: AsRef<Path>>(path: P) -> Option<(LyricOwned, LyricOwned)>
     #[cfg(not(feature = "i18n-local-lyric"))]
     let mut tlyric = LyricOwned::None;
 
-    if tlyric.is_none() {
+    if tlyric.is_none() && EXTRACT_TRANSLATED_LYRIC.get().cloned().unwrap_or_default() {
         if let LyricOwned::LineTimestamp(lines) = &olyric {
             let tlyric_lines = lines
                 .windows(2)
