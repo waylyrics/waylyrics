@@ -5,8 +5,8 @@ use std::sync::OnceLock;
 use crate::log::{debug, error, warn};
 use crate::lyric_providers::{Lyric, LyricOwned, LyricProvider};
 use crate::sync::interop::hint_from_player;
-use crate::sync::utils::extract_lyric_lines;
-use crate::sync::TrackMeta;
+use crate::sync::utils::extract_translated_lyric;
+use crate::sync::{filter_original_lyric, TrackMeta};
 use crate::LYRIC_PROVIDERS;
 
 #[derive(Debug)]
@@ -110,9 +110,9 @@ fn load_local_lyric<P: AsRef<Path>>(path: P) -> Option<(LyricOwned, LyricOwned)>
 
     if tlyric.is_none() && EXTRACT_TRANSLATED_LYRIC.get().cloned().unwrap_or_default() {
         if let LyricOwned::LineTimestamp(lines) = &olyric {
-            let tlyric_lines = extract_lyric_lines(lines, 1);
+            let tlyric_lines = extract_translated_lyric(lines);
             if !tlyric_lines.is_empty() {
-                let olyric_lines = extract_lyric_lines(lines, 0);
+                let olyric_lines = filter_original_lyric(lines, &tlyric_lines);
                 debug!("extracted original lyric: {olyric_lines:#?}");
                 debug!("extracted translation lyric: {tlyric_lines:#?}");
                 olyric = LyricOwned::LineTimestamp(olyric_lines);

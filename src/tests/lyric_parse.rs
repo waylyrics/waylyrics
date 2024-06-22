@@ -4,7 +4,7 @@ mod lrc {
 
     use crate::{
         lyric_providers::{utils::lrc_iter, LyricLine, LyricLineOwned},
-        sync::extract_lyric_lines,
+        sync::{extract_translated_lyric, filter_original_lyric},
     };
     use anyhow::Result;
 
@@ -164,26 +164,19 @@ Author: poly000
         let lrc = r#"
 [00:01.77]Please don't say "You are lazy"
 [00:01.77]请不要说“你很懒”
-[00:04.38]だって本当はcrazy
-[00:04.38]因为其实是非常疯狂的"#;
+[00:04.38]だって本当はcrazy"#;
         let lyrics = lrc_iter(lrc.lines())?
             .into_iter()
             .map(LyricLine::into_owned)
             .collect::<Vec<_>>();
-        let tlyric = extract_lyric_lines(&lyrics, 1);
-        let olyric = extract_lyric_lines(&lyrics, 0);
+        let tlyric = extract_translated_lyric(&lyrics);
+        let olyric = filter_original_lyric(lyrics, &tlyric);
         assert_eq!(
             tlyric,
-            vec![
-                LyricLineOwned {
-                    text: "请不要说“你很懒”".into(),
-                    start_time: Duration::from_millis(1770)
-                },
-                LyricLineOwned {
-                    text: "因为其实是非常疯狂的".into(),
-                    start_time: Duration::from_millis(4380)
-                }
-            ]
+            vec![LyricLineOwned {
+                text: "请不要说“你很懒”".into(),
+                start_time: Duration::from_millis(1770)
+            },]
         );
         assert_eq!(
             olyric,

@@ -2,7 +2,7 @@ use crate::{
     app::search_window,
     log::{info, warn},
     sync::LyricState,
-    utils::{bind_shortcut, gettext},
+    utils::bind_shortcut,
 };
 use glib_macros::clone;
 use gtk::{
@@ -150,6 +150,7 @@ pub fn register_remove_lyric(app: &Application, wind: &app::Window) {
 pub fn register_import_original_lyric(app: &Application, wind: &app::Window) {
     use crate::log::error;
     use crate::lyric_providers::{utils::lrc_iter, Lyric};
+    use crate::utils::gettext;
 
     let action = SimpleAction::new("import-original-lyric", None);
     action.connect_activate(clone!(@weak wind as window => move |_, _| {

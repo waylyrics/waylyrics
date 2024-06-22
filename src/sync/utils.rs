@@ -1,5 +1,6 @@
 use std::{path::PathBuf, time::Duration};
 
+use ahash::HashMap;
 use gtk::subclass::prelude::*;
 use sorensen::distance;
 
@@ -136,18 +137,34 @@ pub fn fuzzy_match_song(
     }
 }
 
-/// target: 0, 1
-pub fn extract_lyric_lines(
-    lyric: impl AsRef<[LyricLineOwned]>,
-    target: usize,
-) -> Vec<LyricLineOwned> {
+pub fn extract_translated_lyric(lyric: impl AsRef<[LyricLineOwned]>) -> Vec<LyricLineOwned> {
     let tlyric_lines = lyric
         .as_ref()
         .windows(2)
         .filter_map(|l| <&[LyricLineOwned; 2]>::try_from(l).ok())
         // this should work because we have sorted lyrics by timestamp
         .filter(|&[a, b]| a.start_time == b.start_time)
-        .map(|p| &p[target])
+        .map(|p| &p[1])
+        .cloned()
+        .collect::<Vec<_>>();
+    tlyric_lines
+}
+
+pub fn filter_original_lyric(
+    lyric: impl AsRef<[LyricLineOwned]>,
+    tlyric: impl AsRef<[LyricLineOwned]>,
+) -> Vec<LyricLineOwned> {
+    let tlyric = tlyric
+        .as_ref()
+        .iter()
+        .map(|LyricLineOwned { text, start_time }| (start_time, text))
+        .collect::<HashMap<_, _>>();
+    let tlyric_lines = lyric
+        .as_ref()
+        .iter()
+        .filter(|LyricLineOwned { text, start_time }| {
+            !tlyric.contains_key(start_time) || tlyric[start_time] != text
+        })
         .cloned()
         .collect::<Vec<_>>();
     tlyric_lines
