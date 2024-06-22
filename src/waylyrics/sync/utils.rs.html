@@ -152,8 +152,26 @@
 <a href="#152" id="152">152</a>
 <a href="#153" id="153">153</a>
 <a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{path::PathBuf, time::Duration};
 
+<span class="kw">use </span>ahash::HashMap;
 <span class="kw">use </span>gtk::subclass::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>sorensen::distance;
 
@@ -290,18 +308,34 @@
     }
 }
 
-<span class="doccomment">/// target: 0, 1
-</span><span class="kw">pub fn </span>extract_lyric_lines(
-    lyric: <span class="kw">impl </span>AsRef&lt;[LyricLineOwned]&gt;,
-    target: usize,
-) -&gt; Vec&lt;LyricLineOwned&gt; {
+<span class="kw">pub fn </span>extract_translated_lyric(lyric: <span class="kw">impl </span>AsRef&lt;[LyricLineOwned]&gt;) -&gt; Vec&lt;LyricLineOwned&gt; {
     <span class="kw">let </span>tlyric_lines = lyric
         .as_ref()
         .windows(<span class="number">2</span>)
         .filter_map(|l| &lt;<span class="kw-2">&amp;</span>[LyricLineOwned; <span class="number">2</span>]&gt;::try_from(l).ok())
         <span class="comment">// this should work because we have sorted lyrics by timestamp
         </span>.filter(|<span class="kw-2">&amp;</span>[a, b]| a.start_time == b.start_time)
-        .map(|p| <span class="kw-2">&amp;</span>p[target])
+        .map(|p| <span class="kw-2">&amp;</span>p[<span class="number">1</span>])
+        .cloned()
+        .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+    tlyric_lines
+}
+
+<span class="kw">pub fn </span>filter_original_lyric(
+    lyric: <span class="kw">impl </span>AsRef&lt;[LyricLineOwned]&gt;,
+    tlyric: <span class="kw">impl </span>AsRef&lt;[LyricLineOwned]&gt;,
+) -&gt; Vec&lt;LyricLineOwned&gt; {
+    <span class="kw">let </span>tlyric = tlyric
+        .as_ref()
+        .iter()
+        .map(|LyricLineOwned { text, start_time }| (start_time, text))
+        .collect::&lt;HashMap&lt;<span class="kw">_</span>, <span class="kw">_</span>&gt;&gt;();
+    <span class="kw">let </span>tlyric_lines = lyric
+        .as_ref()
+        .iter()
+        .filter(|LyricLineOwned { text, start_time }| {
+            !tlyric.contains_key(start_time) || tlyric[start_time] != text
+        })
         .cloned()
         .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
     tlyric_lines

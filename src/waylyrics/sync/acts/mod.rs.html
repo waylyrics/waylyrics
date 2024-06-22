@@ -241,11 +241,12 @@
 <a href="#241" id="241">241</a>
 <a href="#242" id="242">242</a>
 <a href="#243" id="243">243</a>
+<a href="#244" id="244">244</a>
 </pre></div><pre class="rust"><code><span class="kw">use crate</span>::{
     app::search_window,
     log::{info, warn},
     sync::LyricState,
-    utils::{bind_shortcut, gettext},
+    utils::bind_shortcut,
 };
 <span class="kw">use </span>glib_macros::clone;
 <span class="kw">use </span>gtk::{
@@ -393,6 +394,7 @@
 </span><span class="kw">pub fn </span>register_import_original_lyric(app: <span class="kw-2">&amp;</span>Application, wind: <span class="kw-2">&amp;</span>app::Window) {
     <span class="kw">use </span><span class="kw">crate</span>::log::error;
     <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{utils::lrc_iter, Lyric};
+    <span class="kw">use </span><span class="kw">crate</span>::utils::gettext;
 
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"import-original-lyric"</span>, <span class="prelude-val">None</span>);
     action.connect_activate(<span class="macro">clone!</span>(@weak wind <span class="kw">as </span>window =&gt; <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {

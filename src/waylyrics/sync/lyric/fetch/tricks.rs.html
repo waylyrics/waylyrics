@@ -134,8 +134,8 @@
 <span class="kw">use </span><span class="kw">crate</span>::log::{debug, error, warn};
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{Lyric, LyricOwned, LyricProvider};
 <span class="kw">use </span><span class="kw">crate</span>::sync::interop::hint_from_player;
-<span class="kw">use </span><span class="kw">crate</span>::sync::utils::extract_lyric_lines;
-<span class="kw">use </span><span class="kw">crate</span>::sync::TrackMeta;
+<span class="kw">use </span><span class="kw">crate</span>::sync::utils::extract_translated_lyric;
+<span class="kw">use </span><span class="kw">crate</span>::sync::{filter_original_lyric, TrackMeta};
 <span class="kw">use </span><span class="kw">crate</span>::LYRIC_PROVIDERS;
 
 <span class="attr">#[derive(Debug)]
@@ -239,9 +239,9 @@
 
     <span class="kw">if </span>tlyric.is_none() &amp;&amp; EXTRACT_TRANSLATED_LYRIC.get().cloned().unwrap_or_default() {
         <span class="kw">if let </span>LyricOwned::LineTimestamp(lines) = <span class="kw-2">&amp;</span>olyric {
-            <span class="kw">let </span>tlyric_lines = extract_lyric_lines(lines, <span class="number">1</span>);
+            <span class="kw">let </span>tlyric_lines = extract_translated_lyric(lines);
             <span class="kw">if </span>!tlyric_lines.is_empty() {
-                <span class="kw">let </span>olyric_lines = extract_lyric_lines(lines, <span class="number">0</span>);
+                <span class="kw">let </span>olyric_lines = filter_original_lyric(lines, <span class="kw-2">&amp;</span>tlyric_lines);
                 <span class="macro">debug!</span>(<span class="string">"extracted original lyric: {olyric_lines:#?}"</span>);
                 <span class="macro">debug!</span>(<span class="string">"extracted translation lyric: {tlyric_lines:#?}"</span>);
                 olyric = LyricOwned::LineTimestamp(olyric_lines);
