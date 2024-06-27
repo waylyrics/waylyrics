@@ -38,6 +38,15 @@
   </screenshots>
 
   <releases>
+    <release version="0.3.13" date="2024-06-27">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.13</url>
+        <description>
+          <p>Bug Fixes</p>
+            <ul>
+              <li>Do not remove original lyric when extracting translated lines</li>
+            </ul>
+        </description>
+    </release>
     <release version="0.3.12" date="2024-06-20">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.12</url>
         <description>

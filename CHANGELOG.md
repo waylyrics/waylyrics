@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.13] - 2024-06-27
+
+### 🐛 Bug Fixes
+
+- Do not remove original lyric on extracting translated ones
+- Missing import statement
+
+### 📚 Documentation
+
+- *(readme)* Add `ncmpcpp` via mpd-mpris
+
+### ⚙️ Miscellaneous Tasks
+
+- Bump dependencies
+
 ## [0.3.12] - 2024-06-20
 
 ### 🐛 Bug Fixes
@@ -16,6 +31,7 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - *(log)* Add log for textdomain to use
+- Release v0.3.12
 
 ## [0.3.11] - 2024-06-06
 
@@ -212,7 +228,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor
 
-- Pass WeakRef<Window> to register_sync_task
+- Pass WeakRef`<Window>` to register_sync_task
 
 ### 📚 Documentation
 
@@ -627,7 +643,7 @@ All notable changes to this project will be documented in this file.
 - Generate changelogs for master
 - Update changelog on each commit
 - Do not flood commit logs
-- Remove unnessacary use of Arc<dyn LyricProvider>
+- Remove unnessacary use of Arc`<dyn LyricProvider>`
 - Release v0.2.8
 
 ### Build
