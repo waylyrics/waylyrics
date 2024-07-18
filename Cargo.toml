@@ -34,11 +34,11 @@ rust_decimal = { version = "1.35.0", default-features = false, features = [
     "std",
 ] }
 rust_decimal_macros = "1.34.2"
-url = "2.5.0"
+url = "2.5.2"
 
 # ui
-gtk = { version = "0.8.2", package = "gtk4" }
-glib-macros = "0.19.5"
+gtk = { version = "0.9.0", package = "gtk4" }
+glib-macros = "0.20.0"
 
 # lyric providers + parse
 ncmapi = { version = "0.1.13", package = "ncmapi2" }
@@ -115,7 +115,7 @@ mpris = "2.0.1"
 
 [target.'cfg(target_os = "windows")'.dependencies]
 tray-icon = { version = "0.14.3", optional = true }
-windows = { version = "0.57.0", features = [
+windows = { version = "0.58.0", features = [
     # SMTC
     "Media_Control",
     "Foundation_Collections",
@@ -124,7 +124,7 @@ windows = { version = "0.57.0", features = [
     "Win32_Foundation",
     "Win32_UI_WindowsAndMessaging",
 ] }
-gdk4-win32 = { version = "0.8.1" }
+gdk4-win32 = { version = "0.9.0" }
 
 [target.'cfg(windows)'.build-dependencies]
 windows_exe_info = { version = "0.4" }
