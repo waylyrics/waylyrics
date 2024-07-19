@@ -292,8 +292,10 @@ impl Window {
 
     fn setup_callbacks(&self) {
         let imp = self.imp();
-        imp.input_title
-            .connect_activate(clone!(@weak self as window => move |_| {
+        imp.input_title.connect_activate(clone!(
+            #[weak(rename_to = window)]
+            self,
+            move |_| {
                 let window = window.downgrade();
                 crate::log::debug!("spawned window.search() from search button");
                 glib_spawn!(async move {
@@ -301,10 +303,13 @@ impl Window {
                         window.search().await
                     }
                 });
-            }));
+            }
+        ));
 
-        imp.input_title
-            .connect_icon_release(clone!(@weak self as window => move |_, _| {
+        imp.input_title.connect_icon_release(clone!(
+            #[weak(rename_to = window)]
+            self,
+            move |_, _| {
                 let window = window.downgrade();
                 crate::log::debug!("spawned window.search() from search icon release");
                 glib_spawn!(async move {
@@ -312,10 +317,13 @@ impl Window {
                         window.search().await
                     }
                 });
-            }));
+            }
+        ));
 
-        imp.set_button
-            .connect_clicked(clone!(@weak self as window => move |_| {
+        imp.set_button.connect_clicked(clone!(
+            #[weak(rename_to = window)]
+            self,
+            move |_| {
                 let result = window.get_selected_result();
                 let Some(result) = result else {
                     return;
@@ -325,7 +333,8 @@ impl Window {
                 let Some(provider) = LYRIC_PROVIDERS
                     .get()
                     .expect("lyric providers must be initialized")
-                    .get(provider_idx) else {
+                    .get(provider_idx)
+                else {
                     error!("provider_idx {} is out of range", provider_idx);
                     return;
                 };
@@ -339,15 +348,17 @@ impl Window {
                         Ok(lyric) => {
                             let origin = provider.parse_lyric(&lyric);
                             let translation = provider.parse_translated_lyric(&lyric);
-                            set_current_lyric(LyricState{ origin, translation });
-
+                            set_current_lyric(LyricState {
+                                origin,
+                                translation,
+                            });
 
                             if window.imp().use_cache.get() {
                                 if let Some(cache_path) = get_lyric_cache_path() {
                                     update_lyric_cache(&cache_path);
                                 }
                             }
-                        },
+                        }
                         Err(e) => {
                             let error_msg = format!("{e} when getting lyric.");
                             error!(error_msg);
@@ -355,7 +366,8 @@ impl Window {
                         }
                     }
                 });
-            }));
+            }
+        ));
     }
 
     fn setup_factory(&self) {

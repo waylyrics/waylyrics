@@ -129,20 +129,27 @@ pub fn register_refetch_lyric(app: &Application, window: &app::Window, trigger: 
 
 pub fn register_remove_lyric(app: &Application, wind: &app::Window) {
     let action = SimpleAction::new("remove-lyric", None);
-    action.connect_activate(clone!(@weak wind as window => move |_, _| {
-        // Clear current lyric
-        let origin = LyricOwned::LineTimestamp(vec![]);
-        let translation = LyricOwned::None;
-        LYRIC.set(LyricState{ origin, translation });
-        let cache_lyrics = window.imp().cache_lyrics.get();
-        // Update cache
-        if cache_lyrics {
-            utils::update_cache();
+    action.connect_activate(clone!(
+        #[weak(rename_to = window)]
+        wind,
+        move |_, _| {
+            // Clear current lyric
+            let origin = LyricOwned::LineTimestamp(vec![]);
+            let translation = LyricOwned::None;
+            LYRIC.set(LyricState {
+                origin,
+                translation,
+            });
+            let cache_lyrics = window.imp().cache_lyrics.get();
+            // Update cache
+            if cache_lyrics {
+                utils::update_cache();
+            }
+            // Remove current lyric inside window
+            reset_lyric_labels(&window, None);
+            info!("removed lyric");
         }
-        // Remove current lyric inside window
-        reset_lyric_labels(&window, None);
-        info!("removed lyric");
-    }));
+    ));
     app.add_action(&action);
 }
 
@@ -153,36 +160,41 @@ pub fn register_import_original_lyric(app: &Application, wind: &app::Window) {
     use crate::utils::gettext;
 
     let action = SimpleAction::new("import-original-lyric", None);
-    action.connect_activate(clone!(@weak wind as window => move |_, _| {
-        glib_spawn!(async move {
-            let lrc_file = rfd::AsyncFileDialog::new()
-        .set_title(&gettext("Select a lyrics file"))
-        .add_filter("Simple LRC", &["lrc"])
-        .pick_file().await;
+    action.connect_activate(clone!(
+        #[weak(rename_to = window)]
+        wind,
+        move |_, _| {
+            glib_spawn!(async move {
+                let lrc_file = rfd::AsyncFileDialog::new()
+                    .set_title(&gettext("Select a lyrics file"))
+                    .add_filter("Simple LRC", &["lrc"])
+                    .pick_file()
+                    .await;
 
-            let Some(lrc_file) = lrc_file else {
-                return;
-            };
-            let lrc = match String::from_utf8(lrc_file.read().await) {
-                Ok(lrc) => lrc,
-                Err(e) => {
-                    let error_msg = format!( "failed to read LRC in UTF-8: {e}");
-                    error!(error_msg);
-                    show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
+                let Some(lrc_file) = lrc_file else {
                     return;
+                };
+                let lrc = match String::from_utf8(lrc_file.read().await) {
+                    Ok(lrc) => lrc,
+                    Err(e) => {
+                        let error_msg = format!("failed to read LRC in UTF-8: {e}");
+                        error!(error_msg);
+                        show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
+                        return;
+                    }
+                };
+                if let Ok(lyric) = lrc_iter(lrc.lines()) {
+                    LYRIC.with_borrow_mut(|LyricState { origin, .. }| {
+                        *origin = Lyric::LineTimestamp(lyric).into_owned();
+                    });
                 }
-            };
-            if let Ok(lyric) = lrc_iter(lrc.lines()) {
-                LYRIC.with_borrow_mut(|LyricState { origin, .. }|{
-                    *origin = Lyric::LineTimestamp(lyric).into_owned();
-                });
-            }
-            let cache_lyrics = window.imp().cache_lyrics.get();
-            if cache_lyrics {
-                utils::update_cache();
-            }
-        });
-    }));
+                let cache_lyrics = window.imp().cache_lyrics.get();
+                if cache_lyrics {
+                    utils::update_cache();
+                }
+            });
+        }
+    ));
     app.add_action(&action);
 }
 
@@ -193,36 +205,41 @@ pub fn register_import_translated_lyric(app: &Application, wind: &app::Window) {
     use crate::utils::gettext;
 
     let action = SimpleAction::new("import-translated-lyric", None);
-    action.connect_activate(clone!(@weak wind as window => move |_, _| {
-        glib_spawn!(async move {
-            let lrc_file = rfd::AsyncFileDialog::new()
-        .set_title(&gettext("Select a lyrics file"))
-        .add_filter("Simple LRC", &["lrc"])
-        .pick_file().await;
+    action.connect_activate(clone!(
+        #[weak(rename_to = window)]
+        wind,
+        move |_, _| {
+            glib_spawn!(async move {
+                let lrc_file = rfd::AsyncFileDialog::new()
+                    .set_title(&gettext("Select a lyrics file"))
+                    .add_filter("Simple LRC", &["lrc"])
+                    .pick_file()
+                    .await;
 
-            let Some(lrc_file) = lrc_file else {
-                return;
-            };
-            let lrc = match String::from_utf8(lrc_file.read().await) {
-                Ok(lrc) => lrc,
-                Err(e) => {
-                    let error_msg = format!( "failed to read LRC in UTF-8: {e}");
-                    error!(error_msg);
-                    show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
+                let Some(lrc_file) = lrc_file else {
                     return;
+                };
+                let lrc = match String::from_utf8(lrc_file.read().await) {
+                    Ok(lrc) => lrc,
+                    Err(e) => {
+                        let error_msg = format!("failed to read LRC in UTF-8: {e}");
+                        error!(error_msg);
+                        show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
+                        return;
+                    }
+                };
+                if let Ok(lyric) = lrc_iter(lrc.lines()) {
+                    LYRIC.with_borrow_mut(|LyricState { translation, .. }| {
+                        *translation = Lyric::LineTimestamp(lyric).into_owned();
+                    });
                 }
-            };
-            if let Ok(lyric) = lrc_iter(lrc.lines()) {
-                LYRIC.with_borrow_mut(|LyricState { translation, .. }|{
-                    *translation = Lyric::LineTimestamp(lyric).into_owned();
-                });
-            }
-            let cache_lyrics = window.imp().cache_lyrics.get();
-            if cache_lyrics {
-                utils::update_cache();
-            }
-        });
-    }));
+                let cache_lyrics = window.imp().cache_lyrics.get();
+                if cache_lyrics {
+                    utils::update_cache();
+                }
+            });
+        }
+    ));
     app.add_action(&action);
 }
 
