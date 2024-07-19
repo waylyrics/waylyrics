@@ -130,30 +130,34 @@ impl ObjectImpl for Window {
         popover.set_menu_model(Some(&self.menu));
 
         let player_menu = &self.player_menu;
-        popover.connect_visible_submenu_notify(clone!(@weak player_menu=> move |sub| {
-            if Some(&*gettext("Select Player")) != sub.visible_submenu().as_deref() {
-                return;
-            }
-            player_menu.remove_all();
+        popover.connect_visible_submenu_notify(clone!(
+            #[weak]
+            player_menu,
+            move |sub| {
+                if Some(&*gettext("Select Player")) != sub.visible_submenu().as_deref() {
+                    return;
+                }
+                player_menu.remove_all();
 
-            let section = gio::Menu::new();
-            let players = list_players();
-            if !players.is_empty() {
-                let disconnect =
-                    MenuItem::new(Some(&gettext("Disconnect")), Some("app.disconnect"));
-                player_menu.append_item(&disconnect);
-            }
+                let section = gio::Menu::new();
+                let players = list_players();
+                if !players.is_empty() {
+                    let disconnect =
+                        MenuItem::new(Some(&gettext("Disconnect")), Some("app.disconnect"));
+                    player_menu.append_item(&disconnect);
+                }
 
-            for player in players {
-                let item = MenuItem::new(Some(&player.player_name), None);
-                item.set_action_and_target_value(
-                    Some("app.connect"),
-                    Some(&ToVariant::to_variant(&player.inner_id)),
-                );
-                section.append_item(&item);
+                for player in players {
+                    let item = MenuItem::new(Some(&player.player_name), None);
+                    item.set_action_and_target_value(
+                        Some("app.connect"),
+                        Some(&ToVariant::to_variant(&player.inner_id)),
+                    );
+                    section.append_item(&item);
+                }
+                player_menu.append_section(None, &section);
             }
-            player_menu.append_section(None, &section);
-        }));
+        ));
         self.menubutton.set_popover(Some(&popover));
 
         for display_mode in <LyricDisplayMode as strum::IntoEnumIterator>::iter() {
