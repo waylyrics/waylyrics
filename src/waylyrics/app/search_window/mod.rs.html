@@ -413,6 +413,18 @@
 <a href="#413" id="413">413</a>
 <a href="#414" id="414">414</a>
 <a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+<a href="#419" id="419">419</a>
+<a href="#420" id="420">420</a>
+<a href="#421" id="421">421</a>
+<a href="#422" id="422">422</a>
+<a href="#423" id="423">423</a>
+<a href="#424" id="424">424</a>
+<a href="#425" id="425">425</a>
+<a href="#426" id="426">426</a>
+<a href="#427" id="427">427</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>imp;
 
 <span class="kw">use </span>std::sync::Arc;
@@ -707,8 +719,10 @@
 
     <span class="kw">fn </span>setup_callbacks(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">let </span>imp = <span class="self">self</span>.imp();
-        imp.input_title
-            .connect_activate(<span class="macro">clone!</span>(@weak <span class="self">self </span><span class="kw">as </span>window =&gt; <span class="kw">move </span>|<span class="kw">_</span>| {
+        imp.input_title.connect_activate(<span class="macro">clone!</span>(
+            <span class="attr">#[weak(rename_to = window)]
+            </span><span class="self">self</span>,
+            <span class="kw">move </span>|<span class="kw">_</span>| {
                 <span class="kw">let </span>window = window.downgrade();
                 <span class="macro">crate::log::debug!</span>(<span class="string">"spawned window.search() from search button"</span>);
                 <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
@@ -716,10 +730,13 @@
                         window.search().<span class="kw">await
                     </span>}
                 });
-            }));
+            }
+        ));
 
-        imp.input_title
-            .connect_icon_release(<span class="macro">clone!</span>(@weak <span class="self">self </span><span class="kw">as </span>window =&gt; <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
+        imp.input_title.connect_icon_release(<span class="macro">clone!</span>(
+            <span class="attr">#[weak(rename_to = window)]
+            </span><span class="self">self</span>,
+            <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
                 <span class="kw">let </span>window = window.downgrade();
                 <span class="macro">crate::log::debug!</span>(<span class="string">"spawned window.search() from search icon release"</span>);
                 <span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
@@ -727,10 +744,13 @@
                         window.search().<span class="kw">await
                     </span>}
                 });
-            }));
+            }
+        ));
 
-        imp.set_button
-            .connect_clicked(<span class="macro">clone!</span>(@weak <span class="self">self </span><span class="kw">as </span>window =&gt; <span class="kw">move </span>|<span class="kw">_</span>| {
+        imp.set_button.connect_clicked(<span class="macro">clone!</span>(
+            <span class="attr">#[weak(rename_to = window)]
+            </span><span class="self">self</span>,
+            <span class="kw">move </span>|<span class="kw">_</span>| {
                 <span class="kw">let </span>result = window.get_selected_result();
                 <span class="kw">let </span><span class="prelude-val">Some</span>(result) = result <span class="kw">else </span>{
                     <span class="kw">return</span>;
@@ -740,7 +760,8 @@
                 <span class="kw">let </span><span class="prelude-val">Some</span>(provider) = LYRIC_PROVIDERS
                     .get()
                     .expect(<span class="string">"lyric providers must be initialized"</span>)
-                    .get(provider_idx) <span class="kw">else </span>{
+                    .get(provider_idx)
+                <span class="kw">else </span>{
                     <span class="macro">error!</span>(<span class="string">"provider_idx {} is out of range"</span>, provider_idx);
                     <span class="kw">return</span>;
                 };
@@ -754,15 +775,17 @@
                         <span class="prelude-val">Ok</span>(lyric) =&gt; {
                             <span class="kw">let </span>origin = provider.parse_lyric(<span class="kw-2">&amp;</span>lyric);
                             <span class="kw">let </span>translation = provider.parse_translated_lyric(<span class="kw-2">&amp;</span>lyric);
-                            set_current_lyric(LyricState{ origin, translation });
-
+                            set_current_lyric(LyricState {
+                                origin,
+                                translation,
+                            });
 
                             <span class="kw">if </span>window.imp().use_cache.get() {
                                 <span class="kw">if let </span><span class="prelude-val">Some</span>(cache_path) = get_lyric_cache_path() {
                                     update_lyric_cache(<span class="kw-2">&amp;</span>cache_path);
                                 }
                             }
-                        },
+                        }
                         <span class="prelude-val">Err</span>(e) =&gt; {
                             <span class="kw">let </span>error_msg = <span class="macro">format!</span>(<span class="string">"{e} when getting lyric."</span>);
                             <span class="macro">error!</span>(error_msg);
@@ -770,7 +793,8 @@
                         }
                     }
                 });
-            }));
+            }
+        ));
     }
 
     <span class="kw">fn </span>setup_factory(<span class="kw-2">&amp;</span><span class="self">self</span>) {

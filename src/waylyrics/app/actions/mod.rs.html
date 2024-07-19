@@ -82,6 +82,22 @@
 <a href="#82" id="82">82</a>
 <a href="#83" id="83">83</a>
 <a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
 </pre></div><pre class="rust"><code><span class="attr">#[cfg(feature = <span class="string">"action-event"</span>)]
 </span><span class="kw">mod </span>event;
 
@@ -103,9 +119,13 @@
 
 <span class="kw">pub fn </span>register_switch_decoration(wind: <span class="kw-2">&amp;</span>Window, trigger: <span class="kw-2">&amp;</span>str) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"switch-decoration"</span>, <span class="prelude-val">None</span>);
-    action.connect_activate(<span class="macro">clone!</span>(@weak wind =&gt; <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
-        wind.set_decorated(!wind.is_decorated());
-    }));
+    action.connect_activate(<span class="macro">clone!</span>(
+        <span class="attr">#[weak]
+        </span>wind,
+        <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
+            wind.set_decorated(!wind.is_decorated());
+        }
+    ));
     wind.add_action(<span class="kw-2">&amp;</span>action);
 
     bind_shortcut(<span class="string">"win.switch-decoration"</span>, wind, trigger);
@@ -126,12 +146,16 @@
 
 <span class="kw">pub fn </span>register_switch_passthrough(wind: <span class="kw-2">&amp;</span>Window, trigger: <span class="kw-2">&amp;</span>str) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"switch-passthrough"</span>, <span class="prelude-val">None</span>);
-    action.connect_activate(<span class="macro">clone!</span>(@weak wind =&gt; <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
-        <span class="kw">let </span>clickthrough = !wind.imp().clickthrough.get();
-        wind.imp().clickthrough.set(clickthrough);
-        set_click_pass_through(<span class="kw-2">&amp;</span>wind, clickthrough);
-        wind.present();
-    }));
+    action.connect_activate(<span class="macro">clone!</span>(
+        <span class="attr">#[weak]
+        </span>wind,
+        <span class="kw">move </span>|<span class="kw">_</span>, <span class="kw">_</span>| {
+            <span class="kw">let </span>clickthrough = !wind.imp().clickthrough.get();
+            wind.imp().clickthrough.set(clickthrough);
+            set_click_pass_through(<span class="kw-2">&amp;</span>wind, clickthrough);
+            wind.present();
+        }
+    ));
     wind.add_action(<span class="kw-2">&amp;</span>action);
 
     bind_shortcut(<span class="string">"win.switch-passthrough"</span>, wind, trigger);
@@ -139,31 +163,39 @@
 
 <span class="kw">pub fn </span>register_set_display_mode(wind: <span class="kw-2">&amp;</span>Window) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"set-display-mode"</span>, <span class="prelude-val">Some</span>(VariantTy::STRING));
-    action.connect_activate(<span class="macro">clone!</span>(@weak wind =&gt; <span class="kw">move </span>|<span class="kw">_</span>, display_mode| {
-        <span class="kw">let </span><span class="prelude-val">Some</span>(display_mode) = display_mode.and_then(|d| d.str()) <span class="kw">else </span>{
-            <span class="kw">return</span>;
-        };
-        <span class="kw">let </span><span class="prelude-val">Ok</span>(display_mode) = display_mode.parse() <span class="kw">else </span>{
-            <span class="macro">error!</span>(<span class="string">"unknown display_mode: {display_mode}"</span>);
-            <span class="kw">return</span>;
-        };
-        wind.imp().lyric_display_mode.set(display_mode);
-    }));
+    action.connect_activate(<span class="macro">clone!</span>(
+        <span class="attr">#[weak]
+        </span>wind,
+        <span class="kw">move </span>|<span class="kw">_</span>, display_mode| {
+            <span class="kw">let </span><span class="prelude-val">Some</span>(display_mode) = display_mode.and_then(|d| d.str()) <span class="kw">else </span>{
+                <span class="kw">return</span>;
+            };
+            <span class="kw">let </span><span class="prelude-val">Ok</span>(display_mode) = display_mode.parse() <span class="kw">else </span>{
+                <span class="macro">error!</span>(<span class="string">"unknown display_mode: {display_mode}"</span>);
+                <span class="kw">return</span>;
+            };
+            wind.imp().lyric_display_mode.set(display_mode);
+        }
+    ));
     wind.add_action(<span class="kw-2">&amp;</span>action);
 }
 
 <span class="kw">pub fn </span>register_set_lyric_align(wind: <span class="kw-2">&amp;</span>Window) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"set-lyric-align"</span>, <span class="prelude-val">Some</span>(VariantTy::STRING));
-    action.connect_activate(<span class="macro">clone!</span>(@weak wind =&gt; <span class="kw">move </span>|<span class="kw">_</span>, lyric_align| {
-        <span class="kw">let </span><span class="prelude-val">Some</span>(align) = lyric_align.and_then(|d| d.str()) <span class="kw">else </span>{
-            <span class="kw">return</span>;
-        };
-        <span class="kw">let </span><span class="prelude-val">Ok</span>(align): <span class="prelude-ty">Result</span>&lt;Align, <span class="kw">_</span>&gt; = align.parse() <span class="kw">else </span>{
-            <span class="macro">error!</span>(<span class="string">"unknown lyric alignment: {align}"</span>);
-            <span class="kw">return</span>;
-        };
-        set_lyric_align(<span class="kw-2">&amp;</span>wind, align);
-    }));
+    action.connect_activate(<span class="macro">clone!</span>(
+        <span class="attr">#[weak]
+        </span>wind,
+        <span class="kw">move </span>|<span class="kw">_</span>, lyric_align| {
+            <span class="kw">let </span><span class="prelude-val">Some</span>(align) = lyric_align.and_then(|d| d.str()) <span class="kw">else </span>{
+                <span class="kw">return</span>;
+            };
+            <span class="kw">let </span><span class="prelude-val">Ok</span>(align): <span class="prelude-ty">Result</span>&lt;Align, <span class="kw">_</span>&gt; = align.parse() <span class="kw">else </span>{
+                <span class="macro">error!</span>(<span class="string">"unknown lyric alignment: {align}"</span>);
+                <span class="kw">return</span>;
+            };
+            set_lyric_align(<span class="kw-2">&amp;</span>wind, align);
+        }
+    ));
     wind.add_action(<span class="kw-2">&amp;</span>action);
 }
 </code></pre></div></section></main></body></html>
