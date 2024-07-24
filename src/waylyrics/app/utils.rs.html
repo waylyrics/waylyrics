@@ -127,7 +127,7 @@
         <span class="kw">use </span>windows::Win32::UI::WindowsAndMessaging::{
             GetWindowLongPtrW, SetWindowLongPtrW, GWL_EXSTYLE,
         };
-        <span class="kw">let </span>hwnd = HWND(hwnd);
+        <span class="kw">let </span>hwnd = HWND(hwnd <span class="kw">as _</span>);
 
         <span class="kw">const </span>WS_EX_TRANSPARENT: isize = <span class="number">0x00000020</span>;
         <span class="kw">const </span>WS_EX_LAYERED: isize = <span class="number">0x00080000</span>;
