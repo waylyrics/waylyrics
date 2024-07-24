@@ -6,6 +6,7 @@ use std::time::SystemTime;
 use anyhow::Result;
 use gtk::glib::subclass::types::ObjectSubclassIsExt;
 use tokio::runtime::Runtime;
+
 use windows::Media::Control::GlobalSystemMediaTransportControlsSession as GSMTCSession;
 use windows::Media::Control::GlobalSystemMediaTransportControlsSessionManager as GSMTCSessionManager;
 use windows::Media::Control::GlobalSystemMediaTransportControlsSessionMediaProperties as GSMTCSessionMediaProperties;
@@ -27,7 +28,7 @@ static TOKIO_RUNTIME: OnceLock<Runtime> = OnceLock::new();
 
 fn media_properties(session: &GSMTCSession) -> Result<GSMTCSessionMediaProperties> {
     let runtime = TOKIO_RUNTIME.get_or_init(|| Runtime::new().unwrap());
-    Ok(runtime.block_on(async { session.TryGetMediaPropertiesAsync()?.await })?)
+    Ok(runtime.block_on(async { session.TryGetMediaPropertiesAsync()?.get() })?)
 }
 
 fn session_manager() -> &'static GSMTCSessionManager {
@@ -37,7 +38,7 @@ fn session_manager() -> &'static GSMTCSessionManager {
         runtime.block_on(async move {
             GSMTCSessionManager::RequestAsync()
                 .expect("cannot request GSMTC Session Manager!")
-                .await
+                .get()
                 .expect("request GSMTC Session Manager failed!")
         })
     })
