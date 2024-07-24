@@ -77,10 +77,14 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 [mpd-mpris]: https://github.com/natsukagami/mpd-mpris
 [ncmpcpp]: https://github.com/ncmpcpp/ncmpcpp
 
+[DeaDBeeF]: https://deadbeef.sourceforge.io/
+[deadbeef-mpris2-plugin]: https://github.com/DeaDBeeF-Player/deadbeef-mpris2-plugi4
+
 | 名称                      | 在线 | 框架      | 备注                       |
 | ------------------------- | ---- | --------- | -------------------------- |
 | Firefox                   | O    | 浏览器    | 需要[插件]                 |
 | Chrome                    | O    | 浏览器    |                            |
+| [DeaDBeeF]                | X    | GTK3      | [deadbeef-mpris2-plugin]   |
 | [netease-cloud-music-gtk] | O    | GTK4      | 2.3.0+                     |
 | [amberol]                 | X    | GTK4      |                            |
 | [lollypop]                | X    | GTK4      |                            |
