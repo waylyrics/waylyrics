@@ -11,7 +11,7 @@ pub(super) fn set_click_pass_through(window: &window::Window, enabled: bool) {
         use windows::Win32::UI::WindowsAndMessaging::{
             GetWindowLongPtrW, SetWindowLongPtrW, GWL_EXSTYLE,
         };
-        let hwnd = HWND(hwnd);
+        let hwnd = HWND(hwnd as _);
 
         const WS_EX_TRANSPARENT: isize = 0x00000020;
         const WS_EX_LAYERED: isize = 0x00080000;
