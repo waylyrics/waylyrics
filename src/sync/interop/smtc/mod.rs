@@ -153,7 +153,7 @@ impl OsImp for GSMTC {
 
         let mut length = timeline_properties.EndTime().ok().map(Duration::from);
 
-        // workaround: go-musicfox v4.4.0 will give zero EndTime
+        // * workaround: go-musicfox v4.4.0 will give zero EndTime
         if length.is_some_and(|l| l.is_zero()) {
             length = None;
         }

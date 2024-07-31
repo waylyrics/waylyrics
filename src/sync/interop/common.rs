@@ -95,7 +95,7 @@ pub fn need_fetch_lyric(track_meta: &TrackMeta) -> bool {
             let track_meta_playing = metainfo.as_ref().cloned();
             trace!("got track_id: {track_meta:#?}");
 
-            // workarounds for issue [#109](https://github.com/waylyrics/waylyrics/issues/109)
+            // ? issue [#109](https://github.com/waylyrics/waylyrics/issues/109)
             // skip comparing length
             let need = !track_meta_playing.is_some_and(|p| {
                 TrackMeta { length: None, ..p }

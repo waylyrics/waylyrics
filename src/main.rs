@@ -187,7 +187,7 @@ fn build_ui(app: &Application) -> Result<()> {
     setup_providers(lyric_search_source);
 
     #[cfg(target_os = "windows")]
-    // workaround for a GTK4 bug:
+    // * workaround for a GTK4 bug:
     // GTK4 will freeze on close request on windows
     // so we just exit without actually call gtk_window_close
     wind.connect_close_request(|wind| {
