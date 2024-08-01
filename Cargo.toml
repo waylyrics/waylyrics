@@ -67,7 +67,7 @@ thiserror = "1.0.59"
 
 # networking
 async-trait = "0.1.80"
-tokio = { version = "1.37.0", features = [
+tokio = { version = "1.39.2", features = [
     "macros",
     "net",
     "time",
