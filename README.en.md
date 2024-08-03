@@ -77,7 +77,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 [ncmpcpp]: https://github.com/ncmpcpp/ncmpcpp
 
 [DeaDBeeF]: https://deadbeef.sourceforge.io/
-[deadbeef-mpris2-plugin]: https://github.com/DeaDBeeF-Player/deadbeef-mpris2-plugi4
+[deadbeef-mpris2-plugin]: https://github.com/DeaDBeeF-Player/deadbeef-mpris2-plugin
 
 | Name                      | Online? | Framework | #                                          |
 | ------------------------- | ------- | --------- | ------------------------------------------ |
