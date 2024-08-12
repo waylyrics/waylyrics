@@ -52,11 +52,14 @@ pub fn match_likely_lyric<'a>(
             let o_album: Option<Vec<char>>;
             let o_singer: Option<Vec<char>>;
 
-            if cfg!(feature = "opencc") {
+            #[cfg(feature = "opencc")]
+            {
                 o_title = opencc.convert(title).chars().collect();
                 o_album = album.map(|a| opencc.convert(a).chars().collect());
                 o_singer = singer.map(|s| opencc.convert(s).chars().collect());
-            } else {
+            }
+            #[cfg(not(feature = "opencc"))]
+            {
                 o_title = title.chars().collect();
                 o_album = album.map(|a| a.chars().collect());
                 o_singer = singer.map(|s| s.chars().collect());
@@ -75,13 +78,16 @@ pub fn match_likely_lyric<'a>(
                         let r_album;
                         let r_singer;
 
-                        if cfg!(feature = "opencc") {
+                        #[cfg(feature = "opencc")]
+                        {
                             r_title = opencc.convert(_title).chars().collect::<Vec<_>>();
                             r_album = _album
                                 .as_ref()
                                 .map(|a| opencc.convert(a).chars().collect::<Vec<_>>());
                             r_singer = opencc.convert(_singer).chars().collect::<Vec<_>>();
-                        } else {
+                        }
+                        #[cfg(not(feature = "opencc"))]
+                        {
                             r_title = _title.chars().collect::<Vec<_>>();
                             r_album = _album.as_ref().map(|a| a.chars().collect::<Vec<_>>());
                             r_singer = _singer.chars().collect::<Vec<_>>();
