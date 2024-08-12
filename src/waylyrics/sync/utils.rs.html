@@ -167,10 +167,6 @@
 <a href="#167" id="167">167</a>
 <a href="#168" id="168">168</a>
 <a href="#169" id="169">169</a>
-<a href="#170" id="170">170</a>
-<a href="#171" id="171">171</a>
-<a href="#172" id="172">172</a>
-<a href="#173" id="173">173</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{path::PathBuf, time::Duration};
 
 <span class="kw">use </span>ahash::HashMap;
@@ -221,20 +217,19 @@
                 <span class="kw">return </span><span class="prelude-val">None</span>;
             };
 
-            <span class="attr">#[cfg(feature = <span class="string">"opencc"</span>)]
-            </span><span class="kw">let </span>title: Vec&lt;char&gt; = opencc.convert(title).chars().collect();
-            <span class="attr">#[cfg(not(feature = <span class="string">"opencc"</span>))]
-            </span><span class="kw">let </span>title: Vec&lt;char&gt; = title.chars().collect();
+            <span class="kw">let </span>o_title: Vec&lt;char&gt;;
+            <span class="kw">let </span>o_album: <span class="prelude-ty">Option</span>&lt;Vec&lt;char&gt;&gt;;
+            <span class="kw">let </span>o_singer: <span class="prelude-ty">Option</span>&lt;Vec&lt;char&gt;&gt;;
 
-            <span class="attr">#[cfg(feature = <span class="string">"opencc"</span>)]
-            </span><span class="kw">let </span>album: <span class="prelude-ty">Option</span>&lt;Vec&lt;char&gt;&gt; = album.map(|a| opencc.convert(a).chars().collect());
-            <span class="attr">#[cfg(not(feature = <span class="string">"opencc"</span>))]
-            </span><span class="kw">let </span>album: <span class="prelude-ty">Option</span>&lt;Vec&lt;char&gt;&gt; = album.map(|a| a.chars().collect());
-
-            <span class="attr">#[cfg(feature = <span class="string">"opencc"</span>)]
-            </span><span class="kw">let </span>singer: <span class="prelude-ty">Option</span>&lt;Vec&lt;char&gt;&gt; = singer.map(|s| opencc.convert(s).chars().collect());
-            <span class="attr">#[cfg(not(feature = <span class="string">"opencc"</span>))]
-            </span><span class="kw">let </span>singer: <span class="prelude-ty">Option</span>&lt;Vec&lt;char&gt;&gt; = singer.map(|s| s.chars().collect());
+            <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">"opencc"</span>) {
+                o_title = opencc.convert(title).chars().collect();
+                o_album = album.map(|a| opencc.convert(a).chars().collect());
+                o_singer = singer.map(|s| opencc.convert(s).chars().collect());
+            } <span class="kw">else </span>{
+                o_title = title.chars().collect();
+                o_album = album.map(|a| a.chars().collect());
+                o_singer = singer.map(|s| s.chars().collect());
+            }
 
             search_result
                 .iter()
@@ -249,25 +244,22 @@
                         <span class="kw">let </span>r_album;
                         <span class="kw">let </span>r_singer;
 
-                        <span class="attr">#[cfg(feature = <span class="string">"opencc"</span>)]
-                        </span>{
+                        <span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">"opencc"</span>) {
                             r_title = opencc.convert(_title).chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
                             r_album = _album
                                 .as_ref()
                                 .map(|a| opencc.convert(a).chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;());
                             r_singer = opencc.convert(_singer).chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
-                        }
-                        <span class="attr">#[cfg(not(feature = <span class="string">"opencc"</span>))]
-                        </span>{
+                        } <span class="kw">else </span>{
                             r_title = _title.chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
                             r_album = _album.as_ref().map(|a| a.chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;());
                             r_singer = _singer.chars().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
                         }
 
                         <span class="kw">let </span>likelihood = fuzzy_match_song(
-                            <span class="kw-2">&amp;</span>title,
-                            album.as_deref(),
-                            singer.as_deref(),
+                            <span class="kw-2">&amp;</span>o_title,
+                            o_album.as_deref(),
+                            o_singer.as_deref(),
                             <span class="kw-2">&amp;</span>r_title,
                             r_album.as_deref(),
                             <span class="kw-2">&amp;</span>r_singer,
