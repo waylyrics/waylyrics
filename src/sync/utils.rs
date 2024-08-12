@@ -48,20 +48,19 @@ pub fn match_likely_lyric<'a>(
                 return None;
             };
 
-            #[cfg(feature = "opencc")]
-            let title: Vec<char> = opencc.convert(title).chars().collect();
-            #[cfg(not(feature = "opencc"))]
-            let title: Vec<char> = title.chars().collect();
+            let o_title: Vec<char>;
+            let o_album: Option<Vec<char>>;
+            let o_singer: Option<Vec<char>>;
 
-            #[cfg(feature = "opencc")]
-            let album: Option<Vec<char>> = album.map(|a| opencc.convert(a).chars().collect());
-            #[cfg(not(feature = "opencc"))]
-            let album: Option<Vec<char>> = album.map(|a| a.chars().collect());
-
-            #[cfg(feature = "opencc")]
-            let singer: Option<Vec<char>> = singer.map(|s| opencc.convert(s).chars().collect());
-            #[cfg(not(feature = "opencc"))]
-            let singer: Option<Vec<char>> = singer.map(|s| s.chars().collect());
+            if cfg!(feature = "opencc") {
+                o_title = opencc.convert(title).chars().collect();
+                o_album = album.map(|a| opencc.convert(a).chars().collect());
+                o_singer = singer.map(|s| opencc.convert(s).chars().collect());
+            } else {
+                o_title = title.chars().collect();
+                o_album = album.map(|a| a.chars().collect());
+                o_singer = singer.map(|s| s.chars().collect());
+            }
 
             search_result
                 .iter()
@@ -76,25 +75,22 @@ pub fn match_likely_lyric<'a>(
                         let r_album;
                         let r_singer;
 
-                        #[cfg(feature = "opencc")]
-                        {
+                        if cfg!(feature = "opencc") {
                             r_title = opencc.convert(_title).chars().collect::<Vec<_>>();
                             r_album = _album
                                 .as_ref()
                                 .map(|a| opencc.convert(a).chars().collect::<Vec<_>>());
                             r_singer = opencc.convert(_singer).chars().collect::<Vec<_>>();
-                        }
-                        #[cfg(not(feature = "opencc"))]
-                        {
+                        } else {
                             r_title = _title.chars().collect::<Vec<_>>();
                             r_album = _album.as_ref().map(|a| a.chars().collect::<Vec<_>>());
                             r_singer = _singer.chars().collect::<Vec<_>>();
                         }
 
                         let likelihood = fuzzy_match_song(
-                            &title,
-                            album.as_deref(),
-                            singer.as_deref(),
+                            &o_title,
+                            o_album.as_deref(),
+                            o_singer.as_deref(),
                             &r_title,
                             r_album.as_deref(),
                             &r_singer,
