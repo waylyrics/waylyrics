@@ -53,49 +53,51 @@ pub fn match_likely_lyric<'a>(
             #[cfg(not(feature = "opencc"))]
             let title: Vec<char> = title.chars().collect();
 
-            let album: Option<Vec<char>> = album.map(|a| {
-                #[cfg(feature = "opencc")]
-                return opencc.convert(a).chars().collect();
-                #[cfg(not(feature = "opencc"))]
-                return a.chars().collect();
-            });
-            let singer: Option<Vec<char>> = singer.map(|s| {
-                #[cfg(feature = "opencc")]
-                return opencc.convert(s).chars().collect();
-                #[cfg(not(feature = "opencc"))]
-                return s.chars().collect();
-            });
+            #[cfg(feature = "opencc")]
+            let album: Option<Vec<char>> = album.map(|a| opencc.convert(a).chars().collect());
+            #[cfg(not(feature = "opencc"))]
+            let album: Option<Vec<char>> = album.map(|a| a.chars().collect());
+
+            #[cfg(feature = "opencc")]
+            let singer: Option<Vec<char>> = singer.map(|s| opencc.convert(s).chars().collect());
+            #[cfg(not(feature = "opencc"))]
+            let singer: Option<Vec<char>> = singer.map(|s| s.chars().collect());
+
             search_result
                 .iter()
                 .map(
                     |s @ SongInfo {
-                         title: r_title,
-                         singer: r_singer,
-                         album: r_album,
+                         title: _title,
+                         singer: _singer,
+                         album: _album,
                          ..
                      }| {
+                        let r_title;
+                        let r_album;
+                        let r_singer;
+
+                        #[cfg(feature = "opencc")]
+                        {
+                            r_title = opencc.convert(_title).chars().collect::<Vec<_>>();
+                            r_album = _album
+                                .as_ref()
+                                .map(|a| opencc.convert(a).chars().collect::<Vec<_>>());
+                            r_singer = opencc.convert(_singer).chars().collect::<Vec<_>>();
+                        }
+                        #[cfg(not(feature = "opencc"))]
+                        {
+                            r_title = _title.chars().collect::<Vec<_>>();
+                            r_album = _album.as_ref().map(|a| a.chars().collect::<Vec<_>>());
+                            r_singer = _singer.chars().collect::<Vec<_>>();
+                        }
+
                         let likelihood = fuzzy_match_song(
                             &title,
                             album.as_deref(),
                             singer.as_deref(),
-                            #[cfg(feature = "opencc")]
-                            &opencc.convert(r_title).chars().collect::<Vec<_>>(),
-                            #[cfg(feature = "opencc")]
-                            r_album
-                                .as_ref()
-                                .map(|a| opencc.convert(a).chars().collect::<Vec<_>>())
-                                .as_deref(),
-                            #[cfg(feature = "opencc")]
-                            &opencc.convert(r_singer).chars().collect::<Vec<_>>(),
-                            #[cfg(not(feature = "opencc"))]
-                            &r_title.chars().collect::<Vec<_>>(),
-                            #[cfg(not(feature = "opencc"))]
-                            r_album
-                                .as_ref()
-                                .map(|a| a.chars().collect::<Vec<_>>())
-                                .as_deref(),
-                            #[cfg(not(feature = "opencc"))]
-                            &r_singer.chars().collect::<Vec<_>>(),
+                            &r_title,
+                            r_album.as_deref(),
+                            &r_singer,
                         );
                         trace!("p={likelihood} for {s:?}");
                         (s, likelihood)
