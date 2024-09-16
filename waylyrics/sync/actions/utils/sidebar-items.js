@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["update_cache"]};
+window.SIDEBAR_ITEMS = {"fn":["import_lyric","update_cache"]};
