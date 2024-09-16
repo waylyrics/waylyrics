@@ -317,11 +317,11 @@
         </span>{
             <span class="self">self</span>.import_lyric_menu.append(
                 <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Original Lyric"</span>)),
-                <span class="prelude-val">Some</span>(<span class="string">"app.import-original-lyric"</span>),
+                <span class="prelude-val">Some</span>(<span class="string">"app.import-lyric(true)"</span>),
             );
             <span class="self">self</span>.import_lyric_menu.append(
                 <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Translated Lyric"</span>)),
-                <span class="prelude-val">Some</span>(<span class="string">"app.import-translated-lyric"</span>),
+                <span class="prelude-val">Some</span>(<span class="string">"app.import-lyric(false)"</span>),
             );
             play_section.append_submenu(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>gettext(<span class="string">"Import Lyric"</span>)), <span class="kw-2">&amp;</span><span class="self">self</span>.import_lyric_menu);
         }

@@ -96,9 +96,9 @@
                 PlayAction::RemoveLyric =&gt; (<span class="string">"remove-lyric"</span>, <span class="prelude-val">None</span>),
                 PlayAction::SearchLyric =&gt; (<span class="string">"search-lyric"</span>, <span class="prelude-val">None</span>),
                 <span class="attr">#[cfg(feature = <span class="string">"import-lyric"</span>)]
-                </span>PlayAction::ImportOriginalLyric =&gt; (<span class="string">"import-original-lyric"</span>, <span class="prelude-val">None</span>),
+                </span>PlayAction::ImportOriginalLyric =&gt; (<span class="string">"import-lyric"</span>, <span class="prelude-val">Some</span>(<span class="bool-val">true</span>.to_variant())),
                 <span class="attr">#[cfg(feature = <span class="string">"import-lyric"</span>)]
-                </span>PlayAction::ImportTranslatedLyric =&gt; (<span class="string">"import-translated-lyric"</span>, <span class="prelude-val">None</span>),
+                </span>PlayAction::ImportTranslatedLyric =&gt; (<span class="string">"import-lyric"</span>, <span class="prelude-val">Some</span>(<span class="bool-val">false</span>.to_variant())),
             };
 
             <span class="kw">if let </span><span class="prelude-val">Some</span>(app) = app.upgrade() {

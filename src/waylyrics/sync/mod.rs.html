@@ -108,12 +108,12 @@
 <span class="kw">pub static </span>ENABLE_LOCAL_LYRIC: OnceLock&lt;bool&gt; = OnceLock::new();
 
 <span class="kw">mod </span>actions;
+<span class="attr">#[cfg(feature = <span class="string">"import-lyric"</span>)]
+</span><span class="kw">pub use </span>actions::register_import_lyric;
 <span class="kw">pub use </span>actions::{
     register_connect, register_disconnect, register_refetch_lyric, register_reload_lyric,
     register_remove_lyric, register_search_lyric,
 };
-<span class="attr">#[cfg(feature = <span class="string">"import-lyric"</span>)]
-</span><span class="kw">pub use </span>actions::{register_import_original_lyric, register_import_translated_lyric};
 
 <span class="attr">#[cfg(feature = <span class="string">"action-event"</span>)]
 </span><span class="kw">pub use </span>actions::{init_play_action_channel, PlayAction, PLAY_ACTION};

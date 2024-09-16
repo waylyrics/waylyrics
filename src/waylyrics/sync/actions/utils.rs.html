@@ -55,10 +55,13 @@
 <a href="#55" id="55">55</a>
 <a href="#56" id="56">56</a>
 <a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>gtk::subclass::prelude::ObjectSubclassIsExt;
 
 <span class="kw">use crate</span>::{
     app::{dialog::show_dialog, Window},
+    log::{error, info},
     sync::{lyric::cache::update_lyric_cache, LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE},
 };
 
@@ -71,9 +74,10 @@
 }
 
 <span class="kw">pub async fn </span>import_lyric(window: <span class="kw-2">&amp;</span>Window, is_original: bool) {
-    <span class="kw">use </span><span class="kw">crate</span>::log::error;
     <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{utils::lrc_iter, Lyric};
     <span class="kw">use </span><span class="kw">crate</span>::utils::gettext;
+
+    <span class="macro">info!</span>(<span class="string">"spawned import-lyric: original={is_original}"</span>);
 
     <span class="kw">let </span>lrc_file = rfd::AsyncFileDialog::new()
         .set_title(<span class="kw-2">&amp;</span>gettext(<span class="string">"Select a lyrics file"</span>))
