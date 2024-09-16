@@ -45,12 +45,12 @@ thread_local! {
 pub static ENABLE_LOCAL_LYRIC: OnceLock<bool> = OnceLock::new();
 
 mod actions;
+#[cfg(feature = "import-lyric")]
+pub use actions::register_import_lyric;
 pub use actions::{
     register_connect, register_disconnect, register_refetch_lyric, register_reload_lyric,
     register_remove_lyric, register_search_lyric,
 };
-#[cfg(feature = "import-lyric")]
-pub use actions::{register_import_original_lyric, register_import_translated_lyric};
 
 #[cfg(feature = "action-event")]
 pub use actions::{init_play_action_channel, PlayAction, PLAY_ACTION};

@@ -112,11 +112,11 @@ impl ObjectImpl for Window {
         {
             self.import_lyric_menu.append(
                 Some(&gettext("Original Lyric")),
-                Some("app.import-original-lyric"),
+                Some("app.import-lyric(true)"),
             );
             self.import_lyric_menu.append(
                 Some(&gettext("Translated Lyric")),
-                Some("app.import-translated-lyric"),
+                Some("app.import-lyric(false)"),
             );
             play_section.append_submenu(Some(&gettext("Import Lyric")), &self.import_lyric_menu);
         }

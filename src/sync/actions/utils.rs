@@ -2,6 +2,7 @@ use gtk::subclass::prelude::ObjectSubclassIsExt;
 
 use crate::{
     app::{dialog::show_dialog, Window},
+    log::{error, info},
     sync::{lyric::cache::update_lyric_cache, LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE},
 };
 
@@ -14,9 +15,10 @@ pub fn update_cache() {
 }
 
 pub async fn import_lyric(window: &Window, is_original: bool) {
-    use crate::log::error;
     use crate::lyric_providers::{utils::lrc_iter, Lyric};
     use crate::utils::gettext;
+
+    info!("spawned import-lyric: original={is_original}");
 
     let lrc_file = rfd::AsyncFileDialog::new()
         .set_title(&gettext("Select a lyrics file"))

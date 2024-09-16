@@ -45,9 +45,9 @@ Exec=gdbus call -e -d io.github.waylyrics.Waylyrics -o /io/github/waylyrics/Wayl
 [Desktop Action ImportOriginalLyric]
 Name=Import Original Lyric
 Name[zh]=导入原歌词
-Exec=gdbus call -e -d io.github.waylyrics.Waylyrics -o /io/github/waylyrics/Waylyrics -m org.gtk.Actions.Activate "import-original-lyric" [] {}
+Exec=gdbus call -e -d io.github.waylyrics.Waylyrics -o /io/github/waylyrics/Waylyrics -m org.gtk.Actions.Activate "import-lyric" '[<boolean true>]' {}
 
 [Desktop Action ImportTranslatedLyric]
 Name=Import Translated Lyric 
 Name[zh]=导入翻译歌词
-Exec=gdbus call -e -d io.github.waylyrics.Waylyrics -o /io/github/waylyrics/Waylyrics -m org.gtk.Actions.Activate "import-translated-lyric" [] {}
+Exec=gdbus call -e -d io.github.waylyrics.Waylyrics -o /io/github/waylyrics/Waylyrics -m org.gtk.Actions.Activate "import-lyric" '[<boolean false>]' {}

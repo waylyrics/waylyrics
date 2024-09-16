@@ -37,9 +37,9 @@ fn register_play_action(app: WeakRef<Application>) -> Sender<PlayAction> {
                 PlayAction::RemoveLyric => ("remove-lyric", None),
                 PlayAction::SearchLyric => ("search-lyric", None),
                 #[cfg(feature = "import-lyric")]
-                PlayAction::ImportOriginalLyric => ("import-original-lyric", None),
+                PlayAction::ImportOriginalLyric => ("import-lyric", Some(true.to_variant())),
                 #[cfg(feature = "import-lyric")]
-                PlayAction::ImportTranslatedLyric => ("import-translated-lyric", None),
+                PlayAction::ImportTranslatedLyric => ("import-lyric", Some(false.to_variant())),
             };
 
             if let Some(app) = app.upgrade() {

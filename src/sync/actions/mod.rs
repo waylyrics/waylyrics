@@ -154,33 +154,19 @@ pub fn register_remove_lyric(app: &Application, wind: &app::Window) {
 }
 
 #[cfg(feature = "import-lyric")]
-pub fn register_import_original_lyric(app: &Application, wind: &app::Window) {
+pub fn register_import_lyric(app: &Application, wind: &app::Window) {
     use utils::import_lyric;
 
-    let action = SimpleAction::new("import-original-lyric", None);
+    let action = SimpleAction::new("import-lyric", Some(VariantTy::BOOLEAN));
     action.connect_activate(clone!(
         #[weak(rename_to = window)]
         wind,
-        move |_, _| {
+        move |_, arg| {
+            let arg = arg.cloned();
             glib_spawn!(async move {
-                import_lyric(&window, true).await;
-            });
-        }
-    ));
-    app.add_action(&action);
-}
-
-#[cfg(feature = "import-lyric")]
-pub fn register_import_translated_lyric(app: &Application, wind: &app::Window) {
-    use utils::import_lyric;
-
-    let action = SimpleAction::new("import-translated-lyric", None);
-    action.connect_activate(clone!(
-        #[weak(rename_to = window)]
-        wind,
-        move |_, _| {
-            glib_spawn!(async move {
-                import_lyric(&window, false).await;
+                let Some(arg) = arg else { return };
+                let Some(is_original) = arg.get() else { return };
+                import_lyric(&window, is_original).await;
             });
         }
     ));
