@@ -40,6 +40,8 @@ pub struct Window {
     pub align_mode_menu: gio::Menu,
     #[cfg(feature = "import-lyric")]
     pub import_lyric_menu: gio::Menu,
+    #[cfg(feature = "export-lyric")]
+    pub export_lyric_menu: gio::Menu,
 }
 
 #[glib::object_subclass]
@@ -119,6 +121,18 @@ impl ObjectImpl for Window {
                 Some("app.import-lyric(false)"),
             );
             play_section.append_submenu(Some(&gettext("Import Lyric")), &self.import_lyric_menu);
+        }
+        #[cfg(feature = "export-lyric")]
+        {
+            self.export_lyric_menu.append(
+                Some(&gettext("Original Lyric")),
+                Some("app.export-lyric(true)"),
+            );
+            self.export_lyric_menu.append(
+                Some(&gettext("Translated Lyric")),
+                Some("app.export-lyric(false)"),
+            );
+            play_section.append_submenu(Some(&gettext("Export Lyric")), &self.export_lyric_menu);
         }
 
         for item in [&search_lyric, &remove_lyric, &refetch_lyric] {

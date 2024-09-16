@@ -21,6 +21,10 @@ pub enum PlayAction {
     ImportOriginalLyric,
     #[cfg(feature = "import-lyric")]
     ImportTranslatedLyric,
+    #[cfg(feature = "export-lyric")]
+    ExportOriginalLyric,
+    #[cfg(feature = "export-lyric")]
+    ExportTranslatedLyric,
 }
 
 fn register_play_action(app: WeakRef<Application>) -> Sender<PlayAction> {
@@ -40,6 +44,10 @@ fn register_play_action(app: WeakRef<Application>) -> Sender<PlayAction> {
                 PlayAction::ImportOriginalLyric => ("import-lyric", Some(true.to_variant())),
                 #[cfg(feature = "import-lyric")]
                 PlayAction::ImportTranslatedLyric => ("import-lyric", Some(false.to_variant())),
+                #[cfg(feature = "export-lyric")]
+                PlayAction::ExportOriginalLyric => ("export-lyric", Some(true.to_variant())),
+                #[cfg(feature = "export-lyric")]
+                PlayAction::ExportTranslatedLyric => ("export-lyric", Some(false.to_variant())),
             };
 
             if let Some(app) = app.upgrade() {

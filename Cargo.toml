@@ -93,6 +93,7 @@ default = [
     "i18n",
     "journald",
     "import-lyric",
+    "export-lyric",
     "i18n-local-lyric",
 ]
 tray-icon = ["action-event", "dep:ksni", "dep:tray-icon"]
@@ -100,6 +101,7 @@ i18n = ["dep:gettext-rs"]
 journald = ["dep:tracing-journald"]
 opencc = ["dep:opencc-rust"]
 import-lyric = ["dep:rfd"]
+export-lyric = ["dep:rfd"]
 i18n-local-lyric = ["dep:sys-locale"]
 
 mimalloc = ["dep:mimalloc"]

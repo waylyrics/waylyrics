@@ -230,6 +230,8 @@ fn register_actions(
     register_refetch_lyric(app, wind, &refetch_lyric);
     #[cfg(feature = "import-lyric")]
     register_import_lyric(app, wind);
+    #[cfg(feature = "export-lyric")]
+    register_export_lyric(app, wind);
 }
 
 fn setup_providers(providers_enabled: Vec<String>) {

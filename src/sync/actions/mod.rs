@@ -173,6 +173,26 @@ pub fn register_import_lyric(app: &Application, wind: &app::Window) {
     app.add_action(&action);
 }
 
+#[cfg(feature = "export-lyric")]
+pub fn register_export_lyric(app: &Application, wind: &app::Window) {
+    use utils::export_lyric;
+
+    let action = SimpleAction::new("export-lyric", Some(VariantTy::BOOLEAN));
+    action.connect_activate(clone!(
+        #[weak(rename_to = window)]
+        wind,
+        move |_, arg| {
+            let arg = arg.cloned();
+            glib_spawn!(async move {
+                let Some(arg) = arg else { return };
+                let Some(is_original) = arg.get() else { return };
+                export_lyric(&window, is_original).await;
+            });
+        }
+    ));
+    app.add_action(&action);
+}
+
 pub fn register_connect(app: &Application) {
     let connect = SimpleAction::new("connect", Some(VariantTy::STRING));
     connect.connect_activate(|_, player_id| {

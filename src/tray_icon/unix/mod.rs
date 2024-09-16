@@ -158,6 +158,31 @@ impl Tray for TrayIcon {
                 ..Default::default()
             }
             .into(),
+            #[cfg(feature = "export-lyric")]
+            SubMenu {
+                label: gettext("Export Lyric"),
+                icon_name: "document-export".into(),
+                submenu: vec![
+                    StandardItem {
+                        label: gettext("Original Lyric"),
+                        activate: Box::new(|_| {
+                            let _ = play_action().send_blocking(PlayAction::ExportOriginalLyric);
+                        }),
+                        ..Default::default()
+                    }
+                    .into(),
+                    StandardItem {
+                        label: gettext("Translated Lyric"),
+                        activate: Box::new(|_| {
+                            let _ = play_action().send_blocking(PlayAction::ExportOriginalLyric);
+                        }),
+                        ..Default::default()
+                    }
+                    .into(),
+                ],
+                ..Default::default()
+            }
+            .into(),
             StandardItem {
                 label: gettext("Search Lyric"),
                 icon_name: "system-search".into(),
