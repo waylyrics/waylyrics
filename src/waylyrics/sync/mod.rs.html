@@ -61,6 +61,8 @@
 <a href="#61" id="61">61</a>
 <a href="#62" id="62">62</a>
 <a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::RefCell;
 <span class="kw">use </span>std::path::PathBuf;
 <span class="kw">use </span>std::sync::OnceLock;
@@ -108,6 +110,8 @@
 <span class="kw">pub static </span>ENABLE_LOCAL_LYRIC: OnceLock&lt;bool&gt; = OnceLock::new();
 
 <span class="kw">mod </span>actions;
+<span class="attr">#[cfg(feature = <span class="string">"export-lyric"</span>)]
+</span><span class="kw">pub use </span>actions::register_export_lyric;
 <span class="attr">#[cfg(feature = <span class="string">"import-lyric"</span>)]
 </span><span class="kw">pub use </span>actions::register_import_lyric;
 <span class="kw">pub use </span>actions::{

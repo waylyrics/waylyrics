@@ -57,6 +57,14 @@
 <a href="#57" id="57">57</a>
 <a href="#58" id="58">58</a>
 <a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>async_channel::Sender;
 <span class="kw">use </span>std::sync::OnceLock;
 
@@ -80,6 +88,10 @@
     </span>ImportOriginalLyric,
     <span class="attr">#[cfg(feature = <span class="string">"import-lyric"</span>)]
     </span>ImportTranslatedLyric,
+    <span class="attr">#[cfg(feature = <span class="string">"export-lyric"</span>)]
+    </span>ExportOriginalLyric,
+    <span class="attr">#[cfg(feature = <span class="string">"export-lyric"</span>)]
+    </span>ExportTranslatedLyric,
 }
 
 <span class="kw">fn </span>register_play_action(app: WeakRef&lt;Application&gt;) -&gt; Sender&lt;PlayAction&gt; {
@@ -99,6 +111,10 @@
                 </span>PlayAction::ImportOriginalLyric =&gt; (<span class="string">"import-lyric"</span>, <span class="prelude-val">Some</span>(<span class="bool-val">true</span>.to_variant())),
                 <span class="attr">#[cfg(feature = <span class="string">"import-lyric"</span>)]
                 </span>PlayAction::ImportTranslatedLyric =&gt; (<span class="string">"import-lyric"</span>, <span class="prelude-val">Some</span>(<span class="bool-val">false</span>.to_variant())),
+                <span class="attr">#[cfg(feature = <span class="string">"export-lyric"</span>)]
+                </span>PlayAction::ExportOriginalLyric =&gt; (<span class="string">"export-lyric"</span>, <span class="prelude-val">Some</span>(<span class="bool-val">true</span>.to_variant())),
+                <span class="attr">#[cfg(feature = <span class="string">"export-lyric"</span>)]
+                </span>PlayAction::ExportTranslatedLyric =&gt; (<span class="string">"export-lyric"</span>, <span class="prelude-val">Some</span>(<span class="bool-val">false</span>.to_variant())),
             };
 
             <span class="kw">if let </span><span class="prelude-val">Some</span>(app) = app.upgrade() {
