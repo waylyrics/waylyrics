@@ -37,16 +37,6 @@ fn make_lrc_line(text: impl Display, start_time: Duration) -> String {
 pub async fn export_lyric(window: &Window, is_original: bool) {
     info!("spawned export-lyric: original={is_original}");
 
-    let Some(lrc_file) = rfd::AsyncFileDialog::new()
-        .set_title(&gettext("Export a lyrics file"))
-        .add_filter("Simple LRC", &["lrc"])
-        .save_file()
-        .await
-    else {
-        info!("user canceled selection");
-        return;
-    };
-
     let meta = TRACK_PLAYING_STATE.with_borrow(|meta| meta.metainfo.clone());
     let current_lyrics = LYRIC.with_borrow(|l| {
         if is_original {
@@ -90,6 +80,16 @@ pub async fn export_lyric(window: &Window, is_original: bool) {
         output += &make_lrc_line(&line.text, line.start_time);
         output += "\n";
     }
+
+    let Some(lrc_file) = rfd::AsyncFileDialog::new()
+        .set_title(&gettext("Export a lyrics file"))
+        .add_filter("Simple LRC", &["lrc"])
+        .save_file()
+        .await
+    else {
+        info!("user canceled selection");
+        return;
+    };
 
     if let Err(e) = lrc_file.write(output.as_bytes()).await {
         let error_msg = format!("failed to export: {e}");
