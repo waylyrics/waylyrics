@@ -21,6 +21,7 @@ pub fn update_cache() {
     });
 }
 
+#[cfg(feature = "export-lyric")]
 fn make_lrc_line(text: impl Display, start_time: Duration) -> String {
     let mut ms = start_time.as_millis() as u64;
     let mut sec = ms / 1000;
@@ -31,6 +32,7 @@ fn make_lrc_line(text: impl Display, start_time: Duration) -> String {
     format!("[{min:02}:{sec:02}.{ms:03}]{text}")
 }
 
+#[cfg(feature = "export-lyric")]
 pub async fn export_lyric(window: &Window, is_original: bool) {
     info!("spawned export-lyric: original={is_original}");
 
@@ -95,6 +97,7 @@ pub async fn export_lyric(window: &Window, is_original: bool) {
     }
 }
 
+#[cfg(feature = "import-lyric")]
 pub async fn import_lyric(window: &Window, is_original: bool) {
     use crate::lyric_providers::{utils::lrc_iter, Lyric};
 
