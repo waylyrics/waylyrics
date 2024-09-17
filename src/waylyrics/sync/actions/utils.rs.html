@@ -145,7 +145,12 @@
 <a href="#145" id="145">145</a>
 <a href="#146" id="146">146</a>
 <a href="#147" id="147">147</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+</pre></div><pre class="rust"><code><span class="attr">#![allow(unused)]
+</span><span class="kw">use </span>std::{
     fmt::{Display, Write},
     time::Duration,
 };
@@ -168,7 +173,8 @@
     });
 }
 
-<span class="kw">fn </span>make_lrc_line(text: <span class="kw">impl </span>Display, start_time: Duration) -&gt; String {
+<span class="attr">#[cfg(feature = <span class="string">"export-lyric"</span>)]
+</span><span class="kw">fn </span>make_lrc_line(text: <span class="kw">impl </span>Display, start_time: Duration) -&gt; String {
     <span class="kw">let </span><span class="kw-2">mut </span>ms = start_time.as_millis() <span class="kw">as </span>u64;
     <span class="kw">let </span><span class="kw-2">mut </span>sec = ms / <span class="number">1000</span>;
     <span class="kw">let </span>min = sec / <span class="number">60</span>;
@@ -178,7 +184,8 @@
     <span class="macro">format!</span>(<span class="string">"[{min:02}:{sec:02}.{ms:03}]{text}"</span>)
 }
 
-<span class="kw">pub async fn </span>export_lyric(window: <span class="kw-2">&amp;</span>Window, is_original: bool) {
+<span class="attr">#[cfg(feature = <span class="string">"export-lyric"</span>)]
+</span><span class="kw">pub async fn </span>export_lyric(window: <span class="kw-2">&amp;</span>Window, is_original: bool) {
     <span class="macro">info!</span>(<span class="string">"spawned export-lyric: original={is_original}"</span>);
 
     <span class="kw">let </span><span class="prelude-val">Some</span>(lrc_file) = rfd::AsyncFileDialog::new()
@@ -242,7 +249,8 @@
     }
 }
 
-<span class="kw">pub async fn </span>import_lyric(window: <span class="kw-2">&amp;</span>Window, is_original: bool) {
+<span class="attr">#[cfg(feature = <span class="string">"import-lyric"</span>)]
+</span><span class="kw">pub async fn </span>import_lyric(window: <span class="kw-2">&amp;</span>Window, is_original: bool) {
     <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{utils::lrc_iter, Lyric};
 
     <span class="macro">info!</span>(<span class="string">"spawned import-lyric: original={is_original}"</span>);
