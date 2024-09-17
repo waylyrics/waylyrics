@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use std::convert::Infallible;
 
 mod sync_task;
 use sync_task::{reconnect_player, try_sync_track};
@@ -73,7 +74,7 @@ fn find_players() -> Vec<Player> {
 }
 
 impl TryFrom<Metadata> for TrackMeta {
-    type Error = PlayerStatus;
+    type Error = Infallible;
 
     fn try_from(meta: Metadata) -> Result<Self, Self::Error> {
         let track_id = meta.track_id();

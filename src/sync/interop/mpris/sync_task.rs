@@ -12,6 +12,7 @@ use utils::find_next_player;
 
 use crate::{
     app, glib_spawn,
+    sync::TrackMeta,
     sync::{
         interop::common::need_fetch_lyric,
         interop::common::update_lyric,
@@ -19,7 +20,6 @@ use crate::{
         interop::PlayerStatus,
         lyric::scroll::refresh_lyric,
     },
-    sync::{TrackMeta, TRACK_PLAYING_STATE},
     utils::reset_lyric_labels,
 };
 
@@ -102,12 +102,10 @@ pub fn try_sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
             .map_err(|_| PlayerStatus::Unsupported("cannot get metadata of the track playing"))?;
         let meta = match TrackMeta::try_from(track_meta) {
             Ok(meta) => meta,
-            Err(e) => {
-                // no track_id or title is available
-                // reset
-                TRACK_PLAYING_STATE.take();
-                return Err(e);
-            }
+            // TODO:
+            // Rust 1.82 stablized `min_exhaustive_patterns`
+            // we could remove this branch after MSRV bumped to Rust 1.82
+            Err(_) => unreachable!(),
         };
 
         Ok(meta)
