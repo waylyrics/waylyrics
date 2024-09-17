@@ -93,7 +93,9 @@
 <a href="#93" id="93">93</a>
 <a href="#94" id="94">94</a>
 <a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::cell::RefCell;
+<span class="kw">use </span>std::convert::Infallible;
 
 <span class="kw">mod </span>sync_task;
 <span class="kw">use </span>sync_task::{reconnect_player, try_sync_track};
@@ -168,7 +170,7 @@
 }
 
 <span class="kw">impl </span>TryFrom&lt;Metadata&gt; <span class="kw">for </span>TrackMeta {
-    <span class="kw">type </span>Error = PlayerStatus;
+    <span class="kw">type </span>Error = Infallible;
 
     <span class="kw">fn </span>try_from(meta: Metadata) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Error&gt; {
         <span class="kw">let </span>track_id = meta.track_id();

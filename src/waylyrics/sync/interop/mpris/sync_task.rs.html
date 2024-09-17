@@ -128,8 +128,6 @@
 <a href="#128" id="128">128</a>
 <a href="#129" id="129">129</a>
 <a href="#130" id="130">130</a>
-<a href="#131" id="131">131</a>
-<a href="#132" id="132">132</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::time::{Duration, SystemTime};
 
 <span class="kw">use </span>gtk::glib::subclass::types::ObjectSubclassIsExt;
@@ -144,6 +142,7 @@
 
 <span class="kw">use crate</span>::{
     app, glib_spawn,
+    sync::TrackMeta,
     sync::{
         interop::common::need_fetch_lyric,
         interop::common::update_lyric,
@@ -151,7 +150,6 @@
         interop::PlayerStatus,
         lyric::scroll::refresh_lyric,
     },
-    sync::{TrackMeta, TRACK_PLAYING_STATE},
     utils::reset_lyric_labels,
 };
 
@@ -234,12 +232,10 @@
             .map_err(|<span class="kw">_</span>| PlayerStatus::Unsupported(<span class="string">"cannot get metadata of the track playing"</span>))<span class="question-mark">?</span>;
         <span class="kw">let </span>meta = <span class="kw">match </span>TrackMeta::try_from(track_meta) {
             <span class="prelude-val">Ok</span>(meta) =&gt; meta,
-            <span class="prelude-val">Err</span>(e) =&gt; {
-                <span class="comment">// no track_id or title is available
-                // reset
-                </span>TRACK_PLAYING_STATE.take();
-                <span class="kw">return </span><span class="prelude-val">Err</span>(e);
-            }
+            <span class="comment">// TODO:
+            // Rust 1.82 stablized `min_exhaustive_patterns`
+            // we could remove this branch after MSRV bumped to Rust 1.82
+            </span><span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
         };
 
         <span class="prelude-val">Ok</span>(meta)
