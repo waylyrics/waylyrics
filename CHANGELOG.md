@@ -2,7 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.3.14] - 2024-09-18
+## [0.3.15] - 2024-09-17
+
+### 🐛 Bug Fixes
+
+- Sec field in exported lyric
+
+### Enhance
+
+- Make import/export pormpt different
+- Select output file after generation
+
+## [0.3.14] - 2024-09-17
 
 ### 🚀 Features
 
@@ -33,6 +44,7 @@ All notable changes to this project will be documented in this file.
 - Bump dependencies
 - Disable unused warn
 - *(dep)* Bump dependencies
+- Release v0.3.14
 
 ### Build
 

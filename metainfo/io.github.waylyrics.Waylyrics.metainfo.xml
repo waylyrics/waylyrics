@@ -38,6 +38,15 @@
   </screenshots>
 
   <releases>
+    <release version="0.3.15" date="2024-09-18">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.15</url>
+        <description>
+          <p>Bug Fix</p>
+            <ul>
+              <li>Exported lrc will contain correct second</li>
+            </ul>
+        </description>
+    </release>
     <release version="0.3.14" date="2024-09-18">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.14</url>
         <description>
