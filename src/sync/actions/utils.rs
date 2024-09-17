@@ -27,7 +27,7 @@ fn make_lrc_line(text: impl Display, start_time: Duration) -> String {
     let mut ms = start_time.as_millis() as u64;
     let mut sec = ms / 1000;
     let min = sec / 60;
-    sec /= 60;
+    sec %= 60;
     ms %= 1000;
 
     format!("[{min:02}:{sec:02}.{ms:03}]{text}")
