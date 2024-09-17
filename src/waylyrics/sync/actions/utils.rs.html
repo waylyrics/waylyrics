@@ -178,7 +178,7 @@
     <span class="kw">let </span><span class="kw-2">mut </span>ms = start_time.as_millis() <span class="kw">as </span>u64;
     <span class="kw">let </span><span class="kw-2">mut </span>sec = ms / <span class="number">1000</span>;
     <span class="kw">let </span>min = sec / <span class="number">60</span>;
-    sec /= <span class="number">60</span>;
+    sec %= <span class="number">60</span>;
     ms %= <span class="number">1000</span>;
 
     <span class="macro">format!</span>(<span class="string">"[{min:02}:{sec:02}.{ms:03}]{text}"</span>)
