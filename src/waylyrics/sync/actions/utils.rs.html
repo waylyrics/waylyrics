@@ -188,16 +188,6 @@
 </span><span class="kw">pub async fn </span>export_lyric(window: <span class="kw-2">&amp;</span>Window, is_original: bool) {
     <span class="macro">info!</span>(<span class="string">"spawned export-lyric: original={is_original}"</span>);
 
-    <span class="kw">let </span><span class="prelude-val">Some</span>(lrc_file) = rfd::AsyncFileDialog::new()
-        .set_title(<span class="kw-2">&amp;</span>gettext(<span class="string">"Export a lyrics file"</span>))
-        .add_filter(<span class="string">"Simple LRC"</span>, <span class="kw-2">&amp;</span>[<span class="string">"lrc"</span>])
-        .save_file()
-        .<span class="kw">await
-    else </span>{
-        <span class="macro">info!</span>(<span class="string">"user canceled selection"</span>);
-        <span class="kw">return</span>;
-    };
-
     <span class="kw">let </span>meta = TRACK_PLAYING_STATE.with_borrow(|meta| meta.metainfo.clone());
     <span class="kw">let </span>current_lyrics = LYRIC.with_borrow(|l| {
         <span class="kw">if </span>is_original {
@@ -241,6 +231,16 @@
         output += <span class="kw-2">&amp;</span>make_lrc_line(<span class="kw-2">&amp;</span>line.text, line.start_time);
         output += <span class="string">"\n"</span>;
     }
+
+    <span class="kw">let </span><span class="prelude-val">Some</span>(lrc_file) = rfd::AsyncFileDialog::new()
+        .set_title(<span class="kw-2">&amp;</span>gettext(<span class="string">"Export a lyrics file"</span>))
+        .add_filter(<span class="string">"Simple LRC"</span>, <span class="kw-2">&amp;</span>[<span class="string">"lrc"</span>])
+        .save_file()
+        .<span class="kw">await
+    else </span>{
+        <span class="macro">info!</span>(<span class="string">"user canceled selection"</span>);
+        <span class="kw">return</span>;
+    };
 
     <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = lrc_file.write(output.as_bytes()).<span class="kw">await </span>{
         <span class="kw">let </span>error_msg = <span class="macro">format!</span>(<span class="string">"failed to export: {e}"</span>);
