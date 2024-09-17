@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: waylyrics 0.3.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-18 01:36+0800\n"
+"POT-Creation-Date: 2024-09-18 02:06+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -134,7 +134,11 @@ msgstr ""
 msgid "No result was found."
 msgstr ""
 
-#: ../src/sync/actions/utils.rs:41 ../src/sync/actions/utils.rs:108
+#: ../src/sync/actions/utils.rs:41
+msgid "Export a lyrics file"
+msgstr ""
+
+#: ../src/sync/actions/utils.rs:108
 msgid "Select a lyrics file"
 msgstr ""
 

@@ -38,7 +38,7 @@ pub async fn export_lyric(window: &Window, is_original: bool) {
     info!("spawned export-lyric: original={is_original}");
 
     let Some(lrc_file) = rfd::AsyncFileDialog::new()
-        .set_title(&gettext("Select a lyrics file"))
+        .set_title(&gettext("Export a lyrics file"))
         .add_filter("Simple LRC", &["lrc"])
         .save_file()
         .await
