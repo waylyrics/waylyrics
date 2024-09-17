@@ -196,8 +196,10 @@ impl Window {
                 let tracks = match search_result {
                     Ok(songs) => songs,
                     Err(e) => {
-                        // TODO: to show errors to users in GUI
-                        error!("{e} occurs when searching {title} on {}", provider_name);
+                        let error_msg =
+                            format!("{e} occurs when searching {title} on {}", provider_name);
+                        error!(error_msg);
+                        show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
                         continue;
                     }
                 };
