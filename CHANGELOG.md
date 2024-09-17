@@ -2,6 +2,60 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.14] - 2024-09-18
+
+### 🚀 Features
+
+- Export-lyric
+
+### 🐛 Bug Fixes
+
+- Migrate to window-rs 0.58
+- Support new type of HWND inner
+- Build with `opencc` disabled
+- Build with export-lyric/import-lyric disabled
+
+### 🚜 Refactor
+
+- Migrate to gtk4-rs clone! new style
+- Migrate to new-style clone!
+- Prefer lazy-binding rather than multiple `cfg` flag
+- Unify naming of same component in different mod
+- Dedup import-*-lyric
+
+### 📚 Documentation
+
+- Mark issue/workaround for Better Comments
+- *(readme)* Fix broken link for DeaDBeeF plugin [ci skip]
+
+### ⚙️ Miscellaneous Tasks
+
+- Bump dependencies
+- Disable unused warn
+- *(dep)* Bump dependencies
+
+### Build
+
+- *(deps)* Bump serde_json from 1.0.118 to 1.0.119 in the serde group (#244)
+- *(deps)* Bump openssl from 0.10.64 to 0.10.66 (#246)
+- *(deps)* Bump serde_json from 1.0.120 to 1.0.121 in the serde group (#247)
+- *(deps)* Bump tokio from 1.39.1 to 1.39.2 (#248)
+- *(deps)* Bump orhun/git-cliff-action from 3 to 4 (#257)
+- *(deps)* Bump rust_decimal from 1.35.0 to 1.36.0 (#256)
+- *(deps)* Bump reqwest from 0.12.5 to 0.12.7 (#255)
+- *(deps)* Bump gettext-rs from 0.7.0 to 0.7.1 (#254)
+- *(deps)* Bump opencc-rust from 1.1.18 to 1.1.19 (#253)
+- *(deps)* Bump the serde group with 2 updates (#252)
+- Enable export-lyric for win build [ci skip]
+
+### Enhance
+
+- Dedup import-lyric
+
+### I18n
+
+- Update locale for 0.3.14
+
 ## [0.3.13] - 2024-06-27
 
 ### 🐛 Bug Fixes
@@ -16,6 +70,7 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Bump dependencies
+- Release v0.3.13
 
 ## [0.3.12] - 2024-06-20
 
@@ -228,7 +283,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor
 
-- Pass WeakRef`<Window>` to register_sync_task
+- Pass WeakRef<Window> to register_sync_task
 
 ### 📚 Documentation
 
@@ -643,7 +698,7 @@ All notable changes to this project will be documented in this file.
 - Generate changelogs for master
 - Update changelog on each commit
 - Do not flood commit logs
-- Remove unnessacary use of Arc`<dyn LyricProvider>`
+- Remove unnessacary use of Arc<dyn LyricProvider>
 - Release v0.2.8
 
 ### Build
