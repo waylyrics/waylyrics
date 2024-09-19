@@ -238,7 +238,7 @@
 };
 
 <span class="kw">use </span><span class="kw">crate</span>::sync::interop::connect_player_with_id;
-<span class="kw">mod </span>utils;
+<span class="kw">pub mod </span>utils;
 
 <span class="kw">pub fn </span>register_disconnect(app: <span class="kw-2">&amp;</span>Application) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"disconnect"</span>, <span class="prelude-val">None</span>);
