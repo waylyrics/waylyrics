@@ -48,7 +48,7 @@ pub async fn export_lyric(window: &Window, is_original: bool) {
     let offset = window.imp().lyric_offset_ms.get();
 
     let LyricOwned::LineTimestamp(lines) = current_lyrics else {
-        let error_msg = "lyric not exising!";
+        let error_msg = gettext("lyric not exising!");
         error!(error_msg);
         show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
         return;
@@ -82,7 +82,7 @@ pub async fn export_lyric(window: &Window, is_original: bool) {
     }
 
     let Some(lrc_file) = rfd::AsyncFileDialog::new()
-        .set_title(&gettext("Export a lyrics file"))
+        .set_title(gettext("Export a lyrics file"))
         .add_filter("Simple LRC", &["lrc"])
         .save_file()
         .await
@@ -92,7 +92,8 @@ pub async fn export_lyric(window: &Window, is_original: bool) {
     };
 
     if let Err(e) = lrc_file.write(output.as_bytes()).await {
-        let error_msg = format!("failed to export: {e}");
+        let prompt = gettext("failed to export: ");
+        let error_msg = format!("{prompt}{e}");
         error!(error_msg);
         show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
     }
@@ -105,7 +106,7 @@ pub async fn import_lyric(window: &Window, is_original: bool) {
     info!("spawned import-lyric: original={is_original}");
 
     let lrc_file = rfd::AsyncFileDialog::new()
-        .set_title(&gettext("Select a lyrics file"))
+        .set_title(gettext("Select a lyrics file"))
         .add_filter("Simple LRC", &["lrc"])
         .pick_file()
         .await;
@@ -117,7 +118,8 @@ pub async fn import_lyric(window: &Window, is_original: bool) {
     let lrc = match String::from_utf8(lrc_file.read().await) {
         Ok(lrc) => lrc,
         Err(e) => {
-            let error_msg = format!("failed to read LRC in UTF-8: {e}");
+            let prompt = gettext("failed to read LRC in UTF-8: ");
+            let error_msg = format!("{prompt}{e}");
             error!(error_msg);
             show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
             return;
@@ -126,7 +128,8 @@ pub async fn import_lyric(window: &Window, is_original: bool) {
     let lyric = match lrc_iter(lrc.lines()) {
         Ok(r) => r,
         Err(e) => {
-            let error_msg = format!("input LRC in unsupported format: {e}");
+            let prompt = gettext("input LRC in unsupported format: ");
+            let error_msg = format!("{prompt}{e}");
             error!(error_msg);
             show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
             return;

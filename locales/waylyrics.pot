@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: waylyrics 0.3.14\n"
+"Project-Id-Version: waylyrics 0.3.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-18 02:06+0800\n"
+"POT-Creation-Date: 2024-09-19 18:59+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,69 +17,9 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/app/window/imp.rs:67
-msgid "Hide Decoration"
-msgstr ""
-
-#: ../src/app/window/imp.rs:71 ../src/tray_icon/unix/mod.rs:87
-#: ../src/tray_icon/windows/mod.rs:54
-msgid "Toggle Passthrough"
-msgstr ""
-
-#: ../src/app/window/imp.rs:74 ../src/tray_icon/unix/mod.rs:101
-msgid "Reload theme"
-msgstr ""
-
-#: ../src/app/window/imp.rs:75 ../src/app/search_window/mod.rs:57
+#: ../src/app/search_window/mod.rs:57 ../src/app/window/imp.rs:75
 #: ../src/tray_icon/windows/mod.rs:39
 msgid "Search lyric"
-msgstr ""
-
-#: ../src/app/window/imp.rs:77 ../src/tray_icon/windows/mod.rs:44
-msgid "Refetch lyric"
-msgstr ""
-
-#: ../src/app/window/imp.rs:80
-msgid "Remove lyric"
-msgstr ""
-
-#: ../src/app/window/imp.rs:82
-msgid "Remove lyric forever"
-msgstr ""
-
-#: ../src/app/window/imp.rs:93 ../src/tray_icon/unix/mod.rs:38
-msgid "Lyric Display Mode"
-msgstr ""
-
-#: ../src/app/window/imp.rs:97 ../src/tray_icon/unix/mod.rs:58
-msgid "Lyric Alignment"
-msgstr ""
-
-#: ../src/app/window/imp.rs:109 ../src/app/window/imp.rs:151
-#: ../src/tray_icon/unix/mod.rs:111
-msgid "Select Player"
-msgstr ""
-
-#: ../src/app/window/imp.rs:116 ../src/app/window/imp.rs:128
-#: ../src/tray_icon/unix/mod.rs:142 ../src/tray_icon/unix/mod.rs:167
-msgid "Original Lyric"
-msgstr ""
-
-#: ../src/app/window/imp.rs:120 ../src/app/window/imp.rs:132
-#: ../src/tray_icon/unix/mod.rs:150 ../src/tray_icon/unix/mod.rs:175
-msgid "Translated Lyric"
-msgstr ""
-
-#: ../src/app/window/imp.rs:123 ../src/tray_icon/unix/mod.rs:138
-msgid "Import Lyric"
-msgstr ""
-
-#: ../src/app/window/imp.rs:135 ../src/tray_icon/unix/mod.rs:163
-msgid "Export Lyric"
-msgstr ""
-
-#: ../src/app/window/imp.rs:160
-msgid "Disconnect"
 msgstr ""
 
 #: ../src/app/search_window/mod.rs:114
@@ -130,16 +70,92 @@ msgstr ""
 msgid "Set as lyric"
 msgstr ""
 
-#: ../src/app/search_window/mod.rs:262
+#: ../src/app/search_window/mod.rs:264
 msgid "No result was found."
 msgstr ""
 
-#: ../src/sync/actions/utils.rs:41
+#: ../src/app/window/imp.rs:67
+msgid "Hide Decoration"
+msgstr ""
+
+#: ../src/app/window/imp.rs:71 ../src/tray_icon/unix/mod.rs:87
+#: ../src/tray_icon/windows/mod.rs:54
+msgid "Toggle Passthrough"
+msgstr ""
+
+#: ../src/app/window/imp.rs:74 ../src/tray_icon/unix/mod.rs:101
+msgid "Reload theme"
+msgstr ""
+
+#: ../src/app/window/imp.rs:77 ../src/tray_icon/windows/mod.rs:44
+msgid "Refetch lyric"
+msgstr ""
+
+#: ../src/app/window/imp.rs:80
+msgid "Remove lyric"
+msgstr ""
+
+#: ../src/app/window/imp.rs:82
+msgid "Remove lyric forever"
+msgstr ""
+
+#: ../src/app/window/imp.rs:93 ../src/tray_icon/unix/mod.rs:38
+msgid "Lyric Display Mode"
+msgstr ""
+
+#: ../src/app/window/imp.rs:97 ../src/tray_icon/unix/mod.rs:58
+msgid "Lyric Alignment"
+msgstr ""
+
+#: ../src/app/window/imp.rs:109 ../src/app/window/imp.rs:151
+#: ../src/tray_icon/unix/mod.rs:111
+msgid "Select Player"
+msgstr ""
+
+#: ../src/app/window/imp.rs:116 ../src/app/window/imp.rs:128
+#: ../src/tray_icon/unix/mod.rs:142 ../src/tray_icon/unix/mod.rs:167
+msgid "Original Lyric"
+msgstr ""
+
+#: ../src/app/window/imp.rs:120 ../src/app/window/imp.rs:132
+#: ../src/tray_icon/unix/mod.rs:150 ../src/tray_icon/unix/mod.rs:175
+msgid "Translated Lyric"
+msgstr ""
+
+#: ../src/app/window/imp.rs:123 ../src/tray_icon/unix/mod.rs:138
+msgid "Import Lyric"
+msgstr ""
+
+#: ../src/app/window/imp.rs:135 ../src/tray_icon/unix/mod.rs:163
+msgid "Export Lyric"
+msgstr ""
+
+#: ../src/app/window/imp.rs:160
+msgid "Disconnect"
+msgstr ""
+
+#: ../src/sync/actions/utils.rs:51
+msgid "lyric not exising!"
+msgstr ""
+
+#: ../src/sync/actions/utils.rs:85
 msgid "Export a lyrics file"
 msgstr ""
 
-#: ../src/sync/actions/utils.rs:108
+#: ../src/sync/actions/utils.rs:95
+msgid "failed to export: "
+msgstr ""
+
+#: ../src/sync/actions/utils.rs:109
 msgid "Select a lyrics file"
+msgstr ""
+
+#: ../src/sync/actions/utils.rs:121
+msgid "failed to read LRC in UTF-8: "
+msgstr ""
+
+#: ../src/sync/actions/utils.rs:131
+msgid "input LRC in unsupported format: "
 msgstr ""
 
 #: ../src/tray_icon/unix/mod.rs:78 ../src/tray_icon/windows/mod.rs:49
