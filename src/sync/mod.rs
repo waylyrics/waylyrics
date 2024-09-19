@@ -44,7 +44,7 @@ thread_local! {
 
 pub static ENABLE_LOCAL_LYRIC: OnceLock<bool> = OnceLock::new();
 
-mod actions;
+pub(crate) mod actions;
 #[cfg(feature = "export-lyric")]
 pub use actions::register_export_lyric;
 #[cfg(feature = "import-lyric")]

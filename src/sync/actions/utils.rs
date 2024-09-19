@@ -23,7 +23,7 @@ pub fn update_cache() {
 }
 
 #[cfg(feature = "export-lyric")]
-fn make_lrc_line(text: impl Display, start_time: Duration) -> String {
+pub fn make_lrc_line(text: impl Display, start_time: Duration) -> String {
     let mut ms = start_time.as_millis() as u64;
     let mut sec = ms / 1000;
     let min = sec / 60;

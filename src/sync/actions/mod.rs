@@ -26,7 +26,7 @@ use crate::{
 };
 
 use crate::sync::interop::connect_player_with_id;
-mod utils;
+pub mod utils;
 
 pub fn register_disconnect(app: &Application) {
     let action = SimpleAction::new("disconnect", None);
