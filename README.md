@@ -147,6 +147,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 [可道歌词]: https://www.autolyric.com/
 [Lyricify]: https://github.com/WXRIW/Lyricify-App
 [osdlyrics]: https://github.com/osdlyrics/osdlyrics
+[desktop_lyric]: https://github.com/Moeweb647252/desktop_lyric
 
 ### Linux
 
@@ -158,6 +159,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 | [caraoke-plasmoid]            | QML           | Plasma        | MPRIS      |      |
 | [osdlyrics]                   | GTK2/C+Python | X/Xwayland    | MPRIS      |      |
 | [lyricsSeeker]                | Python+QML    | Plasma        |            | WIP  |
+| [desktop_lyric]               | egui          | *             | MPRIS      |      |
 
 [^0]: https://github.com/kangxiaoju/waybar-netease-music-lyrics/blob/f84810fe1628ca38fa36d88506152d88cf0e77e4/song.sh#L41-L59
 
