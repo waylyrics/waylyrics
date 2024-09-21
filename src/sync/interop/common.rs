@@ -14,7 +14,7 @@ use crate::{
     app::{self, Window},
     log::*,
     sync::{
-        interop::PlayerStatus,
+        interop::{PlayerStatus, OS, OsImp},
         lyric::{
             cache::{self, get_cache_path},
             fetch,
@@ -24,8 +24,6 @@ use crate::{
     },
     utils::reset_lyric_labels,
 };
-
-use super::{reconnect_player, try_sync_track};
 
 pub async fn update_lyric(
     track_meta: &TrackMeta,
@@ -56,9 +54,9 @@ pub fn register_sync_task(wind: WeakRef<Window>, interval: Duration) {
             return glib::ControlFlow::Continue;
         };
 
-        match try_sync_track(&window) {
+        match OS::try_sync_track(&window) {
             Err(PlayerStatus::Missing) => {
-                reconnect_player();
+                OS::reconnect_player();
                 reset_lyric_labels(&window, None);
                 clean_lyric(&window);
                 TRACK_PLAYING_STATE.take();

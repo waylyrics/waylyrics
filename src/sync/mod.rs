@@ -9,7 +9,7 @@ mod interop;
 pub mod lyric;
 mod utils;
 
-pub use interop::list_players;
+pub use interop::{OS, OsImp};
 pub use lyric::scroll::register_lyric_display;
 
 /// metadata from connected player

@@ -18,20 +18,20 @@ use crate::{
     glib_spawn,
     lyric_providers::LyricOwned,
     sync::{
-        interop::clean_player, interop::common::update_lyric, TrackState, LYRIC,
+        interop::common::update_lyric, TrackState, LYRIC,
         TRACK_PLAYING_STATE,
     },
     utils::reset_lyric_labels,
     MAIN_WINDOW,
 };
 
-use crate::sync::interop::connect_player_with_id;
+use crate::sync::interop::{OS, OsImp};
 pub mod utils;
 
 pub fn register_disconnect(app: &Application) {
     let action = SimpleAction::new("disconnect", None);
     action.connect_activate(|_, _| {
-        clean_player();
+        OS::clean_player();
     });
     app.add_action(&action);
 }
@@ -201,7 +201,7 @@ pub fn register_connect(app: &Application) {
             return;
         };
 
-        connect_player_with_id(player_id)
+        OS::connect_player_with_id(player_id)
     });
     app.add_action(&connect);
 }

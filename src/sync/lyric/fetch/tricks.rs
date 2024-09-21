@@ -4,7 +4,7 @@ use std::sync::OnceLock;
 
 use crate::log::{debug, error, warn};
 use crate::lyric_providers::{Lyric, LyricOwned, LyricProvider};
-use crate::sync::interop::hint_from_player;
+use crate::sync::interop::{OsImp, OS};
 use crate::sync::utils::extract_translated_lyric;
 use crate::sync::{filter_original_lyric, TrackMeta};
 use crate::LYRIC_PROVIDERS;
@@ -27,7 +27,7 @@ pub enum LyricHintResult {
 }
 
 pub async fn get_lyric_hint_from_player() -> Option<LyricHintResult> {
-    let hint_from_player: Option<LyricHint> = hint_from_player();
+    let hint_from_player: Option<LyricHint> = OS::hint_from_player();
 
     debug!("got player hint: {:?}", hint_from_player);
 
