@@ -230,20 +230,20 @@
     glib_spawn,
     lyric_providers::LyricOwned,
     sync::{
-        interop::clean_player, interop::common::update_lyric, TrackState, LYRIC,
+        interop::common::update_lyric, TrackState, LYRIC,
         TRACK_PLAYING_STATE,
     },
     utils::reset_lyric_labels,
     MAIN_WINDOW,
 };
 
-<span class="kw">use </span><span class="kw">crate</span>::sync::interop::connect_player_with_id;
+<span class="kw">use </span><span class="kw">crate</span>::sync::interop::{OS, OsImp};
 <span class="kw">pub mod </span>utils;
 
 <span class="kw">pub fn </span>register_disconnect(app: <span class="kw-2">&amp;</span>Application) {
     <span class="kw">let </span>action = SimpleAction::new(<span class="string">"disconnect"</span>, <span class="prelude-val">None</span>);
     action.connect_activate(|<span class="kw">_</span>, <span class="kw">_</span>| {
-        clean_player();
+        OS::clean_player();
     });
     app.add_action(<span class="kw-2">&amp;</span>action);
 }
@@ -413,7 +413,7 @@
             <span class="kw">return</span>;
         };
 
-        connect_player_with_id(player_id)
+        OS::connect_player_with_id(player_id)
     });
     app.add_action(<span class="kw-2">&amp;</span>connect);
 }

@@ -133,7 +133,7 @@
 
 <span class="kw">use </span><span class="kw">crate</span>::log::{debug, error, warn};
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{Lyric, LyricOwned, LyricProvider};
-<span class="kw">use </span><span class="kw">crate</span>::sync::interop::hint_from_player;
+<span class="kw">use </span><span class="kw">crate</span>::sync::interop::{OsImp, OS};
 <span class="kw">use </span><span class="kw">crate</span>::sync::utils::extract_translated_lyric;
 <span class="kw">use </span><span class="kw">crate</span>::sync::{filter_original_lyric, TrackMeta};
 <span class="kw">use </span><span class="kw">crate</span>::LYRIC_PROVIDERS;
@@ -156,7 +156,7 @@
 }
 
 <span class="kw">pub async fn </span>get_lyric_hint_from_player() -&gt; <span class="prelude-ty">Option</span>&lt;LyricHintResult&gt; {
-    <span class="kw">let </span>hint_from_player: <span class="prelude-ty">Option</span>&lt;LyricHint&gt; = hint_from_player();
+    <span class="kw">let </span>hint_from_player: <span class="prelude-ty">Option</span>&lt;LyricHint&gt; = OS::hint_from_player();
 
     <span class="macro">debug!</span>(<span class="string">"got player hint: {:?}"</span>, hint_from_player);
 

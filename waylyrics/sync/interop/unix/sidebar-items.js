@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["clean_player","connect_player_with_id","hint_from_player","list_players","reconnect_player","try_sync_track"]};
