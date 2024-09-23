@@ -79,6 +79,8 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 [DeaDBeeF]: https://deadbeef.sourceforge.io/
 [deadbeef-mpris2-plugin]: https://github.com/DeaDBeeF-Player/deadbeef-mpris2-plugin
 
+[SPlayer]: https://github.com/imsyy/SPlayer
+
 | Name                      | Online? | Framework | #                                          |
 | ------------------------- | ------- | --------- | ------------------------------------------ |
 | Firefox                   | O       | Browser   | needs [extension]                          |
@@ -103,6 +105,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 | Name          | Online? | Framework | #                                                             |
 | ------------- | ------- | --------- | ------------------------------------------------------------- |
 | [FeelUOwn]    | O       | Qt5       | 4.0.1+                                                        |
+| [SPlayer]     | O       | Electron  |                                                               |
 | [go-musicfox] | O       | bubbletea | 4.4.0+                                                        |
 | Media Player  | X       | UWP       | it will **NOT** update timeline <br> immediately after a seek |
 

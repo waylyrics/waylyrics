@@ -80,6 +80,8 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 [DeaDBeeF]: https://deadbeef.sourceforge.io/
 [deadbeef-mpris2-plugin]: https://github.com/DeaDBeeF-Player/deadbeef-mpris2-plugin
 
+[SPlayer]: https://github.com/imsyy/SPlayer
+
 | 名称                      | 在线 | 框架      | 备注                       |
 | ------------------------- | ---- | --------- | -------------------------- |
 | Firefox                   | O    | 浏览器    | 需要[插件]                 |
@@ -104,6 +106,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 | 名称          | 在线 | 框架      | 备注               |
 | ------------- | ---- | --------- | ------------------ |
 | [FeelUOwn]    | O    | Qt5       | 4.0.1+             |
+| [SPlayer]     | O    | Electron  |                    |
 | [go-musicfox] | O    | bubbletea | 4.4.0+             |
 | 媒体播放器    | X    | UWP       | 拖拽后不会立即更新 |
 
