@@ -118,15 +118,15 @@ glib-compile-schemas /usr/share/glib-2.0/schemas/
 #编译 schemas 文件
 ```
 
-## 多语言设置
+## 软件汉化
 📣Tips：此项为可选项，并不会影响软件正常使用
+
+什么？！我启动软件后界面全是英语？！别着急，我们只需要编译一下语言文件就可以汉化 Waylyrics 了！
 ```bash
-cd locales
-for po in $(find . -type f -name '*.po')
-do
-    mkdir -p ~/.local/share/locale/${po#/*}
-    msgfmt -o ~/.local/share/locale/${po%.po}.mo ${po}
-done
+cd locales/zh_CN/LC_MESSAGES/
+msgfmt waylyrics.po
+#将 .po 的语言文件编译成 .mo 文件
+sudo cp ./messages.mo /usr/share/locale/zh_CN/LC_MESSAGES/waylyrics.mo
 ```
 
 ## 软件图标设置
