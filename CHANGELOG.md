@@ -2,11 +2,51 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.16] - 2024-09-28
+
+### 🚀 Features
+
+- Show error dialog if search failed
+
+### 🐛 Bug Fixes
+
+- Build error on linux
+
+### 🚜 Refactor
+
+- Dedup function signature
+
+### 📚 Documentation
+
+- *(readme)* Add alternative
+- *(readme)* Intro SPlayer [ci skip]
+- *(readme)* Desktop support of desktop_lyric, #258
+
+### 🧪 Testing
+
+- Add test for make_lrc_line
+
+### Build
+
+- *(fix)* Fix build with MSVC
+
+### Enhance
+
+- TrackMeta from Metadata will not fail now
+
+### I18n
+
+- Translate tips
+
 ## [0.3.15] - 2024-09-17
 
 ### 🐛 Bug Fixes
 
 - Sec field in exported lyric
+
+### ⚙️ Miscellaneous Tasks
+
+- Release v0.3.15
 
 ### Enhance
 
@@ -295,7 +335,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor
 
-- Pass WeakRef<Window> to register_sync_task
+- Pass WeakRef`<Window>` to register_sync_task
 
 ### 📚 Documentation
 
@@ -710,7 +750,7 @@ All notable changes to this project will be documented in this file.
 - Generate changelogs for master
 - Update changelog on each commit
 - Do not flood commit logs
-- Remove unnessacary use of Arc<dyn LyricProvider>
+- Remove unnessacary use of Arc`<dyn LyricProvider>`
 - Release v0.2.8
 
 ### Build
