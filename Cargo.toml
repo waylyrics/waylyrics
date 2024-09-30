@@ -38,7 +38,7 @@ url = "2.5.2"
 
 # ui
 gtk = { version = "0.9.1", package = "gtk4" }
-glib-macros = "0.20.3"
+glib-macros = "0.20.4"
 
 # lyric providers + parse
 ncmapi = { version = "0.1.13", package = "ncmapi2" }

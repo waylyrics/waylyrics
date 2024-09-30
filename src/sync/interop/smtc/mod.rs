@@ -207,7 +207,10 @@ fn update_position(
             let update_time_us = update_time.UniversalTime / 10;
             // update_time - unix_univer_diff = time since unix epoch
             let update_time = Duration::from_micros(update_time_us as _)
-                - Duration::from_secs(UNIX_EPOCH_UNIVERSAL_TIME_DIFF_DAY * 24 * 60 * 60);
+                .checked_sub(Duration::from_secs(
+                    UNIX_EPOCH_UNIVERSAL_TIME_DIFF_DAY * 24 * 60 * 60,
+                ))
+                .ok_or(PlayerStatus::Unsupported("update_time was not set"))?;
             SystemTime::UNIX_EPOCH
                 .checked_add(update_time)
                 .ok_or(PlayerStatus::Unsupported(
