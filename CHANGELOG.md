@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.17] - 2024-10-06
+
+### 🐛 Bug Fixes
+
+- *(win32)* Crash with Motrix runnig
+- *(tray)* Export translated lyrics
+- *(tray/unix)* Avoid calling list_players() from tray thread (#262)
+
+### Build
+
+- *(deps)* Bump reqwest from 0.12.7 to 0.12.8 (#261)
+
+### I18n
+
+- Create Italian Translation  it_IT (#260)
+
 ## [0.3.16] - 2024-09-28
 
 ### 🚀 Features
@@ -21,14 +37,20 @@ All notable changes to this project will be documented in this file.
 - *(readme)* Add alternative
 - *(readme)* Intro SPlayer [ci skip]
 - *(readme)* Desktop support of desktop_lyric, #258
+- *(build)* Fix i18n part (#259)
 
 ### 🧪 Testing
 
 - Add test for make_lrc_line
 
+### ⚙️ Miscellaneous Tasks
+
+- Release v0.3.16
+
 ### Build
 
 - *(fix)* Fix build with MSVC
+- *(fix)* ""desktop
 
 ### Enhance
 
@@ -335,7 +357,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚜 Refactor
 
-- Pass WeakRef`<Window>` to register_sync_task
+- Pass WeakRef<Window> to register_sync_task
 
 ### 📚 Documentation
 
@@ -750,7 +772,7 @@ All notable changes to this project will be documented in this file.
 - Generate changelogs for master
 - Update changelog on each commit
 - Do not flood commit logs
-- Remove unnessacary use of Arc`<dyn LyricProvider>`
+- Remove unnessacary use of Arc<dyn LyricProvider>
 - Release v0.2.8
 
 ### Build

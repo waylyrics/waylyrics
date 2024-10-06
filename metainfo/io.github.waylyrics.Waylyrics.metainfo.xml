@@ -38,6 +38,16 @@
   </screenshots>
 
   <releases>
+    <release version="0.3.17" date="2024-10-06">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.17</url>
+        <description>
+          <p>Bug Fixes</p>
+            <ul>
+              <li><em>tray:</em> start mpris::PlayerFinder in main thread</li>
+              <li><em>tray:</em> export translated lyric</li>
+            </ul>
+        </description>
+    </release>
     <release version="0.3.16" date="2024-09-29">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.16</url>
         <description>
