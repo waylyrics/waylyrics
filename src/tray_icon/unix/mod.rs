@@ -3,6 +3,7 @@ use std::time::Duration;
 use std::{env, process};
 
 use async_channel::Sender;
+use gtk::glib;
 
 use crate::utils::gettext;
 use ksni::{Tray, TrayService};
@@ -18,8 +19,21 @@ use crate::sync::{OS, OsImp, PlayerId};
 use crate::log::error;
 use crate::{APP_ID, PACKAGE_NAME};
 
-#[derive(Debug, Default)]
-struct TrayIcon {}
+#[derive(Debug)]
+struct TrayIcon {
+    // For calling list_players() inside main thread.
+    req_tx: async_channel::Sender<()>,
+    resp_rx: async_channel::Receiver<Vec<PlayerId>>
+}
+
+impl TrayIcon {
+    pub fn new(req_tx: async_channel::Sender<()>, resp_rx: async_channel::Receiver<Vec<PlayerId>>) -> Self {
+        Self {
+            req_tx,
+            resp_rx
+        }
+    }
+}
 
 impl Tray for TrayIcon {
     fn icon_name(&self) -> String {
@@ -31,7 +45,8 @@ impl Tray for TrayIcon {
     fn menu(&self) -> Vec<ksni::MenuItem<Self>> {
         use ksni::menu::*;
 
-        let players = OS::list_players();
+        self.req_tx.send_blocking(()).unwrap();
+        let players = self.resp_rx.recv_blocking().unwrap();
 
         vec![
             SubMenu {
@@ -225,8 +240,23 @@ impl Tray for TrayIcon {
 }
 
 pub fn start_tray_service() -> Option<()> {
-    let service = TrayService::new(TrayIcon::default());
-
+    // mpris::PlayerFinder would create a new DBus connection which has 4 matches attached,
+    // but in TrayService, the messages matching could never be handled.
+    // This would make messages stalling within dbus broker, and might finally make dbus-broker
+    // terminates some connections inside user session as it would exceed its per-UID bytes quota.
+    // This could be fatal as modern desktop environments would expect dbus service always working,
+    // and the quota exceeding issue could bring complete user session down.
+    // To resolve this issue, here we just enforce that we shall call OS::list_players() only in
+    // main thread (by glib async runtime), with 2 channels.
+    let (req_tx, req_rx) = async_channel::unbounded();
+    let (resp_tx, resp_rx) = async_channel::unbounded();
+    let service = TrayService::new(TrayIcon::new(req_tx, resp_rx));
+    glib::spawn_future_local(async move {
+        while req_rx.recv().await.is_ok() {
+            let players = OS::list_players();
+            resp_tx.send(players).await.unwrap();
+        }
+    });
     service.spawn_without_dbus_name();
     Some(())
 }
