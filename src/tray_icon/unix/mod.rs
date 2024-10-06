@@ -174,7 +174,7 @@ impl Tray for TrayIcon {
                     StandardItem {
                         label: gettext("Translated Lyric"),
                         activate: Box::new(|_| {
-                            let _ = play_action().send_blocking(PlayAction::ExportOriginalLyric);
+                            let _ = play_action().send_blocking(PlayAction::ExportTranslatedLyric);
                         }),
                         ..Default::default()
                     }
