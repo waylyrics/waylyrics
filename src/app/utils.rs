@@ -101,6 +101,9 @@ fn has_filtered_word(text: &str) -> bool {
 }
 
 pub fn setup_label(label: &Label, hide_filtered_words: bool) {
+    label.set_wrap(true);
+    label.set_wrap_mode(gtk::pango::WrapMode::Word);
+
     if hide_filtered_words {
         label.connect_label_notify(|label| {
             let text = label.label();
