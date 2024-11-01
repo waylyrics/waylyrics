@@ -54,7 +54,7 @@ tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 md5 = "0.7.0"
 
 # utils
-regex = "1.10.6"
+regex = "1.11.1"
 directories = "5.0.1"
 strum = { version = "0.26.2", default-features = false, features = ["derive"] }
 sorensen = "0.2.0"
