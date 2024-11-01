@@ -63,7 +63,7 @@ rfd = { version = "0.15.0", optional = true }
 
 # error handling
 anyhow = "1.0.89"
-thiserror = "1.0.64"
+thiserror = "1.0.66"
 
 # networking
 async-trait = "0.1.83"
