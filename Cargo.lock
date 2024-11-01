@@ -1527,7 +1527,7 @@ dependencies = [
  "futures-task",
  "futures-util",
  "gio-sys 0.20.4",
- "glib-macros 0.20.4",
+ "glib-macros 0.20.5",
  "glib-sys 0.20.4",
  "gobject-sys 0.20.4",
  "libc",
@@ -1551,9 +1551,9 @@ dependencies = [
 
 [[package]]
 name = "glib-macros"
-version = "0.20.4"
+version = "0.20.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a6bf88f70cd5720a6197639dcabcb378dd528d0cb68cb1f45e3b358bcb841cd7"
+checksum = "e7d21ca27acfc3e91da70456edde144b4ac7c36f78ee77b10189b3eb4901c156"
 dependencies = [
  "heck 0.5.0",
  "proc-macro-crate 3.2.0",
@@ -4427,7 +4427,7 @@ dependencies = [
  "documented",
  "gdk4-win32",
  "gettext-rs",
- "glib-macros 0.20.4",
+ "glib-macros 0.20.5",
  "gtk4",
  "ksni",
  "lrc-nom",
