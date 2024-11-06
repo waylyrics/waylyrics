@@ -260,7 +260,7 @@
                 SongId::Songid(id) =&gt; get_songmid(api, <span class="kw-2">&amp;</span>client, id).<span class="kw">await</span><span class="question-mark">?</span>,
             };
 
-            <span class="kw">let </span>url = api.query_lyric(<span class="kw-2">&amp;</span>mid);
+            <span class="kw">let </span>url = api.query_lyric(<span class="kw-2">&amp;</span>mid)<span class="question-mark">?</span>.uri().to_string();
             <span class="kw">let </span>resp: QueryLyricResp =
                 serde_json::from_slice(client.get(url).send().<span class="kw">await</span><span class="question-mark">?</span>.bytes().<span class="kw">await</span><span class="question-mark">?</span>.as_ref())<span class="question-mark">?</span>;
 
@@ -290,7 +290,7 @@
                 <span class="kw">return </span><span class="prelude-val">Err</span>(Error::ApiClientNotInit)<span class="question-mark">?</span>;
             };
 
-            <span class="kw">let </span>url = api.search::&lt;Track&gt;(<span class="kw-2">&amp;</span>keyword, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>);
+            <span class="kw">let </span>url = api.search::&lt;Track&gt;(<span class="kw-2">&amp;</span>keyword, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>)<span class="question-mark">?</span>.uri().to_string();
             <span class="kw">let </span>resp: &lt;Track <span class="kw">as </span>SearchType&gt;::Resp =
                 serde_json::from_slice(client.get(url).send().<span class="kw">await</span><span class="question-mark">?</span>.bytes().<span class="kw">await</span><span class="question-mark">?</span>.as_ref())<span class="question-mark">?</span>;
 
@@ -325,7 +325,7 @@
 }
 
 <span class="kw">async fn </span>get_songmid(api: <span class="kw-2">&amp;</span>QQMusicApi, client: <span class="kw-2">&amp;</span>Client, songid: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;String&gt; {
-    <span class="kw">let </span>url = api.song_detail(SongId::Songid(songid));
+    <span class="kw">let </span>url = api.song_detail(SongId::Songid(songid))<span class="question-mark">?</span>.uri().to_string();
     <span class="kw">let </span>resp: SongDetailResp =
         serde_json::from_slice(client.get(url).send().<span class="kw">await</span><span class="question-mark">?</span>.bytes().<span class="kw">await</span><span class="question-mark">?</span>.as_ref())<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(resp.data.track_info.mid)
