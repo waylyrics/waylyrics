@@ -72,7 +72,7 @@ impl super::LyricProvider for QQMusic {
                 SongId::Songid(id) => get_songmid(api, &client, id).await?,
             };
 
-            let url = api.query_lyric(&mid);
+            let url = api.query_lyric(&mid)?.uri().to_string();
             let resp: QueryLyricResp =
                 serde_json::from_slice(client.get(url).send().await?.bytes().await?.as_ref())?;
 
@@ -102,7 +102,7 @@ impl super::LyricProvider for QQMusic {
                 return Err(Error::ApiClientNotInit)?;
             };
 
-            let url = api.search::<Track>(&keyword, None, None);
+            let url = api.search::<Track>(&keyword, None, None)?.uri().to_string();
             let resp: <Track as SearchType>::Resp =
                 serde_json::from_slice(client.get(url).send().await?.bytes().await?.as_ref())?;
 
@@ -137,7 +137,7 @@ impl super::LyricProvider for QQMusic {
 }
 
 async fn get_songmid(api: &QQMusicApi, client: &Client, songid: &str) -> Result<String> {
-    let url = api.song_detail(SongId::Songid(songid));
+    let url = api.song_detail(SongId::Songid(songid))?.uri().to_string();
     let resp: SongDetailResp =
         serde_json::from_slice(client.get(url).send().await?.bytes().await?.as_ref())?;
     Ok(resp.data.track_info.mid)
