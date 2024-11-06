@@ -179,6 +179,13 @@
 <a href="#179" id="179">179</a>
 <a href="#180" id="180">180</a>
 <a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{sync::OnceLock, time::Duration};
 
 <span class="kw">use </span>anyhow::Result;
@@ -198,16 +205,23 @@
 
 <span class="kw">use super</span>::{Lyric, LyricOwned, LyricStore};
 
+<span class="kw">mod </span>typo;
+<span class="kw">pub use </span>typo::QQMusicConfig;
+
 <span class="attr">#[derive(Clone, Copy)]
 </span><span class="kw">pub struct </span>QQMusic;
 
 <span class="attr">#[async_trait::async_trait]
 </span><span class="kw">impl </span><span class="kw">super</span>::LyricProvider <span class="kw">for </span>QQMusic {
     <span class="kw">fn </span>init(<span class="self">self</span>, base_url: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
-        <span class="kw">let </span>base_url: Url = base_url.parse()<span class="question-mark">?</span>;
-        QQMUSIC_API_CLIENT
-            .set(<span class="prelude-val">Some</span>(QQMusicApi::new(base_url)))
-            .map_err(|<span class="kw">_</span>| Error::ApiClientInited)<span class="question-mark">?</span>;
+        <span class="kw">let </span>QQMusicConfig { api_base_url } = serde_json::from_str(base_url)<span class="question-mark">?</span>;
+
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(base_url) = api_base_url {
+            <span class="kw">let </span>base_url: Url = base_url.parse()<span class="question-mark">?</span>;
+            QQMUSIC_API_CLIENT
+                .set(<span class="prelude-val">Some</span>(QQMusicApi::new(base_url)))
+                .map_err(|<span class="kw">_</span>| Error::ApiClientInited)<span class="question-mark">?</span>;
+        }
         <span class="prelude-val">Ok</span>(())
     }
 

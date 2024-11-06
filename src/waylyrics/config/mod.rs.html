@@ -168,12 +168,11 @@
 <a href="#168" id="168">168</a>
 <a href="#169" id="169">169</a>
 <a href="#170" id="170">170</a>
-<a href="#171" id="171">171</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>documented::DocumentedFields;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 <span class="kw">use </span>strum::{EnumIter, EnumString};
 
-<span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{netease::Netease, LyricProvider};
+<span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{netease::Netease, qqmusic::QQMusicConfig, LyricProvider};
 
 <span class="attr">#[derive(Clone, Copy, Default, EnumIter, strum::Display, EnumString)]
 </span><span class="kw">pub enum </span>Align {
@@ -233,10 +232,6 @@
     /// inspired by LyricX's filter list
     </span><span class="kw">pub </span>filter_regexies: Vec&lt;String&gt;,
 
-    <span class="doccomment">/// QQMusicApi api url
-    /// example: "http://127.0.0.1:11451"
-    </span><span class="kw">pub </span>qqmusic_api_base_url: <span class="prelude-ty">Option</span>&lt;String&gt;,
-
     <span class="doccomment">/// avaliable options: 网易云音乐, QQ音乐
     </span><span class="kw">pub </span>lyric_search_source: Vec&lt;String&gt;,
 
@@ -261,6 +256,9 @@
     /// for global ones, please install the `.desktop` file
     /// also check trigger format at https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html
     </span><span class="kw">pub </span>triggers: Triggers,
+
+    <span class="doccomment">/// QQMusic config
+    </span><span class="kw">pub </span>qqmusic: QQMusicConfig,
 }
 
 <span class="doccomment">/// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
@@ -302,8 +300,6 @@
             enable_filter_regex: <span class="bool-val">false</span>,
             enable_local_lyric: <span class="bool-val">true</span>,
             filter_regexies: default_filter_regexies(),
-            triggers: Triggers::default(),
-            qqmusic_api_base_url: <span class="prelude-val">None</span>,
             lyric_search_source: <span class="macro">vec!</span>[Netease.unique_name().into()],
             show_default_text_on_idle: <span class="bool-val">true</span>,
             show_lyric_on_pause: <span class="bool-val">true</span>,
@@ -312,6 +308,8 @@
             player_name_blacklist: <span class="macro">vec!</span>[<span class="string">"firefox"</span>.into()],
             player_identity_blacklist: <span class="macro">vec!</span>[],
             extract_translated_lyric: <span class="bool-val">true</span>,
+            triggers: Triggers::default(),
+            qqmusic: QQMusicConfig::default(),
         }
     }
 }
