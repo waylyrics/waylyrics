@@ -17,16 +17,23 @@ use crate::{
 
 use super::{Lyric, LyricOwned, LyricStore};
 
+mod typo;
+pub use typo::QQMusicConfig;
+
 #[derive(Clone, Copy)]
 pub struct QQMusic;
 
 #[async_trait::async_trait]
 impl super::LyricProvider for QQMusic {
     fn init(self, base_url: &str) -> Result<()> {
-        let base_url: Url = base_url.parse()?;
-        QQMUSIC_API_CLIENT
-            .set(Some(QQMusicApi::new(base_url)))
-            .map_err(|_| Error::ApiClientInited)?;
+        let QQMusicConfig { api_base_url } = serde_json::from_str(base_url)?;
+
+        if let Some(base_url) = api_base_url {
+            let base_url: Url = base_url.parse()?;
+            QQMUSIC_API_CLIENT
+                .set(Some(QQMusicApi::new(base_url)))
+                .map_err(|_| Error::ApiClientInited)?;
+        }
         Ok(())
     }
 

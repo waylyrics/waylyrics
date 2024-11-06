@@ -2,7 +2,7 @@ use documented::DocumentedFields;
 use serde::{Deserialize, Serialize};
 use strum::{EnumIter, EnumString};
 
-use crate::lyric_providers::{netease::Netease, LyricProvider};
+use crate::lyric_providers::{netease::Netease, qqmusic::QQMusicConfig, LyricProvider};
 
 #[derive(Clone, Copy, Default, EnumIter, strum::Display, EnumString)]
 pub enum Align {
@@ -62,10 +62,6 @@ pub struct Config {
     /// inspired by LyricX's filter list
     pub filter_regexies: Vec<String>,
 
-    /// QQMusicApi api url
-    /// example: "http://127.0.0.1:11451"
-    pub qqmusic_api_base_url: Option<String>,
-
     /// avaliable options: 网易云音乐, QQ音乐
     pub lyric_search_source: Vec<String>,
 
@@ -90,6 +86,9 @@ pub struct Config {
     /// for global ones, please install the `.desktop` file
     /// also check trigger format at https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html
     pub triggers: Triggers,
+
+    /// QQMusic config
+    pub qqmusic: QQMusicConfig,
 }
 
 /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
@@ -131,8 +130,6 @@ impl Default for Config {
             enable_filter_regex: false,
             enable_local_lyric: true,
             filter_regexies: default_filter_regexies(),
-            triggers: Triggers::default(),
-            qqmusic_api_base_url: None,
             lyric_search_source: vec![Netease.unique_name().into()],
             show_default_text_on_idle: true,
             show_lyric_on_pause: true,
@@ -141,6 +138,8 @@ impl Default for Config {
             player_name_blacklist: vec!["firefox".into()],
             player_identity_blacklist: vec![],
             extract_translated_lyric: true,
+            triggers: Triggers::default(),
+            qqmusic: QQMusicConfig::default(),
         }
     }
 }

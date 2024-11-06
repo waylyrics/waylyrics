@@ -6,7 +6,6 @@ use gtk::{glib, Application};
 
 use anyhow::Result;
 
-use lyric::fetch::tricks::EXTRACT_TRANSLATED_LYRIC;
 use regex::RegexSet;
 use waylyrics::app::{self, build_main_window};
 use waylyrics::config::append_comments;
@@ -14,10 +13,12 @@ use waylyrics::config::{Config, Triggers};
 use waylyrics::lyric_providers::qqmusic::QQMusic;
 use waylyrics::lyric_providers::utils::get_provider;
 use waylyrics::lyric_providers::LyricProvider;
-use waylyrics::utils::init_dirs;
+
 use waylyrics::{
-    utils, EXCLUDED_REGEXES, GTK_DBUS_CONNECTION, LYRIC_PROVIDERS, MAIN_WINDOW,
-    PLAYER_IDENTITY_BLACKLIST, PLAYER_NAME_BLACKLIST, THEME_PATH,
+    sync::lyric::fetch::tricks::EXTRACT_TRANSLATED_LYRIC,
+    utils::{self, init_dirs},
+    EXCLUDED_REGEXES, GTK_DBUS_CONNECTION, LYRIC_PROVIDERS, MAIN_WINDOW, PLAYER_IDENTITY_BLACKLIST,
+    PLAYER_NAME_BLACKLIST, THEME_PATH,
 };
 
 use waylyrics::log;
@@ -119,7 +120,6 @@ fn build_ui(app: &Application) -> Result<()> {
         filter_regexies,
         ref length_toleration,
         triggers,
-        qqmusic_api_base_url,
         lyric_search_source,
         show_default_text_on_idle,
         show_lyric_on_pause,
@@ -129,6 +129,7 @@ fn build_ui(app: &Application) -> Result<()> {
         player_identity_blacklist,
         enable_local_lyric,
         extract_translated_lyric,
+        qqmusic,
     } = config;
 
     #[cfg(feature = "tray-icon")]
@@ -180,9 +181,7 @@ fn build_ui(app: &Application) -> Result<()> {
         EXCLUDED_REGEXES.set(RegexSet::new(&filter_regexies)?);
     }
 
-    if let Some(base_url) = qqmusic_api_base_url {
-        QQMusic.init(&base_url)?;
-    }
+    QQMusic.init(&serde_json::to_string(&qqmusic)?)?;
 
     setup_providers(lyric_search_source);
 
