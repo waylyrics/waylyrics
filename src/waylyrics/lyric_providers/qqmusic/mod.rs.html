@@ -276,10 +276,10 @@
     <span class="kw">async fn </span>search_song_detailed(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         album: <span class="kw-2">&amp;</span>str,
-        _artists: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str],
+        artists: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str],
         title: <span class="kw-2">&amp;</span>str,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;SongInfo&gt;&gt; {
-        <span class="kw">let </span>keyword = default_search_query(album, <span class="kw-2">&amp;</span>[], title);
+        <span class="kw">let </span>keyword = default_search_query(album, artists, title);
         <span class="self">self</span>.search_song(<span class="kw-2">&amp;</span>keyword).<span class="kw">await
     </span>}
 
