@@ -5,6 +5,7 @@ use qqmusic_rs::{
     lyric::{QueryLyric, QueryLyricResp},
     search::{Search, SearchType, Track},
     song::{SongDetail, SongDetailResp},
+    user::SetCookie,
     QQMusicApi, SongId,
 };
 use reqwest::Client;
@@ -26,14 +27,35 @@ pub struct QQMusic;
 #[async_trait::async_trait]
 impl super::LyricProvider for QQMusic {
     fn init(self, base_url: &str) -> Result<()> {
-        let QQMusicConfig { api_base_url } = serde_json::from_str(base_url)?;
+        let QQMusicConfig {
+            api_base_url,
+            cookies,
+        } = serde_json::from_str(base_url)?;
 
-        if let Some(base_url) = api_base_url {
-            let base_url: Url = base_url.parse()?;
-            QQMUSIC_API_CLIENT
-                .set(Some(QQMusicApi::new(base_url)))
-                .map_err(|_| Error::ApiClientInited)?;
-        }
+        let Some(base_url) = api_base_url else {
+            return Ok(());
+        };
+
+        let base_url: Url = base_url.parse()?;
+        QQMUSIC_API_CLIENT
+            .set(Some(QQMusicApi::new(base_url)))
+            .map_err(|_| Error::ApiClientInited)?;
+
+        tokio_spawn!(async move {
+            async fn login_qqmusic(cookies: &str, api: &QQMusicApi) -> Result<()> {
+                let req = api.set_cookie(&cookies)?;
+                let reqw_req = reqwest::Request::try_from(req)?;
+                let client = Client::builder().user_agent("Waylyrics/0.1").build()?;
+                client.execute(reqw_req).await?;
+                Ok(())
+            }
+            let Some(cookies) = cookies else { return };
+            let Some(Some(api)) = QQMUSIC_API_CLIENT.get() else {
+                return;
+            };
+            let _ = login_qqmusic(&cookies, api);
+        });
+
         Ok(())
     }
 
