@@ -4,3 +4,7 @@
 dhat.out.*
 
 *.mo
+
+.envrc
+/.direnv
+/result
