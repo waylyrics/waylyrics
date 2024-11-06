@@ -1,14 +1,24 @@
-use crate::lyric_providers::qqmusic::QQMusic;
+use anyhow::Result;
+
+use crate::lyric_providers::qqmusic::{QQMusic, QQMusicConfig};
 use crate::lyric_providers::LyricProvider;
+
+fn init_with_base(base: &str) -> Result<()> {
+    let config = QQMusicConfig {
+        api_base_url: Some(base.into()),
+        ..Default::default()
+    };
+    QQMusic.init(&serde_json::to_string(&config)?)
+}
 
 #[test]
 fn test_qqmusic_base_url_init() {
     // empty URL
-    assert!(QQMusic.init("").is_err());
+    assert!(init_with_base("").is_err());
     // ill-formed URL
-    assert!(QQMusic.init("http//127.0.0.1:1000").is_err());
+    assert!(init_with_base("http//127.0.0.1:1000").is_err());
     // legal URL example
-    assert!(QQMusic.init("https://127.0.0.1:1000").is_ok());
+    assert!(init_with_base("https://127.0.0.1:1000").is_ok());
     // prevents to initialize again
-    assert!(QQMusic.init("http://127.0.0.1:1000").is_err());
+    assert!(init_with_base("http://127.0.0.1:1000").is_err());
 }
