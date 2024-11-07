@@ -21,7 +21,7 @@ All commands are run by common users. Understand the function of each command be
 
 Before compiling, please make sure that your network communication is good, otherwise it is likely to get stuck at the beginning of compiling.
 
-This document has Waylyrics installed globally by default, and advanced players can put some of the files into ~/.local/share.
+This document has Waylyrics installed globally by default, and advanced users can put some of the files into ~/.local/share.
 
 Alternatively, you can install a compiled binary package from [Spark Store](https://spark-app.store/).
 ```shell
@@ -32,7 +32,7 @@ sudo aptss install waylyrics
 ```shell
 sudo apt-get install git nano build-essential libssl-dev libgtk-4-dev libdbus-1-dev libmimalloc-dev gettext cargo
 ```
-📣Tips: The cargo package here pulls up the rustc package, note that the rustc package version needs to be >= 1.73. Advanced players can build their own rust environments instead of installing cargo from the package manager.
+📣Tips: The cargo package here pulls up the rustc package, note that the rustc package version needs to be >= 1.73. Advanced users can build their own rust environments instead of installing cargo from the package manager.
 
 ## Clone source code
 We need to clone the Waylyrics source code on Github for compilation. Make sure the Internet connection is good, and in rare cases use the magic 🪄.
@@ -47,7 +47,7 @@ cd waylyrics
 export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 # Set the Waylyrics theme directory variable, which will be used later
 ```
-💡Tips: Advanced players look over meow! White can skip it.
+💡Tips: Advanced users look over meow! Noobs can skip it.
 ```shell
 export WAYLYRICS_THEME_PRESETS_DIR=/usr/share/waylyrics/themes
 ```
@@ -57,7 +57,7 @@ This environment variable is used to specify the directory where Waylyrics loads
 
 
 ## Start compiling
-There is a stable standard toolchain at compile time, or the nightly daily update toolchain can be selected (nightly is not recommended by White).
+There is a stable standard toolchain at compile time, or the nightly daily update toolchain can be selected (nightly is not recommended by Noobs).
 
 ⚠️Waring: For the third time, please ensure that your network is free, the download of the tool chain ahead requires a lot of traffic.
 
