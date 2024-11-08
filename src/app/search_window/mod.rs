@@ -176,6 +176,8 @@ impl Window {
                 .map(str::to_owned)
                 .collect::<Vec<String>>(),
         );
+        let (error_tx, error_rx) = async_channel::bounded(providers.len());
+
         let mut results = tokio_spawn!(async move {
             let mut set = JoinSet::new();
             for (idx, provider) in providers.iter().enumerate() {
@@ -199,6 +201,7 @@ impl Window {
                         let error_msg =
                             format!("{e} occurs when searching {title} on {}", provider_name);
                         error!(error_msg);
+                        let _ = error_tx.send(error_msg).await;
                         continue;
                     }
                 };
@@ -211,6 +214,19 @@ impl Window {
         })
         .await
         .expect("Tokio runtime failure");
+
+        let mut errors = Vec::new();
+        while let Ok(msg) = error_rx.try_recv() {
+            errors.push(msg);
+        }
+
+        if !errors.is_empty() {
+            show_dialog(
+                Some(self),
+                &format!("Errors happend during search: \n{}", errors.join("\n")),
+                gtk::MessageType::Error,
+            );
+        }
 
         let query_title_chars = query_title.chars().collect::<Vec<_>>();
         let query_album_chars = query_album.chars().collect::<Vec<_>>();
