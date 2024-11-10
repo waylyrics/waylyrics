@@ -43,7 +43,7 @@ impl super::LyricProvider for QQMusic {
 
         tokio_spawn!(async move {
             async fn login_qqmusic(cookies: &str, api: &QQMusicApi) -> Result<()> {
-                let req = api.set_cookie(&cookies)?;
+                let req = api.set_cookie(cookies)?;
                 let reqw_req = reqwest::Request::try_from(req)?;
                 let client = Client::builder().user_agent("Waylyrics/0.1").build()?;
                 client.execute(reqw_req).await?;
@@ -53,7 +53,7 @@ impl super::LyricProvider for QQMusic {
             let Some(Some(api)) = QQMUSIC_API_CLIENT.get() else {
                 return;
             };
-            let _ = login_qqmusic(&cookies, api);
+            let _ = login_qqmusic(&cookies, api).await;
         });
 
         Ok(())

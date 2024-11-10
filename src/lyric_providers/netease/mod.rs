@@ -120,6 +120,8 @@ impl super::LyricParse for Netease {
         let olyric = self.parse_lyric(store);
         let tlyric = store.tlyric.as_deref();
         let mut tlyric = verify_lyric(tlyric).into_owned();
+
+        // workaround: hide translation if original line ends
         if let (LyricOwned::LineTimestamp(tlyric), LyricOwned::LineTimestamp(olyric)) =
             (&mut tlyric, &olyric)
         {
