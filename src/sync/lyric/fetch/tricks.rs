@@ -91,7 +91,7 @@ fn load_local_lyric<P: AsRef<Path>>(path: P) -> Option<(LyricOwned, LyricOwned)>
     let mut tlyric = {
         let mut translation_path = path.as_ref().to_owned();
         let lang = sys_locale::get_locale();
-        translation_path.set_extension(&format!("{}.lrc", lang.as_deref().unwrap_or("zh")));
+        translation_path.set_extension(format!("{}.lrc", lang.as_deref().unwrap_or("zh")));
         fs::read_to_string(&translation_path)
             .map_err(|e| error!("cannot read translated lyric from hint: {e}"))
             .ok()

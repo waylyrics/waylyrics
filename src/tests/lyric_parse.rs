@@ -17,14 +17,14 @@ mod lrc {
         let mut lyrics = lrc_iter(lrc.lines())?.into_iter();
 
         assert_eq!(
-            lyrics.next().map(|l| LyricLine::<'_>::into_owned(l)),
+            lyrics.next().map(LyricLine::<'_>::into_owned),
             Some(LyricLineOwned {
                 text: "Hi friend...".into(),
                 start_time: Duration::from_millis(1000 + 50),
             })
         );
         assert_eq!(
-            lyrics.next().map(|l| LyricLine::<'_>::into_owned(l)),
+            lyrics.next().map(LyricLine::<'_>::into_owned),
             Some(LyricLineOwned {
                 text: "Can you hear me?...".into(),
                 start_time: Duration::from_millis(640 + (45 * 60 + 5) * 1000),
@@ -43,14 +43,14 @@ mod lrc {
         let mut lyrics = lrc_iter(lrc.lines())?.into_iter();
 
         assert_eq!(
-            lyrics.next().map(|l| LyricLine::<'_>::into_owned(l)),
+            lyrics.next().map(LyricLine::<'_>::into_owned),
             Some(LyricLineOwned {
                 text: "Hi friend...".into(),
                 start_time: Duration::from_millis(1000 + 50),
             })
         );
         assert_eq!(
-            lyrics.next().map(|l| LyricLine::<'_>::into_owned(l)),
+            lyrics.next().map(LyricLine::<'_>::into_owned),
             Some(LyricLineOwned {
                 text: "Can you hear me?...".into(),
                 start_time: Duration::from_millis(640 + (45 * 60 + 5) * 1000),
@@ -68,7 +68,7 @@ mod lrc {
         let mut lyrics = lrc_iter(lrc.lines())?.into_iter();
 
         assert_eq!(
-            lyrics.next().map(|l| LyricLine::<'_>::into_owned(l)),
+            lyrics.next().map(LyricLine::<'_>::into_owned),
             Some(LyricLineOwned {
                 text: "Hi friend...".into(),
                 start_time: Duration::from_millis(1000 + 50),
@@ -87,7 +87,7 @@ Author: poly000
         let mut lyrics = lrc_iter(lrc.lines())?.into_iter();
 
         assert_eq!(
-            lyrics.next().map(|l| LyricLine::<'_>::into_owned(l)),
+            lyrics.next().map(LyricLine::<'_>::into_owned),
             Some(LyricLineOwned {
                 text: "Hi friend...".into(),
                 start_time: Duration::from_millis(1000 + 50),
@@ -114,7 +114,7 @@ Author: poly000
         let mut lyrics = lrc_iter(lrc.lines())?.into_iter();
 
         assert_eq!(
-            lyrics.next().map(|l| LyricLine::<'_>::into_owned(l)),
+            lyrics.next().map(LyricLine::<'_>::into_owned),
             Some(LyricLineOwned {
                 text: "Hi friend...".into(),
                 start_time: Duration::from_millis(1014),
@@ -122,7 +122,7 @@ Author: poly000
         );
 
         assert_eq!(
-            lyrics.next().map(|l| LyricLine::<'_>::into_owned(l)),
+            lyrics.next().map(LyricLine::<'_>::into_owned),
             Some(LyricLineOwned {
                 text: "Hi friend...".into(),
                 start_time: Duration::from_millis(2062),
@@ -141,7 +141,7 @@ Author: poly000
         let mut lyrics = lrc_iter(lrc.lines())?.into_iter();
 
         assert_eq!(
-            lyrics.next().map(|l| LyricLine::<'_>::into_owned(l)),
+            lyrics.next().map(LyricLine::<'_>::into_owned),
             Some(LyricLineOwned {
                 text: "Hi friend...".into(),
                 start_time: Duration::from_millis(1014),
@@ -149,7 +149,7 @@ Author: poly000
         );
 
         assert_eq!(
-            lyrics.next().map(|l| LyricLine::<'_>::into_owned(l)),
+            lyrics.next().map(LyricLine::<'_>::into_owned),
             Some(LyricLineOwned {
                 text: "".into(),
                 start_time: Duration::from_millis(2062),

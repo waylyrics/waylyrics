@@ -91,21 +91,19 @@ pub async fn fetch_lyric_cached(
     }
 
     let result = fetch_lyric(track_meta, window).await;
-    if result.is_ok() {
-        if update_lyric_cache(&cache_path) {
-            let dbus_conn = GTK_DBUS_CONNECTION
-                .with_borrow(|conn| conn.as_ref().cloned())
-                .expect("GApplication was not set");
-            let _ = dbus_conn.emit_signal(
-                None,
-                "/io/github/waylyrics/Waylyrics",
-                crate::APP_ID,
-                "NewLyricCache",
-                Some(&Variant::tuple_from_iter([cache_path
-                    .to_string_lossy()
-                    .to_variant()])),
-            );
-        }
+    if result.is_ok() && update_lyric_cache(&cache_path) {
+        let dbus_conn = GTK_DBUS_CONNECTION
+            .with_borrow(|conn| conn.as_ref().cloned())
+            .expect("GApplication was not set");
+        let _ = dbus_conn.emit_signal(
+            None,
+            "/io/github/waylyrics/Waylyrics",
+            crate::APP_ID,
+            "NewLyricCache",
+            Some(&Variant::tuple_from_iter([cache_path
+                .to_string_lossy()
+                .to_variant()])),
+        );
     }
     result
 }

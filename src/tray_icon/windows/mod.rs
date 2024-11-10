@@ -91,7 +91,7 @@ fn menu_event_handler() {
                     .arg("-WindowStyle")
                     .arg("1")
                     .arg("-Command")
-                    .arg(&format!("sleep 5; start {}", args().next().unwrap()))
+                    .arg(format!("sleep 5; start {}", args().next().unwrap()))
                     .spawn();
                 let _ = ui_action().send_blocking(UIAction::Quit);
             }

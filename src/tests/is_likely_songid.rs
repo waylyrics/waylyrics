@@ -14,7 +14,7 @@ fn is_qqmusic_songid() {
 
 #[test]
 fn is_netease_songid() {
-    for songid in ["1145141919"] {
+    for songid in ["1145141919", "114"] {
         assert!(Netease.is_likely_songid(songid));
     }
     for invalid_songid in ["11451.41919", ""] {

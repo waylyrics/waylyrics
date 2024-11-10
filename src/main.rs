@@ -72,7 +72,7 @@ fn main() -> Result<glib::ExitCode> {
         Err(e) => log::error!("failed to bind textdomain: {e}"),
         Ok(domain) => log::info!(
             "bind to textdomain: {:?}",
-            domain.as_ref().map(|s| String::from_utf8_lossy(&s))
+            domain.as_ref().map(|s| String::from_utf8_lossy(s))
         ),
     }
 
