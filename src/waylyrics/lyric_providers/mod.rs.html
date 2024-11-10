@@ -113,13 +113,13 @@
 <a href="#113" id="113">113</a>
 <a href="#114" id="114">114</a>
 <a href="#115" id="115">115</a>
-<a href="#116" id="116">116</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>utils;
 <span class="kw">use </span>anyhow::Result;
 <span class="kw">use </span>strum::EnumIs;
 
 <span class="kw">pub mod </span>dict;
 
+<span class="kw">pub mod </span>lrclib;
 <span class="kw">pub mod </span>netease;
 <span class="kw">pub mod </span>qqmusic;
 
@@ -190,7 +190,7 @@
     <span class="kw">fn </span>parse_translated_lyric(<span class="kw-2">&amp;</span><span class="self">self</span>, store: <span class="kw-2">&amp;</span>LyricStore) -&gt; LyricOwned;
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; Lyric&lt;<span class="lifetime">'a</span>&gt; {
+<span class="kw">impl </span>Lyric&lt;<span class="lifetime">'_</span>&gt; {
     <span class="kw">pub fn </span>into_owned(<span class="self">self</span>) -&gt; LyricOwned {
         <span class="kw">match </span><span class="self">self </span>{
             Lyric::None =&gt; LyricOwned::None,
@@ -205,7 +205,7 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; LyricLine&lt;<span class="lifetime">'a</span>&gt; {
+<span class="kw">impl </span>LyricLine&lt;<span class="lifetime">'_</span>&gt; {
     <span class="kw">pub fn </span>into_owned(<span class="self">Self </span>{ text, start_time }: <span class="self">Self</span>) -&gt; LyricLineOwned {
         LyricLineOwned {
             text: text.into(),
@@ -223,8 +223,6 @@
 </span><span class="kw">pub enum </span>Error {
     <span class="attr">#[error(<span class="string">"no search result!"</span>)]
     </span>NoResult,
-    <span class="attr">#[error(<span class="string">"no lyrics for such song"</span>)]
-    </span>NoLyric,
 }
 
 <span class="kw">pub fn </span>default_search_query(album: <span class="kw-2">&amp;</span>str, artists: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str], title: <span class="kw-2">&amp;</span>str) -&gt; String {

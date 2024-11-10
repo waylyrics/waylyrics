@@ -220,7 +220,7 @@
     </span><span class="kw">let </span><span class="kw-2">mut </span>tlyric = {
         <span class="kw">let </span><span class="kw-2">mut </span>translation_path = path.as_ref().to_owned();
         <span class="kw">let </span>lang = sys_locale::get_locale();
-        translation_path.set_extension(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">"{}.lrc"</span>, lang.as_deref().unwrap_or(<span class="string">"zh"</span>)));
+        translation_path.set_extension(<span class="macro">format!</span>(<span class="string">"{}.lrc"</span>, lang.as_deref().unwrap_or(<span class="string">"zh"</span>)));
         fs::read_to_string(<span class="kw-2">&amp;</span>translation_path)
             .map_err(|e| <span class="macro">error!</span>(<span class="string">"cannot read translated lyric from hint: {e}"</span>))
             .ok()

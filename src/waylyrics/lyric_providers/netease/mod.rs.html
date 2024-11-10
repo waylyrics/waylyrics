@@ -152,6 +152,8 @@
 <a href="#152" id="152">152</a>
 <a href="#153" id="153">153</a>
 <a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Result;
 <span class="kw">use </span>std::time::Duration;
 
@@ -274,7 +276,9 @@
         <span class="kw">let </span>olyric = <span class="self">self</span>.parse_lyric(store);
         <span class="kw">let </span>tlyric = store.tlyric.as_deref();
         <span class="kw">let </span><span class="kw-2">mut </span>tlyric = verify_lyric(tlyric).into_owned();
-        <span class="kw">if let </span>(LyricOwned::LineTimestamp(tlyric), LyricOwned::LineTimestamp(olyric)) =
+
+        <span class="comment">// workaround: hide translation if original line ends
+        </span><span class="kw">if let </span>(LyricOwned::LineTimestamp(tlyric), LyricOwned::LineTimestamp(olyric)) =
             (<span class="kw-2">&amp;mut </span>tlyric, <span class="kw-2">&amp;</span>olyric)
         {
             <span class="kw">let </span>last_t = tlyric.last();
