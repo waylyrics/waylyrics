@@ -62,7 +62,7 @@ pub struct Config {
     /// inspired by LyricX's filter list
     pub filter_regexies: Vec<String>,
 
-    /// avaliable options: 网易云音乐, QQ音乐
+    /// avaliable options: 网易云音乐, QQ音乐, LRCLib
     pub lyric_search_source: Vec<String>,
 
     /// if enabled, waylyrics will set `DEFAULT_TEXT` on idle,

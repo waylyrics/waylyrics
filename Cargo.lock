@@ -2386,6 +2386,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "lrclib-api-rs"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3277201f4745b2fb86fd428bb2a6c1313590100868c15e770cd0230ffd10c359"
+dependencies = [
+ "http",
+ "serde",
+ "serde_json",
+ "strum",
+ "thiserror 2.0.2",
+ "url",
+]
+
+[[package]]
 name = "malloc_buf"
 version = "0.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4657,6 +4671,7 @@ dependencies = [
  "gtk4",
  "ksni",
  "lrc-nom",
+ "lrclib-api-rs",
  "md5",
  "mimalloc",
  "mpris",

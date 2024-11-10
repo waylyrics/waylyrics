@@ -43,6 +43,7 @@ glib-macros = "0.20.5"
 # lyric providers + parse
 ncmapi = { version = "0.1.13", package = "ncmapi2" }
 qqmusic-rs = { version = "0.2.0" }
+lrclib-api-rs = { version = "0.3.1" }
 lrc-nom = "0.3.0"
 
 # logging

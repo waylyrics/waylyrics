@@ -4,6 +4,7 @@ use strum::EnumIs;
 
 pub mod dict;
 
+pub mod lrclib;
 pub mod netease;
 pub mod qqmusic;
 
@@ -74,7 +75,7 @@ pub trait LyricParse {
     fn parse_translated_lyric(&self, store: &LyricStore) -> LyricOwned;
 }
 
-impl<'a> Lyric<'a> {
+impl Lyric<'_> {
     pub fn into_owned(self) -> LyricOwned {
         match self {
             Lyric::None => LyricOwned::None,
@@ -89,7 +90,7 @@ impl<'a> Lyric<'a> {
     }
 }
 
-impl<'a> LyricLine<'a> {
+impl LyricLine<'_> {
     pub fn into_owned(Self { text, start_time }: Self) -> LyricLineOwned {
         LyricLineOwned {
             text: text.into(),
@@ -107,8 +108,6 @@ pub struct LyricStore {
 pub enum Error {
     #[error("no search result!")]
     NoResult,
-    #[error("no lyrics for such song")]
-    NoLyric,
 }
 
 pub fn default_search_query(album: &str, artists: &[&str], title: &str) -> String {

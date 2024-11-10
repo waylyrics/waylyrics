@@ -52,9 +52,10 @@ pub fn find_next_lyric<'a>(
 }
 
 pub fn get_provider(provider_id: &str) -> Option<&'static dyn LyricProvider> {
+    use super::lrclib::LRCLib;
     use super::netease::Netease;
     use super::qqmusic::QQMusic;
-    let providers: [&'static dyn super::LyricProvider; 2] = [&Netease, &QQMusic];
+    let providers: [&'static dyn super::LyricProvider; 3] = [&Netease, &QQMusic, &LRCLib];
     providers
         .into_iter()
         .find(|p| p.unique_name() == provider_id)
