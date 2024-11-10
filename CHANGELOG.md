@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.18] - 2024-11-10
+
+### 🚀 Features
+
+- Set cookies for QQMusicApi in config
+- Show errors from providers in search_window
+- Support LRCLib provider
+
+### 🐛 Bug Fixes
+
+- Set text wrap to show very-long lyric
+- *(test)* Initialize QQMusic
+- Add artists to QQMusic keyword
+- Search failure dialog cannot be spawned outside GTK thread
+- `login_qqmusic` call was not awaited
+
+### 📚 Documentation
+
+- *(readme)* Add alternative `lyrica`
+- *(i18n)* Translation for contribution.md and build guide ubuntu (#272)
+- Fix typo in filename
+
+### 🧪 Testing
+
+- Search/query via lrclib
+
+### ⚙️ Miscellaneous Tasks
+
+- Support nix flake (#264)
+- Migrate to qqmusic-rs 0.2.0
+- Apply clippy fix
+
+### Build
+
+- *(deps)* Bump tray-icon from 0.19.0 to 0.19.1 (#270)
+- *(deps)* Bump regex from 1.11.0 to 1.11.1 (#269)
+- *(deps)* Bump thiserror from 1.0.64 to 1.0.66 (#268)
+- *(deps)* Bump glib-macros from 0.20.4 to 0.20.5 (#267)
+- *(deps)* Bump the serde group with 2 updates (#266)
+
+### Enhance
+
+- Init lyric provider with any struct
+
 ## [0.3.17] - 2024-10-06
 
 ### 🐛 Bug Fixes
@@ -9,6 +53,10 @@ All notable changes to this project will be documented in this file.
 - *(win32)* Crash with Motrix runnig
 - *(tray)* Export translated lyrics
 - *(tray/unix)* Avoid calling list_players() from tray thread (#262)
+
+### ⚙️ Miscellaneous Tasks
+
+- Release v0.3.17
 
 ### Build
 

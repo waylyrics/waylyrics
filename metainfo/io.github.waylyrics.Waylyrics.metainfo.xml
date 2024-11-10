@@ -38,6 +38,21 @@
   </screenshots>
 
   <releases>
+    <release version="0.3.18" date="2024-11-11">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.17</url>
+        <description>
+          <p>Features</p>
+            <ul>
+              <li>set cookies for QQMusic on start</li>
+              <li>support LRCLib lyrics provider</li>
+            </ul>
+          <p>Bug Fixes</p>
+            <ul>
+              <li>set text-wrap for long lyric display</li>
+              <li>crash if error occurs when searching in search window</li>
+            </ul>
+        </description>
+    </release>
     <release version="0.3.17" date="2024-10-06">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.17</url>
         <description>
