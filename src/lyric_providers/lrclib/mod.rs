@@ -1,10 +1,11 @@
-use std::{sync::LazyLock, time::Duration};
+use std::time::Duration;
 
 use anyhow::Result;
 use lrclib_api_rs::{
     types::{ErrorResponse, GetLyricsResponse, LyricsData},
     LRCLibAPI,
 };
+use once_cell::sync::Lazy;
 use reqwest::Client;
 
 use super::{Lyric, LyricOwned, LyricStore, SongInfo};
@@ -12,8 +13,8 @@ use crate::tokio_spawn;
 
 pub struct LRCLib;
 
-pub static LRCLIB_API_CLIENT: LazyLock<LRCLibAPI> = LazyLock::new(Default::default);
-pub static REQWEST_CLIENT: LazyLock<Client> = LazyLock::new(Default::default);
+pub static LRCLIB_API_CLIENT: Lazy<LRCLibAPI> = Lazy::new(Default::default);
+pub static REQWEST_CLIENT: Lazy<Client> = Lazy::new(Default::default);
 
 impl super::LyricParse for LRCLib {
     fn parse_lyric(&self, store: &LyricStore) -> LyricOwned {
@@ -37,12 +38,10 @@ impl super::LyricProvider for LRCLib {
             let resp = REQWEST_CLIENT.get(req.uri().to_string()).send().await?;
             let result: GetLyricsResponse = resp.json().await?;
             match result {
-                GetLyricsResponse::Success(LyricsData { synced_lyrics, .. }) => {
-                    Ok(LyricStore {
-                        lyric: synced_lyrics,
-                        tlyric: None,
-                    })
-                }
+                GetLyricsResponse::Success(LyricsData { synced_lyrics, .. }) => Ok(LyricStore {
+                    lyric: synced_lyrics,
+                    tlyric: None,
+                }),
                 GetLyricsResponse::Error(ErrorResponse { message, .. }) => {
                     crate::log::debug!("query failed: {message}");
                     Err(super::Error::NoResult)?
@@ -133,9 +132,7 @@ fn map_lyrics_result(data: Vec<LyricsData>) -> Vec<SongInfo> {
                     title: track_name,
                     singer: artist_name,
                     album: album_name,
-                    length: duration
-                        .map(Duration::from_secs_f64)
-                        .unwrap_or_default(),
+                    length: duration.map(Duration::from_secs_f64).unwrap_or_default(),
                 }
             },
         )
