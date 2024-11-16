@@ -138,16 +138,14 @@
 <a href="#138" id="138">138</a>
 <a href="#139" id="139">139</a>
 <a href="#140" id="140">140</a>
-<a href="#141" id="141">141</a>
-<a href="#142" id="142">142</a>
-<a href="#143" id="143">143</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::{sync::LazyLock, time::Duration};
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::time::Duration;
 
 <span class="kw">use </span>anyhow::Result;
 <span class="kw">use </span>lrclib_api_rs::{
     types::{ErrorResponse, GetLyricsResponse, LyricsData},
     LRCLibAPI,
 };
+<span class="kw">use </span>once_cell::sync::Lazy;
 <span class="kw">use </span>reqwest::Client;
 
 <span class="kw">use super</span>::{Lyric, LyricOwned, LyricStore, SongInfo};
@@ -155,8 +153,8 @@
 
 <span class="kw">pub struct </span>LRCLib;
 
-<span class="kw">pub static </span>LRCLIB_API_CLIENT: LazyLock&lt;LRCLibAPI&gt; = LazyLock::new(Default::default);
-<span class="kw">pub static </span>REQWEST_CLIENT: LazyLock&lt;Client&gt; = LazyLock::new(Default::default);
+<span class="kw">pub static </span>LRCLIB_API_CLIENT: Lazy&lt;LRCLibAPI&gt; = Lazy::new(Default::default);
+<span class="kw">pub static </span>REQWEST_CLIENT: Lazy&lt;Client&gt; = Lazy::new(Default::default);
 
 <span class="kw">impl </span><span class="kw">super</span>::LyricParse <span class="kw">for </span>LRCLib {
     <span class="kw">fn </span>parse_lyric(<span class="kw-2">&amp;</span><span class="self">self</span>, store: <span class="kw-2">&amp;</span>LyricStore) -&gt; LyricOwned {
@@ -180,12 +178,10 @@
             <span class="kw">let </span>resp = REQWEST_CLIENT.get(req.uri().to_string()).send().<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">let </span>result: GetLyricsResponse = resp.json().<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">match </span>result {
-                GetLyricsResponse::Success(LyricsData { synced_lyrics, .. }) =&gt; {
-                    <span class="prelude-val">Ok</span>(LyricStore {
-                        lyric: synced_lyrics,
-                        tlyric: <span class="prelude-val">None</span>,
-                    })
-                }
+                GetLyricsResponse::Success(LyricsData { synced_lyrics, .. }) =&gt; <span class="prelude-val">Ok</span>(LyricStore {
+                    lyric: synced_lyrics,
+                    tlyric: <span class="prelude-val">None</span>,
+                }),
                 GetLyricsResponse::Error(ErrorResponse { message, .. }) =&gt; {
                     <span class="macro">crate::log::debug!</span>(<span class="string">"query failed: {message}"</span>);
                     <span class="prelude-val">Err</span>(<span class="kw">super</span>::Error::NoResult)<span class="question-mark">?
@@ -276,9 +272,7 @@
                     title: track_name,
                     singer: artist_name,
                     album: album_name,
-                    length: duration
-                        .map(Duration::from_secs_f64)
-                        .unwrap_or_default(),
+                    length: duration.map(Duration::from_secs_f64).unwrap_or_default(),
                 }
             },
         )
