@@ -14,7 +14,7 @@ mod lrc {
 [00:01.05] Hi friend...
 [45:05.64] Can you hear me?...
 "#;
-        let mut lyrics = lrc_iter(lrc.lines())?.into_iter();
+        let mut lyrics = lrc_iter(lrc.lines())?.iter();
 
         assert_eq!(
             lyrics.next().map(LyricLine::<'_>::into_owned),
@@ -40,7 +40,7 @@ mod lrc {
 [45:05.64] Can you hear me?...
 [00:01.05] Hi friend...
 "#;
-        let mut lyrics = lrc_iter(lrc.lines())?.into_iter();
+        let mut lyrics = lrc_iter(lrc.lines())?.iter();
 
         assert_eq!(
             lyrics.next().map(LyricLine::<'_>::into_owned),
@@ -65,7 +65,7 @@ mod lrc {
         let lrc = r#"
 [00:01:05] Hi friend...
 "#;
-        let mut lyrics = lrc_iter(lrc.lines())?.into_iter();
+        let mut lyrics = lrc_iter(lrc.lines())?.iter();
 
         assert_eq!(
             lyrics.next().map(LyricLine::<'_>::into_owned),
@@ -84,7 +84,7 @@ My first LRC Lyric!
 Author: poly000
 [00:01.05] Hi friend...
 "#;
-        let mut lyrics = lrc_iter(lrc.lines())?.into_iter();
+        let mut lyrics = lrc_iter(lrc.lines())?.iter();
 
         assert_eq!(
             lyrics.next().map(LyricLine::<'_>::into_owned),
@@ -111,7 +111,7 @@ Author: poly000
         let lrc = r#"
 [00:01.014][00:02.062] Hi friend...
 "#;
-        let mut lyrics = lrc_iter(lrc.lines())?.into_iter();
+        let mut lyrics = lrc_iter(lrc.lines())?.iter();
 
         assert_eq!(
             lyrics.next().map(LyricLine::<'_>::into_owned),
@@ -138,7 +138,7 @@ Author: poly000
 [00:01.014] Hi friend...
 [00:02.062]
 "#;
-        let mut lyrics = lrc_iter(lrc.lines())?.into_iter();
+        let mut lyrics = lrc_iter(lrc.lines())?.iter();
 
         assert_eq!(
             lyrics.next().map(LyricLine::<'_>::into_owned),
@@ -166,7 +166,7 @@ Author: poly000
 [00:01.77]请不要说“你很懒”
 [00:04.38]だって本当はcrazy"#;
         let lyrics = lrc_iter(lrc.lines())?
-            .into_iter()
+            .iter()
             .map(LyricLine::into_owned)
             .collect::<Vec<_>>();
         let tlyric = extract_translated_lyric(&lyrics);

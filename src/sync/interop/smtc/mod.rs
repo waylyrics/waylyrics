@@ -247,5 +247,5 @@ fn list_sessions() -> Option<impl Iterator<Item = GSMTCSession>> {
         return None;
     };
 
-    Some(sessions.into_iter())
+    Some(sessions.iter())
 }
