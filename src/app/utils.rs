@@ -1,6 +1,8 @@
+use std::cell::RefCell;
+
 use crate::EXCLUDED_REGEXES;
 
-use gtk::{prelude::*, Label};
+use gtk::{prelude::*, CssProvider, Label};
 
 use super::window;
 
@@ -83,17 +85,32 @@ pub(super) fn set_click_pass_through(window: &window::Window, enabled: bool) {
 /// We set priority as `STYLE_PROVIDER_PRIORITY + 1` to override user theme
 ///
 /// [GTK+ doc]: https://docs.gtk.org/gtk4/type_func.StyleContext.add_provider_for_display.html#parameters
-pub fn merge_css(css: &str) {
+pub fn load_css_stylesheet(css: &str) {
     use gtk::gdk::Display as GdkDisplay;
+
+    thread_local! {
+        static LATEST_PROVIDER: RefCell<Option<CssProvider>> = RefCell::new(None);
+    }
 
     let css_provider = gtk::CssProvider::new();
     css_provider.load_from_data(css);
+    let display = GdkDisplay::default().expect("Could not connect to a display.");
+
+    LATEST_PROVIDER.with_borrow_mut(|provider| {
+        if let Some(provider) = provider.take() {
+            gtk::style_context_remove_provider_for_display(&display, &provider);
+        }
+    });
 
     gtk::style_context_add_provider_for_display(
-        &GdkDisplay::default().expect("Could not connect to a display."),
+        &display,
         &css_provider,
         gtk::STYLE_PROVIDER_PRIORITY_USER + 1,
     );
+
+    LATEST_PROVIDER.with_borrow_mut(|provider| {
+        *provider = Some(css_provider);
+    });
 }
 
 fn has_filtered_word(text: &str) -> bool {
