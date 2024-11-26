@@ -117,6 +117,20 @@
 <a href="#117" id="117">117</a>
 <a href="#118" id="118">118</a>
 <a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::EXCLUDED_REGEXES;
 
 <span class="kw">use </span>gtk::{prelude::<span class="kw-2">*</span>, Label};
@@ -204,15 +218,29 @@
 /// [GTK+ doc]: https://docs.gtk.org/gtk4/type_func.StyleContext.add_provider_for_display.html#parameters
 </span><span class="kw">pub fn </span>merge_css(css: <span class="kw-2">&amp;</span>str) {
     <span class="kw">use </span>gtk::gdk::Display <span class="kw">as </span>GdkDisplay;
+    <span class="kw">use </span>gtk::CssProvider;
+    <span class="kw">use </span>std::cell::RefCell;
 
-    <span class="kw">let </span>css_provider = gtk::CssProvider::new();
+    <span class="macro">thread_local!</span> {
+        <span class="kw">static </span>LATEST_PROVIDER: RefCell&lt;<span class="prelude-ty">Option</span>&lt;CssProvider&gt;&gt; = RefCell::new(<span class="prelude-val">None</span>);
+    }
+    <span class="kw">let </span>css_provider = CssProvider::new();
     css_provider.load_from_data(css);
+    <span class="kw">let </span>display = GdkDisplay::default().expect(<span class="string">"Could not connect to a display."</span>);
+    LATEST_PROVIDER.with_borrow_mut(|provider| {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(provider) = provider.take() {
+            gtk::style_context_remove_provider_for_display(<span class="kw-2">&amp;</span>display, <span class="kw-2">&amp;</span>provider);
+        }
+    });
 
     gtk::style_context_add_provider_for_display(
-        <span class="kw-2">&amp;</span>GdkDisplay::default().expect(<span class="string">"Could not connect to a display."</span>),
+        <span class="kw-2">&amp;</span>display,
         <span class="kw-2">&amp;</span>css_provider,
         gtk::STYLE_PROVIDER_PRIORITY_USER + <span class="number">1</span>,
     );
+    LATEST_PROVIDER.with_borrow_mut(|provider| {
+        <span class="kw-2">*</span>provider = <span class="prelude-val">Some</span>(css_provider);
+    });
 }
 
 <span class="kw">fn </span>has_filtered_word(text: <span class="kw-2">&amp;</span>str) -&gt; bool {
