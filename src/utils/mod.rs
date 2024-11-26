@@ -86,3 +86,5 @@ pub fn init_dirs() -> Result<(PathBuf, PathBuf)> {
 
 mod shortcut;
 pub use shortcut::bind_shortcut;
+mod theme;
+pub use theme::auto_theme_change;

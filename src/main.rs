@@ -14,6 +14,7 @@ use waylyrics::lyric_providers::qqmusic::QQMusic;
 use waylyrics::lyric_providers::utils::get_provider;
 use waylyrics::lyric_providers::LyricProvider;
 
+use waylyrics::utils::auto_theme_change;
 use waylyrics::{
     sync::lyric::fetch::tricks::EXTRACT_TRANSLATED_LYRIC,
     utils::{self, init_dirs},
@@ -21,7 +22,7 @@ use waylyrics::{
     PLAYER_NAME_BLACKLIST, THEME_PATH,
 };
 
-use waylyrics::{glib_spawn, log};
+use waylyrics::log;
 use waylyrics::sync::*;
 
 #[cfg(feature = "action-event")]
@@ -32,8 +33,6 @@ use waylyrics::tray_icon::start_tray_service;
 use tracing_subscriber::filter::{EnvFilter, LevelFilter};
 use tracing_subscriber::prelude::*;
 use tracing_subscriber::{fmt, Registry};
-
-use futures::stream::StreamExt;
 
 use app::actions::{
     register_reload_theme, register_set_display_mode, register_set_lyric_align,
@@ -162,6 +161,7 @@ fn build_ui(app: &Application) -> Result<()> {
     let css_style = fs::read_to_string(&theme_path)?;
     app::utils::merge_css(&css_style);
     THEME_PATH.set(theme_path);
+    auto_theme_change(color_scheme, theme_dark_switch)?;
 
     let wind = build_main_window(
         app,
@@ -186,87 +186,6 @@ fn build_ui(app: &Application) -> Result<()> {
     }
 
     QQMusic.init(&serde_json::to_string(&qqmusic)?)?;
-
-    if let Some(settings) = gtk::Settings::default() {
-        match color_scheme.as_str() {
-            "light" => settings.set_gtk_application_prefer_dark_theme(false),
-            "dark" => settings.set_gtk_application_prefer_dark_theme(true),
-            "auto" => {
-                // Check system color scheme
-                fn replace_suffix<'a>(input: &'a str, old_suffix: &str, new_suffix: &str) -> String {
-                    if input.ends_with(old_suffix) {
-                        let trimmed = &input[..input.len() - old_suffix.len()];
-                        format!("{}{}", trimmed, new_suffix)
-                    } else {
-                        input.to_string()
-                    }
-                }
-
-                fn set_and_update(dark: bool) {
-                    THEME_PATH.with_borrow_mut(|theme_path| {
-                        let filename: &str = match theme_path.file_name()
-                            .and_then(|p| p.to_str()) {
-                            Some(p) => p,
-                            None => return,
-                        };
-                        if dark {
-                            if !filename.ends_with("-dark.css") {
-                                let new_name = replace_suffix(filename, ".css", "-dark.css");
-                                theme_path.set_file_name(new_name);
-                            }
-                        } else {
-                            if filename.ends_with("-dark.css") {
-                                let new_name = replace_suffix(filename, "-dark.css", ".css");
-                                theme_path.set_file_name(new_name);
-                            }
-                        }
-
-                        if let Ok(style) = std::fs::read_to_string(&theme_path) {
-                            crate::app::utils::merge_css(&style);
-                        } else {
-                            log::warn!("Filename {:?} not found.", theme_path);
-                        }
-                    })
-                }
-                if dark_light::detect() == dark_light::Mode::Dark {
-                    settings.set_gtk_application_prefer_dark_theme(true);
-                    if theme_dark_switch {
-                        set_and_update(true);
-                    }
-                } else {
-                    settings.set_gtk_application_prefer_dark_theme(false)
-                }
-
-                // Listen to changes...
-                glib_spawn!(async move {
-                    let mut stream = match dark_light::subscribe().await {
-                        Ok(stream) => stream,
-                        Err(e) => {
-                            log::error!("Subscribing color-scheme changing events failed: {e}");
-                            return;
-                        }
-                    };
-                    while let Some(mode) = stream.next().await {
-                        match mode {
-                            dark_light::Mode::Dark => {
-                                settings.set_gtk_application_prefer_dark_theme(true);
-                                if theme_dark_switch {
-                                    set_and_update(true);
-                                }
-                            },
-                            _ => {
-                                settings.set_gtk_application_prefer_dark_theme(false);
-                                if theme_dark_switch {
-                                    set_and_update(false);
-                                }
-                            }
-                        }
-                    }
-                });
-            },
-            _ => { anyhow::bail!("Unknown color-scheme {}", color_scheme); }
-        }
-    }
 
     setup_providers(lyric_search_source);
 
