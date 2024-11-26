@@ -89,6 +89,12 @@ pub struct Config {
 
     /// QQMusic config
     pub qqmusic: QQMusicConfig,
+
+    /// Color scheme used for Gtk interface -- light, dark or auto (use system)
+    pub color_scheme: String,
+
+    /// Whether to use <name>-dark.css when system is in dark mode
+    pub theme_dark_switch: bool,
 }
 
 /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
@@ -140,6 +146,8 @@ impl Default for Config {
             extract_translated_lyric: true,
             triggers: Triggers::default(),
             qqmusic: QQMusicConfig::default(),
+            color_scheme: "auto".to_owned(),
+            theme_dark_switch: false,
         }
     }
 }
