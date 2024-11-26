@@ -21,8 +21,8 @@ use waylyrics::{
     PLAYER_NAME_BLACKLIST, THEME_PATH,
 };
 
-use waylyrics::sync::*;
 use waylyrics::{glib_spawn, log};
+use waylyrics::sync::*;
 
 #[cfg(feature = "action-event")]
 use waylyrics::app::actions::init_ui_action_channel;
@@ -160,7 +160,7 @@ fn build_ui(app: &Application) -> Result<()> {
 
     log::debug!("theme path: {:?}", theme_path);
     let css_style = fs::read_to_string(&theme_path)?;
-    app::utils::load_css_stylesheet(&css_style);
+    app::utils::merge_css(&css_style);
     THEME_PATH.set(theme_path);
 
     let wind = build_main_window(
@@ -193,11 +193,7 @@ fn build_ui(app: &Application) -> Result<()> {
             "dark" => settings.set_gtk_application_prefer_dark_theme(true),
             "auto" => {
                 // Check system color scheme
-                fn replace_suffix<'a>(
-                    input: &'a str,
-                    old_suffix: &str,
-                    new_suffix: &str,
-                ) -> String {
+                fn replace_suffix<'a>(input: &'a str, old_suffix: &str, new_suffix: &str) -> String {
                     if input.ends_with(old_suffix) {
                         let trimmed = &input[..input.len() - old_suffix.len()];
                         format!("{}{}", trimmed, new_suffix)
@@ -208,7 +204,8 @@ fn build_ui(app: &Application) -> Result<()> {
 
                 fn set_and_update(dark: bool) {
                     THEME_PATH.with_borrow_mut(|theme_path| {
-                        let filename: &str = match theme_path.file_name().and_then(|p| p.to_str()) {
+                        let filename: &str = match theme_path.file_name()
+                            .and_then(|p| p.to_str()) {
                             Some(p) => p,
                             None => return,
                         };
@@ -225,7 +222,7 @@ fn build_ui(app: &Application) -> Result<()> {
                         }
 
                         if let Ok(style) = std::fs::read_to_string(&theme_path) {
-                            crate::app::utils::load_css_stylesheet(&style);
+                            crate::app::utils::merge_css(&style);
                         } else {
                             log::warn!("Filename {:?} not found.", theme_path);
                         }
@@ -256,7 +253,7 @@ fn build_ui(app: &Application) -> Result<()> {
                                 if theme_dark_switch {
                                     set_and_update(true);
                                 }
-                            }
+                            },
                             _ => {
                                 settings.set_gtk_application_prefer_dark_theme(false);
                                 if theme_dark_switch {
@@ -266,10 +263,8 @@ fn build_ui(app: &Application) -> Result<()> {
                         }
                     }
                 });
-            }
-            _ => {
-                anyhow::bail!("Unknown color-scheme {}", color_scheme);
-            }
+            },
+            _ => { anyhow::bail!("Unknown color-scheme {}", color_scheme); }
         }
     }
 

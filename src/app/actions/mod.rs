@@ -36,7 +36,7 @@ pub fn register_reload_theme(app: &Application, wind: &Window, trigger: &str) {
     action.connect_activate(move |_, _| {
         crate::THEME_PATH.with_borrow(|theme_path| {
             if let Ok(style) = std::fs::read_to_string(theme_path) {
-                crate::app::utils::load_css_stylesheet(&style);
+                crate::app::utils::merge_css(&style);
             }
         });
     });
