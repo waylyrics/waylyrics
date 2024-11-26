@@ -4,6 +4,15 @@ use strum::{EnumIter, EnumString};
 
 use crate::lyric_providers::{netease::Netease, qqmusic::QQMusicConfig, LyricProvider};
 
+#[derive(Clone, Copy, Default, EnumIter, strum::Display, EnumString, Serialize, Deserialize)]
+#[strum(serialize_all = "lowercase")]
+pub enum ColorScheme {
+    #[default]
+    Auto,
+    Dark,
+    Light,
+}
+
 #[derive(Clone, Copy, Default, EnumIter, strum::Display, EnumString)]
 pub enum Align {
     /// left align
@@ -91,7 +100,7 @@ pub struct Config {
     pub qqmusic: QQMusicConfig,
 
     /// Color scheme used for Gtk interface -- light, dark or auto (use system)
-    pub color_scheme: String,
+    pub color_scheme: ColorScheme,
 
     /// Whether to use <name>-dark.css when system is in dark mode
     pub theme_dark_switch: bool,
@@ -146,7 +155,7 @@ impl Default for Config {
             extract_translated_lyric: true,
             triggers: Triggers::default(),
             qqmusic: QQMusicConfig::default(),
-            color_scheme: "auto".to_owned(),
+            color_scheme: ColorScheme::default(),
             theme_dark_switch: false,
         }
     }

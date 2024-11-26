@@ -161,7 +161,7 @@ fn build_ui(app: &Application) -> Result<()> {
     let css_style = fs::read_to_string(&theme_path)?;
     app::utils::merge_css(&css_style);
     THEME_PATH.set(theme_path);
-    auto_theme_change(color_scheme, theme_dark_switch)?;
+    auto_theme_change(color_scheme, theme_dark_switch);
 
     let wind = build_main_window(
         app,

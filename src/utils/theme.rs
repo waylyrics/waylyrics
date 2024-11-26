@@ -1,20 +1,16 @@
 use futures::StreamExt;
 
-use crate::{glib_spawn, log, THEME_PATH};
+use crate::{config::ColorScheme, glib_spawn, log, THEME_PATH};
 
-pub fn auto_theme_change(
-    color_scheme: impl AsRef<str>,
-    theme_dark_switch: bool,
-) -> anyhow::Result<()> {
-    let color_scheme = color_scheme.as_ref();
+pub fn auto_theme_change(color_scheme: ColorScheme, theme_dark_switch: bool) {
     let Some(settings) = gtk::Settings::default() else {
-        return Ok(());
+        return;
     };
 
     match color_scheme {
-        "light" => settings.set_gtk_application_prefer_dark_theme(false),
-        "dark" => settings.set_gtk_application_prefer_dark_theme(true),
-        "auto" => {
+        ColorScheme::Light => settings.set_gtk_application_prefer_dark_theme(false),
+        ColorScheme::Dark => settings.set_gtk_application_prefer_dark_theme(true),
+        ColorScheme::Auto => {
             if dark_light::detect() == dark_light::Mode::Dark {
                 settings.set_gtk_application_prefer_dark_theme(true);
                 if theme_dark_switch {
@@ -51,12 +47,7 @@ pub fn auto_theme_change(
                 }
             });
         }
-        _ => {
-            anyhow::bail!("Unknown color-scheme {}", color_scheme);
-        }
     }
-
-    Ok(())
 }
 
 // Check system color scheme
