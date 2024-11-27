@@ -111,6 +111,7 @@ fn build_ui(app: &Application) -> Result<()> {
     let config_with_docs = append_comments(&toml::to_string(&config)?)?;
     fs::write(config_path, config_with_docs)?;
 
+    #[cfg_attr(windows, allow(unused))]
     let Config {
         player_sync_interval,
         lyric_update_interval,
@@ -130,6 +131,8 @@ fn build_ui(app: &Application) -> Result<()> {
         enable_local_lyric,
         extract_translated_lyric,
         qqmusic,
+        color_scheme,
+        theme_dark_switch,
     } = config;
 
     #[cfg(feature = "tray-icon")]
@@ -158,6 +161,9 @@ fn build_ui(app: &Application) -> Result<()> {
     let css_style = fs::read_to_string(&theme_path)?;
     app::utils::merge_css(&css_style);
     THEME_PATH.set(theme_path);
+
+    #[cfg(not(windows))]
+    utils::auto_theme_change(color_scheme, theme_dark_switch);
 
     let wind = build_main_window(
         app,
