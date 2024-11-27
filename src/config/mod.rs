@@ -6,6 +6,7 @@ use crate::lyric_providers::{netease::Netease, qqmusic::QQMusicConfig, LyricProv
 
 #[derive(Clone, Copy, Default, EnumIter, strum::Display, EnumString, Serialize, Deserialize)]
 #[strum(serialize_all = "lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum ColorScheme {
     #[default]
     Auto,
@@ -44,11 +45,14 @@ pub struct Config {
     pub lyric_update_interval: String,
 
     /// waylyrics matches lyrics with `weights`
+    ///
     /// if `(length-lyric_len).abs() < length_toleration`,
+    ///
     /// waylyrics set it's weight as zero, mark it a best choice
     pub length_toleration: String,
 
     /// whether to cache lyrics
+    ///
     /// note: persistenced lyric offset depends on this
     pub cache_lyrics: bool,
 
@@ -59,15 +63,19 @@ pub struct Config {
     pub enable_filter_regex: bool,
 
     /// if enabled, when waylyrics find `xesam:url`
+    ///
     /// starts with `file://` and no any other hint was matched,
+    ///
     /// waylyrics will try to read the `.lrc` file has same filename
     pub enable_local_lyric: bool,
 
     /// if enabled, when waylyrics loads a local lyric file,
+    ///
     /// it will try to extract translated lyric
     pub extract_translated_lyric: bool,
 
     /// hide lyric if it matches any of these regexies
+    ///
     /// inspired by LyricX's filter list
     pub filter_regexies: Vec<String>,
 
@@ -75,6 +83,7 @@ pub struct Config {
     pub lyric_search_source: Vec<String>,
 
     /// if enabled, waylyrics will set `DEFAULT_TEXT` on idle,
+    ///
     /// otherwise it just show nothing
     pub show_default_text_on_idle: bool,
 
@@ -92,7 +101,9 @@ pub struct Config {
     pub player_identity_blacklist: Vec<String>,
 
     /// shortcuts when focusing on waylyrics
+    ///
     /// for global ones, please install the `.desktop` file
+    ///
     /// also check trigger format at https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html
     pub triggers: Triggers,
 
@@ -100,6 +111,8 @@ pub struct Config {
     pub qqmusic: QQMusicConfig,
 
     /// Color scheme used for Gtk interface -- light, dark or auto (use system)
+    ///
+    /// Not supported on Windows.
     pub color_scheme: ColorScheme,
 
     /// Whether to use <name>-dark.css when system is in dark mode
