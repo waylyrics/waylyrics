@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["auto_theme_change","replace_suffix","set_and_update"]};

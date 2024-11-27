@@ -168,11 +168,51 @@
 <a href="#168" id="168">168</a>
 <a href="#169" id="169">169</a>
 <a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>documented::DocumentedFields;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 <span class="kw">use </span>strum::{EnumIter, EnumString};
 
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{netease::Netease, qqmusic::QQMusicConfig, LyricProvider};
+
+<span class="attr">#[derive(Clone, Copy, Default, EnumIter, strum::Display, EnumString, Serialize, Deserialize)]
+#[strum(serialize_all = <span class="string">"lowercase"</span>)]
+#[serde(rename_all = <span class="string">"lowercase"</span>)]
+</span><span class="kw">pub enum </span>ColorScheme {
+    <span class="attr">#[default]
+    </span>Auto,
+    Dark,
+    Light,
+}
 
 <span class="attr">#[derive(Clone, Copy, Default, EnumIter, strum::Display, EnumString)]
 </span><span class="kw">pub enum </span>Align {
@@ -205,11 +245,14 @@
     </span><span class="kw">pub </span>lyric_update_interval: String,
 
     <span class="doccomment">/// waylyrics matches lyrics with `weights`
+    ///
     /// if `(length-lyric_len).abs() &lt; length_toleration`,
+    ///
     /// waylyrics set it's weight as zero, mark it a best choice
     </span><span class="kw">pub </span>length_toleration: String,
 
     <span class="doccomment">/// whether to cache lyrics
+    ///
     /// note: persistenced lyric offset depends on this
     </span><span class="kw">pub </span>cache_lyrics: bool,
 
@@ -220,15 +263,19 @@
     </span><span class="kw">pub </span>enable_filter_regex: bool,
 
     <span class="doccomment">/// if enabled, when waylyrics find `xesam:url`
+    ///
     /// starts with `file://` and no any other hint was matched,
+    ///
     /// waylyrics will try to read the `.lrc` file has same filename
     </span><span class="kw">pub </span>enable_local_lyric: bool,
 
     <span class="doccomment">/// if enabled, when waylyrics loads a local lyric file,
+    ///
     /// it will try to extract translated lyric
     </span><span class="kw">pub </span>extract_translated_lyric: bool,
 
     <span class="doccomment">/// hide lyric if it matches any of these regexies
+    ///
     /// inspired by LyricX's filter list
     </span><span class="kw">pub </span>filter_regexies: Vec&lt;String&gt;,
 
@@ -236,6 +283,7 @@
     </span><span class="kw">pub </span>lyric_search_source: Vec&lt;String&gt;,
 
     <span class="doccomment">/// if enabled, waylyrics will set `DEFAULT_TEXT` on idle,
+    ///
     /// otherwise it just show nothing
     </span><span class="kw">pub </span>show_default_text_on_idle: bool,
 
@@ -253,12 +301,22 @@
     </span><span class="kw">pub </span>player_identity_blacklist: Vec&lt;String&gt;,
 
     <span class="doccomment">/// shortcuts when focusing on waylyrics
+    ///
     /// for global ones, please install the `.desktop` file
+    ///
     /// also check trigger format at https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html
     </span><span class="kw">pub </span>triggers: Triggers,
 
     <span class="doccomment">/// QQMusic config
     </span><span class="kw">pub </span>qqmusic: QQMusicConfig,
+
+    <span class="doccomment">/// Color scheme used for Gtk interface -- light, dark or auto (use system)
+    ///
+    /// Not supported on Windows.
+    </span><span class="kw">pub </span>color_scheme: ColorScheme,
+
+    <span class="doccomment">/// Whether to use &lt;name&gt;-dark.css when system is in dark mode
+    </span><span class="kw">pub </span>theme_dark_switch: bool,
 }
 
 <span class="doccomment">/// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
@@ -310,6 +368,8 @@
             extract_translated_lyric: <span class="bool-val">true</span>,
             triggers: Triggers::default(),
             qqmusic: QQMusicConfig::default(),
+            color_scheme: ColorScheme::default(),
+            theme_dark_switch: <span class="bool-val">false</span>,
         }
     }
 }

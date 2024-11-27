@@ -84,7 +84,7 @@
 }
 <span class="kw">pub static </span>LYRIC_PROVIDERS: OnceLock&lt;Vec&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="kw">dyn </span>LyricProvider&gt;&gt; = OnceLock::new();
 
-<span class="kw">static </span>MAIN_CONTEXT: Lazy&lt;MainContext&gt; = Lazy::new(gtk::glib::MainContext::default);
+<span class="kw">pub static </span>MAIN_CONTEXT: Lazy&lt;MainContext&gt; = Lazy::new(gtk::glib::MainContext::default);
 <span class="kw">static </span>TOKIO_RUNTIME: Lazy&lt;tokio::runtime::Runtime&gt; =
     Lazy::new(|| tokio::runtime::Runtime::new().unwrap());
 

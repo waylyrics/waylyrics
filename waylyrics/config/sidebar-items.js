@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Align","LyricDisplayMode"],"fn":["append_comments","default_filter_regexies"],"mod":["merge"],"struct":["AlignIter","Config","LyricDisplayModeIter","Triggers"]};
+window.SIDEBAR_ITEMS = {"enum":["Align","ColorScheme","LyricDisplayMode"],"fn":["append_comments","default_filter_regexies"],"mod":["merge"],"struct":["AlignIter","ColorSchemeIter","Config","LyricDisplayModeIter","Triggers"]};
