@@ -222,7 +222,7 @@
     <span class="kw">use </span>std::cell::RefCell;
 
     <span class="macro">thread_local!</span> {
-        <span class="kw">static </span>LATEST_PROVIDER: RefCell&lt;<span class="prelude-ty">Option</span>&lt;CssProvider&gt;&gt; = RefCell::new(<span class="prelude-val">None</span>);
+        <span class="kw">static </span>LATEST_PROVIDER: RefCell&lt;<span class="prelude-ty">Option</span>&lt;CssProvider&gt;&gt; = <span class="kw">const </span>{ RefCell::new(<span class="prelude-val">None</span>) };
     }
     <span class="kw">let </span>css_provider = CssProvider::new();
     css_provider.load_from_data(css);

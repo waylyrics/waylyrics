@@ -82,9 +82,6 @@
 <a href="#82" id="82">82</a>
 <a href="#83" id="83">83</a>
 <a href="#84" id="84">84</a>
-<a href="#85" id="85">85</a>
-<a href="#86" id="86">86</a>
-<a href="#87" id="87">87</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>futures::StreamExt;
 
 <span class="kw">use crate</span>::{config::ColorScheme, glib_spawn, log, THEME_PATH};
@@ -138,9 +135,8 @@
 }
 
 <span class="comment">// Check system color scheme
-</span><span class="kw">fn </span>replace_suffix&lt;<span class="lifetime">'a</span>&gt;(input: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>str, old_suffix: <span class="kw-2">&amp;</span>str, new_suffix: <span class="kw-2">&amp;</span>str) -&gt; String {
-    <span class="kw">if </span>input.ends_with(old_suffix) {
-        <span class="kw">let </span>trimmed = <span class="kw-2">&amp;</span>input[..input.len() - old_suffix.len()];
+</span><span class="kw">fn </span>replace_suffix(input: <span class="kw-2">&amp;</span>str, old_suffix: <span class="kw-2">&amp;</span>str, new_suffix: <span class="kw-2">&amp;</span>str) -&gt; String {
+    <span class="kw">if let </span><span class="prelude-val">Some</span>(trimmed) = input.strip_suffix(old_suffix) {
         <span class="macro">format!</span>(<span class="string">"{}{}"</span>, trimmed, new_suffix)
     } <span class="kw">else </span>{
         input.to_string()
@@ -158,11 +154,9 @@
                 <span class="kw">let </span>new_name = replace_suffix(filename, <span class="string">".css"</span>, <span class="string">"-dark.css"</span>);
                 theme_path.set_file_name(new_name);
             }
-        } <span class="kw">else </span>{
-            <span class="kw">if </span>filename.ends_with(<span class="string">"-dark.css"</span>) {
-                <span class="kw">let </span>new_name = replace_suffix(filename, <span class="string">"-dark.css"</span>, <span class="string">".css"</span>);
-                theme_path.set_file_name(new_name);
-            }
+        } <span class="kw">else if </span>filename.ends_with(<span class="string">"-dark.css"</span>) {
+            <span class="kw">let </span>new_name = replace_suffix(filename, <span class="string">"-dark.css"</span>, <span class="string">".css"</span>);
+            theme_path.set_file_name(new_name);
         }
 
         <span class="kw">if let </span><span class="prelude-val">Ok</span>(style) = std::fs::read_to_string(<span class="kw-2">&amp;</span>theme_path) {
