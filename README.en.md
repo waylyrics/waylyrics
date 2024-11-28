@@ -29,6 +29,8 @@
 
 ## Build/Install
 
+> MSRV: 1.78.0
+
 Check [INSTALLATION.en.md](doc/INSTALLATION.en.md)
 
 ## Usage

@@ -29,6 +29,8 @@
 
 ## 构建/安装
 
+> 注意：最低需要Rust版本为 1.78.0
+
 详阅 [INSTALLATION.md](doc/INSTALLATION.md)
 
 Ubuntu用户详阅 [BUILD_GUIDE_UBUNTU.zh_cn.md](doc/BUILD_GUIDE_UBUNTU.zh_cn.md)

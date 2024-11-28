@@ -1,6 +1,10 @@
 
 - [下载预编译二进制](#下载预编译二进制)
 - [通过包管理器安装](#通过包管理器安装)
+  - [Fedora Copr](#fedora-copr)
+  - [archlinuxcn](#archlinuxcn)
+  - [Flatpak](#flatpak)
+  - [Spark Store (Ubuntu 22.04 LTS)](#spark-store-ubuntu-2204-lts)
 - [安装构建依赖](#安装构建依赖)
   - [Debian-based](#debian-based)
   - [Arch-based](#arch-based)
@@ -97,8 +101,6 @@ waylyrics 会从该位置加载主题，除非被 `${XDG_DATA_HOME}/_themes/<nam
 如果编译时没有设置这个环境变量，waylyrics将只能加载用户主题。
 
 ## 使用 stable 工具链
-
-* note: 你的 rustc 需要在 1.73+
 
 ```bash
 cargo build --release --locked --target-dir target

@@ -1,6 +1,10 @@
 
 - [Download pre-built executable](#download-pre-built-executable)
 - [Install with package manager](#install-with-package-manager)
+  - [Fedora Copr](#fedora-copr)
+  - [archlinuxcn](#archlinuxcn)
+  - [Flatpak](#flatpak)
+  - [Spark Store (Ubuntu 22.04 LTS)](#spark-store-ubuntu-2204-lts)
 - [Prepare Dependencies](#prepare-dependencies)
   - [Debian-based](#debian-based)
   - [Arch-based](#arch-based)
@@ -97,8 +101,6 @@ waylyrics will load themes from `PRESET_DIR`, unless they were overridden by `${
 If `WAYLYRICS_THEME_PRESETS_DIR` is not set, waylyrics will only load themes from user data home.
 
 ## With stable toolchain
-
-* note: your rustc should be 1.73+
 
 ```bash
 cargo build --release --locked --target-dir target

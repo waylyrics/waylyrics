@@ -5,6 +5,7 @@ edition = "2021"
 description = "Simple On Screen lyrics Display for linux/unix"
 authors = ["poly000"]
 license-file = "LICENSE"
+rust-version = "1.78.0"
 
 [profile.release]
 lto = "thin"
