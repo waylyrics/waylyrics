@@ -31,7 +31,7 @@ pub fn acquire_instance_name() -> Result<()> {
             let mut hasher = ahash::AHasher::default();
             hasher.write_i32(random_num);
             let hash = hasher.finish();
-            let mut out: Vec<u8> = Vec::with_capacity(16);
+            let mut out: Vec<u8> = vec![0; 16];
             let hash_str = hex_simd::encode_as_str(
                 &hash.to_ne_bytes(),
                 out.as_out(),
