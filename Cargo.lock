@@ -3255,9 +3255,9 @@ dependencies = [
 
 [[package]]
 name = "qqmusic-rs"
-version = "0.2.0"
+version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e5d6ae8790ac97c9f088544937880ae9f83a74f8b3ab3a1e426f63eaf598c0b4"
+checksum = "504500582ef42e422f9f26e59db34529b67a6d17cd0d2700f3a07db972d333fc"
 dependencies = [
  "http",
  "serde",
