@@ -30,7 +30,7 @@ pub fn build_main_window(
 
     window.set_size_request(500, WINDOW_MIN_HEIGHT);
     window.set_title(Some(DEFAULT_TEXT));
-    window.set_icon_name(Some(crate::APP_ID));
+    window.set_icon_name(Some(crate::APP_ID_FIXED));
     window.present();
 
     let above_label = Label::builder()
@@ -70,7 +70,7 @@ pub fn build_main_window(
         set_click_pass_through(window, clickthrough)
     });
 
-    window.set_icon_name(Some(crate::APP_ID));
+    window.set_icon_name(Some(crate::APP_ID_FIXED));
 
     window
 }

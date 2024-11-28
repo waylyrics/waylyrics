@@ -7,7 +7,7 @@ use gtk::subclass::prelude::*;
 use gtk::{gio, glib, Application};
 
 use crate::config::{Align, LyricDisplayMode};
-use crate::APP_ID;
+use crate::APP_ID_FIXED;
 
 glib::wrapper! {
     pub struct Window(ObjectSubclass<imp::Window>)
@@ -38,7 +38,7 @@ impl Window {
     }
 
     fn setup_settings(&self) {
-        let settings = Settings::new(APP_ID);
+        let settings = Settings::new(APP_ID_FIXED);
         self.imp()
             .settings
             .set(settings)

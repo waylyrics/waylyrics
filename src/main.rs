@@ -14,6 +14,7 @@ use waylyrics::lyric_providers::qqmusic::QQMusic;
 use waylyrics::lyric_providers::utils::get_provider;
 use waylyrics::lyric_providers::LyricProvider;
 
+use waylyrics::utils::acquire_instance_name;
 use waylyrics::{
     sync::lyric::fetch::tricks::EXTRACT_TRANSLATED_LYRIC,
     utils::{self, init_dirs},
@@ -78,11 +79,17 @@ fn main() -> Result<glib::ExitCode> {
 
     log::info!("process id: {}", std::process::id());
 
+    acquire_instance_name()?;
+
     let app = Application::builder()
-        .application_id(waylyrics::APP_ID)
+        .application_id(
+            waylyrics::INSTANCE_NAME
+                .get()
+                .expect("Instance name must be set"),
+        )
         .build();
 
-    glib::set_prgname(Some(waylyrics::APP_ID));
+    glib::set_prgname(Some(waylyrics::APP_ID_FIXED));
 
     log::info!("successfully created application!");
 
@@ -165,11 +172,13 @@ fn build_ui(app: &Application) -> Result<()> {
     #[cfg(not(windows))]
     utils::auto_theme_change(color_scheme, theme_dark_switch);
 
+    let enable_filter_regex = enable_filter_regex && !filter_regexies.is_empty();
+    let length_toleration_ms = parse_time(length_toleration)?.as_millis();
     let wind = build_main_window(
         app,
-        enable_filter_regex && !filter_regexies.is_empty(),
+        enable_filter_regex,
         cache_lyrics,
-        parse_time(length_toleration)?.as_millis(),
+        length_toleration_ms,
         show_default_text_on_idle,
         show_lyric_on_pause,
     );
