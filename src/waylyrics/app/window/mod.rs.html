@@ -100,7 +100,7 @@
 <span class="kw">use </span>gtk::{gio, glib, Application};
 
 <span class="kw">use </span><span class="kw">crate</span>::config::{Align, LyricDisplayMode};
-<span class="kw">use </span><span class="kw">crate</span>::APP_ID;
+<span class="kw">use </span><span class="kw">crate</span>::APP_ID_FIXED;
 
 <span class="macro">glib::wrapper!</span> {
     <span class="kw">pub struct </span>Window(ObjectSubclass&lt;imp::Window&gt;)
@@ -131,7 +131,7 @@
     }
 
     <span class="kw">fn </span>setup_settings(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="kw">let </span>settings = Settings::new(APP_ID);
+        <span class="kw">let </span>settings = Settings::new(APP_ID_FIXED);
         <span class="self">self</span>.imp()
             .settings
             .set(settings)

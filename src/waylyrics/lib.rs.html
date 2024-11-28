@@ -53,6 +53,7 @@
 <a href="#53" id="53">53</a>
 <a href="#54" id="54">54</a>
 <a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{cell::RefCell, path::PathBuf, sync::OnceLock};
 
 <span class="kw">use </span>app::Window;
@@ -70,7 +71,8 @@
 
 <span class="kw">pub const </span>DEFAULT_TEXT: <span class="kw-2">&amp;</span>str = <span class="string">"Waylyrics"</span>;
 <span class="kw">pub const </span>PACKAGE_NAME: <span class="kw-2">&amp;</span>str = <span class="macro">env!</span>(<span class="string">"CARGO_PKG_NAME"</span>);
-<span class="kw">pub const </span>APP_ID: <span class="kw-2">&amp;</span>str = <span class="string">"io.github.waylyrics.Waylyrics"</span>;
+<span class="kw">pub const </span>APP_ID_FIXED: <span class="kw-2">&amp;</span>str = <span class="string">"io.github.waylyrics.Waylyrics"</span>;
+<span class="kw">pub static </span>INSTANCE_NAME: OnceLock&lt;String&gt; = OnceLock::new();
 
 <span class="macro">thread_local!</span> {
     <span class="kw">pub static </span>CACHE_DIR: RefCell&lt;String&gt; = <span class="kw">const </span>{ RefCell::new(String::new()) };

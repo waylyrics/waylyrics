@@ -130,7 +130,7 @@
 
     window.set_size_request(<span class="number">500</span>, WINDOW_MIN_HEIGHT);
     window.set_title(<span class="prelude-val">Some</span>(DEFAULT_TEXT));
-    window.set_icon_name(<span class="prelude-val">Some</span>(<span class="kw">crate</span>::APP_ID));
+    window.set_icon_name(<span class="prelude-val">Some</span>(<span class="kw">crate</span>::APP_ID_FIXED));
     window.present();
 
     <span class="kw">let </span>above_label = Label::builder()
@@ -170,7 +170,7 @@
         set_click_pass_through(window, clickthrough)
     });
 
-    window.set_icon_name(<span class="prelude-val">Some</span>(<span class="kw">crate</span>::APP_ID));
+    window.set_icon_name(<span class="prelude-val">Some</span>(<span class="kw">crate</span>::APP_ID_FIXED));
 
     window
 }

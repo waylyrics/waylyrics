@@ -296,30 +296,30 @@
 <span class="kw">use </span><span class="kw">crate</span>::sync::{PlayAction, PLAY_ACTION};
 
 <span class="kw">use </span><span class="kw">crate</span>::config::{Align, LyricDisplayMode};
-<span class="kw">use </span><span class="kw">crate</span>::sync::{OS, OsImp, PlayerId};
+<span class="kw">use </span><span class="kw">crate</span>::sync::{OsImp, PlayerId, OS};
 
 <span class="kw">use </span><span class="kw">crate</span>::log::error;
-<span class="kw">use crate</span>::{APP_ID, PACKAGE_NAME};
+<span class="kw">use crate</span>::{INSTANCE_NAME, PACKAGE_NAME};
 
 <span class="attr">#[derive(Debug)]
 </span><span class="kw">struct </span>TrayIcon {
     <span class="comment">// For calling list_players() inside main thread.
     </span>req_tx: async_channel::Sender&lt;()&gt;,
-    resp_rx: async_channel::Receiver&lt;Vec&lt;PlayerId&gt;&gt;
+    resp_rx: async_channel::Receiver&lt;Vec&lt;PlayerId&gt;&gt;,
 }
 
 <span class="kw">impl </span>TrayIcon {
-    <span class="kw">pub fn </span>new(req_tx: async_channel::Sender&lt;()&gt;, resp_rx: async_channel::Receiver&lt;Vec&lt;PlayerId&gt;&gt;) -&gt; <span class="self">Self </span>{
-        <span class="self">Self </span>{
-            req_tx,
-            resp_rx
-        }
+    <span class="kw">pub fn </span>new(
+        req_tx: async_channel::Sender&lt;()&gt;,
+        resp_rx: async_channel::Receiver&lt;Vec&lt;PlayerId&gt;&gt;,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{ req_tx, resp_rx }
     }
 }
 
 <span class="kw">impl </span>Tray <span class="kw">for </span>TrayIcon {
     <span class="kw">fn </span>icon_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
-        APP_ID.to_string()
+        INSTANCE_NAME.get().unwrap().to_string()
     }
     <span class="kw">fn </span>id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
         PACKAGE_NAME.into()
