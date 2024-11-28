@@ -15,7 +15,8 @@ pub mod utils;
 
 pub const DEFAULT_TEXT: &str = "Waylyrics";
 pub const PACKAGE_NAME: &str = env!("CARGO_PKG_NAME");
-pub const APP_ID: &str = "io.github.waylyrics.Waylyrics";
+pub const APP_ID_FIXED: &str = "io.github.waylyrics.Waylyrics";
+pub static INSTANCE_NAME: OnceLock<String> = OnceLock::new();
 
 thread_local! {
     pub static CACHE_DIR: RefCell<String> = const { RefCell::new(String::new()) };

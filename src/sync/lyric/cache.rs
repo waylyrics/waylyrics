@@ -71,7 +71,9 @@ pub async fn fetch_lyric_cached(
                     let _ = dbus_conn.emit_signal(
                         None,
                         "/io/github/waylyrics/Waylyrics",
-                        crate::APP_ID,
+                        crate::INSTANCE_NAME
+                            .get()
+                            .ok_or(anyhow::anyhow!("Failed to read app_id"))?,
                         "LoadLyricCache",
                         Some(&Variant::tuple_from_iter([cache_path
                             .to_string_lossy()
@@ -98,7 +100,9 @@ pub async fn fetch_lyric_cached(
         let _ = dbus_conn.emit_signal(
             None,
             "/io/github/waylyrics/Waylyrics",
-            crate::APP_ID,
+            crate::INSTANCE_NAME
+                .get()
+                .ok_or(anyhow::anyhow!("Failed to read app_id"))?,
             "NewLyricCache",
             Some(&Variant::tuple_from_iter([cache_path
                 .to_string_lossy()

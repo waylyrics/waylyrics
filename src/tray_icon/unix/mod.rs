@@ -14,30 +14,30 @@ use crate::app::actions::{UIAction, UI_ACTION};
 use crate::sync::{PlayAction, PLAY_ACTION};
 
 use crate::config::{Align, LyricDisplayMode};
-use crate::sync::{OS, OsImp, PlayerId};
+use crate::sync::{OsImp, PlayerId, OS};
 
 use crate::log::error;
-use crate::{APP_ID, PACKAGE_NAME};
+use crate::{INSTANCE_NAME, PACKAGE_NAME};
 
 #[derive(Debug)]
 struct TrayIcon {
     // For calling list_players() inside main thread.
     req_tx: async_channel::Sender<()>,
-    resp_rx: async_channel::Receiver<Vec<PlayerId>>
+    resp_rx: async_channel::Receiver<Vec<PlayerId>>,
 }
 
 impl TrayIcon {
-    pub fn new(req_tx: async_channel::Sender<()>, resp_rx: async_channel::Receiver<Vec<PlayerId>>) -> Self {
-        Self {
-            req_tx,
-            resp_rx
-        }
+    pub fn new(
+        req_tx: async_channel::Sender<()>,
+        resp_rx: async_channel::Receiver<Vec<PlayerId>>,
+    ) -> Self {
+        Self { req_tx, resp_rx }
     }
 }
 
 impl Tray for TrayIcon {
     fn icon_name(&self) -> String {
-        APP_ID.to_string()
+        INSTANCE_NAME.get().unwrap().to_string()
     }
     fn id(&self) -> String {
         PACKAGE_NAME.into()

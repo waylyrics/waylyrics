@@ -88,3 +88,5 @@ mod shortcut;
 pub use shortcut::bind_shortcut;
 mod theme;
 pub use theme::auto_theme_change;
+mod instance;
+pub use instance::acquire_instance_name;
