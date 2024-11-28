@@ -51,9 +51,8 @@ pub fn auto_theme_change(color_scheme: ColorScheme, theme_dark_switch: bool) {
 }
 
 // Check system color scheme
-fn replace_suffix<'a>(input: &'a str, old_suffix: &str, new_suffix: &str) -> String {
-    if input.ends_with(old_suffix) {
-        let trimmed = &input[..input.len() - old_suffix.len()];
+fn replace_suffix(input: &str, old_suffix: &str, new_suffix: &str) -> String {
+    if let Some(trimmed) = input.strip_suffix(old_suffix) {
         format!("{}{}", trimmed, new_suffix)
     } else {
         input.to_string()
@@ -71,11 +70,9 @@ fn set_and_update(dark: bool) {
                 let new_name = replace_suffix(filename, ".css", "-dark.css");
                 theme_path.set_file_name(new_name);
             }
-        } else {
-            if filename.ends_with("-dark.css") {
-                let new_name = replace_suffix(filename, "-dark.css", ".css");
-                theme_path.set_file_name(new_name);
-            }
+        } else if filename.ends_with("-dark.css") {
+            let new_name = replace_suffix(filename, "-dark.css", ".css");
+            theme_path.set_file_name(new_name);
         }
 
         if let Ok(style) = std::fs::read_to_string(&theme_path) {

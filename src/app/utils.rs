@@ -89,7 +89,7 @@ pub fn merge_css(css: &str) {
     use std::cell::RefCell;
 
     thread_local! {
-        static LATEST_PROVIDER: RefCell<Option<CssProvider>> = RefCell::new(None);
+        static LATEST_PROVIDER: RefCell<Option<CssProvider>> = const { RefCell::new(None) };
     }
     let css_provider = CssProvider::new();
     css_provider.load_from_data(css);
