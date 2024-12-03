@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.19] - 2024-12-03
+
+### 🚀 Features
+
+- Implement color-scheme autoswitch (light/dark mode) (#277)
+- Support multi-monitor setup (#278)
+
+### 🐛 Bug Fixes
+
+- LazyLock is not stable yet in 1.73 rustc
+- Instance format
+- SetCookies for QQMusicApi
+
+### 💼 Other
+
+- *(deps)* Bump rustls from 0.23.16 to 0.23.18 (#276)
+- Unregister latest theme
+- *(deps)* Bump url from 2.5.3 to 2.5.4 (#283)
+- *(deps)* Bump rfd from 0.15.0 to 0.15.1 (#284)
+- *(deps)* Bump tray-icon from 0.19.1 to 0.19.2 (#282)
+- *(deps)* Bump tracing from 0.1.40 to 0.1.41 (#281)
+- *(deps)* Bump the serde group with 2 updates (#280)
+- Build on windows
+
+### 📚 Documentation
+
+- *(build)* Check MSRV
+
+### ⚙️ Miscellaneous Tasks
+
+- Update lock file
+- *(clippy)* Fix clippy warnings
+- Release v0.3.19
+
 ## [0.3.18] - 2024-11-10
 
 ### 🚀 Features
@@ -18,6 +52,15 @@ All notable changes to this project will be documented in this file.
 - Search failure dialog cannot be spawned outside GTK thread
 - `login_qqmusic` call was not awaited
 
+### 💼 Other
+
+- Init lyric provider with any struct
+- *(deps)* Bump tray-icon from 0.19.0 to 0.19.1 (#270)
+- *(deps)* Bump regex from 1.11.0 to 1.11.1 (#269)
+- *(deps)* Bump thiserror from 1.0.64 to 1.0.66 (#268)
+- *(deps)* Bump glib-macros from 0.20.4 to 0.20.5 (#267)
+- *(deps)* Bump the serde group with 2 updates (#266)
+
 ### 📚 Documentation
 
 - *(readme)* Add alternative `lyrica`
@@ -33,18 +76,8 @@ All notable changes to this project will be documented in this file.
 - Support nix flake (#264)
 - Migrate to qqmusic-rs 0.2.0
 - Apply clippy fix
-
-### Build
-
-- *(deps)* Bump tray-icon from 0.19.0 to 0.19.1 (#270)
-- *(deps)* Bump regex from 1.11.0 to 1.11.1 (#269)
-- *(deps)* Bump thiserror from 1.0.64 to 1.0.66 (#268)
-- *(deps)* Bump glib-macros from 0.20.4 to 0.20.5 (#267)
-- *(deps)* Bump the serde group with 2 updates (#266)
-
-### Enhance
-
-- Init lyric provider with any struct
+- Bump version to 0.3.18
+- Fix details URL in metainfo
 
 ## [0.3.17] - 2024-10-06
 
@@ -54,17 +87,14 @@ All notable changes to this project will be documented in this file.
 - *(tray)* Export translated lyrics
 - *(tray/unix)* Avoid calling list_players() from tray thread (#262)
 
+### 💼 Other
+
+- Create Italian Translation  it_IT (#260)
+- *(deps)* Bump reqwest from 0.12.7 to 0.12.8 (#261)
+
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.3.17
-
-### Build
-
-- *(deps)* Bump reqwest from 0.12.7 to 0.12.8 (#261)
-
-### I18n
-
-- Create Italian Translation  it_IT (#260)
 
 ## [0.3.16] - 2024-09-28
 
@@ -75,6 +105,13 @@ All notable changes to this project will be documented in this file.
 ### 🐛 Bug Fixes
 
 - Build error on linux
+
+### 💼 Other
+
+- TrackMeta from Metadata will not fail now
+- *(fix)* Fix build with MSVC
+- Translate tips
+- *(fix)* ""desktop
 
 ### 🚜 Refactor
 
@@ -95,33 +132,20 @@ All notable changes to this project will be documented in this file.
 
 - Release v0.3.16
 
-### Build
-
-- *(fix)* Fix build with MSVC
-- *(fix)* ""desktop
-
-### Enhance
-
-- TrackMeta from Metadata will not fail now
-
-### I18n
-
-- Translate tips
-
 ## [0.3.15] - 2024-09-17
 
 ### 🐛 Bug Fixes
 
 - Sec field in exported lyric
 
-### ⚙️ Miscellaneous Tasks
-
-- Release v0.3.15
-
-### Enhance
+### 💼 Other
 
 - Make import/export pormpt different
 - Select output file after generation
+
+### ⚙️ Miscellaneous Tasks
+
+- Release v0.3.15
 
 ## [0.3.14] - 2024-09-17
 
@@ -135,6 +159,22 @@ All notable changes to this project will be documented in this file.
 - Support new type of HWND inner
 - Build with `opencc` disabled
 - Build with export-lyric/import-lyric disabled
+
+### 💼 Other
+
+- *(deps)* Bump serde_json from 1.0.118 to 1.0.119 in the serde group (#244)
+- *(deps)* Bump openssl from 0.10.64 to 0.10.66 (#246)
+- *(deps)* Bump serde_json from 1.0.120 to 1.0.121 in the serde group (#247)
+- *(deps)* Bump tokio from 1.39.1 to 1.39.2 (#248)
+- *(deps)* Bump orhun/git-cliff-action from 3 to 4 (#257)
+- *(deps)* Bump rust_decimal from 1.35.0 to 1.36.0 (#256)
+- *(deps)* Bump reqwest from 0.12.5 to 0.12.7 (#255)
+- *(deps)* Bump gettext-rs from 0.7.0 to 0.7.1 (#254)
+- *(deps)* Bump opencc-rust from 1.1.18 to 1.1.19 (#253)
+- *(deps)* Bump the serde group with 2 updates (#252)
+- Dedup import-lyric
+- Enable export-lyric for win build [ci skip]
+- Update locale for 0.3.14
 
 ### 🚜 Refactor
 
@@ -155,28 +195,6 @@ All notable changes to this project will be documented in this file.
 - Disable unused warn
 - *(dep)* Bump dependencies
 - Release v0.3.14
-
-### Build
-
-- *(deps)* Bump serde_json from 1.0.118 to 1.0.119 in the serde group (#244)
-- *(deps)* Bump openssl from 0.10.64 to 0.10.66 (#246)
-- *(deps)* Bump serde_json from 1.0.120 to 1.0.121 in the serde group (#247)
-- *(deps)* Bump tokio from 1.39.1 to 1.39.2 (#248)
-- *(deps)* Bump orhun/git-cliff-action from 3 to 4 (#257)
-- *(deps)* Bump rust_decimal from 1.35.0 to 1.36.0 (#256)
-- *(deps)* Bump reqwest from 0.12.5 to 0.12.7 (#255)
-- *(deps)* Bump gettext-rs from 0.7.0 to 0.7.1 (#254)
-- *(deps)* Bump opencc-rust from 1.1.18 to 1.1.19 (#253)
-- *(deps)* Bump the serde group with 2 updates (#252)
-- Enable export-lyric for win build [ci skip]
-
-### Enhance
-
-- Dedup import-lyric
-
-### I18n
-
-- Update locale for 0.3.14
 
 ## [0.3.13] - 2024-06-27
 
@@ -212,6 +230,14 @@ All notable changes to this project will be documented in this file.
 
 ## [0.3.11] - 2024-06-06
 
+### 💼 Other
+
+- *(deps)* Bump async-channel from 2.2.1 to 2.3.1
+- *(deps)* Bump anyhow from 1.0.82 to 1.0.86
+- *(deps)* Bump the serde group with 2 updates
+- *(deps)* Bump mimalloc from 0.1.41 to 0.1.42
+- *(deps)* Bump toml_edit from 0.22.12 to 0.22.13
+
 ### 📚 Documentation
 
 - *(install)* User-fiendly version (#240)
@@ -219,14 +245,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.3.11
-
-### Build
-
-- *(deps)* Bump async-channel from 2.2.1 to 2.3.1
-- *(deps)* Bump anyhow from 1.0.82 to 1.0.86
-- *(deps)* Bump the serde group with 2 updates
-- *(deps)* Bump mimalloc from 0.1.41 to 0.1.42
-- *(deps)* Bump toml_edit from 0.22.12 to 0.22.13
 
 ## [0.3.10] - 2024-05-30
 
@@ -245,6 +263,11 @@ All notable changes to this project will be documented in this file.
 - *(test)* Do not test time
 - *(windows)* Auto connect to active player
 
+### 💼 Other
+
+- Workaround for musicfox v4.4.0 [ci skip]
+- Enable import lyric feature for windows
+
 ### 📚 Documentation
 
 - *(readme)* Intro musicfox, TUI music player supports SMTC [ci skip]
@@ -253,19 +276,16 @@ All notable changes to this project will be documented in this file.
 
 - Release v0.3.9
 
-### Build
-
-- Enable import lyric feature for windows
-
-### Enhance
-
-- Workaround for musicfox v4.4.0 [ci skip]
-
 ## [0.3.8] - 2024-04-29
 
 ### 🚀 Features
 
 - Import local lrc in tray & csd menu
+
+### 💼 Other
+
+- Do not strip binary by default [ci skip]
+- Translate 'import lyric' & translated/original lyric
 
 ### 📚 Documentation
 
@@ -274,14 +294,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.3.8
-
-### Build
-
-- Do not strip binary by default [ci skip]
-
-### I18n
-
-- Translate 'import lyric' & translated/original lyric
 
 ## [0.3.7] - 2024-04-29
 
@@ -308,6 +320,10 @@ All notable changes to this project will be documented in this file.
 - Disable local lrc hint on `enable-local-lyric=false`
 - *(typo)* Import-lrc -> import-lyric
 
+### 💼 Other
+
+- Migrate to ksni 0.2.2
+
 ### 🚜 Refactor
 
 - Store dbus connection instead of gapplication
@@ -324,10 +340,6 @@ All notable changes to this project will be documented in this file.
 - Add archlinuxcn in installation guide
 - Release v0.3.6
 
-### Build
-
-- Migrate to ksni 0.2.2
-
 ## [0.3.5] - 2024-04-25
 
 ### 🚀 Features
@@ -335,13 +347,13 @@ All notable changes to this project will be documented in this file.
 - Reload lyric from cache
 - Emit NewLyricCache signal on lyric cache update
 
+### 💼 Other
+
+- *(test)* Set profile.test.debug a boolean
+
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.3.5
-
-### Build
-
-- *(test)* Set profile.test.debug a boolean
 
 ## [0.3.4] - 2024-04-25
 
@@ -367,16 +379,16 @@ All notable changes to this project will be documented in this file.
 - *(readme)* Broken link of desktop file
 - Enum tuple variant cannot be destrcucted by tuple matching
 
+### 💼 Other
+
+- *(tray)* Do not flood start_time on smtc
+
 ### ⚙️ Miscellaneous Tasks
 
 - Make extracting values from tuples more readable
 - Use for loop to refactor entries appending in imp.vbox
 - Use for loop to refactor items appending in ui_section & play_section
 - Release v0.3.2
-
-### Log
-
-- *(tray)* Do not flood start_time on smtc
 
 ## [0.3.1] - 2024-04-24
 
@@ -403,6 +415,11 @@ All notable changes to this project will be documented in this file.
 - Set titlebar before set decorated
 - *(ci)* New schema path
 
+### 💼 Other
+
+- Mpris position delay
+- Set time diff log level to TRACE so we will not flood debug log
+
 ### 🚜 Refactor
 
 - Pass WeakRef<Window> to register_sync_task
@@ -419,11 +436,6 @@ All notable changes to this project will be documented in this file.
 ### ◀️ Revert
 
 - "Translate display modes"
-
-### Log
-
-- Mpris position delay
-- Set time diff log level to TRACE so we will not flood debug log
 
 ## [0.2.21] - 2024-04-23
 
@@ -442,6 +454,10 @@ All notable changes to this project will be documented in this file.
 
 ## [0.2.20] - 2024-04-21
 
+### 💼 Other
+
+- Remove git dependencies
+
 ### 📚 Documentation
 
 - *(changelog)* Update changelog
@@ -449,10 +465,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.2.20
-
-### Build
-
-- Remove git dependencies
 
 ## [0.2.19] - 2024-04-17
 
@@ -467,6 +479,14 @@ All notable changes to this project will be documented in this file.
 - Underscore not showing in display mode menu
 - *(i18n)* Load i18n on windows
 
+### 💼 Other
+
+- *(windows)* Add build script
+- Fine-tune fuzzy match factor
+- Make fuzzy-match weight more than length based match
+- Apply alias for artist name on `netease`
+- Enable i18n for msvc build
+
 ### 📚 Documentation
 
 - *(changelog)* Update changelog
@@ -476,17 +496,6 @@ All notable changes to this project will be documented in this file.
 
 - Bump dependencies
 - Release v0.2.19
-
-### Build
-
-- *(windows)* Add build script
-- Enable i18n for msvc build
-
-### Enhance
-
-- Fine-tune fuzzy match factor
-- Make fuzzy-match weight more than length based match
-- Apply alias for artist name on `netease`
 
 ## [0.2.18] - 2024-04-14
 
@@ -498,6 +507,10 @@ All notable changes to this project will be documented in this file.
 
 - Set paused as false after resumed to playing
 
+### 💼 Other
+
+- Print control status at trace level
+
 ### 📚 Documentation
 
 - *(changelog)* Update changelog
@@ -505,10 +518,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.2.18
-
-### Log
-
-- Print control status at trace level
 
 ## [0.2.17] - 2024-04-09
 
@@ -520,6 +529,10 @@ All notable changes to this project will be documented in this file.
 
 - Gtk4 freezes on `Window::close` on windows
 
+### 💼 Other
+
+- Support LastUpdateTime on windows
+
 ### 📚 Documentation
 
 - *(readme)* Update missing translation
@@ -528,10 +541,6 @@ All notable changes to this project will be documented in this file.
 
 - Switch to upstream `tray-icon`
 - Release v0.2.17
-
-### Enhance
-
-- Support LastUpdateTime on windows
 
 ## [0.2.16] - 2024-04-08
 
@@ -543,6 +552,11 @@ All notable changes to this project will be documented in this file.
 
 - Feature gate for unix should be `cfg(unix)`
 
+### 💼 Other
+
+- Add icon for win32 build
+- *(deps)* Bump h2 from 0.4.3 to 0.4.4
+
 ### 📚 Documentation
 
 - *(readme)* The only compatible player on windows
@@ -552,11 +566,6 @@ All notable changes to this project will be documented in this file.
 
 - *(test)* Cleanup unused imports
 - Release v0.2.16
-
-### Build
-
-- Add icon for win32 build
-- *(deps)* Bump h2 from 0.4.3 to 0.4.4
 
 ## [0.2.15] - 2024-04-03
 
@@ -591,6 +600,16 @@ All notable changes to this project will be documented in this file.
 - Duplicated import
 - Do workarounds for windows-rs bug
 
+### 💼 Other
+
+- *(rpm)* Packit is no longer needed [ci skip]
+- Reduce binary size
+- *(deps)* Bump documented from 0.3.0 to 0.4.0
+- *(deps)* Bump actions/checkout from 3 to 4
+- *(deps)* Bump orhun/git-cliff-action from 2 to 3
+- *(deps)* Bump actions/upload-artifact from 3 to 4
+- Make gettext, openssl, journald optional
+
 ### 🚜 Refactor
 
 - Use `bind_shortcut` in switch-passthrough
@@ -616,22 +635,17 @@ All notable changes to this project will be documented in this file.
 
 - Vendored -> openssl
 
-### Build
-
-- *(rpm)* Packit is no longer needed [ci skip]
-- Reduce binary size
-- *(deps)* Bump documented from 0.3.0 to 0.4.0
-- *(deps)* Bump actions/checkout from 3 to 4
-- *(deps)* Bump orhun/git-cliff-action from 2 to 3
-- *(deps)* Bump actions/upload-artifact from 3 to 4
-- Make gettext, openssl, journald optional
-
 ## [0.2.13] - 2024-03-23
 
 ### 🚀 Features
 
 - Fix secondary lyric will not end
 - Blacklist players by name/identity
+
+### 💼 Other
+
+- *(deps)* Bump mio from 0.8.10 to 0.8.11
+- *(dep)* Update reqwest to 0.12
 
 ### ⚙️ Miscellaneous Tasks
 
@@ -641,17 +655,16 @@ All notable changes to this project will be documented in this file.
 
 - "Update README.md"
 
-### Build
-
-- *(deps)* Bump mio from 0.8.10 to 0.8.11
-- *(dep)* Update reqwest to 0.12
-
 ## [Setup] - 2024-03-01
 
 ### 🚀 Features
 
 - Select labels by origin/translation in theme
 - Add theme no-background [ci skip]
+
+### 💼 Other
+
+- Replace extension with PathBuf::set_extension
 
 ### 🚜 Refactor
 
@@ -671,10 +684,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Fix missing bracket
-
-### Enhance
-
-- Replace extension with PathBuf::set_extension
 
 ## [0.2.12] - 2024-02-25
 
@@ -703,6 +712,10 @@ All notable changes to this project will be documented in this file.
 - Hsl color format
 - Show_both mode place origin to above if no translation
 
+### 💼 Other
+
+- Switch-passthrough in tray-icon without restart
+
 ### 🚜 Refactor
 
 - Use `clone!` macro rather than calling upgrade/downgrade manually
@@ -723,10 +736,6 @@ All notable changes to this project will be documented in this file.
 - Disable changelog on tag due to shitty failure [ci skip]
 - Bump dependencies
 - Release v0.2.11
-
-### Enhance
-
-- Switch-passthrough in tray-icon without restart
 
 ## [0.2.10] - 2024-02-21
 
@@ -767,6 +776,12 @@ All notable changes to this project will be documented in this file.
 - Show icons on tray-icon menu
 - [**breaking**] Set lyric align mode on run time
 
+### 💼 Other
+
+- Translate length to 时长
+- Translate display_mode
+- Translate lyric align
+
 ### 📚 Documentation
 
 - *(changelog)* Update changelog
@@ -777,12 +792,6 @@ All notable changes to this project will be documented in this file.
 - Remove invalid github template
 - Clean up theme comments
 - Release v0.2.9
-
-### I18n
-
-- Translate length to 时长
-- Translate display_mode
-- Translate lyric align
 
 ## [0.2.8] - 2024-02-20
 
@@ -796,6 +805,13 @@ All notable changes to this project will be documented in this file.
 
 - Changelog CI need write permission
 - Incomplete i18n in menu
+
+### 💼 Other
+
+- *(rpm)* Add icon
+- Make global theme presets optional
+- Add translation for Simplefied Chinese
+- *(rpm)* Package with i18n files
 
 ### 🚜 Refactor
 
@@ -823,16 +839,6 @@ All notable changes to this project will be documented in this file.
 - Remove unnessacary use of Arc<dyn LyricProvider>
 - Release v0.2.8
 
-### Build
-
-- *(rpm)* Add icon
-- Make global theme presets optional
-- *(rpm)* Package with i18n files
-
-### I18n
-
-- Add translation for Simplefied Chinese
-
 ## [0.2.7] - 2024-02-19
 
 ### 🚀 Features
@@ -841,18 +847,15 @@ All notable changes to this project will be documented in this file.
 - Fuzzy-match lyrics with Sorensen-Dice coefficient
 - Skip fuzzy-match if we got only title in metadata
 
+### 💼 Other
+
+- Remove unnessacary global variable for PlayerId's
+- Log detailed likelihood with trace-level
+- Migrate to better dice-coefficient lib
+
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.2.7
-
-### Enhance
-
-- Remove unnessacary global variable for PlayerId's
-- Migrate to better dice-coefficient lib
-
-### Log
-
-- Log detailed likelihood with trace-level
 
 ## [0.2.6] - 2024-02-18
 
@@ -867,6 +870,10 @@ All notable changes to this project will be documented in this file.
 
 - Missing feature gate for re-export in sync
 
+### 💼 Other
+
+- Impl real tray-icon functions
+
 ### 🚜 Refactor
 
 - Remove repeated function prefix
@@ -874,10 +881,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.2.6
-
-### Todo
-
-- Impl real tray-icon functions
 
 ## [0.2.5] - 2024-02-18
 
@@ -922,6 +925,15 @@ All notable changes to this project will be documented in this file.
 - Remove `hide_label_on_empty_text = false` support
 - Do not show lyric on `Stopped` status
 
+### 💼 Other
+
+- *(logo)* Make logo not so shining in dark background [ci skip]
+- *(logo)* White shade for text and logo
+- Make tray-icon feature optional
+- Log reveiced action event
+- Rename feature to 'action-event' rather than tray-icon
+- Add optional ksni dep
+
 ### 🚜 Refactor
 
 - Rename AppAction to PlayAction
@@ -944,21 +956,6 @@ All notable changes to this project will be documented in this file.
 
 - *(dep)* Migrate to gtk4-rs 0.8.0
 - Release 0.2.4
-
-### Build
-
-- Make tray-icon feature optional
-- Rename feature to 'action-event' rather than tray-icon
-- Add optional ksni dep
-
-### Log
-
-- Log reveiced action event
-
-### Other
-
-- *(logo)* Make logo not so shining in dark background [ci skip]
-- *(logo)* White shade for text and logo
 
 ## [0.2.3] - 2024-02-13
 
@@ -1003,16 +1000,21 @@ All notable changes to this project will be documented in this file.
 
 - QQMusic::init should panic on `Err()` rather than `Ok()`
 
+### 💼 Other
+
+- Add ability to disable tests require network
+
 ### ⚙️ Miscellaneous Tasks
 
 - Test qqmusic provider initializing
 - Release `v0.2.2`
 
-### Build
-
-- Add ability to disable tests require network
-
 ## [0.2.1] - 2024-02-08
+
+### 💼 Other
+
+- *(ui)* Drop `SIGUSR` control support
+- Improve test build time
 
 ### 🚜 Refactor
 
@@ -1040,14 +1042,6 @@ All notable changes to this project will be documented in this file.
 - Remove unused import
 - Run real test in CI
 - Release 0.2.1
-
-### Breaking
-
-- *(ui)* Drop `SIGUSR` control support
-
-### Build
-
-- Improve test build time
 
 ## [0.2.0] - 2024-02-08
 
@@ -1125,6 +1119,38 @@ All notable changes to this project will be documented in this file.
 - Ignore invalid LRC lines
 - Override user theme
 - Hint support for musicfox
+
+### 💼 Other
+
+- Query play status and sync on update
+- Fix not fetching lyrics
+- Remote/master
+- Label alignment
+- Adjust layout about switch player
+- Switch-click-through-shortcut
+- Direct id support for YesPlayMusic
+- Do not copy template themes
+- Ship with a generated template is useless
+- Save GTK+ CSD state
+- Impl search & fetch_lyric
+- Disable QQMusic source by default
+- Trim lyrics on set
+- *(ui)* Set Align::Start for column entries
+- *(ui)* Better layout for search_window
+- Log to journalctld
+- Set resizeable for title, singer and album
+- Asynchronously fetch lyric
+- *(ui)* Distingush label for whether lyrics were cached
+- Apply Mutex<()> lock for update_lyrics
+- Album+title for qqmusic
+- *(lyric/qqmusic)* Handle -1901 error
+- Fix mpris player connect
+- Use an external build system
+- Info - player hint
+- Log errors on local lyric loading
+- Let install to make directory
+- *(rpm)* Package LICENSE and README
+- *(rpm)* Fix install
 
 ### 🚜 Refactor
 
@@ -1214,58 +1240,5 @@ All notable changes to this project will be documented in this file.
 - *(doc)* Update doc for youtube-music [ci skip]
 - *(doc)* Add `musicfox`, a TUI based music player [ci skip]
 - Release 0.2.0
-
-### Build
-
-- Let install to make directory
-- *(rpm)* Package LICENSE and README
-- *(rpm)* Fix install
-
-### Config
-
-- Label alignment
-
-### Enhance
-
-- Adjust layout about switch player
-- Direct id support for YesPlayMusic
-- Do not copy template themes
-- Ship with a generated template is useless
-- Save GTK+ CSD state
-- Trim lyrics on set
-- *(ui)* Set Align::Start for column entries
-- *(ui)* Better layout for search_window
-- Log to journalctld
-- Asynchronously fetch lyric
-- *(ui)* Distingush label for whether lyrics were cached
-- Apply Mutex<()> lock for update_lyrics
-- Album+title for qqmusic
-- *(lyric/qqmusic)* Handle -1901 error
-
-### Hotfix
-
-- Disable QQMusic source by default
-- Fix mpris player connect
-
-### Log
-
-- Info - player hint
-- Log errors on local lyric loading
-
-### Merge
-
-- Remote/master
-- Switch-click-through-shortcut
-
-### Search
-
-- Set resizeable for title, singer and album
-
-### Todo
-
-- Query play status and sync on update
-- Fix not fetching lyrics
-- Impl search & fetch_lyric
-- Use an external build system
 
 <!-- generated by git-cliff -->

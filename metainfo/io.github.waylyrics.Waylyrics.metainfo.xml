@@ -38,6 +38,20 @@
   </screenshots>
 
   <releases>
+    <release version="0.3.19" date="2024-12-03">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.19</url>
+        <description>
+          <p>Features</p>
+            <ul>
+              <li>Dark/Light theme auto-switch</li>
+              <li>Multi-montor setup</li>
+            </ul>
+          <p>Bug Fixes</p>
+            <ul>
+              <li>Set cookies for QQMusicApi</li>
+            </ul>
+        </description>
+    </release>
     <release version="0.3.18" date="2024-11-11">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.18</url>
         <description>
