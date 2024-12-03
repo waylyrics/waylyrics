@@ -38,7 +38,7 @@ rust_decimal_macros = "1.36.0"
 url = "2.5.4"
 
 # ui
-gtk = { version = "0.9.3", package = "gtk4" }
+gtk = { version = "0.9.4", package = "gtk4" }
 glib-macros = "0.20.5"
 dark-light = { git = "https://github.com/frewsxcv/rust-dark-light.git", rev = "3eb3e93dd0fa30733c3e93082dd9517fb580ae95" }
 # Required by async stream
@@ -52,8 +52,8 @@ lrc-nom = "0.3.0"
 
 # logging
 tracing = "0.1.41"
-tracing-journald = { version = "0.3.0", optional = true }
-tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+tracing-journald = { version = "0.3.1", optional = true }
+tracing-subscriber = { version = "0.3.19", features = ["env-filter"] }
 
 # cache
 md5 = "0.7.0"
@@ -69,11 +69,11 @@ hex-simd = { version = "0.8.0", optional = true, default-features = false }
 
 # error handling
 anyhow = "1.0.93"
-thiserror = "2.0.2"
+thiserror = "2.0.4"
 
 # networking
 async-trait = "0.1.83"
-tokio = { version = "1.41.1", features = [
+tokio = { version = "1.42.0", features = [
     "macros",
     "net",
     "time",
