@@ -51,5 +51,6 @@ pub fn acquire_instance_name() -> Result<()> {
 
 #[cfg(not(unix))]
 pub fn acquire_instance_name() -> Result<()> {
-    let _ = waylyrics::INSTANCE_NAME.set(String::from(waylyrics::APP_ID_FIXED));
+    let _ = crate::INSTANCE_NAME.set(String::from(crate::APP_ID_FIXED));
+    Ok(())
 }
