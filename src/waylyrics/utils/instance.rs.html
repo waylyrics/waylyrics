@@ -53,7 +53,8 @@
 <a href="#52" id="52">52</a>
 <a href="#53" id="53">53</a>
 <a href="#54" id="54">54</a>
-<a href="#55" id="55">55</a></pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Result;
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a></pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Result;
 
 <span class="attr">#[cfg(unix)]
 </span><span class="kw">pub fn </span>acquire_instance_name() -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
@@ -106,6 +107,7 @@
 
 <span class="attr">#[cfg(not(unix))]
 </span><span class="kw">pub fn </span>acquire_instance_name() -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
-    <span class="kw">let _ </span>= waylyrics::INSTANCE_NAME.set(String::from(waylyrics::APP_ID_FIXED));
+    <span class="kw">let _ </span>= <span class="kw">crate</span>::INSTANCE_NAME.set(String::from(<span class="kw">crate</span>::APP_ID_FIXED));
+    <span class="prelude-val">Ok</span>(())
 }
 </code></pre></div></section></main></body></html>
