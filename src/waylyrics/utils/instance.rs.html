@@ -54,18 +54,35 @@
 <a href="#53" id="53">53</a>
 <a href="#54" id="54">54</a>
 <a href="#55" id="55">55</a>
-<a href="#56" id="56">56</a></pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Result;
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a></pre></div><pre class="rust"><code><span class="kw">use </span>anyhow::Result;
 
 <span class="attr">#[cfg(unix)]
 </span><span class="kw">pub fn </span>acquire_instance_name() -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+    <span class="kw">use </span>tracing::info;
+
     <span class="attr">#[cfg(feature = <span class="string">"multi-monitor"</span>)]
     </span>{
-        <span class="kw">use </span>std::hash::Hasher;
         <span class="kw">use </span>std::time::Duration;
 
         <span class="kw">use </span>dbus::blocking::Connection;
-        <span class="kw">use </span>gtk::glib::ffi::g_random_int_range;
-        <span class="kw">use </span>hex_simd::AsOut;
 
         <span class="kw">let </span>conn = Connection::new_session()<span class="question-mark">?</span>;
         <span class="kw">let </span>proxy = conn.with_proxy(
@@ -83,18 +100,13 @@
         <span class="kw">if </span>!waylyrics_instances.contains(<span class="kw">crate</span>::APP_ID_FIXED) {
             <span class="kw">let _ </span>= <span class="kw">crate</span>::INSTANCE_NAME.set(String::from(<span class="kw">crate</span>::APP_ID_FIXED));
         } <span class="kw">else </span>{
-            <span class="kw">let </span>random_num = <span class="kw">unsafe </span>{ g_random_int_range(i32::MIN, i32::MAX) };
-            <span class="kw">let </span><span class="kw-2">mut </span>hasher = ahash::AHasher::default();
-            hasher.write_i32(random_num);
-            <span class="kw">let </span>hash = hasher.finish();
-            <span class="kw">let </span><span class="kw-2">mut </span>out: Vec&lt;u8&gt; = <span class="macro">vec!</span>[<span class="number">0</span>; <span class="number">16</span>];
-            <span class="kw">let </span>hash_str = hex_simd::encode_as_str(
-                <span class="kw-2">&amp;</span>hash.to_ne_bytes(),
-                out.as_out(),
-                hex_simd::AsciiCase::Lower,
-            );
-            <span class="kw">let </span>instance_name = <span class="macro">format!</span>(<span class="string">"{}-{}"</span>, <span class="kw">crate</span>::APP_ID_FIXED, hash_str);
-            <span class="kw">let _ </span>= <span class="kw">crate</span>::INSTANCE_NAME.set(instance_name);
+            <span class="kw">loop </span>{
+                <span class="kw">let </span>instance_name = gen_instance_name();
+                <span class="kw">if </span>!waylyrics_instances.contains(instance_name.as_str()) {
+                    <span class="kw">let _ </span>= <span class="kw">crate</span>::INSTANCE_NAME.set(instance_name);
+                    <span class="kw">break</span>;
+                }
+            }
         }
     }
     <span class="attr">#[cfg(not(feature = <span class="string">"multi-monitor"</span>))]
@@ -102,12 +114,36 @@
         <span class="kw">let _ </span>= <span class="kw">crate</span>::INSTANCE_NAME.set(String::from(<span class="kw">crate</span>::APP_ID_FIXED));
     }
 
+    <span class="macro">info!</span>(<span class="string">"instance name: {}"</span>, <span class="kw">crate</span>::INSTANCE_NAME.get().unwrap());
     <span class="prelude-val">Ok</span>(())
 }
 
 <span class="attr">#[cfg(not(unix))]
 </span><span class="kw">pub fn </span>acquire_instance_name() -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
     <span class="kw">let _ </span>= <span class="kw">crate</span>::INSTANCE_NAME.set(String::from(<span class="kw">crate</span>::APP_ID_FIXED));
+    <span class="macro">info!</span>(<span class="string">"instance name: {}"</span>, <span class="kw">crate</span>::INSTANCE_NAME.get().unwrap());
     <span class="prelude-val">Ok</span>(())
+}
+
+<span class="attr">#[cfg(feature = <span class="string">"multi-monitor"</span>)]
+</span><span class="kw">fn </span>gen_instance_name() -&gt; String {
+    <span class="kw">use </span>std::hash::Hasher;
+
+    <span class="kw">use </span>gtk::glib::ffi::g_random_int_range;
+    <span class="kw">use </span>hex_simd::AsOut;
+
+    <span class="kw">let </span>random_num = <span class="kw">unsafe </span>{ g_random_int_range(i32::MIN, i32::MAX) };
+    <span class="kw">let </span><span class="kw-2">mut </span>hasher = ahash::AHasher::default();
+    hasher.write_i32(random_num);
+    <span class="kw">let </span>hash = hasher.finish();
+    <span class="kw">let </span><span class="kw-2">mut </span>out: Vec&lt;u8&gt; = <span class="macro">vec!</span>[<span class="number">0</span>; <span class="number">16</span>];
+    <span class="kw">let </span>hash_str = hex_simd::encode_as_str(
+        <span class="kw-2">&amp;</span>hash.to_ne_bytes(),
+        out.as_out(),
+        hex_simd::AsciiCase::Lower,
+    );
+    <span class="kw">let </span>(hash_str, <span class="kw">_</span>) = hash_str.split_at(hash_str.len() / <span class="number">2</span>);
+    <span class="kw">let </span>instance_name = <span class="macro">format!</span>(<span class="string">"{}._{}"</span>, <span class="kw">crate</span>::APP_ID_FIXED, hash_str);
+    instance_name
 }
 </code></pre></div></section></main></body></html>
