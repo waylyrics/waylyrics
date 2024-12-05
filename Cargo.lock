@@ -4388,6 +4388,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "tracing-panic"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7bf1298a179837099f9309243af3b554e840f7f67f65e9f55294913299bd4cc5"
+dependencies = [
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "tracing-subscriber"
 version = "0.3.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4771,6 +4781,7 @@ dependencies = [
  "toml_edit 0.22.22",
  "tracing",
  "tracing-journald",
+ "tracing-panic",
  "tracing-subscriber",
  "tray-icon",
  "url",

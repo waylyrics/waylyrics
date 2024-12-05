@@ -68,6 +68,8 @@ fn main() -> Result<glib::ExitCode> {
     #[cfg(not(feature = "journald"))]
     registry.init();
 
+    std::panic::set_hook(Box::new(tracing_panic::panic_hook));
+
     #[cfg(feature = "i18n")]
     match i18n_result {
         Err(e) => log::error!("failed to bind textdomain: {e}"),
