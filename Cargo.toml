@@ -116,7 +116,6 @@ mimalloc = ["dep:mimalloc"]
 vendored = ["dbus/vendored"]
 action-event = ["dep:async-channel"]
 offline-test = []
-hex-simd = ["dep:hex-simd"]
 
 [target.'cfg(unix)'.dependencies]
 # MPRIS integration
