@@ -108,6 +108,9 @@ pub struct Config {
     pub triggers: Triggers,
 
     /// QQMusic config
+    ///
+    /// With `cookies` as `name=value; name1=value1;` format,
+    /// waylyrics will set cookies for the QQMusicApi service at startup.
     pub qqmusic: QQMusicConfig,
 
     /// Color scheme used for Gtk interface -- light, dark or auto (use system)
@@ -120,7 +123,7 @@ pub struct Config {
 }
 
 /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, DocumentedFields)]
 #[serde(default)]
 pub struct Triggers {
     /// whether to show GTK+ CSD

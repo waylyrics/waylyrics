@@ -1,9 +1,8 @@
 use anyhow::Result;
+use tracing::info;
 
 #[cfg(unix)]
 pub fn acquire_instance_name() -> Result<()> {
-    use tracing::info;
-
     #[cfg(feature = "multi-monitor")]
     {
         use std::time::Duration;
@@ -44,14 +43,7 @@ pub fn acquire_instance_name() -> Result<()> {
     Ok(())
 }
 
-#[cfg(not(unix))]
-pub fn acquire_instance_name() -> Result<()> {
-    let _ = crate::INSTANCE_NAME.set(String::from(crate::APP_ID_FIXED));
-    info!("instance name: {}", crate::INSTANCE_NAME.get().unwrap());
-    Ok(())
-}
-
-#[cfg(feature = "multi-monitor")]
+#[cfg(all(feature = "multi-monitor", unix))]
 fn gen_instance_name() -> String {
     use std::hash::Hasher;
 
@@ -71,4 +63,11 @@ fn gen_instance_name() -> String {
     let (hash_str, _) = hash_str.split_at(hash_str.len() / 2);
     let instance_name = format!("{}._{}", crate::APP_ID_FIXED, hash_str);
     instance_name
+}
+
+#[cfg(not(unix))]
+pub fn acquire_instance_name() -> Result<()> {
+    let _ = crate::INSTANCE_NAME.set(String::from(crate::APP_ID_FIXED));
+    info!("instance name: {}", crate::INSTANCE_NAME.get().unwrap());
+    Ok(())
 }

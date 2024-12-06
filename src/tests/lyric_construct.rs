@@ -1,9 +1,10 @@
-use std::time::Duration;
-
 #[test]
 #[cfg(feature = "export-lyric")]
 fn make_lrc_line() {
+    use std::time::Duration;
+
     use crate::sync::actions::utils::make_lrc_line;
+
     assert_eq!(
         make_lrc_line("你好", Duration::from_secs(61)),
         "[01:01.000]你好".to_string()

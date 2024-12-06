@@ -82,8 +82,8 @@ tokio = { version = "1.42.0", features = [
 ] }
 reqwest = { version = "0.12.9" }
 
-# async event
-async-channel = { version = "2.3.1", optional = true }
+# event
+async-channel = { version = "2.3.1" }
 
 # i18n
 gettext-rs = { version = "0.7.2", features = [
@@ -115,7 +115,7 @@ multi-monitor = ["dep:hex-simd"]
 
 mimalloc = ["dep:mimalloc"]
 vendored = ["dbus/vendored"]
-action-event = ["dep:async-channel"]
+action-event = []
 offline-test = []
 
 [target.'cfg(unix)'.dependencies]
