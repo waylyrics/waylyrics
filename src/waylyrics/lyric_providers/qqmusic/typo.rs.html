@@ -12,18 +12,40 @@
 <a href="#11" id="11">11</a>
 <a href="#12" id="12">12</a>
 <a href="#13" id="13">13</a>
-<a href="#14" id="14">14</a></pre></div><pre class="rust"><code><span class="kw">use </span>serde::{Deserialize, Serialize};
+<a href="#14" id="14">14</a>
+<a href="#15" id="15">15</a>
+<a href="#16" id="16">16</a>
+<a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a></pre></div><pre class="rust"><code><span class="kw">use </span>documented::DocumentedFields;
+<span class="kw">use </span>serde::{Deserialize, Serialize};
 
-<span class="attr">#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+<span class="attr">#[derive(Debug, Clone, Serialize, Deserialize, DocumentedFields)]
+#[serde(default)]
 </span><span class="kw">pub struct </span>QQMusicConfig {
     <span class="doccomment">/// QQMusicApi api url
     ///
     /// example: "http://127.0.0.1:11451"
-    </span><span class="kw">pub </span>api_base_url: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    </span><span class="kw">pub </span>api_base_url: String,
 
     <span class="doccomment">/// QQMusic Cookies
     ///
     /// WARN: this will apply to the whole QQMusicApi instance
     </span><span class="kw">pub </span>cookies: <span class="prelude-ty">Option</span>&lt;String&gt;,
+}
+
+<span class="kw">impl </span>Default <span class="kw">for </span>QQMusicConfig {
+    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            api_base_url: <span class="string">"http://127.0.0.1:3300"</span>.into(),
+            cookies: Default::default(),
+        }
+    }
 }
 </code></pre></div></section></main></body></html>

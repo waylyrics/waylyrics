@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["append_comments"]};
+window.SIDEBAR_ITEMS = {"fn":["append_comments","comment_sub_struct","fold_doc"]};

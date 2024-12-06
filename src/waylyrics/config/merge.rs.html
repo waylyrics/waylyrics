@@ -28,34 +28,80 @@
 <a href="#27" id="27">27</a>
 <a href="#28" id="28">28</a>
 <a href="#29" id="29">29</a>
-<a href="#30" id="30">30</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt::Write;
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
+<a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
+<a href="#35" id="35">35</a>
+<a href="#36" id="36">36</a>
+<a href="#37" id="37">37</a>
+<a href="#38" id="38">38</a>
+<a href="#39" id="39">39</a>
+<a href="#40" id="40">40</a>
+<a href="#41" id="41">41</a>
+<a href="#42" id="42">42</a>
+<a href="#43" id="43">43</a>
+<a href="#44" id="44">44</a>
+<a href="#45" id="45">45</a>
+<a href="#46" id="46">46</a>
+<a href="#47" id="47">47</a>
+<a href="#48" id="48">48</a>
+<a href="#49" id="49">49</a>
+<a href="#50" id="50">50</a>
+<a href="#51" id="51">51</a>
+<a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt::Write;
 
 <span class="kw">use </span>anyhow::Result;
 <span class="kw">use </span>documented::DocumentedFields;
-<span class="kw">use </span>toml_edit::DocumentMut;
+<span class="kw">use </span>toml_edit::{DocumentMut, Item, Table};
 
-<span class="kw">use </span><span class="kw">crate</span>::config::Config;
+<span class="kw">use </span><span class="kw">crate</span>::config::{Config, QQMusicConfig, Triggers};
 
 <span class="kw">pub fn </span>append_comments(toml: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;String&gt; {
     <span class="kw">let </span><span class="kw-2">mut </span>new_doc = toml.parse::&lt;DocumentMut&gt;()<span class="question-mark">?</span>;
 
-    <span class="kw">for </span>(<span class="kw-2">mut </span>field, item) <span class="kw">in </span>new_doc.iter_mut() {
-        <span class="kw">if let </span><span class="prelude-val">Ok</span>(doc) = Config::get_field_docs(field.replace(<span class="string">'-'</span>, <span class="string">"_"</span>)) {
-            <span class="kw">let </span>doc = doc
-                .lines()
-                .filter(|s| !s.is_empty())
-                .fold(String::new(), |<span class="kw-2">mut </span>s, l| {
-                    <span class="kw">let _ </span>= <span class="macro">write!</span>(<span class="kw-2">&amp;mut </span>s, <span class="string">"\n# {l}"</span>);
-                    s
-                });
-            <span class="kw">match </span>item {
-                toml_edit::Item::Value(<span class="kw">_</span>) =&gt; field.leaf_decor_mut().set_prefix(doc + <span class="string">"\n"</span>),
-                toml_edit::Item::Table(t) =&gt; t.decor_mut().set_suffix(doc),
-                <span class="kw">_ </span>=&gt; (),
+    comment_sub_struct(new_doc.as_table_mut(), Config::get_field_docs);
+    <span class="prelude-val">Ok</span>(new_doc.to_string())
+}
+
+<span class="kw">fn </span>comment_sub_struct(
+    t: <span class="kw-2">&amp;mut </span>Table,
+    get_field: <span class="kw">fn</span>(String) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, documented::Error&gt;,
+) {
+    <span class="kw">for </span>(<span class="kw-2">mut </span>field, item) <span class="kw">in </span>t.iter_mut() {
+        <span class="kw">let </span><span class="prelude-val">Ok</span>(doc) = get_field(field.replace(<span class="string">'-'</span>, <span class="string">"_"</span>)).map(fold_doc) <span class="kw">else </span>{
+            <span class="kw">continue</span>;
+        };
+
+        <span class="kw">match </span>item {
+            Item::Value(<span class="kw">_</span>) =&gt; field.leaf_decor_mut().set_prefix(doc + <span class="string">"\n"</span>),
+            Item::Table(t) =&gt; {
+                t.decor_mut().set_suffix(doc);
+
+                <span class="kw">match </span>field.get() {
+                    <span class="string">"triggers" </span>=&gt; {
+                        comment_sub_struct(t, Triggers::get_field_docs);
+                    }
+                    <span class="string">"qqmusic" </span>=&gt; {
+                        comment_sub_struct(t, QQMusicConfig::get_field_docs);
+                    }
+                    <span class="kw">_ </span>=&gt; (),
+                }
             }
+            <span class="kw">_ </span>=&gt; {}
         }
     }
+}
 
-    <span class="prelude-val">Ok</span>(new_doc.to_string())
+<span class="kw">fn </span>fold_doc(doc: <span class="kw-2">&amp;</span>str) -&gt; String {
+    doc.lines()
+        .map(str::trim)
+        .filter(|s| !s.is_empty())
+        .fold(String::new(), |<span class="kw-2">mut </span>s, l| {
+            <span class="kw">let _ </span>= <span class="macro">write!</span>(<span class="kw-2">&amp;mut </span>s, <span class="string">"\n# {l}"</span>);
+            s
+        })
 }
 </code></pre></div></section></main></body></html>
