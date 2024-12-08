@@ -171,11 +171,13 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 [osdlyrics]: https://github.com/osdlyrics/osdlyrics
 [desktop_lyric]: https://github.com/Moeweb647252/desktop_lyric
 [lyrica]: https://github.com/chiyuki0325/lyrica
+[lyric-for-musicfox]: https://github.com/SmileYik/lyric-for-musicfox
 
 ### Linux
 
 | 名称                          | 技术栈        | 桌面支持      | 播放器支持 | 备注 |
 | ----------------------------- | ------------- | ------------- | ---------- | ---- |
+| [lyric-for-musicfox]          | Qt/C++        | *             | musicfox   |      |
 | [waybar-netease-music-lyrics] | bash          | wlroots-based | NCM[^0]    |      |
 | [Sunamu]                      | Electron/TS   | X/Xwayland    | MPRIS      |      |
 | [desktop-lyric]               | JavaScript    | GNOME         | MPRIS      |      |
