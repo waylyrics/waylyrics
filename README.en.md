@@ -12,6 +12,7 @@
 </div>
 
 - [Waylyrics](#waylyrics)
+  - [Introduction](#introduction)
   - [Preview](#preview)
     - [Main UI](#main-ui)
     - [Search Lyrics](#search-lyrics)
@@ -32,6 +33,20 @@
   - [Credit](#credit)
   - [License](#license)
 
+
+## Introduction
+
+Waylyrics is a desktop lyrics display application that supports both Linux and Windows.
+
+Key Features:
+- Built with GTK 4
+- Maintains up-to-date dependencies
+- Automatic light/dark theme switching
+- Uses TOML format for configuration files
+- Automatically adds latest comments to configuration files on startup
+- Highly customizable CSS themes with [multiple presets available](themes)
+- Compatible with any player that properly implements MPRIS/SMTC protocol
+- Continuously improved lyrics integration with various music players through community contributions
 
 ## Preview
 
@@ -176,7 +191,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 | Name                          | Stack         | DE/WM         | Player Support     | #   |
 | ----------------------------- | ------------- | ------------- | ------------------ | --- |
-| [lyric-for-musicfox]          | Qt/C++        | *             | musicfox   |      |
+| [lyric-for-musicfox]          | Qt/C++        | *             | musicfox           |     |
 | [waybar-netease-music-lyrics] | bash          | wlroots-based | Any NCM Player[^0] |     |
 | [Sunamu]                      | Electron/TS   | X/Xwayland    | MPRIS              |     |
 | [desktop-lyric]               | JavaScript    | GNOME         | MPRIS              |     |
