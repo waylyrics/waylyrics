@@ -12,6 +12,9 @@
 </div>
 
 - [Waylyrics](#waylyrics)
+  - [Preview](#preview)
+    - [Main UI](#main-ui)
+    - [Search Lyrics](#search-lyrics)
   - [Build/Install](#buildinstall)
   - [Usage](#usage)
   - [Requirement](#requirement)
@@ -28,6 +31,20 @@
     - [Windows](#windows-2)
   - [Credit](#credit)
   - [License](#license)
+
+
+## Preview
+
+### Main UI
+
+> You can hide the decoration by `Ctrl-D` or `Hide Decoration` in tray icon menu.
+
+![Main UI](img/en-cn.png)
+
+### Search Lyrics
+
+![Search Lyrics](img/search-window.jpg)
+
 
 ## Build/Install
 

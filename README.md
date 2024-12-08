@@ -12,6 +12,9 @@
 </div>
 
 - [Waylyrics](#waylyrics)
+  - [界面预览](#界面预览)
+    - [主界面](#主界面)
+    - [搜索歌词](#搜索歌词)
   - [构建/安装](#构建安装)
   - [用法](#用法)
   - [依赖](#依赖)
@@ -28,6 +31,18 @@
     - [Windows](#windows-2)
   - [Credit](#credit)
   - [License](#license)
+
+## 界面预览
+
+### 主界面
+
+> 边框可以隐藏（ctrl-d/托盘菜单->开关边框）
+
+![main ui](img/en-cn.png)
+
+### 搜索歌词
+
+![search lyrics](img/search-window.jpg)
 
 ## 构建/安装
 
