@@ -1,13 +1,15 @@
 # Waylyrics
 
-<p align="center">
-  <img src="img/waylyrics.png" style="height: 30vw"></img>
+<div align="center">
+  <img src="img/waylyrics.png" style="height: 200px; width: auto;"></img>
   <br />
-  <a href="https://t.me/+FWgnE0GRDYZhNjc1">Telegram</a>&nbsp;|&nbsp;
-  <a href="https://matrix.to/#/#waylyrics_x:catgirl.cloud">Matrix</a>
-  <br />
-  <a href="https://www.bilibili.com/video/BV1ap421R7nD" target="blank">功能预览</a>
-</p>
+  <div>
+    <a href="https://t.me/+FWgnE0GRDYZhNjc1"><img src="https://img.shields.io/badge/Join-Telegram-blue.svg?logo=telegram"></a>
+    <a href="https://matrix.to/#/#waylyrics_x:catgirl.cloud"><img src="https://img.shields.io/badge/Join-Matrix-blue.svg?logo=matrix"></a>
+    <br />
+    <a href="https://www.bilibili.com/video/av1555055010/" target="blank"><img src="https://img.shields.io/badge/bilibili-Preview-blue.svg?logo=bilibili"></a>
+  </div>
+</div>
 
 - [Waylyrics](#waylyrics)
   - [构建/安装](#构建安装)
