@@ -1,11 +1,9 @@
-use std::{env::args, process::Command};
+use std::{env::args, mem, process::Command};
 
 use anyhow::Result;
 use async_channel::Sender;
-use tray_icon::{
-    menu::{Menu, MenuEvent, MenuId, MenuItemBuilder},
-    Icon, TrayIconBuilder,
-};
+
+use tray_item::{IconSource, TrayItem};
 
 use crate::{
     app::actions::{UIAction, UI_ACTION},
@@ -13,100 +11,38 @@ use crate::{
     utils::gettext,
 };
 
-const EXIT: &str = "exit";
-const RESTART: &str = "restart";
-const REFETCH_LYRIC: &str = "refetch-lyric";
-const SEARCH_LYRIC: &str = "search-lyric";
-const SWITCH_PASSTHROUGH: &str = "switch-passthrough";
-const SWITCH_DECORATION: &str = "switch-decoration";
-
 pub fn start_tray_service() -> Result<()> {
-    let icon = Icon::from_resource_name("icon0", None)?;
-    let menu = build_tray_menu()?;
-    let tray_icon = TrayIconBuilder::new()
-        .with_tooltip(env!("CARGO_PKG_DESCRIPTION"))
-        .with_icon(icon)
-        .with_menu(Box::new(menu))
-        .build()?;
+    let icon = IconSource::Resource("icon0");
+    let mut tray = TrayItem::new(crate::DEFAULT_TEXT, icon)?;
 
-    std::thread::spawn(menu_event_handler);
-    std::mem::forget(tray_icon);
+    tray.add_menu_item(&gettext("Search lyric"), || {
+        let _ = play_action().send_blocking(PlayAction::SearchLyric);
+    })?;
+    tray.add_menu_item(&gettext("Refetch lyric"), || {
+        let _ = play_action().send_blocking(PlayAction::RefetchLyric);
+    })?;
+    tray.add_menu_item(&gettext("Toggle Decoration"), || {
+        let _ = ui_action().send_blocking(UIAction::SwitchDecoration);
+    })?;
+    tray.add_menu_item(&gettext("Toggle Passthrough"), || {
+        let _ = ui_action().send_blocking(UIAction::SwitchPassthrough);
+    })?;
+    tray.add_menu_item(&gettext("Restart"), || {
+        let _ = Command::new("powershell")
+            .arg("-WindowStyle")
+            .arg("1")
+            .arg("-Command")
+            .arg(format!("sleep 5; start {}", args().next().unwrap()))
+            .spawn();
+        let _ = ui_action().send_blocking(UIAction::Quit);
+    })?;
+    tray.add_menu_item(&gettext("Quit"), || {
+        let _ = ui_action().send_blocking(UIAction::Quit);
+    })?;
+
+    mem::forget(tray);
+
     Ok(())
-}
-
-fn build_tray_menu() -> Result<Menu> {
-    let search_lyric = MenuItemBuilder::new()
-        .text(gettext("Search lyric"))
-        .id(SEARCH_LYRIC.into())
-        .enabled(true)
-        .build();
-    let refetch_lyric = MenuItemBuilder::new()
-        .text(gettext("Refetch lyric"))
-        .id(REFETCH_LYRIC.into())
-        .enabled(true)
-        .build();
-    let switch_decoration = MenuItemBuilder::new()
-        .text(gettext("Toggle Decoration"))
-        .id(SWITCH_DECORATION.into())
-        .enabled(true)
-        .build();
-    let switch_passthrough = MenuItemBuilder::new()
-        .text(gettext("Toggle Passthrough"))
-        .id(SWITCH_PASSTHROUGH.into())
-        .enabled(true)
-        .build();
-    let restart = MenuItemBuilder::new()
-        .text(gettext("Restart"))
-        .id(RESTART.into())
-        .enabled(true)
-        .build();
-    let exit = MenuItemBuilder::new()
-        .text(gettext("Quit"))
-        .id(EXIT.into())
-        .enabled(true)
-        .build();
-
-    Ok(Menu::with_items(&[
-        &search_lyric,
-        &refetch_lyric,
-        &switch_decoration,
-        &switch_passthrough,
-        &restart,
-        &exit,
-    ])?)
-}
-
-fn menu_event_handler() {
-    while let Ok(event) = MenuEvent::receiver().recv() {
-        let MenuId(event) = event.id();
-        match event.as_str() {
-            SEARCH_LYRIC => {
-                let _ = play_action().send_blocking(PlayAction::SearchLyric);
-            }
-            REFETCH_LYRIC => {
-                let _ = play_action().send_blocking(PlayAction::RefetchLyric);
-            }
-            RESTART => {
-                let _ = Command::new("powershell")
-                    .arg("-WindowStyle")
-                    .arg("1")
-                    .arg("-Command")
-                    .arg(format!("sleep 5; start {}", args().next().unwrap()))
-                    .spawn();
-                let _ = ui_action().send_blocking(UIAction::Quit);
-            }
-            EXIT => {
-                let _ = ui_action().send_blocking(UIAction::Quit);
-            }
-            SWITCH_DECORATION => {
-                let _ = ui_action().send_blocking(UIAction::SwitchDecoration);
-            }
-            SWITCH_PASSTHROUGH => {
-                let _ = ui_action().send_blocking(UIAction::SwitchPassthrough);
-            }
-            _ => unreachable!(),
-        }
-    }
 }
 
 fn ui_action() -> &'static Sender<UIAction> {

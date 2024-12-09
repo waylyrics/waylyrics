@@ -104,7 +104,7 @@ default = [
     "i18n-local-lyric",
     "multi-monitor",
 ]
-tray-icon = ["action-event", "dep:ksni", "dep:tray-icon"]
+tray-icon = ["action-event", "dep:ksni", "dep:tray-item"]
 i18n = ["dep:gettext-rs"]
 journald = ["dep:tracing-journald"]
 opencc = ["dep:opencc-rust"]
@@ -127,7 +127,7 @@ ksni = { version = "0.3.1", optional = true, features = [
 mpris = "2.0.1"
 
 [target.'cfg(target_os = "windows")'.dependencies]
-tray-icon = { version = "0.19.2", optional = true }
+tray-item = { version = "0.10.0", optional = true }
 windows = { version = "0.58.0", features = [
     # SMTC
     "Media_Control",
