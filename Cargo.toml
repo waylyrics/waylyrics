@@ -121,7 +121,9 @@ offline-test = []
 [target.'cfg(unix)'.dependencies]
 # MPRIS integration
 dbus = "0.9.7"
-ksni = { version = "0.2.2", optional = true }
+ksni = { version = "0.3.1", optional = true, features = [
+    "async-io",
+], default-features = false }
 mpris = "2.0.1"
 
 [target.'cfg(target_os = "windows")'.dependencies]

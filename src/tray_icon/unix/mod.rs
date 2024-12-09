@@ -5,13 +5,13 @@ use std::{env, process};
 use async_channel::Sender;
 use gtk::glib;
 
-use crate::utils::gettext;
-use ksni::{Tray, TrayService};
+use ksni::{Tray, TrayMethods};
 use rust_decimal::prelude::Zero;
 use strum::IntoEnumIterator;
 
 use crate::app::actions::{UIAction, UI_ACTION};
 use crate::sync::{PlayAction, PLAY_ACTION};
+use crate::utils::gettext;
 
 use crate::config::{Align, LyricDisplayMode};
 use crate::sync::{OsImp, PlayerId, OS};
@@ -239,7 +239,7 @@ impl Tray for TrayIcon {
     }
 }
 
-pub fn start_tray_service() -> Option<()> {
+pub fn start_tray_service() {
     // mpris::PlayerFinder would create a new DBus connection which has 4 matches attached,
     // but in TrayService, the messages matching could never be handled.
     // This would make messages stalling within dbus broker, and might finally make dbus-broker
@@ -250,15 +250,18 @@ pub fn start_tray_service() -> Option<()> {
     // main thread (by glib async runtime), with 2 channels.
     let (req_tx, req_rx) = async_channel::unbounded();
     let (resp_tx, resp_rx) = async_channel::unbounded();
-    let service = TrayService::new(TrayIcon::new(req_tx, resp_rx));
+
     glib::spawn_future_local(async move {
         while req_rx.recv().await.is_ok() {
             let players = OS::list_players();
             resp_tx.send(players).await.unwrap();
         }
     });
-    service.spawn_without_dbus_name();
-    Some(())
+
+    tokio_spawn!(async move {
+        let service = TrayIcon::new(req_tx, resp_rx);
+        let _ = service.spawn_without_dbus_name().await;
+    });
 }
 
 fn ui_action() -> &'static Sender<UIAction> {
