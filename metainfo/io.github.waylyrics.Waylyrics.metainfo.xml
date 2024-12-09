@@ -38,6 +38,21 @@
   </screenshots>
 
   <releases>
+    <release version="0.3.20" date="2024-12-07">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.20</url>
+        <description>
+          <p>Features</p>
+            <ul>
+              <li>Record panic messages to journald</li>
+              <li>Comment fields of sub-table in config.toml</li>
+            </ul>
+          <p>Bug Fixes</p>
+            <ul>
+              <li>Instance name will be valid dbus name</li>
+              <li>Fix a potential crash if generated a existing subname</li>
+            </ul>
+        </description>
+    </release>
     <release version="0.3.19" date="2024-12-03">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.19</url>
         <description>

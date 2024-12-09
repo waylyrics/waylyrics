@@ -26,17 +26,13 @@ pub struct QQMusic;
 
 #[async_trait::async_trait]
 impl super::LyricProvider for QQMusic {
-    fn init(self, base_url: &str) -> Result<()> {
+    fn init(self, config: &str) -> Result<()> {
         let QQMusicConfig {
             api_base_url,
             cookies,
-        } = serde_json::from_str(base_url)?;
+        } = serde_json::from_str(config)?;
 
-        let Some(base_url) = api_base_url else {
-            return Ok(());
-        };
-
-        let base_url: Url = base_url.parse()?;
+        let base_url: Url = api_base_url.parse()?;
         QQMUSIC_API_CLIENT
             .set(Some(QQMusicApi::new(base_url)))
             .map_err(|_| Error::ApiClientInited)?;

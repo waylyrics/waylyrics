@@ -1,15 +1,21 @@
 # Waylyrics
 
-<p align="center">
-  <img src="img/waylyrics.png" style="height: 30vw"></img>
+<div align="center">
+  <img src="img/waylyrics.png" style="height: 200px; width: auto;"></img>
   <br />
-  <a href="https://t.me/+FWgnE0GRDYZhNjc1">Telegram</a>&nbsp;|&nbsp;
-  <a href="https://matrix.to/#/#waylyrics_x:catgirl.cloud">Matrix</a>
-  <br />
-  <a href="https://www.bilibili.com/video/BV1ap421R7nD" target="blank">Feature Preview</a>
-</p>
+  <div>
+    <a href="https://t.me/+FWgnE0GRDYZhNjc1"><img src="https://img.shields.io/badge/Join-Telegram-blue.svg?logo=telegram"></a>
+    <a href="https://matrix.to/#/#waylyrics_x:catgirl.cloud"><img src="https://img.shields.io/badge/Join-Matrix-blue.svg?logo=matrix"></a>
+    <br />
+    <a href="https://www.bilibili.com/video/av1555055010/" target="blank"><img src="https://img.shields.io/badge/bilibili-Preview-blue.svg?logo=bilibili"></a>
+  </div>
+</div>
 
 - [Waylyrics](#waylyrics)
+  - [Introduction](#introduction)
+  - [Preview](#preview)
+    - [Main UI](#main-ui)
+    - [Search Lyrics](#search-lyrics)
   - [Build/Install](#buildinstall)
   - [Usage](#usage)
   - [Requirement](#requirement)
@@ -26,6 +32,34 @@
     - [Windows](#windows-2)
   - [Credit](#credit)
   - [License](#license)
+
+
+## Introduction
+
+Waylyrics is a desktop lyrics display application that supports both Linux and Windows.
+
+Key Features:
+- Built with GTK 4
+- Maintains up-to-date dependencies
+- Automatic light/dark theme switching
+- Uses TOML format for configuration files
+- Automatically adds latest comments to configuration files on startup
+- Highly customizable CSS themes with [multiple presets available](themes)
+- Compatible with any player that properly implements MPRIS/SMTC protocol
+- Continuously improved lyrics integration with various music players through community contributions
+
+## Preview
+
+### Main UI
+
+> You can hide the decoration by `Ctrl-D` or `Hide Decoration` in tray icon menu.
+
+![Main UI](img/en-cn.png)
+
+### Search Lyrics
+
+![Search Lyrics](img/search-window.jpg)
+
 
 ## Build/Install
 
@@ -151,11 +185,13 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 [osdlyrics]: https://github.com/osdlyrics/osdlyrics
 [desktop_lyric]: https://github.com/Moeweb647252/desktop_lyric
 [lyrica]: https://github.com/chiyuki0325/lyrica
+[lyric-for-musicfox]: https://github.com/SmileYik/lyric-for-musicfox
 
 ### Linux
 
 | Name                          | Stack         | DE/WM         | Player Support     | #   |
 | ----------------------------- | ------------- | ------------- | ------------------ | --- |
+| [lyric-for-musicfox]          | Qt/C++        | *             | musicfox           |     |
 | [waybar-netease-music-lyrics] | bash          | wlroots-based | Any NCM Player[^0] |     |
 | [Sunamu]                      | Electron/TS   | X/Xwayland    | MPRIS              |     |
 | [desktop-lyric]               | JavaScript    | GNOME         | MPRIS              |     |

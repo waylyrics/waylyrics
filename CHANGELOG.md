@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.20] - 2024-12-07
+
+### 🐛 Bug Fixes
+
+- Check if instance name used
+
+### 💼 Other
+
+- Capture panics
+- Comment for sub table in config
+
+### ⚙️ Miscellaneous Tasks
+
+- Release v0.3.20
+
 ## [0.3.19] - 2024-12-03
 
 ### 🚀 Features
@@ -29,6 +44,7 @@ All notable changes to this project will be documented in this file.
 ### 📚 Documentation
 
 - *(build)* Check MSRV
+- Update metainfo & changelog
 
 ### ⚙️ Miscellaneous Tasks
 

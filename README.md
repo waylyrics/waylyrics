@@ -1,15 +1,21 @@
 # Waylyrics
 
-<p align="center">
-  <img src="img/waylyrics.png" style="height: 30vw"></img>
+<div align="center">
+  <img src="img/waylyrics.png" style="height: 200px; width: auto;"></img>
   <br />
-  <a href="https://t.me/+FWgnE0GRDYZhNjc1">Telegram</a>&nbsp;|&nbsp;
-  <a href="https://matrix.to/#/#waylyrics_x:catgirl.cloud">Matrix</a>
-  <br />
-  <a href="https://www.bilibili.com/video/BV1ap421R7nD" target="blank">功能预览</a>
-</p>
+  <div>
+    <a href="https://t.me/+FWgnE0GRDYZhNjc1"><img src="https://img.shields.io/badge/Join-Telegram-blue.svg?logo=telegram"></a>
+    <a href="https://matrix.to/#/#waylyrics_x:catgirl.cloud"><img src="https://img.shields.io/badge/Join-Matrix-blue.svg?logo=matrix"></a>
+    <br />
+    <a href="https://www.bilibili.com/video/av1555055010/" target="blank"><img src="https://img.shields.io/badge/bilibili-Preview-blue.svg?logo=bilibili"></a>
+  </div>
+</div>
 
 - [Waylyrics](#waylyrics)
+  - [介绍](#介绍)
+  - [界面预览](#界面预览)
+    - [主界面](#主界面)
+    - [搜索歌词](#搜索歌词)
   - [构建/安装](#构建安装)
   - [用法](#用法)
   - [依赖](#依赖)
@@ -26,6 +32,32 @@
     - [Windows](#windows-2)
   - [Credit](#credit)
   - [License](#license)
+
+## 介绍
+
+Waylyrics 是一款支持 Linux/Windows 的桌面歌词软件。
+
+关键特性：
+- 基于 GTK 4
+- 保持最新的依赖
+- 自动切换亮暗主题
+- 配置文件使用 TOML 格式
+- 启动时会为配置文件添加最新注释
+- CSS 自定义主题，提供[多种预设主题](themes)
+- 理论上正确接入 MPRIS/SMTC 即可兼容
+- 通过社区贡献，优化了一部分音乐播放器的歌词接入
+
+## 界面预览
+
+### 主界面
+
+> 边框可以隐藏（ctrl-d/托盘菜单->开关边框）
+
+![main ui](img/en-cn.png)
+
+### 搜索歌词
+
+![search lyrics](img/search-window.jpg)
 
 ## 构建/安装
 
@@ -154,11 +186,13 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 [osdlyrics]: https://github.com/osdlyrics/osdlyrics
 [desktop_lyric]: https://github.com/Moeweb647252/desktop_lyric
 [lyrica]: https://github.com/chiyuki0325/lyrica
+[lyric-for-musicfox]: https://github.com/SmileYik/lyric-for-musicfox
 
 ### Linux
 
 | 名称                          | 技术栈        | 桌面支持      | 播放器支持 | 备注 |
 | ----------------------------- | ------------- | ------------- | ---------- | ---- |
+| [lyric-for-musicfox]          | Qt/C++        | *             | musicfox   |      |
 | [waybar-netease-music-lyrics] | bash          | wlroots-based | NCM[^0]    |      |
 | [Sunamu]                      | Electron/TS   | X/Xwayland    | MPRIS      |      |
 | [desktop-lyric]               | JavaScript    | GNOME         | MPRIS      |      |
