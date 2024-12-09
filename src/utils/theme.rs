@@ -2,7 +2,7 @@ use futures::StreamExt;
 
 use crate::{config::ColorScheme, glib_spawn, log, THEME_PATH};
 
-pub fn auto_theme_change(color_scheme: ColorScheme, theme_dark_switch: bool) {
+pub fn auto_theme_change(color_scheme: ColorScheme, theme_switch: bool) {
     let Some(settings) = gtk::Settings::default() else {
         return;
     };
@@ -13,7 +13,7 @@ pub fn auto_theme_change(color_scheme: ColorScheme, theme_dark_switch: bool) {
         ColorScheme::Auto => {
             if dark_light::detect() == dark_light::Mode::Dark {
                 settings.set_gtk_application_prefer_dark_theme(true);
-                if theme_dark_switch {
+                if theme_switch {
                     set_and_update(true);
                 }
             } else {
@@ -25,32 +25,19 @@ pub fn auto_theme_change(color_scheme: ColorScheme, theme_dark_switch: bool) {
                 let mut stream = match dark_light::subscribe().await {
                     Ok(stream) => stream,
                     Err(e) => {
-                        log::error!("Subscribing color-scheme changing events failed: {e}");
+                        log::error!("Failed to subscribe color-scheme events: {e}");
                         return;
                     }
                 };
                 while let Some(mode) = stream.next().await {
-                    match mode {
-                        dark_light::Mode::Dark => {
-                            settings.set_gtk_application_prefer_dark_theme(true);
-                            if theme_dark_switch {
-                                set_and_update(true);
-                            }
-                        }
-                        _ => {
-                            settings.set_gtk_application_prefer_dark_theme(false);
-                            if theme_dark_switch {
-                                set_and_update(false);
-                            }
-                        }
-                    }
+                    set_by_mode(mode, theme_switch, &settings);
                 }
             });
         }
     }
 }
 
-// Check system color scheme
+/// Check system color scheme
 fn replace_suffix(input: &str, old_suffix: &str, new_suffix: &str) -> String {
     if let Some(trimmed) = input.strip_suffix(old_suffix) {
         format!("{}{}", trimmed, new_suffix)
@@ -81,4 +68,21 @@ fn set_and_update(dark: bool) {
             log::warn!("Filename {:?} not found.", theme_path);
         }
     })
+}
+
+fn set_by_mode(mode: dark_light::Mode, theme_switch: bool, settings: &gtk::Settings) {
+    match mode {
+        dark_light::Mode::Dark => {
+            settings.set_gtk_application_prefer_dark_theme(true);
+            if theme_switch {
+                set_and_update(true);
+            }
+        }
+        _ => {
+            settings.set_gtk_application_prefer_dark_theme(false);
+            if theme_switch {
+                set_and_update(false);
+            }
+        }
+    }
 }
