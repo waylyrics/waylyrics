@@ -25,8 +25,8 @@ thread_local! {
     pub static MAIN_WINDOW: RefCell<Option<Window>> = const { RefCell::new(None) };
     pub static GTK_DBUS_CONNECTION: RefCell<Option<DBusConnection>> = const { RefCell::new(None) };
 
-    pub static PLAYER_IDENTITY_BLACKLIST: RefCell<Vec<String>> = RefCell::new(Default::default());
-    pub static PLAYER_NAME_BLACKLIST: RefCell<Vec<String>> = RefCell::new(Default::default());
+    pub static PLAYER_IDENTITY_BLACKLIST: RefCell<Vec<String>> = RefCell::new(Vec::default());
+    pub static PLAYER_NAME_BLACKLIST: RefCell<Vec<String>> = RefCell::new(Vec::default());
 }
 pub static LYRIC_PROVIDERS: OnceLock<Vec<&'static dyn LyricProvider>> = OnceLock::new();
 

@@ -35,6 +35,6 @@ fn non_ascii() {
 
 #[test]
 fn empty_string() {
-    let result = get_lrc_path(PathBuf::new());
+    let result = get_lrc_path(PathBuf::default());
     assert_eq!(result, None)
 }

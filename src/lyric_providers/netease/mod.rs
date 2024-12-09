@@ -90,7 +90,7 @@ impl super::LyricProvider for Netease {
                         singer: artists
                             .iter()
                             .filter_map(|Artist { name, .. }| name.as_ref())
-                            .fold(String::new(), |mut s, op| {
+                            .fold(String::default(), |mut s, op| {
                                 if !s.is_empty() {
                                     s.push(',')
                                 }

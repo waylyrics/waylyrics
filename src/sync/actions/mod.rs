@@ -17,15 +17,12 @@ use crate::{
     app::{self, dialog::show_dialog},
     glib_spawn,
     lyric_providers::LyricOwned,
-    sync::{
-        interop::common::update_lyric, TrackState, LYRIC,
-        TRACK_PLAYING_STATE,
-    },
+    sync::{interop::common::update_lyric, TrackState, LYRIC, TRACK_PLAYING_STATE},
     utils::reset_lyric_labels,
     MAIN_WINDOW,
 };
 
-use crate::sync::interop::{OS, OsImp};
+use crate::sync::interop::{OsImp, OS};
 pub mod utils;
 
 pub fn register_disconnect(app: &Application) {
@@ -44,7 +41,7 @@ pub fn register_search_lyric(app: &Application, wind: &app::Window, trigger: &st
         let (title, album, artists) =
             TRACK_PLAYING_STATE.with_borrow(|TrackState { metainfo, .. }| {
                 let Some(track) = metainfo.as_ref() else {
-                    return Default::default();
+                    return <(String, String, String)>::default();
                 };
                 let artists = track
                     .artists

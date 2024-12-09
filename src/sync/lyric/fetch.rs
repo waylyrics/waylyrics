@@ -29,7 +29,7 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
     let artists_str = artists
         .as_ref()
         .map(|s| Cow::Owned(s.join(",")))
-        .unwrap_or(Cow::Borrowed("Unknown"));
+        .unwrap_or_else(|| Cow::Borrowed("Unknown"));
 
     if let Some(LyricHintResult::Lyric { olyric, tlyric }) =
         tricks::get_lyric_hint_from_player().await
@@ -43,7 +43,7 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
         .get()
         .expect("lyric providers should be initialized");
 
-    let artists = Arc::new(artists.as_ref().unwrap_or(&vec![]).clone());
+    let artists = Arc::new(artists.as_ref().cloned().unwrap_or_else(|| vec![]).clone());
 
     let length_toleration_ms = window.imp().length_toleration_ms.get();
 

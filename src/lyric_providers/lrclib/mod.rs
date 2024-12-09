@@ -13,8 +13,8 @@ use crate::tokio_spawn;
 
 pub struct LRCLib;
 
-pub static LRCLIB_API_CLIENT: Lazy<LRCLibAPI> = Lazy::new(Default::default);
-pub static REQWEST_CLIENT: Lazy<Client> = Lazy::new(Default::default);
+pub static LRCLIB_API_CLIENT: Lazy<LRCLibAPI> = Lazy::new(LRCLibAPI::default);
+pub static REQWEST_CLIENT: Lazy<Client> = Lazy::new(Client::default);
 
 impl super::LyricParse for LRCLib {
     fn parse_lyric(&self, store: &LyricStore) -> LyricOwned {

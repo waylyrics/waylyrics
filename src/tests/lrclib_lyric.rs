@@ -12,7 +12,7 @@ async fn get_lrclib_lyric() -> Result<()> {
     let lyric_store = provider.query_lyric("1").await?;
     let lyric = provider.parse_lyric(&lyric_store);
     let LyricOwned::LineTimestamp(_) = lyric else {
-        panic!("cannot get lyric from lrclib");
+        anyhow::bail!("cannot get lyric from lrclib");
     };
 
     Ok(())

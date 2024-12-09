@@ -11,7 +11,7 @@ use crate::{app, lyric_providers::SongInfo};
 use super::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
 
 pub fn clean_lyric(window: &app::Window) {
-    LYRIC.set(Default::default());
+    LYRIC.set(LyricState::default());
     window.imp().lyric_offset_ms.set(0);
 }
 

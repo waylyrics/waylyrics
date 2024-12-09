@@ -9,7 +9,7 @@ mod interop;
 pub mod lyric;
 mod utils;
 
-pub use interop::{OS, OsImp};
+pub use interop::{OsImp, OS};
 pub use lyric::scroll::register_lyric_display;
 
 /// metadata from connected player
@@ -39,7 +39,7 @@ thread_local! {
     static LYRIC: RefCell<LyricState> = const { RefCell::new(LyricState { origin: LyricOwned::None, translation: LyricOwned::None }) };
     /// A global variable that contains current playing state (excluding lyrics)
     /// including: track_id, paused, cache_path
-    pub static TRACK_PLAYING_STATE: RefCell<TrackState> = RefCell::new(Default::default());
+    pub static TRACK_PLAYING_STATE: RefCell<TrackState> = RefCell::new(TrackState::default());
 }
 
 pub static ENABLE_LOCAL_LYRIC: OnceLock<bool> = OnceLock::new();

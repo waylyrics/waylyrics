@@ -46,7 +46,7 @@ fn fold_doc(doc: &str) -> String {
     doc.lines()
         .map(str::trim)
         .filter(|s| !s.is_empty())
-        .fold(String::new(), |mut s, l| {
+        .fold(String::default(), |mut s, l| {
             let _ = write!(&mut s, "\n# {l}");
             s
         })

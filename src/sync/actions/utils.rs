@@ -54,7 +54,7 @@ pub async fn export_lyric(window: &Window, is_original: bool) {
         return;
     };
 
-    let mut output = String::new();
+    let mut output = String::default();
 
     let _ = output.write_str("[re:waylyrics]\n");
     let _ = output.write_str(concat!("[ve:", env!("CARGO_PKG_VERSION"), "]\n"));

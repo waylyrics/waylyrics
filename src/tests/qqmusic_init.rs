@@ -6,7 +6,7 @@ use crate::lyric_providers::LyricProvider;
 fn init_with_base(base: &str) -> Result<()> {
     let config = QQMusicConfig {
         api_base_url: base.into(),
-        ..Default::default()
+        ..QQMusicConfig::default()
     };
     QQMusic.init(&serde_json::to_string(&config)?)
 }

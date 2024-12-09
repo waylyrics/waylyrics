@@ -19,7 +19,7 @@ impl Default for QQMusicConfig {
     fn default() -> Self {
         Self {
             api_base_url: "http://127.0.0.1:3300".into(),
-            cookies: Default::default(),
+            cookies: None,
         }
     }
 }

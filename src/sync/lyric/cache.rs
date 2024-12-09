@@ -157,7 +157,7 @@ struct LyricCache {
 }
 
 fn md5_cache_dir(digest: md5::Digest) -> PathBuf {
-    let mut cache_path = PathBuf::new();
+    let mut cache_path = PathBuf::default();
     for i in 0..3 {
         cache_path.push(format!("{:02x}", digest[i]));
     }
