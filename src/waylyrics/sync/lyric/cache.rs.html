@@ -322,7 +322,7 @@
 }
 
 <span class="kw">fn </span>md5_cache_dir(digest: md5::Digest) -&gt; PathBuf {
-    <span class="kw">let </span><span class="kw-2">mut </span>cache_path = PathBuf::new();
+    <span class="kw">let </span><span class="kw-2">mut </span>cache_path = PathBuf::default();
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="number">3 </span>{
         cache_path.push(<span class="macro">format!</span>(<span class="string">"{:02x}"</span>, digest[i]));
     }

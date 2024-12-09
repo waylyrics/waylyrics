@@ -81,8 +81,8 @@
     <span class="kw">pub static </span>MAIN_WINDOW: RefCell&lt;<span class="prelude-ty">Option</span>&lt;Window&gt;&gt; = <span class="kw">const </span>{ RefCell::new(<span class="prelude-val">None</span>) };
     <span class="kw">pub static </span>GTK_DBUS_CONNECTION: RefCell&lt;<span class="prelude-ty">Option</span>&lt;DBusConnection&gt;&gt; = <span class="kw">const </span>{ RefCell::new(<span class="prelude-val">None</span>) };
 
-    <span class="kw">pub static </span>PLAYER_IDENTITY_BLACKLIST: RefCell&lt;Vec&lt;String&gt;&gt; = RefCell::new(Default::default());
-    <span class="kw">pub static </span>PLAYER_NAME_BLACKLIST: RefCell&lt;Vec&lt;String&gt;&gt; = RefCell::new(Default::default());
+    <span class="kw">pub static </span>PLAYER_IDENTITY_BLACKLIST: RefCell&lt;Vec&lt;String&gt;&gt; = RefCell::new(Vec::default());
+    <span class="kw">pub static </span>PLAYER_NAME_BLACKLIST: RefCell&lt;Vec&lt;String&gt;&gt; = RefCell::new(Vec::default());
 }
 <span class="kw">pub static </span>LYRIC_PROVIDERS: OnceLock&lt;Vec&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="kw">dyn </span>LyricProvider&gt;&gt; = OnceLock::new();
 

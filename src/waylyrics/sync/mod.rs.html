@@ -74,7 +74,7 @@
 <span class="kw">pub mod </span>lyric;
 <span class="kw">mod </span>utils;
 
-<span class="kw">pub use </span>interop::{OS, OsImp};
+<span class="kw">pub use </span>interop::{OsImp, OS};
 <span class="kw">pub use </span>lyric::scroll::register_lyric_display;
 
 <span class="doccomment">/// metadata from connected player
@@ -104,7 +104,7 @@
     <span class="kw">static </span>LYRIC: RefCell&lt;LyricState&gt; = <span class="kw">const </span>{ RefCell::new(LyricState { origin: LyricOwned::None, translation: LyricOwned::None }) };
     <span class="doccomment">/// A global variable that contains current playing state (excluding lyrics)
     /// including: track_id, paused, cache_path
-    </span><span class="kw">pub static </span>TRACK_PLAYING_STATE: RefCell&lt;TrackState&gt; = RefCell::new(Default::default());
+    </span><span class="kw">pub static </span>TRACK_PLAYING_STATE: RefCell&lt;TrackState&gt; = RefCell::new(TrackState::default());
 }
 
 <span class="kw">pub static </span>ENABLE_LOCAL_LYRIC: OnceLock&lt;bool&gt; = OnceLock::new();

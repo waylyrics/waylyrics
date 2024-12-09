@@ -186,7 +186,7 @@
 <span class="kw">use super</span>::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
 
 <span class="kw">pub fn </span>clean_lyric(window: <span class="kw-2">&amp;</span>app::Window) {
-    LYRIC.set(Default::default());
+    LYRIC.set(LyricState::default());
     window.imp().lyric_offset_ms.set(<span class="number">0</span>);
 }
 

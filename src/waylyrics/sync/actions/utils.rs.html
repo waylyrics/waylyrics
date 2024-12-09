@@ -208,7 +208,7 @@
         <span class="kw">return</span>;
     };
 
-    <span class="kw">let </span><span class="kw-2">mut </span>output = String::new();
+    <span class="kw">let </span><span class="kw-2">mut </span>output = String::default();
 
     <span class="kw">let _ </span>= output.write_str(<span class="string">"[re:waylyrics]\n"</span>);
     <span class="kw">let _ </span>= output.write_str(<span class="macro">concat!</span>(<span class="string">"[ve:"</span>, <span class="macro">env!</span>(<span class="string">"CARGO_PKG_VERSION"</span>), <span class="string">"]\n"</span>));

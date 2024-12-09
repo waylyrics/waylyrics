@@ -153,8 +153,8 @@
 
 <span class="kw">pub struct </span>LRCLib;
 
-<span class="kw">pub static </span>LRCLIB_API_CLIENT: Lazy&lt;LRCLibAPI&gt; = Lazy::new(Default::default);
-<span class="kw">pub static </span>REQWEST_CLIENT: Lazy&lt;Client&gt; = Lazy::new(Default::default);
+<span class="kw">pub static </span>LRCLIB_API_CLIENT: Lazy&lt;LRCLibAPI&gt; = Lazy::new(LRCLibAPI::default);
+<span class="kw">pub static </span>REQWEST_CLIENT: Lazy&lt;Client&gt; = Lazy::new(Client::default);
 
 <span class="kw">impl </span><span class="kw">super</span>::LyricParse <span class="kw">for </span>LRCLib {
     <span class="kw">fn </span>parse_lyric(<span class="kw-2">&amp;</span><span class="self">self</span>, store: <span class="kw-2">&amp;</span>LyricStore) -&gt; LyricOwned {

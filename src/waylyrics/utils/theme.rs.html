@@ -82,11 +82,15 @@
 <a href="#81" id="81">81</a>
 <a href="#82" id="82">82</a>
 <a href="#83" id="83">83</a>
-<a href="#84" id="84">84</a></pre></div><pre class="rust"><code><span class="kw">use </span>futures::StreamExt;
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a></pre></div><pre class="rust"><code><span class="kw">use </span>futures::StreamExt;
 
 <span class="kw">use crate</span>::{config::ColorScheme, glib_spawn, log, THEME_PATH};
 
-<span class="kw">pub fn </span>auto_theme_change(color_scheme: ColorScheme, theme_dark_switch: bool) {
+<span class="kw">pub fn </span>auto_theme_change(color_scheme: ColorScheme, theme_switch: bool) {
     <span class="kw">let </span><span class="prelude-val">Some</span>(settings) = gtk::Settings::default() <span class="kw">else </span>{
         <span class="kw">return</span>;
     };
@@ -97,7 +101,7 @@
         ColorScheme::Auto =&gt; {
             <span class="kw">if </span>dark_light::detect() == dark_light::Mode::Dark {
                 settings.set_gtk_application_prefer_dark_theme(<span class="bool-val">true</span>);
-                <span class="kw">if </span>theme_dark_switch {
+                <span class="kw">if </span>theme_switch {
                     set_and_update(<span class="bool-val">true</span>);
                 }
             } <span class="kw">else </span>{
@@ -109,32 +113,19 @@
                 <span class="kw">let </span><span class="kw-2">mut </span>stream = <span class="kw">match </span>dark_light::subscribe().<span class="kw">await </span>{
                     <span class="prelude-val">Ok</span>(stream) =&gt; stream,
                     <span class="prelude-val">Err</span>(e) =&gt; {
-                        <span class="macro">log::error!</span>(<span class="string">"Subscribing color-scheme changing events failed: {e}"</span>);
+                        <span class="macro">log::error!</span>(<span class="string">"Failed to subscribe color-scheme events: {e}"</span>);
                         <span class="kw">return</span>;
                     }
                 };
                 <span class="kw">while let </span><span class="prelude-val">Some</span>(mode) = stream.next().<span class="kw">await </span>{
-                    <span class="kw">match </span>mode {
-                        dark_light::Mode::Dark =&gt; {
-                            settings.set_gtk_application_prefer_dark_theme(<span class="bool-val">true</span>);
-                            <span class="kw">if </span>theme_dark_switch {
-                                set_and_update(<span class="bool-val">true</span>);
-                            }
-                        }
-                        <span class="kw">_ </span>=&gt; {
-                            settings.set_gtk_application_prefer_dark_theme(<span class="bool-val">false</span>);
-                            <span class="kw">if </span>theme_dark_switch {
-                                set_and_update(<span class="bool-val">false</span>);
-                            }
-                        }
-                    }
+                    set_by_mode(mode, theme_switch, <span class="kw-2">&amp;</span>settings);
                 }
             });
         }
     }
 }
 
-<span class="comment">// Check system color scheme
+<span class="doccomment">/// Check system color scheme
 </span><span class="kw">fn </span>replace_suffix(input: <span class="kw-2">&amp;</span>str, old_suffix: <span class="kw-2">&amp;</span>str, new_suffix: <span class="kw-2">&amp;</span>str) -&gt; String {
     <span class="kw">if let </span><span class="prelude-val">Some</span>(trimmed) = input.strip_suffix(old_suffix) {
         <span class="macro">format!</span>(<span class="string">"{}{}"</span>, trimmed, new_suffix)
@@ -165,5 +156,22 @@
             <span class="macro">log::warn!</span>(<span class="string">"Filename {:?} not found."</span>, theme_path);
         }
     })
+}
+
+<span class="kw">fn </span>set_by_mode(mode: dark_light::Mode, theme_switch: bool, settings: <span class="kw-2">&amp;</span>gtk::Settings) {
+    <span class="kw">match </span>mode {
+        dark_light::Mode::Dark =&gt; {
+            settings.set_gtk_application_prefer_dark_theme(<span class="bool-val">true</span>);
+            <span class="kw">if </span>theme_switch {
+                set_and_update(<span class="bool-val">true</span>);
+            }
+        }
+        <span class="kw">_ </span>=&gt; {
+            settings.set_gtk_application_prefer_dark_theme(<span class="bool-val">false</span>);
+            <span class="kw">if </span>theme_switch {
+                set_and_update(<span class="bool-val">false</span>);
+            }
+        }
+    }
 }
 </code></pre></div></section></main></body></html>

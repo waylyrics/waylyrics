@@ -207,10 +207,7 @@
 <a href="#206" id="206">206</a>
 <a href="#207" id="207">207</a>
 <a href="#208" id="208">208</a>
-<a href="#209" id="209">209</a>
-<a href="#210" id="210">210</a>
-<a href="#211" id="211">211</a>
-<a href="#212" id="212">212</a></pre></div><pre class="rust"><code><span class="kw">use crate</span>::{
+<a href="#209" id="209">209</a></pre></div><pre class="rust"><code><span class="kw">use crate</span>::{
     app::search_window,
     log::{info, warn},
     sync::LyricState,
@@ -229,15 +226,12 @@
     app::{<span class="self">self</span>, dialog::show_dialog},
     glib_spawn,
     lyric_providers::LyricOwned,
-    sync::{
-        interop::common::update_lyric, TrackState, LYRIC,
-        TRACK_PLAYING_STATE,
-    },
+    sync::{interop::common::update_lyric, TrackState, LYRIC, TRACK_PLAYING_STATE},
     utils::reset_lyric_labels,
     MAIN_WINDOW,
 };
 
-<span class="kw">use </span><span class="kw">crate</span>::sync::interop::{OS, OsImp};
+<span class="kw">use </span><span class="kw">crate</span>::sync::interop::{OsImp, OS};
 <span class="kw">pub mod </span>utils;
 
 <span class="kw">pub fn </span>register_disconnect(app: <span class="kw-2">&amp;</span>Application) {
@@ -256,7 +250,7 @@
         </span><span class="kw">let </span>(title, album, artists) =
             TRACK_PLAYING_STATE.with_borrow(|TrackState { metainfo, .. }| {
                 <span class="kw">let </span><span class="prelude-val">Some</span>(track) = metainfo.as_ref() <span class="kw">else </span>{
-                    <span class="kw">return </span>Default::default();
+                    <span class="kw">return </span>&lt;(String, String, String)&gt;::default();
                 };
                 <span class="kw">let </span>artists = track
                     .artists

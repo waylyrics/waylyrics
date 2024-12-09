@@ -246,7 +246,7 @@
                         singer: artists
                             .iter()
                             .filter_map(|Artist { name, .. }| name.as_ref())
-                            .fold(String::new(), |<span class="kw-2">mut </span>s, op| {
+                            .fold(String::default(), |<span class="kw-2">mut </span>s, op| {
                                 <span class="kw">if </span>!s.is_empty() {
                                     s.push(<span class="string">','</span>)
                                 }
