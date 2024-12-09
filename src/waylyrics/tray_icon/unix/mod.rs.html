@@ -280,20 +280,23 @@
 <a href="#279" id="279">279</a>
 <a href="#280" id="280">280</a>
 <a href="#281" id="281">281</a>
-<a href="#282" id="282">282</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::thread::sleep;
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::thread::sleep;
 <span class="kw">use </span>std::time::Duration;
 <span class="kw">use </span>std::{env, process};
 
 <span class="kw">use </span>async_channel::Sender;
 <span class="kw">use </span>gtk::glib;
 
-<span class="kw">use </span><span class="kw">crate</span>::utils::gettext;
-<span class="kw">use </span>ksni::{Tray, TrayService};
+<span class="kw">use </span>ksni::{Tray, TrayMethods};
 <span class="kw">use </span>rust_decimal::prelude::Zero;
 <span class="kw">use </span>strum::IntoEnumIterator;
 
 <span class="kw">use </span><span class="kw">crate</span>::app::actions::{UIAction, UI_ACTION};
 <span class="kw">use </span><span class="kw">crate</span>::sync::{PlayAction, PLAY_ACTION};
+<span class="kw">use </span><span class="kw">crate</span>::utils::gettext;
 
 <span class="kw">use </span><span class="kw">crate</span>::config::{Align, LyricDisplayMode};
 <span class="kw">use </span><span class="kw">crate</span>::sync::{OsImp, PlayerId, OS};
@@ -521,7 +524,7 @@
     }
 }
 
-<span class="kw">pub fn </span>start_tray_service() -&gt; <span class="prelude-ty">Option</span>&lt;()&gt; {
+<span class="kw">pub fn </span>start_tray_service() {
     <span class="comment">// mpris::PlayerFinder would create a new DBus connection which has 4 matches attached,
     // but in TrayService, the messages matching could never be handled.
     // This would make messages stalling within dbus broker, and might finally make dbus-broker
@@ -532,15 +535,18 @@
     // main thread (by glib async runtime), with 2 channels.
     </span><span class="kw">let </span>(req_tx, req_rx) = async_channel::unbounded();
     <span class="kw">let </span>(resp_tx, resp_rx) = async_channel::unbounded();
-    <span class="kw">let </span>service = TrayService::new(TrayIcon::new(req_tx, resp_rx));
+
     glib::spawn_future_local(<span class="kw">async move </span>{
         <span class="kw">while </span>req_rx.recv().<span class="kw">await</span>.is_ok() {
             <span class="kw">let </span>players = OS::list_players();
             resp_tx.send(players).<span class="kw">await</span>.unwrap();
         }
     });
-    service.spawn_without_dbus_name();
-    <span class="prelude-val">Some</span>(())
+
+    <span class="macro">tokio_spawn!</span>(<span class="kw">async move </span>{
+        <span class="kw">let </span>service = TrayIcon::new(req_tx, resp_rx);
+        <span class="kw">let _ </span>= service.spawn_without_dbus_name().<span class="kw">await</span>;
+    });
 }
 
 <span class="kw">fn </span>ui_action() -&gt; <span class="kw-2">&amp;</span><span class="lifetime">'static </span>Sender&lt;UIAction&gt; {
