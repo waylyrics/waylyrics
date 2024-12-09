@@ -78,15 +78,7 @@
 <a href="#77" id="77">77</a>
 <a href="#78" id="78">78</a>
 <a href="#79" id="79">79</a>
-<a href="#80" id="80">80</a>
-<a href="#81" id="81">81</a>
-<a href="#82" id="82">82</a>
-<a href="#83" id="83">83</a>
-<a href="#84" id="84">84</a>
-<a href="#85" id="85">85</a>
-<a href="#86" id="86">86</a>
-<a href="#87" id="87">87</a>
-<a href="#88" id="88">88</a></pre></div><pre class="rust"><code><span class="kw">use </span>futures::StreamExt;
+<a href="#80" id="80">80</a></pre></div><pre class="rust"><code><span class="kw">use </span>futures::StreamExt;
 
 <span class="kw">use crate</span>::{config::ColorScheme, glib_spawn, log, THEME_PATH};
 
@@ -159,19 +151,11 @@
 }
 
 <span class="kw">fn </span>set_by_mode(mode: dark_light::Mode, theme_switch: bool, settings: <span class="kw-2">&amp;</span>gtk::Settings) {
-    <span class="kw">match </span>mode {
-        dark_light::Mode::Dark =&gt; {
-            settings.set_gtk_application_prefer_dark_theme(<span class="bool-val">true</span>);
-            <span class="kw">if </span>theme_switch {
-                set_and_update(<span class="bool-val">true</span>);
-            }
-        }
-        <span class="kw">_ </span>=&gt; {
-            settings.set_gtk_application_prefer_dark_theme(<span class="bool-val">false</span>);
-            <span class="kw">if </span>theme_switch {
-                set_and_update(<span class="bool-val">false</span>);
-            }
-        }
+    <span class="kw">let </span>is_dark_mode = mode == dark_light::Mode::Dark;
+
+    settings.set_gtk_application_prefer_dark_theme(is_dark_mode);
+    <span class="kw">if </span>theme_switch {
+        set_and_update(is_dark_mode);
     }
 }
 </code></pre></div></section></main></body></html>
