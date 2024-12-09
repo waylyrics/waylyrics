@@ -71,18 +71,10 @@ fn set_and_update(dark: bool) {
 }
 
 fn set_by_mode(mode: dark_light::Mode, theme_switch: bool, settings: &gtk::Settings) {
-    match mode {
-        dark_light::Mode::Dark => {
-            settings.set_gtk_application_prefer_dark_theme(true);
-            if theme_switch {
-                set_and_update(true);
-            }
-        }
-        _ => {
-            settings.set_gtk_application_prefer_dark_theme(false);
-            if theme_switch {
-                set_and_update(false);
-            }
-        }
+    let is_dark_mode = mode == dark_light::Mode::Dark;
+
+    settings.set_gtk_application_prefer_dark_theme(is_dark_mode);
+    if theme_switch {
+        set_and_update(is_dark_mode);
     }
 }
