@@ -36,8 +36,8 @@ sudo apt-get install git nano build-essential libssl-dev libgtk-4-dev libdbus-1-
 
 ```shell
 rustup update stable
+#更新rust到最新版本
 ```
-📣Tips：这里的
 
 ## 克隆源码
 我们需要在 Github 上克隆 Waylyrics 的源代码来进行编译。请保证网络连接通畅，非常情况请使用魔法🪄。
