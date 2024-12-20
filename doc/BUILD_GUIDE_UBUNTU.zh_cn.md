@@ -12,6 +12,7 @@
 - [软件图标设置](#软件图标设置)
 - [桌面图标设置](#桌面图标设置)
 - [软件主题设置](#软件主题设置)
+- [软件详情设置](#软件详情设置)
 - [编译结束](#编译结束)
 - [Waylyric 一些常见使用技巧](#waylyric-一些常见使用技巧)
   - [置顶歌词](#置顶歌词)
@@ -166,7 +167,15 @@ cp -r ./themes/* /usr/share/waylyrics/themes/
 sudo chmod 755 -R /usr/share/waylyrics/themes/
 #设置文件夹权限为755
 ```
+## 软件详情设置
+📣Tips：此项为可选项，并不会影响软件正常使用
 
+```shell
+sudo cp ./metainfo/io.github.waylyrics.Waylyrics.metainfo.xml /usr/share/metainfo/
+#应用程序在软件中心中显示时会使用这些文件中的信息。
+sudo update-desktop-database
+#刷新桌面缓存
+```
 ## 编译结束
 至此，你也应该完成了全部的安装过程了，是不是感觉很有趣呢？但是一切已经过去，软件的编译过程已经完成！
 
