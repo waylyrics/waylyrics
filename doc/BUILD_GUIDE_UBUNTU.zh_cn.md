@@ -1,4 +1,4 @@
-# Waylyrics Ubuntu用户编译指南 (2024.06.01)
+# Waylyrics Ubuntu用户编译指南 (2024.12.20)
 
 ## 目录
 - [观前提示](#观前提示)
@@ -30,9 +30,14 @@ sudo aptss install waylyrics
 
 ## 准备环境
 ```shell
-sudo apt-get install git nano build-essential libssl-dev libgtk-4-dev libdbus-1-dev libmimalloc-dev gettext cargo
+sudo apt-get install git nano build-essential libssl-dev libgtk-4-dev libdbus-1-dev libmimalloc-dev gettext rustup
 ```
-📣Tips：这里的 cargo 软件包会拉起 rustc 软件包，请注意这里的rustc 软件包版本需要 >= 1.73。高阶玩家可以自己搭建 rust 环境，不用从包管理器安装 cargo 。
+📣Tips：这里的 rustup 软件包可以给系统安装最新版本的 rust ，旧版教程的 cargo 拉起的 rust 版本会过老，请注意这个问题！
+
+```shell
+rustup update stable
+```
+📣Tips：这里的
 
 ## 克隆源码
 我们需要在 Github 上克隆 Waylyrics 的源代码来进行编译。请保证网络连接通畅，非常情况请使用魔法🪄。
