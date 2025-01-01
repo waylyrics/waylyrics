@@ -1355,9 +1355,9 @@ dependencies = [
 
 [[package]]
 name = "glib-macros"
-version = "0.20.5"
+version = "0.20.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e7d21ca27acfc3e91da70456edde144b4ac7c36f78ee77b10189b3eb4901c156"
+checksum = "715601f8f02e71baef9c1f94a657a9a77c192aea6097cf9ae7e5e177cd8cde68"
 dependencies = [
  "heck 0.5.0",
  "proc-macro-crate",
