@@ -75,10 +75,8 @@
 <a href="#74" id="74">74</a>
 <a href="#75" id="75">75</a>
 <a href="#76" id="76">76</a>
-<a href="#77" id="77">77</a>
-<a href="#78" id="78">78</a>
-<a href="#79" id="79">79</a>
-<a href="#80" id="80">80</a></pre></div><pre class="rust"><code><span class="kw">use </span>futures::StreamExt;
+<a href="#77" id="77">77</a></pre></div><pre class="rust"><code><span class="kw">use </span>futures_lite::StreamExt;
+<span class="kw">use </span>tracing::info;
 
 <span class="kw">use crate</span>::{config::ColorScheme, glib_spawn, log, THEME_PATH};
 
@@ -91,7 +89,9 @@
         ColorScheme::Light =&gt; settings.set_gtk_application_prefer_dark_theme(<span class="bool-val">false</span>),
         ColorScheme::Dark =&gt; settings.set_gtk_application_prefer_dark_theme(<span class="bool-val">true</span>),
         ColorScheme::Auto =&gt; {
-            <span class="kw">if </span>dark_light::detect() == dark_light::Mode::Dark {
+            <span class="kw">let </span>theme = dark_light::sync::detect();
+            <span class="macro">info!</span>(<span class="string">"detected theme: {theme:?}"</span>);
+            <span class="kw">if </span>theme == dark_light::Mode::Dark {
                 settings.set_gtk_application_prefer_dark_theme(<span class="bool-val">true</span>);
                 <span class="kw">if </span>theme_switch {
                     set_and_update(<span class="bool-val">true</span>);
@@ -102,13 +102,7 @@
 
             <span class="comment">// Listen to changes...
             </span><span class="macro">glib_spawn!</span>(<span class="kw">async move </span>{
-                <span class="kw">let </span><span class="kw-2">mut </span>stream = <span class="kw">match </span>dark_light::subscribe().<span class="kw">await </span>{
-                    <span class="prelude-val">Ok</span>(stream) =&gt; stream,
-                    <span class="prelude-val">Err</span>(e) =&gt; {
-                        <span class="macro">log::error!</span>(<span class="string">"Failed to subscribe color-scheme events: {e}"</span>);
-                        <span class="kw">return</span>;
-                    }
-                };
+                <span class="kw">let </span><span class="kw-2">mut </span>stream = dark_light::subscribe().<span class="kw">await</span>;
                 <span class="kw">while let </span><span class="prelude-val">Some</span>(mode) = stream.next().<span class="kw">await </span>{
                     set_by_mode(mode, theme_switch, <span class="kw-2">&amp;</span>settings);
                 }
