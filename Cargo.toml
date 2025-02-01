@@ -44,7 +44,7 @@ dark-light = { git = "https://github.com/frewsxcv/rust-dark-light.git", rev = "b
     "sync",
 ] }
 # Required by async stream
-futures-lite = "2.3.0"
+futures-lite = "2.6.0"
 
 # lyric providers + parse
 ncmapi = { version = "0.1.13", package = "ncmapi2" }
