@@ -33,6 +33,10 @@
   - [Credit](#credit)
   - [License](#license)
 
+> 目前 waylyrics 暂时处于不活跃开发，两位主要开发者忙于生计，暂时只进行 PR Review / 依赖更新
+>
+> 遇到问题请参考 [issues](https://github.com/waylyrics/waylyrics/issues) 和 [wiki](https://github.com/waylyrics/waylyrics/wiki), [discussion](https://github.com/waylyrics/waylyrics/discussions) 等
+
 ## 介绍
 
 Waylyrics 是一款支持 Linux/Windows 的桌面歌词软件。
