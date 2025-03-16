@@ -1,6 +1,12 @@
 use std::fs;
 use std::path::{Path, PathBuf};
-use std::sync::OnceLock;
+use std::sync::{Mutex, OnceLock};
+
+use ahash::{HashMap, HashMapExt};
+use lofty::file::TaggedFileExt;
+use lofty::read_from_path;
+use lofty::tag::ItemKey;
+use once_cell::sync::Lazy;
 
 use crate::log::{debug, error, warn};
 use crate::lyric_providers::{Lyric, LyricOwned, LyricProvider};
@@ -16,6 +22,7 @@ pub enum LyricHint {
         provider: &'static dyn LyricProvider,
     },
     LyricFile(PathBuf),
+    LyricMetadata(PathBuf),
     Metadata(TrackMeta),
 }
 
@@ -57,7 +64,10 @@ pub async fn get_lyric_hint_from_player() -> Option<LyricHintResult> {
             let (olyric, tlyric) = load_local_lyric(&path)?;
             Some(LyricHintResult::Lyric { olyric, tlyric })
         }
-
+        Some(LyricHint::LyricMetadata(path)) => {
+            let (olyric, tlyric) = get_lrc_from_music_metadata(&path)?;
+            Some(LyricHintResult::Lyric { olyric, tlyric })
+        }
         _ => None,
     }
 }
@@ -73,8 +83,70 @@ pub fn get_lrc_path(mut music_path: PathBuf) -> Option<PathBuf> {
         None
     }
 }
+// 添加一个静态缓存
+pub static LYRIC_TAG_CACHE: Lazy<Mutex<HashMap<PathBuf, bool>>> =
+    Lazy::new(|| Mutex::new(HashMap::new()));
+
+pub fn lyric_tag_exists(music_path: &Path) -> bool {
+    // 尝试从缓存中获取结果
+    if let Ok(cache_guard) = LYRIC_TAG_CACHE.lock() {
+        if let Some(&result) = cache_guard.get(music_path) {
+            return result;
+        }
+    }
+    let result = read_from_path(music_path)
+        .map_err(|e| warn!("cannot read music file: {e}"))
+        .ok()
+        .as_ref()
+        .and_then(|tagged_file| tagged_file.primary_tag())
+        .and_then(|tag| tag.get(&ItemKey::Lyrics))
+        .is_some();
+    // 将结果存入缓存
+    if let Ok(mut cache_guard) = LYRIC_TAG_CACHE.lock() {
+        cache_guard.insert(music_path.to_owned(), result);
+    }
+    result
+}
+pub fn get_lrc_from_music_metadata(music_path: &PathBuf) -> Option<(LyricOwned, LyricOwned)> {
+    read_from_path(music_path)
+        .map_err(|e| error!("cannot read music file: {e}"))
+        .ok()
+        .as_ref()
+        .and_then(|tagged_file| tagged_file.primary_tag())
+        .and_then(|tag| tag.get_string(&ItemKey::Lyrics))
+        .and_then(parse_local_lyric)
+}
 
 pub static EXTRACT_TRANSLATED_LYRIC: OnceLock<bool> = OnceLock::new();
+
+fn parse_local_lyric(lyric: &str) -> Option<(LyricOwned, LyricOwned)> {
+    let mut olyric =
+        crate::lyric_providers::utils::lrc_iter(lyric.trim_start_matches('\u{feff}').lines())
+            .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
+            .map_err(|e| error!("cannot parse lyric from hint: {e}"))
+            .ok()
+            .unwrap_or_default();
+    let mut tlyric = LyricOwned::None;
+    #[cfg(feature = "i18n-local-lyric")]
+    if EXTRACT_TRANSLATED_LYRIC.get().cloned().unwrap_or_default() {
+        if let LyricOwned::LineTimestamp(lines) = &olyric {
+            let tlyric_lines = extract_translated_lyric(lines);
+            if !tlyric_lines.is_empty() {
+                let olyric_lines = filter_original_lyric(lines, &tlyric_lines);
+                debug!("extracted original lyric: {olyric_lines:#?}");
+                debug!("extracted translation lyric: {tlyric_lines:#?}");
+                olyric = LyricOwned::LineTimestamp(olyric_lines);
+                tlyric = LyricOwned::LineTimestamp(tlyric_lines);
+            }
+        }
+    }
+
+    if olyric.is_none() && tlyric.is_none() {
+        return None;
+    }
+
+    Some((olyric, tlyric))
+}
 
 fn load_local_lyric<P: AsRef<Path>>(path: P) -> Option<(LyricOwned, LyricOwned)> {
     let mut olyric = fs::read_to_string(&path)
