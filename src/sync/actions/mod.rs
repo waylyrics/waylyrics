@@ -1,7 +1,7 @@
 use crate::{
     app::search_window,
     log::{info, warn},
-    sync::LyricState,
+    sync::{lyric::fetch::tricks::LYRIC_TAG_CACHE, LyricState},
     utils::bind_shortcut,
 };
 use glib_macros::clone;
@@ -83,6 +83,7 @@ pub fn register_reload_lyric(app: &Application) {
                 return;
             };
             reset_lyric_labels(&wind, None);
+            LYRIC_TAG_CACHE.clear(); // 手动刷新歌词时清空对歌曲文件中歌词标签存在性的缓存
             if let Err(err) = update_lyric(&metainfo, &wind, false).await {
                 show_dialog(
                     Some(&wind),
@@ -110,6 +111,7 @@ pub fn register_refetch_lyric(app: &Application, window: &app::Window, trigger: 
                 return;
             };
             reset_lyric_labels(&wind, None);
+            LYRIC_TAG_CACHE.clear(); // 手动刷新歌词时清空对歌曲文件中歌词标签存在性的缓存
             if let Err(err) = update_lyric(&metainfo, &wind, true).await {
                 show_dialog(
                     Some(&wind),
