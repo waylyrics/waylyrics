@@ -1,13 +1,11 @@
 use std::fs;
 use std::path::{Path, PathBuf};
-use std::sync::{Mutex, OnceLock};
-
-use ahash::{HashMap, HashMapExt};
+use std::sync:: OnceLock;
+use dashmap::DashMap;
 use lofty::file::TaggedFileExt;
 use lofty::read_from_path;
 use lofty::tag::ItemKey;
 use once_cell::sync::Lazy;
-
 use crate::log::{debug, error, warn};
 use crate::lyric_providers::{Lyric, LyricOwned, LyricProvider};
 use crate::sync::interop::{OsImp, OS};
@@ -84,16 +82,16 @@ pub fn get_lrc_path(mut music_path: PathBuf) -> Option<PathBuf> {
     }
 }
 // 添加一个静态缓存
-pub static LYRIC_TAG_CACHE: Lazy<Mutex<HashMap<PathBuf, bool>>> =
-    Lazy::new(|| Mutex::new(HashMap::new()));
+pub static LYRIC_TAG_CACHE: Lazy<DashMap<PathBuf, bool>> = Lazy::new(|| {
+    DashMap::new()
+});
 
 pub fn lyric_tag_exists(music_path: &Path) -> bool {
     // 尝试从缓存中获取结果
-    if let Ok(cache_guard) = LYRIC_TAG_CACHE.lock() {
-        if let Some(&result) = cache_guard.get(music_path) {
-            return result;
-        }
+    if let Some(result) = LYRIC_TAG_CACHE.get(music_path) {
+        return *result;
     }
+
     let result = read_from_path(music_path)
         .map_err(|e| warn!("cannot read music file: {e}"))
         .ok()
@@ -102,9 +100,7 @@ pub fn lyric_tag_exists(music_path: &Path) -> bool {
         .and_then(|tag| tag.get(&ItemKey::Lyrics))
         .is_some();
     // 将结果存入缓存
-    if let Ok(mut cache_guard) = LYRIC_TAG_CACHE.lock() {
-        cache_guard.insert(music_path.to_owned(), result);
-    }
+        LYRIC_TAG_CACHE.insert(music_path.to_owned(), result);
     result
 }
 pub fn get_lrc_from_music_metadata(music_path: &PathBuf) -> Option<(LyricOwned, LyricOwned)> {
@@ -149,49 +145,29 @@ fn parse_local_lyric(lyric: &str) -> Option<(LyricOwned, LyricOwned)> {
 }
 
 fn load_local_lyric<P: AsRef<Path>>(path: P) -> Option<(LyricOwned, LyricOwned)> {
-    let mut olyric = fs::read_to_string(&path)
+    let olyric = fs::read_to_string(&path)
         .map_err(|e| error!("cannot read lyric from hint: {e}"))
         .ok()
-        .and_then(|lyric| {
-            crate::lyric_providers::utils::lrc_iter(lyric.trim_start_matches('\u{feff}').lines())
-                .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
-                .map_err(|e| error!("cannot parse lyric from hint: {e}"))
-                .ok()
-        })
+        .as_ref()
+        .and_then(|lyric| parse_local_lyric(lyric))
+        .map(|(olyric, _)| olyric)
         .unwrap_or_default();
+
     #[cfg(feature = "i18n-local-lyric")]
-    let mut tlyric = {
+    let tlyric = {
         let mut translation_path = path.as_ref().to_owned();
         let lang = sys_locale::get_locale();
         translation_path.set_extension(format!("{}.lrc", lang.as_deref().unwrap_or("zh")));
         fs::read_to_string(&translation_path)
             .map_err(|e| error!("cannot read translated lyric from hint: {e}"))
             .ok()
-            .and_then(|lyric| {
-                crate::lyric_providers::utils::lrc_iter(
-                    lyric.trim_start_matches('\u{feff}').lines(),
-                )
-                .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
-                .map_err(|e| error!("cannot parse lyric from hint: {e}"))
-                .ok()
-            })
+            .as_ref()
+            .and_then(|lyric| parse_local_lyric(lyric))
+            .map(|(_, tlyric)| tlyric)
             .unwrap_or_default()
     };
     #[cfg(not(feature = "i18n-local-lyric"))]
     let mut tlyric = LyricOwned::None;
-
-    if tlyric.is_none() && EXTRACT_TRANSLATED_LYRIC.get().cloned().unwrap_or_default() {
-        if let LyricOwned::LineTimestamp(lines) = &olyric {
-            let tlyric_lines = extract_translated_lyric(lines);
-            if !tlyric_lines.is_empty() {
-                let olyric_lines = filter_original_lyric(lines, &tlyric_lines);
-                debug!("extracted original lyric: {olyric_lines:#?}");
-                debug!("extracted translation lyric: {tlyric_lines:#?}");
-                olyric = LyricOwned::LineTimestamp(olyric_lines);
-                tlyric = LyricOwned::LineTimestamp(tlyric_lines);
-            }
-        }
-    }
 
     if olyric.is_none() && tlyric.is_none() {
         return None;
