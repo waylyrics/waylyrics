@@ -14,7 +14,7 @@ use crate::{
     app::{self, Window},
     log::*,
     sync::{
-        interop::{PlayerStatus, OS, OsImp},
+        interop::{OsImp, PlayerStatus, OS},
         lyric::{
             cache::{self, get_cache_path},
             fetch,

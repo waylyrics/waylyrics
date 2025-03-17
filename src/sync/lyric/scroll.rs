@@ -91,10 +91,8 @@ pub fn refresh_lyric(window: &app::Window, paused: bool) {
                     LyricOwned::LineTimestamp(origin_lyric),
                     LyricOwned::LineTimestamp(translation_lyric),
                 ) => {
-                    let translation = crate::lyric_providers::utils::find_next_lyric(
-                        &elapsed,
-                        translation_lyric,
-                    );
+                    let translation =
+                        crate::lyric_providers::utils::find_next_lyric(&elapsed, translation_lyric);
                     let origin =
                         crate::lyric_providers::utils::find_next_lyric(&elapsed, origin_lyric);
                     set_lyric_with_mode(window, translation, origin);
