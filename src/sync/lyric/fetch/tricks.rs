@@ -161,7 +161,7 @@ fn load_local_lyric<P: AsRef<Path>>(path: P) -> Option<(LyricOwned, LyricOwned)>
             .ok()
             .as_ref()
             .and_then(|lyric| parse_local_lyric(lyric))
-            .map(|(_, tlyric)| tlyric)
+            .map(|(tlyric,_)| tlyric)
             .unwrap_or_default()
     };
     #[cfg(not(feature = "i18n-local-lyric"))]
