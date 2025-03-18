@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["LyricHint","LyricHintResult"],"fn":["get_lrc_path","get_lyric_hint_from_player","load_local_lyric"],"static":["EXTRACT_TRANSLATED_LYRIC"]};
+window.SIDEBAR_ITEMS = {"enum":["LyricHint","LyricHintResult"],"fn":["get_lrc_from_music_metadata","get_lrc_path","get_lyric_hint_from_player","load_local_lyric","lyric_tag_exists","parse_local_lyric"],"static":["EXTRACT_TRANSLATED_LYRIC","LYRIC_TAG_CACHE"]};

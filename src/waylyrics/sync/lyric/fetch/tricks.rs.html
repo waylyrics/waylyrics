@@ -127,16 +127,66 @@
 <a href="#126" id="126">126</a>
 <a href="#127" id="127">127</a>
 <a href="#128" id="128">128</a>
-<a href="#129" id="129">129</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::fs;
-<span class="kw">use </span>std::path::{Path, PathBuf};
-<span class="kw">use </span>std::sync::OnceLock;
-
-<span class="kw">use </span><span class="kw">crate</span>::log::{debug, error, warn};
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a></pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::log::{debug, error, warn};
 <span class="kw">use </span><span class="kw">crate</span>::lyric_providers::{Lyric, LyricOwned, LyricProvider};
 <span class="kw">use </span><span class="kw">crate</span>::sync::interop::{OsImp, OS};
 <span class="kw">use </span><span class="kw">crate</span>::sync::utils::extract_translated_lyric;
 <span class="kw">use </span><span class="kw">crate</span>::sync::{filter_original_lyric, TrackMeta};
 <span class="kw">use </span><span class="kw">crate</span>::LYRIC_PROVIDERS;
+<span class="kw">use </span>dashmap::DashMap;
+<span class="kw">use </span>lofty::file::TaggedFileExt;
+<span class="kw">use </span>lofty::read_from_path;
+<span class="kw">use </span>lofty::tag::ItemKey;
+<span class="kw">use </span>once_cell::sync::Lazy;
+<span class="kw">use </span>std::fs;
+<span class="kw">use </span>std::path::{Path, PathBuf};
+<span class="kw">use </span>std::sync::OnceLock;
 
 <span class="attr">#[derive(Debug)]
 </span><span class="kw">pub enum </span>LyricHint {
@@ -145,6 +195,7 @@
         provider: <span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="kw">dyn </span>LyricProvider,
     },
     LyricFile(PathBuf),
+    LyricMetadata(PathBuf),
     Metadata(TrackMeta),
 }
 
@@ -186,7 +237,10 @@
             <span class="kw">let </span>(olyric, tlyric) = load_local_lyric(<span class="kw-2">&amp;</span>path)<span class="question-mark">?</span>;
             <span class="prelude-val">Some</span>(LyricHintResult::Lyric { olyric, tlyric })
         }
-
+        <span class="prelude-val">Some</span>(LyricHint::LyricMetadata(path)) =&gt; {
+            <span class="kw">let </span>(olyric, tlyric) = get_lrc_from_music_metadata(<span class="kw-2">&amp;</span>path)<span class="question-mark">?</span>;
+            <span class="prelude-val">Some</span>(LyricHintResult::Lyric { olyric, tlyric })
+        }
         <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
     }
 }
@@ -202,42 +256,48 @@
         <span class="prelude-val">None
     </span>}
 }
+<span class="comment">// 添加一个静态缓存
+</span><span class="kw">pub static </span>LYRIC_TAG_CACHE: Lazy&lt;DashMap&lt;PathBuf, bool&gt;&gt; = Lazy::new(DashMap::new);
+
+<span class="kw">pub fn </span>lyric_tag_exists(music_path: <span class="kw-2">&amp;</span>Path) -&gt; bool {
+    <span class="comment">// 尝试从缓存中获取结果
+    </span><span class="kw">if let </span><span class="prelude-val">Some</span>(result) = LYRIC_TAG_CACHE.get(music_path) {
+        <span class="kw">return </span><span class="kw-2">*</span>result;
+    }
+
+    <span class="kw">let </span>result = read_from_path(music_path)
+        .map_err(|e| <span class="macro">warn!</span>(<span class="string">"cannot read music file: {e}"</span>))
+        .ok()
+        .as_ref()
+        .and_then(|tagged_file| tagged_file.primary_tag())
+        .and_then(|tag| tag.get(<span class="kw-2">&amp;</span>ItemKey::Lyrics))
+        .is_some();
+    <span class="comment">// 将结果存入缓存
+    </span>LYRIC_TAG_CACHE.insert(music_path.to_owned(), result);
+    result
+}
+<span class="kw">pub fn </span>get_lrc_from_music_metadata(music_path: <span class="kw-2">&amp;</span>PathBuf) -&gt; <span class="prelude-ty">Option</span>&lt;(LyricOwned, LyricOwned)&gt; {
+    read_from_path(music_path)
+        .map_err(|e| <span class="macro">error!</span>(<span class="string">"cannot read music file: {e}"</span>))
+        .ok()
+        .as_ref()
+        .and_then(|tagged_file| tagged_file.primary_tag())
+        .and_then(|tag| tag.get_string(<span class="kw-2">&amp;</span>ItemKey::Lyrics))
+        .and_then(parse_local_lyric)
+}
 
 <span class="kw">pub static </span>EXTRACT_TRANSLATED_LYRIC: OnceLock&lt;bool&gt; = OnceLock::new();
 
-<span class="kw">fn </span>load_local_lyric&lt;P: AsRef&lt;Path&gt;&gt;(path: P) -&gt; <span class="prelude-ty">Option</span>&lt;(LyricOwned, LyricOwned)&gt; {
-    <span class="kw">let </span><span class="kw-2">mut </span>olyric = fs::read_to_string(<span class="kw-2">&amp;</span>path)
-        .map_err(|e| <span class="macro">error!</span>(<span class="string">"cannot read lyric from hint: {e}"</span>))
-        .ok()
-        .and_then(|lyric| {
-            <span class="kw">crate</span>::lyric_providers::utils::lrc_iter(lyric.trim_start_matches(<span class="string">'\u{feff}'</span>).lines())
-                .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
-                .map_err(|e| <span class="macro">error!</span>(<span class="string">"cannot parse lyric from hint: {e}"</span>))
-                .ok()
-        })
-        .unwrap_or_default();
-    <span class="attr">#[cfg(feature = <span class="string">"i18n-local-lyric"</span>)]
-    </span><span class="kw">let </span><span class="kw-2">mut </span>tlyric = {
-        <span class="kw">let </span><span class="kw-2">mut </span>translation_path = path.as_ref().to_owned();
-        <span class="kw">let </span>lang = sys_locale::get_locale();
-        translation_path.set_extension(<span class="macro">format!</span>(<span class="string">"{}.lrc"</span>, lang.as_deref().unwrap_or(<span class="string">"zh"</span>)));
-        fs::read_to_string(<span class="kw-2">&amp;</span>translation_path)
-            .map_err(|e| <span class="macro">error!</span>(<span class="string">"cannot read translated lyric from hint: {e}"</span>))
+<span class="kw">fn </span>parse_local_lyric(lyric: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;(LyricOwned, LyricOwned)&gt; {
+    <span class="kw">let </span><span class="kw-2">mut </span>olyric =
+        <span class="kw">crate</span>::lyric_providers::utils::lrc_iter(lyric.trim_start_matches(<span class="string">'\u{feff}'</span>).lines())
+            .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
+            .map_err(|e| <span class="macro">error!</span>(<span class="string">"cannot parse lyric from hint: {e}"</span>))
             .ok()
-            .and_then(|lyric| {
-                <span class="kw">crate</span>::lyric_providers::utils::lrc_iter(
-                    lyric.trim_start_matches(<span class="string">'\u{feff}'</span>).lines(),
-                )
-                .map(|lyrics| Lyric::LineTimestamp(lyrics).into_owned())
-                .map_err(|e| <span class="macro">error!</span>(<span class="string">"cannot parse lyric from hint: {e}"</span>))
-                .ok()
-            })
-            .unwrap_or_default()
-    };
-    <span class="attr">#[cfg(not(feature = <span class="string">"i18n-local-lyric"</span>))]
-    </span><span class="kw">let </span><span class="kw-2">mut </span>tlyric = LyricOwned::None;
-
-    <span class="kw">if </span>tlyric.is_none() &amp;&amp; EXTRACT_TRANSLATED_LYRIC.get().cloned().unwrap_or_default() {
+            .unwrap_or_default();
+    <span class="kw">let </span><span class="kw-2">mut </span>tlyric = LyricOwned::None;
+    <span class="attr">#[cfg(feature = <span class="string">"i18n-local-lyric"</span>)]
+    </span><span class="kw">if </span>EXTRACT_TRANSLATED_LYRIC.get().cloned().unwrap_or_default() {
         <span class="kw">if let </span>LyricOwned::LineTimestamp(lines) = <span class="kw-2">&amp;</span>olyric {
             <span class="kw">let </span>tlyric_lines = extract_translated_lyric(lines);
             <span class="kw">if </span>!tlyric_lines.is_empty() {
@@ -249,6 +309,38 @@
             }
         }
     }
+
+    <span class="kw">if </span>olyric.is_none() &amp;&amp; tlyric.is_none() {
+        <span class="kw">return </span><span class="prelude-val">None</span>;
+    }
+
+    <span class="prelude-val">Some</span>((olyric, tlyric))
+}
+
+<span class="kw">fn </span>load_local_lyric&lt;P: AsRef&lt;Path&gt;&gt;(path: P) -&gt; <span class="prelude-ty">Option</span>&lt;(LyricOwned, LyricOwned)&gt; {
+    <span class="kw">let </span>olyric = fs::read_to_string(<span class="kw-2">&amp;</span>path)
+        .map_err(|e| <span class="macro">error!</span>(<span class="string">"cannot read lyric from hint: {e}"</span>))
+        .ok()
+        .as_ref()
+        .and_then(|lyric| parse_local_lyric(lyric))
+        .map(|(olyric, <span class="kw">_</span>)| olyric)
+        .unwrap_or_default();
+
+    <span class="attr">#[cfg(feature = <span class="string">"i18n-local-lyric"</span>)]
+    </span><span class="kw">let </span>tlyric = {
+        <span class="kw">let </span><span class="kw-2">mut </span>translation_path = path.as_ref().to_owned();
+        <span class="kw">let </span>lang = sys_locale::get_locale();
+        translation_path.set_extension(<span class="macro">format!</span>(<span class="string">"{}.lrc"</span>, lang.as_deref().unwrap_or(<span class="string">"zh"</span>)));
+        fs::read_to_string(<span class="kw-2">&amp;</span>translation_path)
+            .map_err(|e| <span class="macro">error!</span>(<span class="string">"cannot read translated lyric from hint: {e}"</span>))
+            .ok()
+            .as_ref()
+            .and_then(|lyric| parse_local_lyric(lyric))
+            .map(|(tlyric,<span class="kw">_</span>)| tlyric)
+            .unwrap_or_default()
+    };
+    <span class="attr">#[cfg(not(feature = <span class="string">"i18n-local-lyric"</span>))]
+    </span><span class="kw">let </span><span class="kw-2">mut </span>tlyric = LyricOwned::None;
 
     <span class="kw">if </span>olyric.is_none() &amp;&amp; tlyric.is_none() {
         <span class="kw">return </span><span class="prelude-val">None</span>;

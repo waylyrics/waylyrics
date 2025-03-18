@@ -70,13 +70,13 @@
 <span class="kw">use super</span>::{LyricLine, LyricLineOwned, LyricProvider};
 
 <span class="doccomment">/// parses lrc tags in each line
-/// 
+///
 /// ignores lines not started with '['
-/// 
+///
 /// returned `Vec` is sorted by it's Duration
-/// 
+///
 /// In the case multiple lyrics comes with the same start_time,
-/// 
+///
 /// they are not reordered between them
 </span><span class="kw">pub fn </span>lrc_iter&lt;<span class="lifetime">'a</span>&gt;(
     lyric_lines: <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span>str&gt;,

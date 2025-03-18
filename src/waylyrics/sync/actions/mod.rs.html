@@ -207,10 +207,12 @@
 <a href="#206" id="206">206</a>
 <a href="#207" id="207">207</a>
 <a href="#208" id="208">208</a>
-<a href="#209" id="209">209</a></pre></div><pre class="rust"><code><span class="kw">use crate</span>::{
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a></pre></div><pre class="rust"><code><span class="kw">use crate</span>::{
     app::search_window,
     log::{info, warn},
-    sync::LyricState,
+    sync::{lyric::fetch::tricks::LYRIC_TAG_CACHE, LyricState},
     utils::bind_shortcut,
 };
 <span class="kw">use </span>glib_macros::clone;
@@ -292,7 +294,8 @@
                 <span class="kw">return</span>;
             };
             reset_lyric_labels(<span class="kw-2">&amp;</span>wind, <span class="prelude-val">None</span>);
-            <span class="kw">if let </span><span class="prelude-val">Err</span>(err) = update_lyric(<span class="kw-2">&amp;</span>metainfo, <span class="kw-2">&amp;</span>wind, <span class="bool-val">false</span>).<span class="kw">await </span>{
+            LYRIC_TAG_CACHE.clear(); <span class="comment">// 手动刷新歌词时清空对歌曲文件中歌词标签存在性的缓存
+            </span><span class="kw">if let </span><span class="prelude-val">Err</span>(err) = update_lyric(<span class="kw-2">&amp;</span>metainfo, <span class="kw-2">&amp;</span>wind, <span class="bool-val">false</span>).<span class="kw">await </span>{
                 show_dialog(
                     <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>wind),
                     <span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">"cannot refetch lyric: {err:?}"</span>),
@@ -319,7 +322,8 @@
                 <span class="kw">return</span>;
             };
             reset_lyric_labels(<span class="kw-2">&amp;</span>wind, <span class="prelude-val">None</span>);
-            <span class="kw">if let </span><span class="prelude-val">Err</span>(err) = update_lyric(<span class="kw-2">&amp;</span>metainfo, <span class="kw-2">&amp;</span>wind, <span class="bool-val">true</span>).<span class="kw">await </span>{
+            LYRIC_TAG_CACHE.clear(); <span class="comment">// 手动刷新歌词时清空对歌曲文件中歌词标签存在性的缓存
+            </span><span class="kw">if let </span><span class="prelude-val">Err</span>(err) = update_lyric(<span class="kw-2">&amp;</span>metainfo, <span class="kw-2">&amp;</span>wind, <span class="bool-val">true</span>).<span class="kw">await </span>{
                 show_dialog(
                     <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>wind),
                     <span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">"cannot refetch lyric: {err:?}"</span>),

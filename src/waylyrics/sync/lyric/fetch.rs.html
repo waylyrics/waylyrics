@@ -194,7 +194,7 @@
         .get()
         .expect(<span class="string">"lyric providers should be initialized"</span>);
 
-    <span class="kw">let </span>artists = Arc::new(artists.as_ref().cloned().unwrap_or_else(|| <span class="macro">vec!</span>[]).clone());
+    <span class="kw">let </span>artists = Arc::new(artists.as_ref().cloned().unwrap_or_else(std::vec::Vec::new).clone());
 
     <span class="kw">let </span>length_toleration_ms = window.imp().length_toleration_ms.get();
 
