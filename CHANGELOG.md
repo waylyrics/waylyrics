@@ -2,6 +2,70 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.3.21 - 2025-04-13
+
+### 🚀 Features
+
+- 添加对从音乐文件元数据读取歌词的支持
+
+### 🐛 Bug Fixes
+
+- *(CI)* Remove outdated test of qqmusic api initialization [ci skip]
+- 手动刷新歌词时清空歌词标签缓存
+- .一个错误
+
+### 💼 Other
+
+- Migrate to ksni 0.3
+- Switch to better tray-icon implementation for windows [ci skip]
+- *(deps)* Bump glib-macros from 0.20.5 to 0.20.7 (#294)
+- *(deps)* Bump thiserror from 2.0.6 to 2.0.9 (#293)
+- *(deps)* Bump gdk4-win32 from 0.9.3 to 0.9.5 (#292)
+- *(deps)* Bump the serde group with 2 updates (#290)
+- *(deps)* Bump reqwest from 0.12.9 to 0.12.12 (#291)
+- *(deps)* Bump dark-light to 2.0.0
+- *(deps)* Bump windows from 0.58.0 to 0.59.0 (#300)
+- *(deps)* Bump futures-lite from 2.5.0 to 2.6.0 (#299)
+- *(deps)* Bump tokio from 1.42.0 to 1.43.0 (#298)
+- *(deps)* Bump thiserror from 2.0.9 to 2.0.11 (#297)
+- *(deps)* Bump serde_json from 1.0.134 to 1.0.138 in the serde group (#296)
+- *(deps)* Bump openssl from 0.10.68 to 0.10.70 (#301)
+- Bump dependencies
+- *(deps)* Bump ring from 0.17.11 to 0.17.13 (#303)
+- *(deps)* Bump the serde group with 2 updates
+- *(deps)* Bump rust_decimal_macros from 1.36.0 to 1.37.1
+- *(deps)* Bump reqwest from 0.12.12 to 0.12.15
+- *(deps)* Bump async-trait from 0.1.86 to 0.1.88
+- *(deps)* Bump rust_decimal from 1.36.0 to 1.37.1
+- *(deps)* Bump openssl from 0.10.71 to 0.10.72
+- *(deps)* Bump tokio from 1.43.0 to 1.43.1
+- Bump dependencies
+
+### 📚 Documentation
+
+- *(readme)* Replace text with logos
+- *(readme)* Add preview images [ci skip]
+- *(readme)* Add alternative `lyric-for-musixfox` [ci skip]
+- *(readme)* Add introduction [ci skip]
+- *(readme)* Note on project status
+- *(readme)* HotLyric, alternative on windows [ci skip]
+
+### ⚡ Performance
+
+- DashMap 作为歌词标签存在性缓存
+
+### 🎨 Styling
+
+- :lipstick: cargo fmt
+
+### ⚙️ Miscellaneous Tasks
+
+- Add .deepsource.toml
+- Fix deepsource lints
+- Dedup code
+- Add script to export dup deps [ci skip]
+- Bump version to v0.3.21
+
 ## [0.3.20] - 2024-12-07
 
 ### 🐛 Bug Fixes
@@ -12,6 +76,14 @@ All notable changes to this project will be documented in this file.
 
 - Capture panics
 - Comment for sub table in config
+
+### 🚜 Refactor
+
+- Extract set_by_mode
+
+### 📚 Documentation
+
+- Update changelog & metainfo
 
 ### ⚙️ Miscellaneous Tasks
 
