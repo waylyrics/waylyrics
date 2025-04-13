@@ -1,8 +1,7 @@
 use crate::log::{debug, error, warn};
 use crate::lyric_providers::{Lyric, LyricOwned, LyricProvider};
 use crate::sync::interop::{OsImp, OS};
-use crate::sync::utils::extract_translated_lyric;
-use crate::sync::{filter_original_lyric, TrackMeta};
+use crate::sync::TrackMeta;
 use crate::LYRIC_PROVIDERS;
 use dashmap::DashMap;
 use lofty::file::TaggedFileExt;
@@ -12,6 +11,11 @@ use once_cell::sync::Lazy;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
+
+#[cfg(feature = "i18n-local-lyric")]
+use crate::sync::filter_original_lyric;
+#[cfg(feature = "i18n-local-lyric")]
+use crate::sync::utils::extract_translated_lyric;
 
 #[derive(Debug)]
 pub enum LyricHint {
@@ -113,6 +117,7 @@ pub fn get_lrc_from_music_metadata(music_path: &PathBuf) -> Option<(LyricOwned, 
 
 pub static EXTRACT_TRANSLATED_LYRIC: OnceLock<bool> = OnceLock::new();
 
+#[allow(unused_mut)]
 fn parse_local_lyric(lyric: &str) -> Option<(LyricOwned, LyricOwned)> {
     let mut olyric =
         crate::lyric_providers::utils::lrc_iter(lyric.trim_start_matches('\u{feff}').lines())
@@ -142,6 +147,7 @@ fn parse_local_lyric(lyric: &str) -> Option<(LyricOwned, LyricOwned)> {
     Some((olyric, tlyric))
 }
 
+#[allow(unused_mut)]
 fn load_local_lyric<P: AsRef<Path>>(path: P) -> Option<(LyricOwned, LyricOwned)> {
     let olyric = fs::read_to_string(&path)
         .map_err(|e| error!("cannot read lyric from hint: {e}"))
@@ -161,7 +167,7 @@ fn load_local_lyric<P: AsRef<Path>>(path: P) -> Option<(LyricOwned, LyricOwned)>
             .ok()
             .as_ref()
             .and_then(|lyric| parse_local_lyric(lyric))
-            .map(|(tlyric,_)| tlyric)
+            .map(|(tlyric, _)| tlyric)
             .unwrap_or_default()
     };
     #[cfg(not(feature = "i18n-local-lyric"))]
