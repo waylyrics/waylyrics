@@ -38,6 +38,15 @@
   </screenshots>
 
   <releases>
+    <release version="0.3.21" date="2024-04-13">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.21</url>
+        <description>
+          <p>Features</p>
+            <ul>
+              <li>Extract LRC from metainfo in music file</li>
+            </ul>
+        </description>
+    </release>
     <release version="0.3.20" date="2024-12-07">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.20</url>
         <description>
