@@ -144,4 +144,4 @@ windows = { version = "0.61.1", features = [
 gdk4-win32 = { version = "0.9.5" }
 
 [target.'cfg(windows)'.build-dependencies]
-windows_exe_info = { version = "0.5.1" }
+windows_exe_info = { version = "0.5.2" }
