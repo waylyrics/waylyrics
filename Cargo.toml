@@ -94,7 +94,7 @@ gettext-rs = { version = "0.7.2", features = [
 opencc-rust = { version = "1.1", optional = true }
 sys-locale = { version = "0.3.2", optional = true }
 tracing-panic = "0.1.2"
-lofty = "0.22.2"
+lofty = "0.22.4"
 dashmap = "6.1.0"
 
 [features]
