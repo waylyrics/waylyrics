@@ -39,7 +39,7 @@ url = "2.5.4"
 
 # ui
 gtk = { version = "0.9.6", package = "gtk4" }
-glib-macros = "0.20.7"
+glib-macros = "0.20.10"
 dark-light = { git = "https://github.com/frewsxcv/rust-dark-light.git", rev = "b8edef9072f7d38ae879129cde03bb1f40750c4c", features = [
     "sync",
 ] }
