@@ -58,7 +58,7 @@ tracing-journald = { version = "0.3.1", optional = true }
 tracing-subscriber = { version = "0.3.19", features = ["env-filter"] }
 
 # cache
-md5 = "0.7.0"
+md5 = "0.8.0"
 
 # utils
 regex = "1.11.1"
