@@ -14,6 +14,9 @@ updates:
       serde:
         patterns:
         - "serde*"
+      toml:
+        patterns:
+        - "toml*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
