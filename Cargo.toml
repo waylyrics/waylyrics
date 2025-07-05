@@ -85,7 +85,7 @@ tokio = { version = "1.46.1", features = [
 reqwest = { version = "0.12.22" }
 
 # event
-async-channel = { version = "2.3.1" }
+async-channel = { version = "2.4.0" }
 
 # i18n
 gettext-rs = { version = "0.7.2", features = [
