@@ -56,11 +56,11 @@ pub fn register_sync_task(wind: WeakRef<Window>, interval: Duration, auto_connec
 
         match OS::try_sync_track(&window) {
             Err(PlayerStatus::Missing) => {
-                reset_lyric_labels(&window, None);
-                clean_lyric(&window);
                 TRACK_PLAYING_STATE.take();
 
                 if auto_connect {
+                    reset_lyric_labels(&window, None);
+                    clean_lyric(&window);
                     OS::reconnect_player();
                 }
             }
