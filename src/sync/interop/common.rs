@@ -48,7 +48,7 @@ pub async fn update_lyric(
     Ok(())
 }
 
-pub fn register_sync_task(wind: WeakRef<Window>, interval: Duration) {
+pub fn register_sync_task(wind: WeakRef<Window>, interval: Duration, auto_connect: bool) {
     glib::timeout_add_local(interval, move || {
         let Some(window) = wind.upgrade() else {
             return glib::ControlFlow::Continue;
@@ -56,10 +56,13 @@ pub fn register_sync_task(wind: WeakRef<Window>, interval: Duration) {
 
         match OS::try_sync_track(&window) {
             Err(PlayerStatus::Missing) => {
-                OS::reconnect_player();
                 reset_lyric_labels(&window, None);
                 clean_lyric(&window);
                 TRACK_PLAYING_STATE.take();
+
+                if auto_connect {
+                    OS::reconnect_player();
+                }
             }
             Err(PlayerStatus::Unsupported(kind)) => {
                 app::get_label(&window, "above").set_label("Unsupported Player");

@@ -38,6 +38,8 @@ pub enum LyricDisplayMode {
 #[derive(Deserialize, Serialize, DocumentedFields)]
 #[serde(rename_all = "kebab-case", default)]
 pub struct Config {
+    /// auto connect to a player if last was disconnected/waylyrics was idle
+    pub auto_connect: bool,
     /// the interval waylyrics updates position/metadata from player
     pub player_sync_interval: String,
 
@@ -153,6 +155,7 @@ impl Default for Triggers {
 impl Default for Config {
     fn default() -> Self {
         Self {
+            auto_connect: true,
             player_sync_interval: "2s".to_owned(),
             lyric_update_interval: "20ms".to_owned(),
             length_toleration: "2s".to_owned(),
