@@ -12,10 +12,10 @@
 <a href=#12 id=12 data-nosnippet>12</a>
 <a href=#13 id=13 data-nosnippet>13</a><span class="kw">use </span>glib_macros::clone;
 <a href=#14 id=14 data-nosnippet>14</a><span class="kw">use </span>gtk::gio::SimpleAction;
-<a href=#15 id=15 data-nosnippet>15</a><span class="kw">use </span>gtk::glib::{<span class="self">self</span>, VariantTy};
+<a href=#15 id=15 data-nosnippet>15</a><span class="kw">use </span>gtk::glib::{<span class="self">self</span>, Variant, VariantTy};
 <a href=#16 id=16 data-nosnippet>16</a><span class="kw">use </span>gtk::{prelude::<span class="kw-2">*</span>, subclass::prelude::<span class="kw-2">*</span>, Application};
 <a href=#17 id=17 data-nosnippet>17</a>
-<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span><span class="kw">super</span>::set_lyric_align;
+<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use super</span>::{get_label, set_lyric_align};
 <a href=#19 id=19 data-nosnippet>19</a>
 <a href=#20 id=20 data-nosnippet>20</a><span class="kw">pub fn </span>register_switch_decoration(wind: <span class="kw-2">&amp;</span>Window, trigger: <span class="kw-2">&amp;</span>str) {
 <a href=#21 id=21 data-nosnippet>21</a>    <span class="kw">let </span>action = SimpleAction::new(<span class="string">"switch-decoration"</span>, <span class="prelude-val">None</span>);
@@ -97,4 +97,32 @@
 <a href=#97 id=97 data-nosnippet>97</a>        }
 <a href=#98 id=98 data-nosnippet>98</a>    ));
 <a href=#99 id=99 data-nosnippet>99</a>    wind.add_action(<span class="kw-2">&amp;</span>action);
-<a href=#100 id=100 data-nosnippet>100</a>}</code></pre></div></section></main></body></html>
+<a href=#100 id=100 data-nosnippet>100</a>}
+<a href=#101 id=101 data-nosnippet>101</a>
+<a href=#102 id=102 data-nosnippet>102</a><span class="kw">pub fn </span>register_set_above_label(wind: <span class="kw-2">&amp;</span>Window) {
+<a href=#103 id=103 data-nosnippet>103</a>    <span class="kw">let </span>action = SimpleAction::new(<span class="string">"set-label"</span>, <span class="prelude-val">Some</span>(VariantTy::STRING_ARRAY));
+<a href=#104 id=104 data-nosnippet>104</a>    action.connect_activate(<span class="macro">clone!</span>(
+<a href=#105 id=105 data-nosnippet>105</a>        <span class="attr">#[weak]
+<a href=#106 id=106 data-nosnippet>106</a>        </span>wind,
+<a href=#107 id=107 data-nosnippet>107</a>        <span class="kw">move </span>|<span class="kw">_</span>, text| {
+<a href=#108 id=108 data-nosnippet>108</a>            <span class="kw">let </span><span class="prelude-val">Some</span>((position, text)) = text.and_then(extract_str_array) <span class="kw">else </span>{
+<a href=#109 id=109 data-nosnippet>109</a>                <span class="kw">return</span>;
+<a href=#110 id=110 data-nosnippet>110</a>            };
+<a href=#111 id=111 data-nosnippet>111</a>            get_label(<span class="kw-2">&amp;</span>wind, position).set_label(text);
+<a href=#112 id=112 data-nosnippet>112</a>        }
+<a href=#113 id=113 data-nosnippet>113</a>    ));
+<a href=#114 id=114 data-nosnippet>114</a>    wind.add_action(<span class="kw-2">&amp;</span>action);
+<a href=#115 id=115 data-nosnippet>115</a>}
+<a href=#116 id=116 data-nosnippet>116</a>
+<a href=#117 id=117 data-nosnippet>117</a><span class="kw">fn </span>extract_str_array(variant: <span class="kw-2">&amp;</span>Variant) -&gt; <span class="prelude-ty">Option</span>&lt;(<span class="kw-2">&amp;</span>str, <span class="kw-2">&amp;</span>str)&gt; {
+<a href=#118 id=118 data-nosnippet>118</a>    <span class="kw">let </span><span class="kw-2">mut </span>iter = variant.array_iter_str().ok()<span class="question-mark">?</span>;
+<a href=#119 id=119 data-nosnippet>119</a>    <span class="kw">let </span>position = iter.next()<span class="question-mark">?</span>;
+<a href=#120 id=120 data-nosnippet>120</a>
+<a href=#121 id=121 data-nosnippet>121</a>    <span class="kw">if </span>![<span class="string">"above"</span>, <span class="string">"below"</span>].contains(<span class="kw-2">&amp;</span>position) {
+<a href=#122 id=122 data-nosnippet>122</a>        <span class="kw">return </span><span class="prelude-val">None</span>;
+<a href=#123 id=123 data-nosnippet>123</a>    }
+<a href=#124 id=124 data-nosnippet>124</a>
+<a href=#125 id=125 data-nosnippet>125</a>    <span class="kw">let </span>text = iter.next()<span class="question-mark">?</span>;
+<a href=#126 id=126 data-nosnippet>126</a>
+<a href=#127 id=127 data-nosnippet>127</a>    <span class="prelude-val">Some</span>((position, text))
+<a href=#128 id=128 data-nosnippet>128</a>}</code></pre></div></section></main></body></html>
