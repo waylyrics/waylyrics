@@ -35,7 +35,7 @@ use tracing_subscriber::prelude::*;
 use tracing_subscriber::{fmt, Registry};
 
 use app::actions::{
-    register_reload_theme, register_set_display_mode, register_set_lyric_align,
+    register_reload_theme, register_set_display_mode, register_set_label, register_set_lyric_align,
     register_switch_decoration, register_switch_passthrough,
 };
 
@@ -244,6 +244,7 @@ fn register_actions(
     register_set_display_mode(wind);
     register_switch_decoration(wind, &switch_decoration);
     register_switch_passthrough(wind, &switch_passthrough);
+    register_set_label(wind);
     register_reload_theme(app, wind, &reload_theme);
     register_search_lyric(app, wind, &search_lyric);
     register_remove_lyric(app, wind);

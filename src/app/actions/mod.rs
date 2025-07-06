@@ -99,7 +99,7 @@ pub fn register_set_lyric_align(wind: &Window) {
     wind.add_action(&action);
 }
 
-pub fn register_set_above_label(wind: &Window) {
+pub fn register_set_label(wind: &Window) {
     let action = SimpleAction::new("set-label", Some(VariantTy::STRING_ARRAY));
     action.connect_activate(clone!(
         #[weak]
