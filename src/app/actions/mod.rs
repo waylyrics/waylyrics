@@ -12,10 +12,10 @@ use crate::utils::bind_shortcut;
 
 use glib_macros::clone;
 use gtk::gio::SimpleAction;
-use gtk::glib::{self, VariantTy};
+use gtk::glib::{self, Variant, VariantTy};
 use gtk::{prelude::*, subclass::prelude::*, Application};
 
-use super::set_lyric_align;
+use super::{get_label, set_lyric_align};
 
 pub fn register_switch_decoration(wind: &Window, trigger: &str) {
     let action = SimpleAction::new("switch-decoration", None);
@@ -97,4 +97,32 @@ pub fn register_set_lyric_align(wind: &Window) {
         }
     ));
     wind.add_action(&action);
+}
+
+pub fn register_set_above_label(wind: &Window) {
+    let action = SimpleAction::new("set-label", Some(VariantTy::STRING_ARRAY));
+    action.connect_activate(clone!(
+        #[weak]
+        wind,
+        move |_, text| {
+            let Some((position, text)) = text.and_then(extract_str_array) else {
+                return;
+            };
+            get_label(&wind, position).set_label(text);
+        }
+    ));
+    wind.add_action(&action);
+}
+
+fn extract_str_array(variant: &Variant) -> Option<(&str, &str)> {
+    let mut iter = variant.array_iter_str().ok()?;
+    let position = iter.next()?;
+
+    if !["above", "below"].contains(&position) {
+        return None;
+    }
+
+    let text = iter.next()?;
+
+    Some((position, text))
 }
