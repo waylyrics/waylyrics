@@ -12,6 +12,10 @@ use crate::log::debug;
 
 #[derive(Clone, Debug)]
 pub enum UIAction {
+    /// set label content for above label
+    SetAboveLabel(String),
+    /// set label content for below label
+    SetBelowLabel(String),
     ReloadTheme,
     /// toggles mouse click passthrough
     SwitchPassthrough,
@@ -40,6 +44,16 @@ fn register_ui_action(app: WeakRef<Application>, wind: WeakRef<Window>) -> Sende
             };
 
             match action {
+                UIAction::SetAboveLabel(text) => ActionGroupExt::activate_action(
+                    &wind,
+                    "set-label",
+                    Some(&vec!["above".to_string(), text].to_variant()),
+                ),
+                UIAction::SetBelowLabel(text) => ActionGroupExt::activate_action(
+                    &wind,
+                    "set-label",
+                    Some(&vec!["below".to_string(), text].to_variant()),
+                ),
                 UIAction::ReloadTheme => app.activate_action("reload-theme", None),
                 UIAction::SwitchPassthrough => {
                     ActionGroupExt::activate_action(&wind, "switch-passthrough", None)

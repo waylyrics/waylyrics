@@ -1,12 +1,15 @@
 use std::fs;
 use std::path::PathBuf;
 
+use gtk::gio::DBusSignalFlags;
 use gtk::prelude::*;
 use gtk::{glib, Application};
 
 use anyhow::Result;
 
 use regex::RegexSet;
+use tracing::warn;
+use waylyrics::app::actions::{UIAction, UI_ACTION};
 use waylyrics::app::{self, build_main_window};
 use waylyrics::config::append_comments;
 use waylyrics::config::{Config, Triggers};
@@ -22,8 +25,8 @@ use waylyrics::{
     PLAYER_NAME_BLACKLIST, THEME_PATH,
 };
 
-use waylyrics::log;
 use waylyrics::sync::*;
+use waylyrics::{glib_spawn, log};
 
 #[cfg(feature = "action-event")]
 use waylyrics::app::actions::init_ui_action_channel;
@@ -104,6 +107,44 @@ fn main() -> Result<glib::ExitCode> {
     app.connect_startup(|a| {
         let dbus_conn = a.dbus_connection();
         GTK_DBUS_CONNECTION.set(dbus_conn);
+
+        let conn = GTK_DBUS_CONNECTION.with_borrow(|conn| conn.as_ref().map(|c| c.clone()));
+
+        let Some(conn) = conn else {
+            return;
+        };
+        glib_spawn!(async move {
+            conn.signal_subscribe(
+                None,
+                Some("io.github.waylyrics.Waylyrics"),
+                None,
+                Some("/io/github/waylyrics/Waylyrics"),
+                None,
+                DBusSignalFlags::NONE,
+                |_conn, _sender, _obj_path, _interface, signal_name, params| {
+                    let Some(sender) = UI_ACTION.get() else {
+                        return;
+                    };
+                    match signal_name {
+                        "SetAboveLabel" => {
+                            let child = params.child_value(0);
+                            let Some(text) = child.str() else {
+                                return;
+                            };
+                            _ = sender.send_blocking(UIAction::SetAboveLabel(text.to_string()));
+                        }
+                        "SetBelowLabel" => {
+                            let child = params.child_value(0);
+                            let Some(text) = child.str() else {
+                                return;
+                            };
+                            _ = sender.send_blocking(UIAction::SetAboveLabel(text.to_string()));
+                        }
+                        _ => warn!("unknown signal: {signal_name}"),
+                    }
+                },
+            );
+        });
     });
 
     Ok(app.run())
