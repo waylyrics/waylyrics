@@ -108,7 +108,7 @@ fn main() -> Result<glib::ExitCode> {
         let dbus_conn = a.dbus_connection();
         GTK_DBUS_CONNECTION.set(dbus_conn);
 
-        let conn = GTK_DBUS_CONNECTION.with_borrow(|conn| conn.as_ref().map(|c| c.clone()));
+        let conn = GTK_DBUS_CONNECTION.with_borrow(|conn| conn.as_ref().cloned());
 
         let Some(conn) = conn else {
             return;
