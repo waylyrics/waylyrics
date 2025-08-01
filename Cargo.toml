@@ -63,7 +63,7 @@ md5 = "0.8.0"
 # utils
 regex = "1.11.1"
 directories = "6.0.0"
-strum = { version = "0.27.1", default-features = false, features = ["derive"] }
+strum = { version = "0.27.2", default-features = false, features = ["derive"] }
 sorensen = "0.2.0"
 ahash = "0.8.12"
 rfd = { version = "0.15.1", optional = true }
