@@ -35,7 +35,7 @@ rust_decimal = { version = "1.37.2", default-features = false, features = [
     "std",
 ] }
 rust_decimal_macros = "1.37.1"
-url = "2.5.4"
+url = "2.5.7"
 
 # ui
 gtk = { version = "0.9.6", package = "gtk4" }
