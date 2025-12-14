@@ -9,8 +9,18 @@ use anyhow::Result;
 
 use regex::RegexSet;
 use tracing::warn;
+
+use tracing_subscriber::filter::{EnvFilter, LevelFilter};
+use tracing_subscriber::prelude::*;
+use tracing_subscriber::{fmt, Registry};
+
+use waylyrics::app::actions::{
+    register_reload_theme, register_set_display_mode, register_set_label, register_set_lyric_align,
+    register_switch_decoration, register_switch_passthrough,
+};
 use waylyrics::app::actions::{UIAction, UI_ACTION};
 use waylyrics::app::{self, build_main_window};
+
 use waylyrics::config::append_comments;
 use waylyrics::config::{Config, Triggers};
 use waylyrics::lyric_providers::qqmusic::QQMusic;
@@ -32,15 +42,6 @@ use waylyrics::{glib_spawn, log};
 use waylyrics::app::actions::init_ui_action_channel;
 #[cfg(feature = "tray-icon")]
 use waylyrics::tray_icon::start_tray_service;
-
-use tracing_subscriber::filter::{EnvFilter, LevelFilter};
-use tracing_subscriber::prelude::*;
-use tracing_subscriber::{fmt, Registry};
-
-use app::actions::{
-    register_reload_theme, register_set_display_mode, register_set_label, register_set_lyric_align,
-    register_switch_decoration, register_switch_passthrough,
-};
 
 pub const THEME_PRESETS_DIR: Option<&str> = option_env!("WAYLYRICS_THEME_PRESETS_DIR");
 
