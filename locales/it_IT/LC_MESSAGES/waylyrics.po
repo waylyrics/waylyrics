@@ -23,9 +23,8 @@ msgstr "Nascondi decorazione"
 
 #: ../src/app/window/imp.rs:71 ../src/tray_icon/unix/mod.rs:102
 #: ../src/tray_icon/windows/mod.rs:27
-#, fuzzy
 msgid "Toggle Passthrough"
-msgstr "Commuta cliccare pass-through"
+msgstr "Atttiva passaggio al click del mouse"
 
 #: ../src/app/window/imp.rs:74 ../src/tray_icon/unix/mod.rs:116
 msgid "Reload theme"
@@ -180,9 +179,8 @@ msgid "Quit"
 msgstr "Esci"
 
 #: ../src/main.rs:111
-#, fuzzy
 msgid "[optional] configuration path"
-msgstr "[facoltativo] percorso del file di configurazione"
+msgstr "[facoltativo] percorso di configurazione"
 
 #: ../src/app/window/imp.rs:179 ../src/tray_icon/unix/mod.rs:57
 msgid "show_both"
