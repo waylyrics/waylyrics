@@ -11,27 +11,20 @@
   </div>
 </div>
 
-- [Waylyrics](#waylyrics)
-  - [Introduction](#introduction)
-  - [Preview](#preview)
-    - [Main UI](#main-ui)
-    - [Search Lyrics](#search-lyrics)
-  - [Build/Install](#buildinstall)
-  - [Usage](#usage)
-  - [Requirement](#requirement)
-  - [Plugins](#plugins)
-  - [Recommended Players](#recommended-players)
-    - [Linux](#linux)
-    - [Windows](#windows)
-  - [Unsupported Players](#unsupported-players)
-  - [Directories](#directories)
-    - [Linux/Unix](#linuxunix)
-    - [Windows](#windows-1)
-  - [Alternatives](#alternatives)
-    - [Linux](#linux-1)
-    - [Windows](#windows-2)
-  - [Credit](#credit)
-  - [License](#license)
+[简体中文](./README.md) | [English](./README.en.md)
+
+- [Introduction](#introduction)
+- [Preview](#preview)
+- [Build/Install](#buildinstall)
+- [Usage](#usage)
+- [Requirement](#requirement)
+- [Plugins](#plugins)
+- [Recommended Players](#recommended-players)
+- [Unsupported Players](#unsupported-players)
+- [Directories](#directories)
+- [Alternatives](#alternatives)
+- [Credit](#credit)
+- [License](#license)
 
 
 ## Introduction
