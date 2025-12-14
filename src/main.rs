@@ -1,7 +1,9 @@
 use std::fs;
+use std::ops::ControlFlow;
 use std::path::PathBuf;
 
 use gtk::gio::{DBusSignalFlags, DBusSignalRef};
+use gtk::glib::{OptionArg, OptionFlags};
 use gtk::prelude::*;
 use gtk::{glib, Application};
 
@@ -27,7 +29,7 @@ use waylyrics::lyric_providers::qqmusic::QQMusic;
 use waylyrics::lyric_providers::utils::get_provider;
 use waylyrics::lyric_providers::LyricProvider;
 
-use waylyrics::utils::acquire_instance_name;
+use waylyrics::utils::{acquire_instance_name, gettext, CUSTOM_CONFIG_PATH};
 use waylyrics::{
     sync::lyric::fetch::tricks::EXTRACT_TRANSLATED_LYRIC,
     utils::{self, init_dirs},
@@ -95,6 +97,21 @@ fn main() -> Result<glib::ExitCode> {
         )
         .build();
 
+    app.connect_handle_local_options(|_app, option| {
+        if let Ok(Some(path)) = option.lookup::<PathBuf>("config-path") {
+            _ = CUSTOM_CONFIG_PATH.set(path);
+        }
+        ControlFlow::Continue(())
+    });
+    app.add_main_option(
+        "config-path",
+        b'c'.into(),
+        OptionFlags::empty(),
+        OptionArg::Filename,
+        &gettext("[optional] configuration path"),
+        None,
+    );
+
     glib::set_prgname(Some(waylyrics::APP_ID_FIXED));
 
     log::info!("successfully created application!");
@@ -160,7 +177,7 @@ fn build_ui(app: &Application) -> Result<()> {
 
     let (config_path, theme_dir) = init_dirs()?;
 
-    log::debug!("config path: {:?}", config_path);
+    log::info!("config path: {:?}", config_path);
     let config = std::fs::read_to_string(&config_path)?;
     let config: Config = toml_edit::de::from_str(&config)?;
     let config_with_docs = append_comments(&toml::to_string(&config)?)?;

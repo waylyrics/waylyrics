@@ -1,6 +1,7 @@
 use anyhow::Result;
 use gtk::glib::subclass::types::ObjectSubclassIsExt;
 use std::path::PathBuf;
+use std::sync::OnceLock;
 use std::time::Duration;
 
 use crate::app::{get_label, Window};
@@ -58,10 +59,11 @@ pub enum ParseError {
     IllFormed,
 }
 
+pub static CUSTOM_CONFIG_PATH: OnceLock<PathBuf> = OnceLock::new();
+
 pub fn init_dirs() -> Result<(PathBuf, PathBuf)> {
     let proj_dirs =
         directories::ProjectDirs::from("io", "poly000", "waylyrics").expect("can't get proj_dirs!");
-    let config_home = proj_dirs.config_dir();
     let cache_dir = proj_dirs.cache_dir();
 
     crate::CACHE_DIR.set(
@@ -71,9 +73,18 @@ pub fn init_dirs() -> Result<(PathBuf, PathBuf)> {
             .into(),
     );
 
-    std::fs::create_dir_all(config_home)?;
     std::fs::create_dir_all(cache_dir)?;
-    let config_path = config_home.join("config.toml");
+
+    let config_path = if let Some(path) = CUSTOM_CONFIG_PATH.get() {
+        path.into()
+    } else {
+        let config_home = proj_dirs.config_dir();
+        config_home.join("config.toml")
+    };
+    if let Some(config_dir) = config_path.parent() {
+        std::fs::create_dir_all(config_dir)?;
+    }
+
     let user_theme_dir = proj_dirs.data_dir().join("_themes");
 
     if !config_path.exists() {
