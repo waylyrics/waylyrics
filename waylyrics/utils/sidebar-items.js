@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["ParseError"],"fn":["acquire_instance_name","auto_theme_change","bind_shortcut","gettext","init_dirs","parse_time","reset_lyric_labels"],"mod":["instance","shortcut","theme"]};
+window.SIDEBAR_ITEMS = {"enum":["ParseError"],"fn":["acquire_instance_name","auto_theme_change","bind_shortcut","gettext","init_dirs","parse_time","reset_lyric_labels"],"mod":["instance","shortcut","theme"],"static":["CUSTOM_CONFIG_PATH"]};
