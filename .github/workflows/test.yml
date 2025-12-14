@@ -1,77 +1,74 @@
 name: Build, Test & upload
-
 on:
-  [push, pull_request]
-
+  push:
+    paths:
+      - src/**
+      - metainfo/*.gschema.xml
+  pull_request:
+    paths:
+      - src/**
+      - metainfo/*.gschema.xml
 env:
   CARGO_TERM_COLOR: always
   WAYLYRICS_THEME_PRESETS_DIR: /usr/share/waylyrics/themes
-
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v6
+      - uses: actions/checkout@v6
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Install deps
+        run: |
+          sudo rm /etc/apt/sources.list.d/microsoft-prod.list
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libgtk-4-dev libdbus-1-dev pkg-config weston
+      - uses: Swatinem/rust-cache@v2
+      - name: Test
+        run: cargo test
+      - name: Build
+        run: cargo build --release
+      - name: Installation
+        run: |
+          sudo mkdir -p /usr/share/waylyrics
+          sudo install -m644 metainfo/io.github.waylyrics.Waylyrics.gschema.xml /usr/share/glib-2.0/schemas/
+          sudo install -dm755 ${WAYLYRICS_THEME_PRESETS_DIR}
+          sudo cp -r themes/* ${WAYLYRICS_THEME_PRESETS_DIR}/
 
-    - name: Setup Rust Toolchain
-      uses: dtolnay/rust-toolchain@stable
+          # install schema
+          sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
+      - name: Start waylyrics
+        run: |
+          # init weston
+          weston --backend=headless-backend.so -Swayland-1 &
+          # let weston prepare for 1s
+          sleep 1
 
-    - name: Install deps
-      run: |
-        sudo rm /etc/apt/sources.list.d/microsoft-prod.list
-        sudo apt-get update
-        sudo apt-get install -y --no-install-recommends libgtk-4-dev libdbus-1-dev pkg-config weston
-    - uses: Swatinem/rust-cache@v2
-    - name: Test
-      run: cargo test
-    - name: Build
-      run: cargo build --release
-    - name: Installation
-      run: |
-        sudo mkdir -p /usr/share/waylyrics
-        sudo install -m644 metainfo/io.github.waylyrics.Waylyrics.gschema.xml /usr/share/glib-2.0/schemas/
-        sudo install -dm755 ${WAYLYRICS_THEME_PRESETS_DIR}
-        sudo cp -r themes/* ${WAYLYRICS_THEME_PRESETS_DIR}/
+          # start waylyrics
+          ret=-1
+          WAYLAND_DISPLAY=wayland-1 RUST_BACKTRACE=1 timeout 5s ./target/release/waylyrics || ret=$?
 
-        # install schema
-        sudo glib-compile-schemas /usr/share/glib-2.0/schemas/
-    - name: Start waylyrics
-      run: |
-        # init weston
-        weston --backend=headless-backend.so -Swayland-1 &
-        # let weston prepare for 1s
-        sleep 1
-
-        # start waylyrics
-        ret=-1
-        WAYLAND_DISPLAY=wayland-1 RUST_BACKTRACE=1 timeout 5s ./target/release/waylyrics || ret=$?
-
-        if [ $ret -eq 124 ]; then
-          echo "waylyrics survived the smoke test"
-          exit 0
-        else
-          echo "waylyrics crashed during the smoke test (exit code $ret)"
-          exit 1
-        fi
-    - name: Prepare assets
-      shell: bash
-      run: |
-        tar -cvzf amd64-linux-gnu.tar.gz target/release/waylyrics \
-        LICENSE res metainfo/io.github.waylyrics.Waylyrics.{gschema.xml,desktop}
-        
-    - name: Declare some variables # https://stackoverflow.com/a/61699863
-      id: vars
-      shell: bash
-      run: |
-        echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
-    - uses: actions/upload-artifact@v5
-      with:
-        name: linux-x86_64
-        path: amd64-linux-gnu.tar.gz
-
+          if [ $ret -eq 124 ]; then
+            echo "waylyrics survived the smoke test"
+            exit 0
+          else
+            echo "waylyrics crashed during the smoke test (exit code $ret)"
+            exit 1
+          fi
+      - name: Prepare assets
+        shell: bash
+        run: |
+          tar -cvzf amd64-linux-gnu.tar.gz target/release/waylyrics \
+          LICENSE res metainfo/io.github.waylyrics.Waylyrics.{gschema.xml,desktop}
+      - name: Declare some variables # https://stackoverflow.com/a/61699863
+        id: vars
+        shell: bash
+        run: |
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      - uses: actions/upload-artifact@v5
+        with:
+          name: linux-x86_64
+          path: amd64-linux-gnu.tar.gz
   update-aur-pkgbuild:
     name: 'Update AUR PKGBUILD'
     runs-on: 'ubuntu-latest'

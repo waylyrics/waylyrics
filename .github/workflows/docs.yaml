@@ -1,42 +1,36 @@
 name: Deploy Docs to GitHub Pages
-
 on:
-    push:
-        branches:
-            - master
-    workflow_dispatch:
-
+  push:
+    branches:
+      - master
+    paths:
+      - src/**
+  workflow_dispatch:
 env:
   CARGO_TERM_COLOR: always
   WAYLYRICS_THEME_PRESETS_DIR: /usr/share/waylyrics/themes
-
 jobs:
-    release:
-        name: GitHub Pages
-        runs-on: ubuntu-latest
-
-        steps:
-            - name: Checkout Repository
-              uses: actions/checkout@v6
-
-            - name: Setup Rust Toolchain
-              uses: dtolnay/rust-toolchain@stable
-
-            - name: Install deps
-              run: |
-                sudo rm /etc/apt/sources.list.d/microsoft-prod.list
-                sudo apt update
-                sudo apt install -y --no-install-recommends libgtk-4-dev libdbus-1-dev pkg-config
-
-            - name: Build Documentation
-              run: cargo doc --all --no-deps --document-private-items
-
-            - name: Deploy Documentation
-              env:
-                ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-                PUBLISH_BRANCH: gh-pages
-                PUBLISH_DIR: ./target/doc
-                SCRIPT_MODE: true
-              run: |
-                wget https://raw.githubusercontent.com/peaceiris/actions-gh-pages/v2.5.0/entrypoint.sh
-                bash ./entrypoint.sh
+  release:
+    name: GitHub Pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Install deps
+        run: |
+          sudo rm /etc/apt/sources.list.d/microsoft-prod.list
+          sudo apt update
+          sudo apt install -y --no-install-recommends libgtk-4-dev libdbus-1-dev pkg-config
+      - name: Build Documentation
+        run: cargo doc --all --no-deps --document-private-items
+      - name: Deploy Documentation
+        env:
+          ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: ./target/doc
+          SCRIPT_MODE: true
+        run: |
+          wget https://raw.githubusercontent.com/peaceiris/actions-gh-pages/v2.5.0/entrypoint.sh
+          bash ./entrypoint.sh
