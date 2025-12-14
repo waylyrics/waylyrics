@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: waylyrics 0.3.15\n"
+"Project-Id-Version: waylyrics 0.3.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-19 18:59+0800\n"
+"POT-Creation-Date: 2025-12-14 17:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,9 +17,69 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/app/search_window/mod.rs:57 ../src/app/window/imp.rs:75
-#: ../src/tray_icon/windows/mod.rs:39
+#: ../src/app/window/imp.rs:67
+msgid "Hide Decoration"
+msgstr ""
+
+#: ../src/app/window/imp.rs:71 ../src/tray_icon/unix/mod.rs:102
+#: ../src/tray_icon/windows/mod.rs:27
+msgid "Toggle Passthrough"
+msgstr ""
+
+#: ../src/app/window/imp.rs:74 ../src/tray_icon/unix/mod.rs:116
+msgid "Reload theme"
+msgstr ""
+
+#: ../src/app/window/imp.rs:75 ../src/app/search_window/mod.rs:57
+#: ../src/tray_icon/windows/mod.rs:18
 msgid "Search lyric"
+msgstr ""
+
+#: ../src/app/window/imp.rs:77 ../src/tray_icon/windows/mod.rs:21
+msgid "Refetch lyric"
+msgstr ""
+
+#: ../src/app/window/imp.rs:80
+msgid "Remove lyric"
+msgstr ""
+
+#: ../src/app/window/imp.rs:82
+msgid "Remove lyric forever"
+msgstr ""
+
+#: ../src/app/window/imp.rs:93 ../src/tray_icon/unix/mod.rs:53
+msgid "Lyric Display Mode"
+msgstr ""
+
+#: ../src/app/window/imp.rs:97 ../src/tray_icon/unix/mod.rs:73
+msgid "Lyric Alignment"
+msgstr ""
+
+#: ../src/app/window/imp.rs:109 ../src/app/window/imp.rs:151
+#: ../src/tray_icon/unix/mod.rs:126
+msgid "Select Player"
+msgstr ""
+
+#: ../src/app/window/imp.rs:116 ../src/app/window/imp.rs:128
+#: ../src/tray_icon/unix/mod.rs:157 ../src/tray_icon/unix/mod.rs:182
+msgid "Original Lyric"
+msgstr ""
+
+#: ../src/app/window/imp.rs:120 ../src/app/window/imp.rs:132
+#: ../src/tray_icon/unix/mod.rs:165 ../src/tray_icon/unix/mod.rs:190
+msgid "Translated Lyric"
+msgstr ""
+
+#: ../src/app/window/imp.rs:123 ../src/tray_icon/unix/mod.rs:153
+msgid "Import Lyric"
+msgstr ""
+
+#: ../src/app/window/imp.rs:135 ../src/tray_icon/unix/mod.rs:178
+msgid "Export Lyric"
+msgstr ""
+
+#: ../src/app/window/imp.rs:160
+msgid "Disconnect"
 msgstr ""
 
 #: ../src/app/search_window/mod.rs:114
@@ -70,68 +130,8 @@ msgstr ""
 msgid "Set as lyric"
 msgstr ""
 
-#: ../src/app/search_window/mod.rs:264
+#: ../src/app/search_window/mod.rs:279
 msgid "No result was found."
-msgstr ""
-
-#: ../src/app/window/imp.rs:67
-msgid "Hide Decoration"
-msgstr ""
-
-#: ../src/app/window/imp.rs:71 ../src/tray_icon/unix/mod.rs:87
-#: ../src/tray_icon/windows/mod.rs:54
-msgid "Toggle Passthrough"
-msgstr ""
-
-#: ../src/app/window/imp.rs:74 ../src/tray_icon/unix/mod.rs:101
-msgid "Reload theme"
-msgstr ""
-
-#: ../src/app/window/imp.rs:77 ../src/tray_icon/windows/mod.rs:44
-msgid "Refetch lyric"
-msgstr ""
-
-#: ../src/app/window/imp.rs:80
-msgid "Remove lyric"
-msgstr ""
-
-#: ../src/app/window/imp.rs:82
-msgid "Remove lyric forever"
-msgstr ""
-
-#: ../src/app/window/imp.rs:93 ../src/tray_icon/unix/mod.rs:38
-msgid "Lyric Display Mode"
-msgstr ""
-
-#: ../src/app/window/imp.rs:97 ../src/tray_icon/unix/mod.rs:58
-msgid "Lyric Alignment"
-msgstr ""
-
-#: ../src/app/window/imp.rs:109 ../src/app/window/imp.rs:151
-#: ../src/tray_icon/unix/mod.rs:111
-msgid "Select Player"
-msgstr ""
-
-#: ../src/app/window/imp.rs:116 ../src/app/window/imp.rs:128
-#: ../src/tray_icon/unix/mod.rs:142 ../src/tray_icon/unix/mod.rs:167
-msgid "Original Lyric"
-msgstr ""
-
-#: ../src/app/window/imp.rs:120 ../src/app/window/imp.rs:132
-#: ../src/tray_icon/unix/mod.rs:150 ../src/tray_icon/unix/mod.rs:175
-msgid "Translated Lyric"
-msgstr ""
-
-#: ../src/app/window/imp.rs:123 ../src/tray_icon/unix/mod.rs:138
-msgid "Import Lyric"
-msgstr ""
-
-#: ../src/app/window/imp.rs:135 ../src/tray_icon/unix/mod.rs:163
-msgid "Export Lyric"
-msgstr ""
-
-#: ../src/app/window/imp.rs:160
-msgid "Disconnect"
 msgstr ""
 
 #: ../src/sync/actions/utils.rs:51
@@ -158,55 +158,59 @@ msgstr ""
 msgid "input LRC in unsupported format: "
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:78 ../src/tray_icon/windows/mod.rs:49
+#: ../src/tray_icon/unix/mod.rs:93 ../src/tray_icon/windows/mod.rs:24
 msgid "Toggle Decoration"
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:187
+#: ../src/tray_icon/unix/mod.rs:202
 msgid "Search Lyric"
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:196
+#: ../src/tray_icon/unix/mod.rs:211
 msgid "Refetch Lyric"
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:206 ../src/tray_icon/windows/mod.rs:59
+#: ../src/tray_icon/unix/mod.rs:221 ../src/tray_icon/windows/mod.rs:30
 msgid "Restart"
 msgstr ""
 
-#: ../src/tray_icon/unix/mod.rs:215 ../src/tray_icon/windows/mod.rs:64
+#: ../src/tray_icon/unix/mod.rs:230 ../src/tray_icon/windows/mod.rs:39
 msgid "Quit"
 msgstr ""
 
-#: ../src/app/window/imp.rs:179 ../src/tray_icon/unix/mod.rs:42
+#: ../src/main.rs:111
+msgid "[optional] configuration path"
+msgstr ""
+
+#: ../src/app/window/imp.rs:179 ../src/tray_icon/unix/mod.rs:57
 msgid "show_both"
 msgstr ""
 
-#: ../src/app/window/imp.rs:179 ../src/tray_icon/unix/mod.rs:42
+#: ../src/app/window/imp.rs:179 ../src/tray_icon/unix/mod.rs:57
 msgid "show_both_rev"
 msgstr ""
 
-#: ../src/app/window/imp.rs:179 ../src/tray_icon/unix/mod.rs:42
+#: ../src/app/window/imp.rs:179 ../src/tray_icon/unix/mod.rs:57
 msgid "origin"
 msgstr ""
 
-#: ../src/app/window/imp.rs:179 ../src/tray_icon/unix/mod.rs:42
+#: ../src/app/window/imp.rs:179 ../src/tray_icon/unix/mod.rs:57
 msgid "prefer_translation"
 msgstr ""
 
-#: ../src/app/window/imp.rs:189 ../src/tray_icon/unix/mod.rs:62
+#: ../src/app/window/imp.rs:189 ../src/tray_icon/unix/mod.rs:77
 msgid "Center"
 msgstr ""
 
-#: ../src/app/window/imp.rs:189 ../src/tray_icon/unix/mod.rs:62
+#: ../src/app/window/imp.rs:189 ../src/tray_icon/unix/mod.rs:77
 msgid "Start"
 msgstr ""
 
-#: ../src/app/window/imp.rs:189 ../src/tray_icon/unix/mod.rs:62
+#: ../src/app/window/imp.rs:189 ../src/tray_icon/unix/mod.rs:77
 msgid "End"
 msgstr ""
 
-#: ../src/app/window/imp.rs:189 ../src/tray_icon/unix/mod.rs:62
+#: ../src/app/window/imp.rs:189 ../src/tray_icon/unix/mod.rs:77
 msgid "Fill"
 msgstr ""
 
