@@ -117,6 +117,9 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 [SPlayer]: https://github.com/imsyy/SPlayer
 
+[listen1-desktop]: https://github.com/listen1/listen1_desktop
+[listen1-pr]: https://github.com/listen1/listen1_desktop/pull/1325
+
 | Name                      | Online? | Framework | #                                          |
 | ------------------------- | ------- | --------- | ------------------------------------------ |
 | Firefox                   | O       | Browser   | needs [extension]                          |
@@ -129,6 +132,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 | [VLC]                     | O       | Qt5       |                                            |
 | [Qcm]                     | O       | Qt6       |                                            |
 | [Telegram]                | O       | Qt6       |                                            |
+| [listen1-desktop]         | O       | Electron  | v2.33.0 [修复][listen2-pr]                 |
 | [Electron-NCM]            | O       | Electron  |                                            |
 | [YesPlayMusic]            | O       | Electron  | R3Play appends unexpected suffixs to title |
 | [youtube-music]           | O       | Electron  | enable `Shortcut`                          |
@@ -147,12 +151,10 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 
 ## Unsupported Players
 
-[listen1-desktop]: https://github.com/listen1/listen1_desktop
 
-| Player            | OSD | issue               |
-| ----------------- | --- | ------------------- |
-| qqmusic           | O   | position stays on 0 |
-| [listen1-desktop] | O   | position stays on 0 |
+| Player  | OSD | issue               |
+| ------- | --- | ------------------- |
+| qqmusic | O   | position stays on 0 |
 
 ## Directories
 
@@ -209,7 +211,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 | ----------- | -------------------- | --------------------------------------------------------------------------------------------------- | --- |
 | [AutoLyric] | C++                  | Windows Media Player<br>Foobar2000<br>AIMP<br>Winamp                                                |     |
 | [Lyricify]  | UWP/C#(4+)<br>C#(3-) | Spotify<br>iTunes<br>Apple Music<br>Music Center<br>QQ Music<br>Netease Cloud Music<br>YesPlayMusic |     |
-| [HotLyric] | WinUI3               | HyPlayer<br>LyricEase<br>YesPlayMusic<br>*GSMTC*s[^1]                                                |      |
+| [HotLyric]  | WinUI3               | HyPlayer<br>LyricEase<br>YesPlayMusic<br>*GSMTC*s[^1]                                               |     |
 
 [HotLyric]: https://github.com/cnbluefire/HotLyric
 [^1]: https://github.com/cnbluefire/HotLyric?tab=readme-ov-file#%E6%94%AF%E6%8C%81%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8
