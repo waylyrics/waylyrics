@@ -176,7 +176,7 @@ impl Window {
                 .map(str::to_owned)
                 .collect::<Vec<String>>(),
         );
-        let (error_tx, error_rx) = async_channel::bounded(providers.len());
+        let (error_tx, error_rx) = async_channel::bounded(providers.len().max(1));
 
         let mut results = tokio_spawn!(async move {
             let mut set = JoinSet::new();
