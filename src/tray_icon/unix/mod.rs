@@ -260,7 +260,7 @@ pub fn start_tray_service() {
 
     tokio_spawn!(async move {
         let service = TrayIcon::new(req_tx, resp_rx);
-        let _ = service.spawn_without_dbus_name().await;
+        let _ = service.disable_dbus_name(true).spawn().await;
     });
 }
 
