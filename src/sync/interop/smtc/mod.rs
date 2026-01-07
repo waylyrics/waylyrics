@@ -28,7 +28,7 @@ static TOKIO_RUNTIME: OnceLock<Runtime> = OnceLock::new();
 
 fn media_properties(session: &GSMTCSession) -> Result<GSMTCSessionMediaProperties> {
     let runtime = TOKIO_RUNTIME.get_or_init(|| Runtime::new().unwrap());
-    Ok(runtime.block_on(async { session.TryGetMediaPropertiesAsync()?.get() })?)
+    Ok(runtime.block_on(async { session.TryGetMediaPropertiesAsync()?.await })?)
 }
 
 fn session_manager() -> &'static GSMTCSessionManager {
@@ -38,7 +38,7 @@ fn session_manager() -> &'static GSMTCSessionManager {
         runtime.block_on(async move {
             GSMTCSessionManager::RequestAsync()
                 .expect("cannot request GSMTC Session Manager!")
-                .get()
+                .await
                 .expect("request GSMTC Session Manager failed!")
         })
     })

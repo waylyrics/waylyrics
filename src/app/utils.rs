@@ -6,7 +6,9 @@ use super::window;
 
 #[cfg(target_os = "windows")]
 pub(super) fn set_click_pass_through(window: &window::Window, enabled: bool) {
-    fn set_window_click_through(hwnd: isize, enabled: bool) {
+    use std::ffi::c_void;
+
+    fn set_window_click_through(hwnd: *mut c_void, enabled: bool) {
         use windows::Win32::Foundation::HWND;
         use windows::Win32::UI::WindowsAndMessaging::{
             GetWindowLongPtrW, SetWindowLongPtrW, GWL_EXSTYLE,
