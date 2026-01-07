@@ -1,3 +1,4 @@
+use std::sync::LazyLock;
 use std::time::Duration;
 
 use anyhow::Result;
@@ -5,7 +6,6 @@ use lrclib_api_rs::{
     types::{ErrorResponse, GetLyricsResponse, LyricsData},
     LRCLibAPI,
 };
-use once_cell::sync::Lazy;
 use reqwest::Client;
 
 use super::{Lyric, LyricOwned, LyricStore, SongInfo};
@@ -13,8 +13,8 @@ use crate::tokio_spawn;
 
 pub struct LRCLib;
 
-pub static LRCLIB_API_CLIENT: Lazy<LRCLibAPI> = Lazy::new(LRCLibAPI::default);
-pub static REQWEST_CLIENT: Lazy<Client> = Lazy::new(Client::default);
+pub static LRCLIB_API_CLIENT: LazyLock<LRCLibAPI> = LazyLock::new(LRCLibAPI::default);
+pub static REQWEST_CLIENT: LazyLock<Client> = LazyLock::new(Client::default);
 
 impl super::LyricParse for LRCLib {
     fn parse_lyric(&self, store: &LyricStore) -> LyricOwned {

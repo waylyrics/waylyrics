@@ -2,9 +2,7 @@ use anyhow::Error;
 use gtk::subclass::prelude::*;
 use tokio::sync::Mutex;
 
-use std::sync::OnceLock;
-
-use std::time::Duration;
+use std::{sync::LazyLock, time::Duration};
 
 use gtk::glib::{self, WeakRef};
 
@@ -30,9 +28,8 @@ pub async fn update_lyric(
     window: &app::Window,
     ignore_cache: bool,
 ) -> Result<(), Error> {
-    static UPDATE_LYRIC_LOCK: OnceLock<Mutex<()>> = OnceLock::new();
-    let lock = UPDATE_LYRIC_LOCK.get_or_init(|| Mutex::new(()));
-    let Ok(_gaurd) = lock.try_lock() else {
+    static UPDATE_LYRIC_LOCK: LazyLock<Mutex<()>> = LazyLock::new(|| Mutex::new(()));
+    let Ok(_gaurd) = UPDATE_LYRIC_LOCK.try_lock() else {
         return Err(anyhow::anyhow!("update_lyric already in queue"));
     };
 

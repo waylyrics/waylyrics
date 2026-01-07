@@ -1,16 +1,18 @@
+use std::fs;
+use std::path::{Path, PathBuf};
+use std::sync::LazyLock;
+use std::sync::OnceLock;
+
+use dashmap::DashMap;
+use lofty::file::TaggedFileExt;
+use lofty::read_from_path;
+use lofty::tag::ItemKey;
+
 use crate::log::{debug, error, warn};
 use crate::lyric_providers::{Lyric, LyricOwned, LyricProvider};
 use crate::sync::interop::{OsImp, OS};
 use crate::sync::TrackMeta;
 use crate::LYRIC_PROVIDERS;
-use dashmap::DashMap;
-use lofty::file::TaggedFileExt;
-use lofty::read_from_path;
-use lofty::tag::ItemKey;
-use once_cell::sync::Lazy;
-use std::fs;
-use std::path::{Path, PathBuf};
-use std::sync::OnceLock;
 
 #[cfg(feature = "i18n-local-lyric")]
 use crate::sync::filter_original_lyric;
@@ -86,7 +88,7 @@ pub fn get_lrc_path(mut music_path: PathBuf) -> Option<PathBuf> {
     }
 }
 // 添加一个静态缓存
-pub static LYRIC_TAG_CACHE: Lazy<DashMap<PathBuf, bool>> = Lazy::new(DashMap::new);
+pub static LYRIC_TAG_CACHE: LazyLock<DashMap<PathBuf, bool>> = LazyLock::new(DashMap::new);
 
 pub fn lyric_tag_exists(music_path: &Path) -> bool {
     // 尝试从缓存中获取结果
