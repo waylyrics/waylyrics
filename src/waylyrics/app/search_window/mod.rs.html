@@ -176,7 +176,7 @@
 <a href=#176 id=176 data-nosnippet>176</a>                .map(str::to_owned)
 <a href=#177 id=177 data-nosnippet>177</a>                .collect::&lt;Vec&lt;String&gt;&gt;(),
 <a href=#178 id=178 data-nosnippet>178</a>        );
-<a href=#179 id=179 data-nosnippet>179</a>        <span class="kw">let </span>(error_tx, error_rx) = async_channel::bounded(providers.len());
+<a href=#179 id=179 data-nosnippet>179</a>        <span class="kw">let </span>(error_tx, error_rx) = async_channel::bounded(providers.len().max(<span class="number">1</span>));
 <a href=#180 id=180 data-nosnippet>180</a>
 <a href=#181 id=181 data-nosnippet>181</a>        <span class="kw">let </span><span class="kw-2">mut </span>results = <span class="macro">tokio_spawn!</span>(<span class="kw">async move </span>{
 <a href=#182 id=182 data-nosnippet>182</a>            <span class="kw">let </span><span class="kw-2">mut </span>set = JoinSet::new();
