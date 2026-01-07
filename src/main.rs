@@ -1,6 +1,7 @@
 use std::fs;
 use std::ops::ControlFlow;
 use std::path::PathBuf;
+use std::sync::atomic::Ordering;
 
 use gtk::gio::{DBusSignalFlags, DBusSignalRef};
 use gtk::glib::{OptionArg, OptionFlags};
@@ -37,8 +38,8 @@ use waylyrics::{
     PLAYER_NAME_BLACKLIST, THEME_PATH,
 };
 
-use waylyrics::sync::*;
 use waylyrics::{glib_spawn, log};
+use waylyrics::{sync::*, LYRIC_SEARCH_SKIP};
 
 #[cfg(feature = "action-event")]
 use waylyrics::app::actions::init_ui_action_channel;
@@ -195,6 +196,7 @@ fn build_ui(app: &Application) -> Result<()> {
         ref length_toleration,
         triggers,
         lyric_search_source,
+        skip_auto_search,
         show_default_text_on_idle,
         show_lyric_on_pause,
         #[cfg(feature = "tray-icon")]
@@ -207,6 +209,8 @@ fn build_ui(app: &Application) -> Result<()> {
         color_scheme,
         theme_dark_switch,
     } = config;
+
+    LYRIC_SEARCH_SKIP.store(skip_auto_search, Ordering::Release);
 
     #[cfg(feature = "tray-icon")]
     if show_tray_icon {

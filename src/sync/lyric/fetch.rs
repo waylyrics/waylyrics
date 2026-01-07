@@ -2,6 +2,7 @@ pub mod tricks;
 
 use anyhow::Result;
 use std::borrow::Cow;
+use std::sync::atomic::Ordering;
 use std::sync::Arc;
 use tokio::task::JoinSet;
 
@@ -10,7 +11,7 @@ use gtk::subclass::prelude::ObjectSubclassIsExt;
 
 use crate::lyric_providers::LyricOwned;
 use crate::sync::{LyricState, TrackMeta, LYRIC};
-use crate::{app, tokio_spawn, LYRIC_PROVIDERS};
+use crate::{app, tokio_spawn, LYRIC_PROVIDERS, LYRIC_SEARCH_SKIP};
 
 use crate::sync::utils::{self, match_likely_lyric};
 
@@ -39,11 +40,21 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
         return Ok(());
     }
 
+    if LYRIC_SEARCH_SKIP.load(Ordering::Acquire) {
+        return Err(crate::lyric_providers::Error::NoResult)?;
+    }
+
     let providers = LYRIC_PROVIDERS
         .get()
         .expect("lyric providers should be initialized");
 
-    let artists = Arc::new(artists.as_ref().cloned().unwrap_or_else(std::vec::Vec::new).clone());
+    let artists = Arc::new(
+        artists
+            .as_ref()
+            .cloned()
+            .unwrap_or_else(std::vec::Vec::new)
+            .clone(),
+    );
 
     let length_toleration_ms = window.imp().length_toleration_ms.get();
 

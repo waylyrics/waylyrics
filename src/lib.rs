@@ -1,3 +1,4 @@
+use std::sync::atomic::AtomicBool;
 use std::sync::LazyLock;
 use std::{cell::RefCell, path::PathBuf, sync::OnceLock};
 
@@ -29,6 +30,7 @@ thread_local! {
     pub static PLAYER_NAME_BLACKLIST: RefCell<Vec<String>> = RefCell::new(Vec::default());
 }
 pub static LYRIC_PROVIDERS: OnceLock<Vec<&'static dyn LyricProvider>> = OnceLock::new();
+pub static LYRIC_SEARCH_SKIP: AtomicBool = AtomicBool::new(false);
 
 pub static MAIN_CONTEXT: LazyLock<MainContext> = LazyLock::new(gtk::glib::MainContext::default);
 static TOKIO_RUNTIME: LazyLock<tokio::runtime::Runtime> =

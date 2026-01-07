@@ -40,6 +40,7 @@ pub enum LyricDisplayMode {
 pub struct Config {
     /// auto connect to a player if last was disconnected/waylyrics was idle
     pub auto_connect: bool,
+
     /// the interval waylyrics updates position/metadata from player
     pub player_sync_interval: String,
 
@@ -83,6 +84,9 @@ pub struct Config {
 
     /// avaliable options: 网易云音乐, QQ音乐, LRCLib
     pub lyric_search_source: Vec<String>,
+
+    /// skip auto search on new track
+    pub skip_auto_search: bool,
 
     /// if enabled, waylyrics will set `DEFAULT_TEXT` on idle,
     ///
@@ -165,6 +169,7 @@ impl Default for Config {
             enable_local_lyric: true,
             filter_regexies: default_filter_regexies(),
             lyric_search_source: vec![Netease.unique_name().into()],
+            skip_auto_search: false,
             show_default_text_on_idle: true,
             show_lyric_on_pause: true,
             #[cfg(feature = "tray-icon")]
