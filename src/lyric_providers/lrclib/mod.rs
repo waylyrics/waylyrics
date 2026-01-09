@@ -2,10 +2,8 @@ use std::sync::LazyLock;
 use std::time::Duration;
 
 use anyhow::Result;
-use lrclib_api_rs::{
-    types::{ErrorResponse, GetLyricsResponse, LyricsData},
-    LRCLibAPI,
-};
+use lrclib_api_rs::types::{ErrorResponse, GetLyricsResponse, LyricsData};
+use lrclib_api_rs::LRCLibAPI;
 use reqwest::Client;
 
 use super::{Lyric, LyricOwned, LyricStore, SongInfo};

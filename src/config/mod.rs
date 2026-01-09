@@ -2,7 +2,9 @@ use documented::DocumentedFields;
 use serde::{Deserialize, Serialize};
 use strum::{EnumIter, EnumString};
 
-use crate::lyric_providers::{netease::Netease, qqmusic::QQMusicConfig, LyricProvider};
+use crate::lyric_providers::netease::Netease;
+use crate::lyric_providers::qqmusic::QQMusicConfig;
+use crate::lyric_providers::LyricProvider;
 
 #[derive(Clone, Copy, Default, EnumIter, strum::Display, EnumString, Serialize, Deserialize)]
 #[strum(serialize_all = "lowercase")]

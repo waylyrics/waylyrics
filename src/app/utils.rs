@@ -1,6 +1,7 @@
 use crate::EXCLUDED_REGEXES;
 
-use gtk::{prelude::*, Label};
+use gtk::prelude::*;
+use gtk::Label;
 
 use super::window;
 
@@ -46,10 +47,8 @@ pub(super) fn set_click_pass_through(window: &window::Window, enabled: bool) {
 
 #[cfg(not(target_os = "windows"))]
 pub(super) fn set_click_pass_through(window: &window::Window, enabled: bool) {
-    use gtk::{
-        cairo::{RectangleInt, Region},
-        subclass::prelude::*,
-    };
+    use gtk::cairo::{RectangleInt, Region};
+    use gtk::subclass::prelude::*;
 
     let obj = window;
     let Some(surface) = obj.surface() else {

@@ -2,7 +2,8 @@ use std::time::{Duration, SystemTime};
 
 use gtk::glib::subclass::types::ObjectSubclassIsExt;
 
-use crate::{log::*, sync::lyric::fetch::LyricHint};
+use crate::log::*;
+use crate::sync::lyric::fetch::LyricHint;
 use mpris::{PlaybackStatus, Player, ProgressTracker};
 
 use anyhow::Result;
@@ -10,18 +11,13 @@ use anyhow::Result;
 mod utils;
 use utils::find_next_player;
 
-use crate::{
-    app, glib_spawn,
-    sync::TrackMeta,
-    sync::{
-        interop::common::need_fetch_lyric,
-        interop::common::update_lyric,
-        interop::mpris::{PLAYER, PLAYER_FINDER},
-        interop::PlayerStatus,
-        lyric::scroll::refresh_lyric,
-    },
-    utils::reset_lyric_labels,
-};
+use crate::sync::interop::common::{need_fetch_lyric, update_lyric};
+use crate::sync::interop::mpris::{PLAYER, PLAYER_FINDER};
+use crate::sync::interop::PlayerStatus;
+use crate::sync::lyric::scroll::refresh_lyric;
+use crate::sync::TrackMeta;
+use crate::utils::reset_lyric_labels;
+use crate::{app, glib_spawn};
 
 use super::hint_from_player;
 

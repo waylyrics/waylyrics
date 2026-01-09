@@ -1,18 +1,15 @@
 use anyhow::Result;
 use std::time::Duration;
 
-use ncmapi::{
-    types::{Album, Artist, Song},
-    NcmApi,
-};
+use ncmapi::types::{Album, Artist, Song};
+use ncmapi::NcmApi;
 
 use ncmapi::types::{LyricResp, SearchSongResp};
 
 use crate::tokio_spawn;
 
-use super::{
-    default_search_query, dict::ARTIST_ALIAS_MAP, Lyric, LyricLineOwned, LyricOwned, LyricStore,
-};
+use super::dict::ARTIST_ALIAS_MAP;
+use super::{default_search_query, Lyric, LyricLineOwned, LyricOwned, LyricStore};
 
 #[derive(Clone, Copy)]
 pub struct Netease;

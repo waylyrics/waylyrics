@@ -1,10 +1,13 @@
 pub mod search_window;
 mod window;
 
-use gtk::{prelude::*, subclass::prelude::ObjectSubclassIsExt, Application, Label};
+use gtk::prelude::*;
+use gtk::subclass::prelude::ObjectSubclassIsExt;
+use gtk::{Application, Label};
 pub use window::Window;
 
-use crate::{app::utils::set_click_pass_through, config, DEFAULT_TEXT};
+use crate::app::utils::set_click_pass_through;
+use crate::{config, DEFAULT_TEXT};
 
 const WINDOW_MIN_HEIGHT: i32 = 120;
 

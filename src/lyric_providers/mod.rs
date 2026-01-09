@@ -8,7 +8,8 @@ pub mod lrclib;
 pub mod netease;
 pub mod qqmusic;
 
-use std::{fmt::Debug, time::Duration};
+use std::fmt::Debug;
+use std::time::Duration;
 
 use serde::{Deserialize, Serialize};
 

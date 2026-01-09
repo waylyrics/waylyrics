@@ -1,17 +1,17 @@
-use std::sync::OnceLock;
-use std::sync::RwLock;
-use std::time::Duration;
-use std::time::SystemTime;
+use std::sync::{OnceLock, RwLock};
+use std::time::{Duration, SystemTime};
 
 use anyhow::Result;
 use gtk::glib::subclass::types::ObjectSubclassIsExt;
 use tokio::runtime::Runtime;
 
-use windows::Media::Control::GlobalSystemMediaTransportControlsSession as GSMTCSession;
-use windows::Media::Control::GlobalSystemMediaTransportControlsSessionManager as GSMTCSessionManager;
-use windows::Media::Control::GlobalSystemMediaTransportControlsSessionMediaProperties as GSMTCSessionMediaProperties;
-use windows::Media::Control::GlobalSystemMediaTransportControlsSessionPlaybackStatus as GSMTCSessionPlaybackStatus;
-use windows::Media::Control::GlobalSystemMediaTransportControlsSessionTimelineProperties as GSMTCSessionTimelineProperties;
+use windows::Media::Control::{
+    GlobalSystemMediaTransportControlsSession as GSMTCSession,
+    GlobalSystemMediaTransportControlsSessionManager as GSMTCSessionManager,
+    GlobalSystemMediaTransportControlsSessionMediaProperties as GSMTCSessionMediaProperties,
+    GlobalSystemMediaTransportControlsSessionPlaybackStatus as GSMTCSessionPlaybackStatus,
+    GlobalSystemMediaTransportControlsSessionTimelineProperties as GSMTCSessionTimelineProperties,
+};
 
 use crate::glib_spawn;
 use crate::log::*;

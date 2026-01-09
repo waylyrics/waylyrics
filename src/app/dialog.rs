@@ -1,4 +1,5 @@
-use gtk::{prelude::*, ButtonsType, Window};
+use gtk::prelude::*;
+use gtk::{ButtonsType, Window};
 
 pub fn show_dialog(parent: Option<&impl IsA<Window>>, msg: &str, level: gtk::MessageType) {
     let msg_dialog =

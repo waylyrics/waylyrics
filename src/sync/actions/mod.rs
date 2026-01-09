@@ -1,26 +1,22 @@
-use crate::{
-    app::search_window,
-    log::{info, warn},
-    sync::{lyric::fetch::tricks::LYRIC_TAG_CACHE, LyricState},
-    utils::bind_shortcut,
-};
+use crate::app::search_window;
+use crate::log::{info, warn};
+use crate::sync::lyric::fetch::tricks::LYRIC_TAG_CACHE;
+use crate::sync::LyricState;
+use crate::utils::bind_shortcut;
 use glib_macros::clone;
-use gtk::{
-    gio::SimpleAction,
-    glib::{self, VariantTy},
-    prelude::*,
-    subclass::prelude::ObjectSubclassIsExt,
-    Application,
-};
+use gtk::gio::SimpleAction;
+use gtk::glib::{self, VariantTy};
+use gtk::prelude::*;
+use gtk::subclass::prelude::ObjectSubclassIsExt;
+use gtk::Application;
 
-use crate::{
-    app::{self, dialog::show_dialog},
-    glib_spawn,
-    lyric_providers::LyricOwned,
-    sync::{interop::common::update_lyric, TrackState, LYRIC, TRACK_PLAYING_STATE},
-    utils::reset_lyric_labels,
-    MAIN_WINDOW,
-};
+use crate::app::dialog::show_dialog;
+use crate::app::{self};
+use crate::lyric_providers::LyricOwned;
+use crate::sync::interop::common::update_lyric;
+use crate::sync::{TrackState, LYRIC, TRACK_PLAYING_STATE};
+use crate::utils::reset_lyric_labels;
+use crate::{glib_spawn, MAIN_WINDOW};
 
 use crate::sync::interop::{OsImp, OS};
 pub mod utils;

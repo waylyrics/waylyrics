@@ -2,26 +2,21 @@ use anyhow::Error;
 use gtk::subclass::prelude::*;
 use tokio::sync::Mutex;
 
-use std::{sync::LazyLock, time::Duration};
+use std::sync::LazyLock;
+use std::time::Duration;
 
 use gtk::glib::{self, WeakRef};
 
 use anyhow::Result;
 
-use crate::{
-    app::{self, Window},
-    log::*,
-    sync::{
-        interop::{OsImp, PlayerStatus, OS},
-        lyric::{
-            cache::{self, get_cache_path},
-            fetch,
-        },
-        utils::clean_lyric,
-        TrackMeta, TrackState, TRACK_PLAYING_STATE,
-    },
-    utils::reset_lyric_labels,
-};
+use crate::app::{self, Window};
+use crate::log::*;
+use crate::sync::interop::{OsImp, PlayerStatus, OS};
+use crate::sync::lyric::cache::{self, get_cache_path};
+use crate::sync::lyric::fetch;
+use crate::sync::utils::clean_lyric;
+use crate::sync::{TrackMeta, TrackState, TRACK_PLAYING_STATE};
+use crate::utils::reset_lyric_labels;
 
 pub async fn update_lyric(
     track_meta: &TrackMeta,

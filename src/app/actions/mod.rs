@@ -4,7 +4,8 @@ mod event;
 #[cfg(feature = "action-event")]
 pub use event::{init_ui_action_channel, UIAction, UI_ACTION};
 
-use crate::app::{utils::set_click_pass_through, Window};
+use crate::app::utils::set_click_pass_through;
+use crate::app::Window;
 
 use crate::config::Align;
 use crate::log::error;
@@ -13,7 +14,9 @@ use crate::utils::bind_shortcut;
 use glib_macros::clone;
 use gtk::gio::SimpleAction;
 use gtk::glib::{self, Variant, VariantTy};
-use gtk::{prelude::*, subclass::prelude::*, Application};
+use gtk::prelude::*;
+use gtk::subclass::prelude::*;
+use gtk::Application;
 
 use super::{get_label, set_lyric_align};
 

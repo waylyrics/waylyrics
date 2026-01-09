@@ -7,9 +7,9 @@ use crate::lyric_providers::SongInfo;
 use crate::utils::gettext;
 use glib::Object;
 use gtk::glib::{clone, IntoGStr};
+use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-use gtk::{gio, glib, ColumnViewColumn};
-use gtk::{prelude::*, ListItem};
+use gtk::{gio, glib, ColumnViewColumn, ListItem};
 use tokio::task::JoinSet;
 
 use crate::{glib_spawn, tokio_spawn, LYRIC_PROVIDERS};

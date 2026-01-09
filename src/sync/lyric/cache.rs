@@ -8,9 +8,10 @@ use gtk::prelude::*;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use serde::{Deserialize, Serialize};
 
-use crate::sync::{lyric::fetch::fetch_lyric, LYRIC};
-use crate::sync::{LyricState, TrackMeta};
-use crate::{app, lyric_providers::LyricOwned, CACHE_DIR};
+use crate::lyric_providers::LyricOwned;
+use crate::sync::lyric::fetch::fetch_lyric;
+use crate::sync::{LyricState, TrackMeta, LYRIC};
+use crate::{app, CACHE_DIR};
 
 /// This will not create cache dir for you -- you should create it yourself.
 ///

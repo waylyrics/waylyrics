@@ -1,7 +1,6 @@
 use std::time::Duration;
 
-use gtk::glib::{self, WeakRef};
-use gtk::glib::{ControlFlow, Priority};
+use gtk::glib::{self, ControlFlow, Priority, WeakRef};
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 
 use crate::app::{self, get_label};

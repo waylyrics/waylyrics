@@ -1,18 +1,16 @@
 #![allow(unused)]
-use std::{
-    fmt::{Display, Write},
-    time::Duration,
-};
+use std::fmt::{Display, Write};
+use std::time::Duration;
 
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 
-use crate::{
-    app::{dialog::show_dialog, Window},
-    log::{error, info, warn},
-    lyric_providers::LyricOwned,
-    sync::{lyric::cache::update_lyric_cache, LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE},
-    utils::gettext,
-};
+use crate::app::dialog::show_dialog;
+use crate::app::Window;
+use crate::log::{error, info, warn};
+use crate::lyric_providers::LyricOwned;
+use crate::sync::lyric::cache::update_lyric_cache;
+use crate::sync::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
+use crate::utils::gettext;
 
 pub fn update_cache() {
     TRACK_PLAYING_STATE.with_borrow(|TrackState { cache_path, .. }| {
@@ -101,7 +99,8 @@ pub async fn export_lyric(window: &Window, is_original: bool) {
 
 #[cfg(feature = "import-lyric")]
 pub async fn import_lyric(window: &Window, is_original: bool) {
-    use crate::lyric_providers::{utils::lrc_iter, Lyric};
+    use crate::lyric_providers::utils::lrc_iter;
+    use crate::lyric_providers::Lyric;
 
     info!("spawned import-lyric: original={is_original}");
 

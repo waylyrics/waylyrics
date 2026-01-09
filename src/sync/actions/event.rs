@@ -1,11 +1,9 @@
 use async_channel::Sender;
 use std::sync::OnceLock;
 
-use gtk::{
-    glib::{self, WeakRef},
-    prelude::*,
-    Application,
-};
+use gtk::glib::{self, WeakRef};
+use gtk::prelude::*;
+use gtk::Application;
 
 use crate::log::debug;
 

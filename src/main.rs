@@ -19,27 +19,24 @@ use tracing_subscriber::{fmt, Registry};
 
 use waylyrics::app::actions::{
     register_reload_theme, register_set_display_mode, register_set_label, register_set_lyric_align,
-    register_switch_decoration, register_switch_passthrough,
+    register_switch_decoration, register_switch_passthrough, UIAction, UI_ACTION,
 };
-use waylyrics::app::actions::{UIAction, UI_ACTION};
 use waylyrics::app::{self, build_main_window};
 
-use waylyrics::config::append_comments;
-use waylyrics::config::{Config, Triggers};
+use waylyrics::config::{append_comments, Config, Triggers};
 use waylyrics::lyric_providers::qqmusic::QQMusic;
 use waylyrics::lyric_providers::utils::get_provider;
 use waylyrics::lyric_providers::LyricProvider;
 
-use waylyrics::utils::{acquire_instance_name, gettext, CUSTOM_CONFIG_PATH};
+use waylyrics::sync::lyric::fetch::tricks::EXTRACT_TRANSLATED_LYRIC;
+use waylyrics::utils::{self, acquire_instance_name, gettext, init_dirs, CUSTOM_CONFIG_PATH};
 use waylyrics::{
-    sync::lyric::fetch::tricks::EXTRACT_TRANSLATED_LYRIC,
-    utils::{self, init_dirs},
     EXCLUDED_REGEXES, GTK_DBUS_CONNECTION, LYRIC_PROVIDERS, MAIN_WINDOW, PLAYER_IDENTITY_BLACKLIST,
     PLAYER_NAME_BLACKLIST, THEME_PATH,
 };
 
-use waylyrics::{glib_spawn, log};
-use waylyrics::{sync::*, LYRIC_SEARCH_SKIP};
+use waylyrics::sync::*;
+use waylyrics::{glib_spawn, log, LYRIC_SEARCH_SKIP};
 
 #[cfg(feature = "action-event")]
 use waylyrics::app::actions::init_ui_action_channel;

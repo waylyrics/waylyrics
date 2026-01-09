@@ -1,12 +1,13 @@
-use std::{path::PathBuf, time::Duration};
+use std::path::PathBuf;
+use std::time::Duration;
 
 use ahash::HashMap;
 use gtk::subclass::prelude::*;
 use sorensen::distance;
 
+use crate::app;
 use crate::log::*;
-use crate::lyric_providers::LyricLineOwned;
-use crate::{app, lyric_providers::SongInfo};
+use crate::lyric_providers::{LyricLineOwned, SongInfo};
 
 use super::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
 

@@ -1,20 +1,17 @@
-use std::{sync::OnceLock, time::Duration};
+use std::sync::OnceLock;
+use std::time::Duration;
 
 use anyhow::Result;
-use qqmusic_rs::{
-    lyric::{QueryLyric, QueryLyricResp},
-    search::{Search, SearchType, Track},
-    song::{SongDetail, SongDetailResp},
-    user::SetCookie,
-    QQMusicApi, SongId,
-};
+use qqmusic_rs::lyric::{QueryLyric, QueryLyricResp};
+use qqmusic_rs::search::{Search, SearchType, Track};
+use qqmusic_rs::song::{SongDetail, SongDetailResp};
+use qqmusic_rs::user::SetCookie;
+use qqmusic_rs::{QQMusicApi, SongId};
 use reqwest::Client;
 use url::Url;
 
-use crate::{
-    lyric_providers::{default_search_query, SongInfo},
-    tokio_spawn,
-};
+use crate::lyric_providers::{default_search_query, SongInfo};
+use crate::tokio_spawn;
 
 use super::{Lyric, LyricOwned, LyricStore};
 

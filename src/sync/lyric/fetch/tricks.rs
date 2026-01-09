@@ -1,7 +1,6 @@
 use std::fs;
 use std::path::{Path, PathBuf};
-use std::sync::LazyLock;
-use std::sync::OnceLock;
+use std::sync::{LazyLock, OnceLock};
 
 use dashmap::DashMap;
 use lofty::file::TaggedFileExt;

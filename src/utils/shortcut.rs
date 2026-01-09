@@ -1,4 +1,5 @@
-use gtk::{prelude::*, NamedAction, Shortcut, ShortcutController, ShortcutTrigger};
+use gtk::prelude::*;
+use gtk::{NamedAction, Shortcut, ShortcutController, ShortcutTrigger};
 
 use crate::app;
 

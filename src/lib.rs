@@ -1,9 +1,11 @@
+use std::cell::RefCell;
+use std::path::PathBuf;
 use std::sync::atomic::AtomicBool;
-use std::sync::LazyLock;
-use std::{cell::RefCell, path::PathBuf, sync::OnceLock};
+use std::sync::{LazyLock, OnceLock};
 
 use app::Window;
-use gtk::{gio::DBusConnection, glib::MainContext};
+use gtk::gio::DBusConnection;
+use gtk::glib::MainContext;
 use lyric_providers::LyricProvider;
 use regex::RegexSet;
 

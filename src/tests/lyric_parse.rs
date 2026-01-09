@@ -2,10 +2,9 @@
 mod lrc {
     use std::time::Duration;
 
-    use crate::{
-        lyric_providers::{utils::lrc_iter, LyricLine, LyricLineOwned},
-        sync::{extract_translated_lyric, filter_original_lyric},
-    };
+    use crate::lyric_providers::utils::lrc_iter;
+    use crate::lyric_providers::{LyricLine, LyricLineOwned};
+    use crate::sync::{extract_translated_lyric, filter_original_lyric};
     use anyhow::Result;
 
     #[test]

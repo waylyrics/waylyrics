@@ -1,15 +1,15 @@
-use std::{env::args, mem, process::Command};
+use std::env::args;
+use std::mem;
+use std::process::Command;
 
 use anyhow::Result;
 use async_channel::Sender;
 
 use tray_item::{IconSource, TrayItem};
 
-use crate::{
-    app::actions::{UIAction, UI_ACTION},
-    sync::{PlayAction, PLAY_ACTION},
-    utils::gettext,
-};
+use crate::app::actions::{UIAction, UI_ACTION};
+use crate::sync::{PlayAction, PLAY_ACTION};
+use crate::utils::gettext;
 
 pub fn start_tray_service() -> Result<()> {
     let icon = IconSource::Resource("icon0");

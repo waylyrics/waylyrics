@@ -1,7 +1,8 @@
 use futures_lite::StreamExt;
 use tracing::info;
 
-use crate::{config::ColorScheme, glib_spawn, log, THEME_PATH};
+use crate::config::ColorScheme;
+use crate::{glib_spawn, log, THEME_PATH};
 
 pub fn auto_theme_change(color_scheme: ColorScheme, theme_switch: bool) {
     let Some(settings) = gtk::Settings::default() else {
