@@ -11,12 +11,11 @@ use gtk::subclass::prelude::ObjectSubclassIsExt;
 use gtk::Application;
 
 use crate::app::dialog::show_dialog;
-use crate::app::{self};
 use crate::lyric_providers::LyricOwned;
 use crate::sync::interop::common::update_lyric;
 use crate::sync::{TrackState, LYRIC, TRACK_PLAYING_STATE};
 use crate::utils::reset_lyric_labels;
-use crate::{glib_spawn, MAIN_WINDOW};
+use crate::{app, glib_spawn, MAIN_WINDOW};
 
 use crate::sync::interop::{OsImp, OS};
 pub mod utils;
