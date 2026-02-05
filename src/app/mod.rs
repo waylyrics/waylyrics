@@ -84,23 +84,29 @@ pub fn build_main_window(
 }
 
 pub fn set_lyric_align(window: &Window, align: config::Align) -> Option<()> {
-    let labels = get_labels(window)?;
+    let vbox: gtk::Box = window.child()?.downcast().ok()?;
+    vbox.set_halign(align.into());
+
+    let labels = get_labels(&vbox)?;
     for label in labels {
         label.set_halign(align.into());
     }
+
     window.imp().lyric_align.set(align);
     Some(())
 }
 
-fn get_labels(window: &Window) -> Option<[Label; 2]> {
-    let vbox: gtk::Box = window.child()?.downcast().ok()?;
+fn get_labels(vbox: &gtk::Box) -> Option<[Label; 2]> {
     let above_label: Label = vbox.first_child()?.downcast().ok()?;
     let below_label: Label = vbox.last_child()?.downcast().ok()?;
     Some([above_label, below_label])
 }
 
 pub fn get_label(window: &Window, position: &str) -> Label {
-    get_labels(window)
+    let Some(vbox) = window.child().and_then(|c| c.downcast::<gtk::Box>().ok()) else {
+        panic!("initialization failed!")
+    };
+    get_labels(&vbox)
         .expect("cannot find labels")
         .into_iter()
         .find(|label| label.widget_name() == position)
