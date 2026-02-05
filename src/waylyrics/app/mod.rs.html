@@ -84,26 +84,32 @@
 <a href=#84 id=84 data-nosnippet>84</a>}
 <a href=#85 id=85 data-nosnippet>85</a>
 <a href=#86 id=86 data-nosnippet>86</a><span class="kw">pub fn </span>set_lyric_align(window: <span class="kw-2">&amp;</span>Window, align: config::Align) -&gt; <span class="prelude-ty">Option</span>&lt;()&gt; {
-<a href=#87 id=87 data-nosnippet>87</a>    <span class="kw">let </span>labels = get_labels(window)<span class="question-mark">?</span>;
-<a href=#88 id=88 data-nosnippet>88</a>    <span class="kw">for </span>label <span class="kw">in </span>labels {
-<a href=#89 id=89 data-nosnippet>89</a>        label.set_halign(align.into());
-<a href=#90 id=90 data-nosnippet>90</a>    }
-<a href=#91 id=91 data-nosnippet>91</a>    window.imp().lyric_align.set(align);
-<a href=#92 id=92 data-nosnippet>92</a>    <span class="prelude-val">Some</span>(())
-<a href=#93 id=93 data-nosnippet>93</a>}
+<a href=#87 id=87 data-nosnippet>87</a>    <span class="kw">let </span>vbox: gtk::Box = window.child()<span class="question-mark">?</span>.downcast().ok()<span class="question-mark">?</span>;
+<a href=#88 id=88 data-nosnippet>88</a>    vbox.set_halign(align.into());
+<a href=#89 id=89 data-nosnippet>89</a>
+<a href=#90 id=90 data-nosnippet>90</a>    <span class="kw">let </span>labels = get_labels(<span class="kw-2">&amp;</span>vbox)<span class="question-mark">?</span>;
+<a href=#91 id=91 data-nosnippet>91</a>    <span class="kw">for </span>label <span class="kw">in </span>labels {
+<a href=#92 id=92 data-nosnippet>92</a>        label.set_halign(align.into());
+<a href=#93 id=93 data-nosnippet>93</a>    }
 <a href=#94 id=94 data-nosnippet>94</a>
-<a href=#95 id=95 data-nosnippet>95</a><span class="kw">fn </span>get_labels(window: <span class="kw-2">&amp;</span>Window) -&gt; <span class="prelude-ty">Option</span>&lt;[Label; <span class="number">2</span>]&gt; {
-<a href=#96 id=96 data-nosnippet>96</a>    <span class="kw">let </span>vbox: gtk::Box = window.child()<span class="question-mark">?</span>.downcast().ok()<span class="question-mark">?</span>;
-<a href=#97 id=97 data-nosnippet>97</a>    <span class="kw">let </span>above_label: Label = vbox.first_child()<span class="question-mark">?</span>.downcast().ok()<span class="question-mark">?</span>;
-<a href=#98 id=98 data-nosnippet>98</a>    <span class="kw">let </span>below_label: Label = vbox.last_child()<span class="question-mark">?</span>.downcast().ok()<span class="question-mark">?</span>;
-<a href=#99 id=99 data-nosnippet>99</a>    <span class="prelude-val">Some</span>([above_label, below_label])
-<a href=#100 id=100 data-nosnippet>100</a>}
-<a href=#101 id=101 data-nosnippet>101</a>
-<a href=#102 id=102 data-nosnippet>102</a><span class="kw">pub fn </span>get_label(window: <span class="kw-2">&amp;</span>Window, position: <span class="kw-2">&amp;</span>str) -&gt; Label {
-<a href=#103 id=103 data-nosnippet>103</a>    get_labels(window)
-<a href=#104 id=104 data-nosnippet>104</a>        .expect(<span class="string">"cannot find labels"</span>)
-<a href=#105 id=105 data-nosnippet>105</a>        .into_iter()
-<a href=#106 id=106 data-nosnippet>106</a>        .find(|label| label.widget_name() == position)
-<a href=#107 id=107 data-nosnippet>107</a>        .unwrap()
-<a href=#108 id=108 data-nosnippet>108</a>}
+<a href=#95 id=95 data-nosnippet>95</a>    window.imp().lyric_align.set(align);
+<a href=#96 id=96 data-nosnippet>96</a>    <span class="prelude-val">Some</span>(())
+<a href=#97 id=97 data-nosnippet>97</a>}
+<a href=#98 id=98 data-nosnippet>98</a>
+<a href=#99 id=99 data-nosnippet>99</a><span class="kw">fn </span>get_labels(vbox: <span class="kw-2">&amp;</span>gtk::Box) -&gt; <span class="prelude-ty">Option</span>&lt;[Label; <span class="number">2</span>]&gt; {
+<a href=#100 id=100 data-nosnippet>100</a>    <span class="kw">let </span>above_label: Label = vbox.first_child()<span class="question-mark">?</span>.downcast().ok()<span class="question-mark">?</span>;
+<a href=#101 id=101 data-nosnippet>101</a>    <span class="kw">let </span>below_label: Label = vbox.last_child()<span class="question-mark">?</span>.downcast().ok()<span class="question-mark">?</span>;
+<a href=#102 id=102 data-nosnippet>102</a>    <span class="prelude-val">Some</span>([above_label, below_label])
+<a href=#103 id=103 data-nosnippet>103</a>}
+<a href=#104 id=104 data-nosnippet>104</a>
+<a href=#105 id=105 data-nosnippet>105</a><span class="kw">pub fn </span>get_label(window: <span class="kw-2">&amp;</span>Window, position: <span class="kw-2">&amp;</span>str) -&gt; Label {
+<a href=#106 id=106 data-nosnippet>106</a>    <span class="kw">let </span><span class="prelude-val">Some</span>(vbox) = window.child().and_then(|c| c.downcast::&lt;gtk::Box&gt;().ok()) <span class="kw">else </span>{
+<a href=#107 id=107 data-nosnippet>107</a>        <span class="macro">panic!</span>(<span class="string">"initialization failed!"</span>)
+<a href=#108 id=108 data-nosnippet>108</a>    };
+<a href=#109 id=109 data-nosnippet>109</a>    get_labels(<span class="kw-2">&amp;</span>vbox)
+<a href=#110 id=110 data-nosnippet>110</a>        .expect(<span class="string">"cannot find labels"</span>)
+<a href=#111 id=111 data-nosnippet>111</a>        .into_iter()
+<a href=#112 id=112 data-nosnippet>112</a>        .find(|label| label.widget_name() == position)
+<a href=#113 id=113 data-nosnippet>113</a>        .unwrap()
+<a href=#114 id=114 data-nosnippet>114</a>}
 </code></pre></div></section></main></body></html>
