@@ -161,7 +161,7 @@ fn main() -> Result<glib::ExitCode> {
                                 warn!("Invalud arguments from dbus signal!");
                                 return;
                             };
-                            _ = sender.send_blocking(UIAction::SetAboveLabel(text.to_string()));
+                            _ = sender.send_blocking(UIAction::SetBelowLabel(text.to_string()));
                         }
                         _ => warn!("unknown signal: {signal_name}"),
                     }
