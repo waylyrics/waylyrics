@@ -40,11 +40,13 @@ pub fn build_main_window(
         .label("Waylyrics")
         .name("above")
         .vexpand(true)
+        .hexpand(false)
         .build();
     let below_label = Label::builder()
         .label("")
         .name("below")
         .vexpand(true)
+        .hexpand(false)
         .visible(false)
         .build();
 
@@ -53,10 +55,13 @@ pub fn build_main_window(
     }
 
     let verical_box = gtk::Box::builder()
+        .name("lyrics-box")
         .baseline_position(gtk::BaselinePosition::Center)
         .orientation(gtk::Orientation::Vertical)
+        .halign(gtk::Align::Center)
         .valign(gtk::Align::Center)
         .vexpand(true)
+        .hexpand(false)
         .build();
 
     verical_box.insert_child_after(&above_label, gtk::Box::NONE);
