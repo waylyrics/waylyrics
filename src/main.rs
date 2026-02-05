@@ -11,7 +11,7 @@ use gtk::{glib, Application};
 use anyhow::Result;
 
 use regex::RegexSet;
-use tracing::warn;
+use tracing::{error, warn};
 
 use tracing_subscriber::filter::{EnvFilter, LevelFilter};
 use tracing_subscriber::prelude::*;
@@ -127,6 +127,7 @@ fn main() -> Result<glib::ExitCode> {
         let conn = GTK_DBUS_CONNECTION.with_borrow(|conn| conn.as_ref().cloned());
 
         let Some(conn) = conn else {
+            error!("D-Bus signal initialization failed");
             return;
         };
         glib_spawn!(async move {
@@ -149,6 +150,7 @@ fn main() -> Result<glib::ExitCode> {
                         "SetAboveLabel" => {
                             let child = parameters.child_value(0);
                             let Some(text) = child.str() else {
+                                warn!("Invalud arguments from dbus signal!");
                                 return;
                             };
                             _ = sender.send_blocking(UIAction::SetAboveLabel(text.to_string()));
@@ -156,6 +158,7 @@ fn main() -> Result<glib::ExitCode> {
                         "SetBelowLabel" => {
                             let child = parameters.child_value(0);
                             let Some(text) = child.str() else {
+                                warn!("Invalud arguments from dbus signal!");
                                 return;
                             };
                             _ = sender.send_blocking(UIAction::SetAboveLabel(text.to_string()));
