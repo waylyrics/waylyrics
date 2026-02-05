@@ -3,7 +3,7 @@ use std::ops::ControlFlow;
 use std::path::PathBuf;
 use std::sync::atomic::Ordering;
 
-use gtk::gio::{DBusSignalFlags, DBusSignalRef};
+use gtk::gio::DBusSignalFlags;
 use gtk::glib::{OptionArg, OptionFlags};
 use gtk::prelude::*;
 use gtk::{glib, Application};
@@ -131,24 +131,21 @@ fn main() -> Result<glib::ExitCode> {
             return;
         };
         glib_spawn!(async move {
-            conn.subscribe_to_signal(
+            #[allow(deprecated, reason = "upstream bug")]
+            conn.signal_subscribe(
                 None,
                 Some("io.github.waylyrics.Waylyrics"),
                 None,
                 Some("/io/github/waylyrics/Waylyrics"),
                 None,
                 DBusSignalFlags::NONE,
-                |DBusSignalRef {
-                     signal_name,
-                     parameters,
-                     ..
-                 }| {
+                |_conn, _sender, _obj_path, _interface, signal_name, params| {
                     let Some(sender) = UI_ACTION.get() else {
                         return;
                     };
                     match signal_name {
                         "SetAboveLabel" => {
-                            let child = parameters.child_value(0);
+                            let child = params.child_value(0);
                             let Some(text) = child.str() else {
                                 warn!("Invalud arguments from dbus signal!");
                                 return;
@@ -156,7 +153,7 @@ fn main() -> Result<glib::ExitCode> {
                             _ = sender.send_blocking(UIAction::SetAboveLabel(text.to_string()));
                         }
                         "SetBelowLabel" => {
-                            let child = parameters.child_value(0);
+                            let child = params.child_value(0);
                             let Some(text) = child.str() else {
                                 warn!("Invalud arguments from dbus signal!");
                                 return;
@@ -166,7 +163,7 @@ fn main() -> Result<glib::ExitCode> {
                         _ => warn!("unknown signal: {signal_name}"),
                     }
                 },
-            )
+            );
         });
     });
 
