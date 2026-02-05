@@ -131,7 +131,7 @@ fn main() -> Result<glib::ExitCode> {
             return;
         };
         glib_spawn!(async move {
-            conn.subscribe_to_signal(
+            std::mem::forget(conn.subscribe_to_signal(
                 None,
                 Some("io.github.waylyrics.Waylyrics"),
                 None,
@@ -166,7 +166,7 @@ fn main() -> Result<glib::ExitCode> {
                         _ => warn!("unknown signal: {signal_name}"),
                     }
                 },
-            )
+            ));
         });
     });
 
