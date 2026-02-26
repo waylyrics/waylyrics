@@ -1,3 +1,6 @@
+mod strip_util;
+pub use strip_util::strip_extended_timestamps;
+
 pub mod utils;
 use anyhow::Result;
 use strum::EnumIs;

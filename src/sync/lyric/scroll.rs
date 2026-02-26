@@ -6,7 +6,7 @@ use gtk::subclass::prelude::ObjectSubclassIsExt;
 use crate::app::{self, get_label};
 use crate::config::LyricDisplayMode;
 use crate::log::*;
-use crate::lyric_providers::{LyricLineOwned, LyricOwned};
+use crate::lyric_providers::{strip_extended_timestamps, LyricLineOwned, LyricOwned};
 
 use crate::sync::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
 use crate::utils::reset_lyric_labels;
@@ -61,10 +61,10 @@ fn set_lyric_with_mode(
 
 fn set_lyric(window: &app::Window, text: Option<&LyricLineOwned>, position: &str) {
     let text = text
-        .map(|LyricLineOwned { text, .. }| text.as_str().trim())
+        .map(|LyricLineOwned { text, .. }| strip_extended_timestamps(text))
         .unwrap_or_default();
 
-    get_label(window, position).set_label(text);
+    get_label(window, position).set_label(text.trim());
 }
 
 pub fn refresh_lyric(window: &app::Window, paused: bool) {
