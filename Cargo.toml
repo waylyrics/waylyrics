@@ -141,7 +141,7 @@ windows = { version = "0.62.1", features = [
     "Win32_Foundation",
     "Win32_UI_WindowsAndMessaging",
 ] }
-gdk4-win32 = { version = "0.10.1" }
+gdk4-win32 = { version = "0.11.0" }
 
 [target.'cfg(windows)'.build-dependencies]
 windows_exe_info = { version = "0.5.2" }
