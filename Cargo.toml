@@ -95,7 +95,7 @@ sys-locale = { version = "0.3.2", optional = true }
 tracing-panic = "0.1.2"
 lofty = "0.22.4"
 dashmap = "6.1.0"
-libc = "0.2.182"
+memchr = "2.8.0"
 
 [features]
 default = [
