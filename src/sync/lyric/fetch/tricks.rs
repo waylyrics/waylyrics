@@ -100,7 +100,7 @@ pub fn lyric_tag_exists(music_path: &Path) -> bool {
         .ok()
         .as_ref()
         .and_then(|tagged_file| tagged_file.primary_tag())
-        .and_then(|tag| tag.get(&ItemKey::Lyrics))
+        .and_then(|tag| tag.get(ItemKey::Lyrics))
         .is_some();
     // 将结果存入缓存
     LYRIC_TAG_CACHE.insert(music_path.to_owned(), result);
@@ -112,7 +112,7 @@ pub fn get_lrc_from_music_metadata(music_path: &PathBuf) -> Option<(LyricOwned, 
         .ok()
         .as_ref()
         .and_then(|tagged_file| tagged_file.primary_tag())
-        .and_then(|tag| tag.get_string(&ItemKey::Lyrics))
+        .and_then(|tag| tag.get_string(ItemKey::Lyrics))
         .and_then(parse_local_lyric)
 }
 
