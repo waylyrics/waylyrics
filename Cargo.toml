@@ -60,7 +60,7 @@ tracing-subscriber = { version = "0.3.20", features = ["env-filter"] }
 md5 = "0.8.0"
 
 # utils
-regex = "1.12.2"
+regex = "1.12.3"
 directories = "6.0.0"
 strum = { version = "0.27.2", default-features = false, features = ["derive"] }
 sorensen = "0.2.0"
