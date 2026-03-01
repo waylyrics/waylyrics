@@ -128,7 +128,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 | [VLC]                     | O    | Qt5       |                            |
 | [Qcm]                     | O    | Qt6       |                            |
 | [Telegram]                | O    | Qt6       |                            |
-| [listen1-desktop]         | O    | Electron  | v2.33.0 [修复][listen2-pr] |
+| [listen1-desktop]         | O    | Electron  | v2.33.0 [修复][listen1-pr] |
 | [Electron-NCM]            | O    | Electron  |                            |
 | [YesPlayMusic]            | O    | Electron  | R3Play会给标题加额外的后缀 |
 | [youtube-music]           | O    | Electron  | 启用Shortcut               |
