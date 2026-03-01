@@ -121,15 +121,6 @@ fn find_next_tag(bytes: &[u8], start: usize) -> Option<(usize, usize)> {
 /// - If tags that need to be removed are found, it builds a new string, copying only the necessary parts,
 ///   and avoids repeated allocations for each segment.
 ///
-/// # Algorithm Description
-/// 1. Scan the string using [`find_next_tag`] to locate each `<...>` tag.
-/// 2. For each tag, call [`is_extended_tag`] to determine if it is an extended timestamp.
-///    - If yes, skip it (do not copy the tag), and copy the preceding retained text (including text before the tag) into the result.
-///    - If no, mark it as retained (temporarily store its start and end positions).
-/// 3. When encountering the first removable tag, create the result string and copy all previously retained segments into it at once.
-/// 4. Subsequent processing appends directly to the result string.
-/// 5. Finally, handle any remaining text after the last tag.
-///
 /// # Arguments
 /// * `lrc` - The original lyrics string.
 ///
