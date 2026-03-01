@@ -1,5 +1,7 @@
 use lrc_nom::{parse_single, LrcParseError};
-use std::time::Duration;
+use std::{borrow::Cow, time::Duration};
+
+use crate::lyric_providers::strip_extended_timestamps;
 
 use super::{LyricLine, LyricLineOwned, LyricProvider};
 
@@ -24,7 +26,10 @@ pub fn lrc_iter<'a>(
             lrc_nom::LrcItem::Metadata(_) => None,
             lrc_nom::LrcItem::Lyric(lyric, timestamps) => {
                 Some(timestamps.into_iter().map(|timestamp| LyricLine {
-                    text: lyric.trim(),
+                    text: match strip_extended_timestamps(lyric) {
+                        Cow::Borrowed(it) => Cow::Borrowed(it.trim()),
+                        Cow::Owned(it) => Cow::Owned(it.trim().to_owned()),
+                    },
                     start_time: Duration::from_millis(timestamp as _),
                 }))
             }
