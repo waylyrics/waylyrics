@@ -57,25 +57,27 @@ pub(super) fn set_click_pass_through(window: &window::Window, enabled: bool) {
 
     if enabled {
         if !window.is_decorated() {
-            surface.set_input_region(&Region::create_rectangle(&RectangleInt::new(0, 0, 0, 0)));
+            surface.set_input_region(Some(&Region::create_rectangle(&RectangleInt::new(
+                0, 0, 0, 0,
+            ))));
         } else {
             let headerbar = &window.imp().headerbar;
             let allocation = headerbar.allocation();
 
-            surface.set_input_region(&Region::create_rectangle(&RectangleInt::new(
+            surface.set_input_region(Some(&Region::create_rectangle(&RectangleInt::new(
                 allocation.x(),
                 allocation.y(),
                 allocation.width(),
                 allocation.height(),
-            )));
+            ))));
         }
     } else {
-        surface.set_input_region(&Region::create_rectangle(&RectangleInt::new(
+        surface.set_input_region(Some(&Region::create_rectangle(&RectangleInt::new(
             0,
             0,
             i32::MAX,
             i32::MAX,
-        )));
+        ))));
     }
 }
 
