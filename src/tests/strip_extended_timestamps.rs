@@ -6,8 +6,15 @@ use crate::lyric_providers::strip_extended_timestamps;
 fn test_direct_borrow() {
     // 没有尖括号，直接借用
     let lrc = "[00:00.00]Hello world!";
-    let stripped2 = strip_extended_timestamps(lrc);
-    assert!(matches!(stripped2, Cow::Borrowed(_)));
+    let stripped = strip_extended_timestamps(lrc);
+    assert!(matches!(stripped, Cow::Borrowed(_)));
+}
+
+#[test]
+fn test_multiple_tag() {
+    let lrc = "[00:12.34]I <01:23.456>love <01:24.123>Rust!";
+    let stripped = strip_extended_timestamps(lrc);
+    assert_eq!(stripped, "[00:12.34]I love Rust!");
 }
 
 #[test]
