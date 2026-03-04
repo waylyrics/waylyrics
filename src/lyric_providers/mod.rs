@@ -1,3 +1,6 @@
+mod strip_util;
+pub use strip_util::strip_extended_timestamps;
+
 pub mod utils;
 use anyhow::Result;
 use strum::EnumIs;
@@ -8,6 +11,7 @@ pub mod lrclib;
 pub mod netease;
 pub mod qqmusic;
 
+use std::borrow::Cow;
 use std::fmt::Debug;
 use std::time::Duration;
 
@@ -22,7 +26,7 @@ pub enum Lyric<'a> {
 
 #[derive(Debug)]
 pub struct LyricLine<'a> {
-    pub text: &'a str,
+    pub text: Cow<'a, str>,
     pub start_time: Duration,
 }
 
