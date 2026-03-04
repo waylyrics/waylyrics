@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Error","Lyric","LyricOwned"],"fn":["default_search_query"],"mod":["dict","lrclib","netease","qqmusic","utils"],"struct":["LyricLine","LyricLineOwned","LyricStore","SongInfo"],"trait":["LyricParse","LyricProvider"]};
+window.SIDEBAR_ITEMS = {"enum":["Error","Lyric","LyricOwned"],"fn":["default_search_query","strip_extended_timestamps"],"mod":["dict","lrclib","netease","qqmusic","strip_util","utils"],"struct":["LyricLine","LyricLineOwned","LyricStore","SongInfo"],"trait":["LyricParse","LyricProvider"]};
