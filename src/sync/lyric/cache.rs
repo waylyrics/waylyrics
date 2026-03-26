@@ -1,6 +1,6 @@
 use anyhow::Result;
 use gtk::glib::Variant;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use crate::log::{debug, error, info, warn};
 use crate::GTK_DBUS_CONNECTION;
@@ -114,7 +114,7 @@ pub async fn fetch_lyric_cached(
 }
 
 /// Using olyric and tlyric inside LYRIC to update corresponding cache file.
-pub fn update_lyric_cache(cache_path: &PathBuf) -> bool {
+pub fn update_lyric_cache(cache_path: &Path) -> bool {
     let cache_dir = cache_path.parent().unwrap();
     if let Err(e) = std::fs::create_dir_all(cache_dir) {
         error!("cannot create cache dir {cache_dir:?}: {e}");

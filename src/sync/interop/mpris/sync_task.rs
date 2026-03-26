@@ -45,11 +45,11 @@ fn sync_position(player: &Player, window: &app::Window) -> Result<(), PlayerStat
         ))?;
 
     if let Some(s) = window.imp().lyric_start.get() {
-        let eplased = s.elapsed().unwrap_or_default();
-        let diff: String = if eplased > position {
-            format!("{:?}", eplased - position)
+        let elapsed = s.elapsed().unwrap_or_default();
+        let diff: String = if elapsed > position {
+            format!("{:?}", elapsed - position)
         } else {
-            format!("-{:?}", position - eplased)
+            format!("-{:?}", position - elapsed)
         };
         trace!("expected position: {:?}", s.elapsed());
         trace!("actual position: {:?}", position);
