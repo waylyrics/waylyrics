@@ -86,11 +86,11 @@ pub fn get_lrc_path(mut music_path: PathBuf) -> Option<PathBuf> {
         None
     }
 }
-// 添加一个静态缓存
+// Static cache for lyric tag existence checks
 pub static LYRIC_TAG_CACHE: LazyLock<DashMap<PathBuf, bool>> = LazyLock::new(DashMap::new);
 
 pub fn lyric_tag_exists(music_path: &Path) -> bool {
-    // 尝试从缓存中获取结果
+    // Check the cache first
     if let Some(result) = LYRIC_TAG_CACHE.get(music_path) {
         return *result;
     }
@@ -102,11 +102,11 @@ pub fn lyric_tag_exists(music_path: &Path) -> bool {
         .and_then(|tagged_file| tagged_file.primary_tag())
         .and_then(|tag| tag.get(ItemKey::Lyrics))
         .is_some();
-    // 将结果存入缓存
+    // Store result in cache
     LYRIC_TAG_CACHE.insert(music_path.to_owned(), result);
     result
 }
-pub fn get_lrc_from_music_metadata(music_path: &PathBuf) -> Option<(LyricOwned, LyricOwned)> {
+pub fn get_lrc_from_music_metadata(music_path: &Path) -> Option<(LyricOwned, LyricOwned)> {
     read_from_path(music_path)
         .map_err(|e| error!("cannot read music file: {e}"))
         .ok()

@@ -68,7 +68,6 @@ fn is_extended_tag(buf: &[u8]) -> bool {
     if !(1..=2).contains(&(pos - start)) || pos == content.len() || content[pos] != b'.' {
         return false;
     }
-    let _ = b'.';
     pos += 1;
 
     // Millisecond part, until the end

@@ -143,7 +143,7 @@ pub fn fuzzy_match_song(
 }
 
 pub fn extract_translated_lyric(lyric: impl AsRef<[LyricLineOwned]>) -> Vec<LyricLineOwned> {
-    let tlyric_lines = lyric
+    lyric
         .as_ref()
         .windows(2)
         .filter_map(|l| <&[LyricLineOwned; 2]>::try_from(l).ok())
@@ -151,8 +151,7 @@ pub fn extract_translated_lyric(lyric: impl AsRef<[LyricLineOwned]>) -> Vec<Lyri
         .filter(|&[a, b]| a.start_time == b.start_time)
         .map(|p| &p[1])
         .cloned()
-        .collect::<Vec<_>>();
-    tlyric_lines
+        .collect()
 }
 
 pub fn filter_original_lyric(

@@ -4,7 +4,7 @@ use crate::lyric_providers::strip_extended_timestamps;
 
 #[test]
 fn test_direct_borrow() {
-    // 没有尖括号，直接借用
+    // No angle brackets, should be borrowed directly
     let lrc = "[00:00.00]Hello world!";
     let stripped = strip_extended_timestamps(lrc);
     assert!(matches!(stripped, Cow::Borrowed(_)));

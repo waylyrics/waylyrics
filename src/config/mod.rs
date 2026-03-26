@@ -84,7 +84,7 @@ pub struct Config {
     /// inspired by LyricX's filter list
     pub filter_regexies: Vec<String>,
 
-    /// avaliable options: 网易云音乐, QQ音乐, LRCLib
+    /// available options: 网易云音乐, QQ音乐, LRCLib
     pub lyric_search_source: Vec<String>,
 
     /// skip auto search on new track

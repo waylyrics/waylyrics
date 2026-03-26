@@ -52,8 +52,7 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
         artists
             .as_ref()
             .cloned()
-            .unwrap_or_else(std::vec::Vec::new)
-            .clone(),
+            .unwrap_or_else(std::vec::Vec::new),
     );
 
     let length_toleration_ms = window.imp().length_toleration_ms.get();
