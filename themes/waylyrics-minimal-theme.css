@@ -1,0 +1,52 @@
+/* Header */
+headerbar {
+  opacity: 0.3;
+  min-height: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Main window */
+window#main-window {
+  background-color: transparent;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* Search window */
+columnview#search-window-column listview row {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+/* Shared lyric style */
+label#above,
+label#below {
+  padding: 10px 18px;
+  color: rgba(255, 255, 255, 0.96);
+  background: rgba(20, 20, 24, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22);
+}
+
+/* Current line */
+label#above {
+  font-size: 30px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 1);
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+/* Secondary line */
+label#below {
+  margin: 6px 0 0 0;
+  font-size: 21px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.62);
+  background: rgba(20, 20, 24, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
