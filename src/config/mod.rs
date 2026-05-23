@@ -198,6 +198,17 @@ impl From<Align> for gtk::Align {
     }
 }
 
+impl From<Align> for gtk::Justification {
+    fn from(align: Align) -> Self {
+        match align {
+            Align::Start => gtk::Justification::Left,
+            Align::Center => gtk::Justification::Center,
+            Align::End => gtk::Justification::Right,
+            Align::Fill => gtk::Justification::Fill,
+        }
+    }
+}
+
 #[rustfmt::skip]
 fn default_filter_regexies() -> Vec<String> {
     [

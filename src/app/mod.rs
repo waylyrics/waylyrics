@@ -90,15 +90,7 @@ pub fn set_lyric_align(window: &Window, align: config::Align) -> Option<()> {
     let labels = get_labels(&vbox)?;
     for label in labels {
         label.set_halign(align.into());
-        match align {
-            config::Align::Start => label.set_justify(gtk::Justification::Left),
-
-            config::Align::Center => label.set_justify(gtk::Justification::Center),
-
-            config::Align::End => label.set_justify(gtk::Justification::Right),
-
-            config::Align::Fill => label.set_justify(gtk::Justification::Fill),
-        }
+        label.set_justify(align.into());
     }
 
     window.imp().lyric_align.set(align);
