@@ -90,6 +90,7 @@ pub fn set_lyric_align(window: &Window, align: config::Align) -> Option<()> {
     let labels = get_labels(&vbox)?;
     for label in labels {
         label.set_halign(align.into());
+        label.set_justify(align.into());
     }
 
     window.imp().lyric_align.set(align);
