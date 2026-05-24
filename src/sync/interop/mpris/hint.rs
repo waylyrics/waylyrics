@@ -14,7 +14,7 @@ pub fn hint_from_player() -> Option<LyricHint> {
             .as_ref()
             .expect("player not exists in lyric fetching");
         let player_name = player.identity();
-        let player_bus_name = player.bus_name_player_name_part();
+        let player_bus_name = player.bus_name_trimmed();
         let meta = player.get_metadata().ok()?;
 
         match (player_name, player_bus_name) {

@@ -13,8 +13,8 @@ pub fn find_next_player(player_finder: &PlayerFinder) -> Option<Player> {
     };
     let name_blacklisted = |p: &Player| {
         PLAYER_NAME_BLACKLIST.with_borrow(|names| {
-            let name = p.bus_name_player_name_part();
-            names.iter().any(|s| s == name)
+            let name = p.bus_name_trimmed();
+            names.iter().any(|s| name.starts_with(s))
         })
     };
 
