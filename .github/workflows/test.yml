@@ -76,7 +76,7 @@ jobs:
   update-aur-pkgbuild:
     name: 'Update AUR PKGBUILD'
     runs-on: 'ubuntu-latest'
-    if: startsWith(github.ref, 'refs/tags/')
+    if: github.event_name == 'push' && github.ref_type == 'tag'
     needs: 'build'
     steps:
       - name: 'Setup Git'
