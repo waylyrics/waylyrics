@@ -38,6 +38,23 @@
   </screenshots>
 
   <releases>
+    <release version="0.3.22" date="2025-05-25">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.22</url>
+      <description>
+        <ul>
+          <li>Support stripping tags in extended LRC lyrics</li>
+          <li>Support custom config path via <code>--config-path</code></li>
+          <li>Support window.set-label dbus action</li>
+          <li>Add optional auto_connect support</li>
+          <li>Allow skipping lyrics searching</li>
+          <li>Add minimal dark overlay and LyricX-like themes</li>
+          <li>Fix multi-line lyric alignment issues</li>
+          <li>Fix panic with empty <code>lyric-search-source</code><li>
+          <li>Fix behaviour on ill-formed MPRIS player name containing <code>.</code><li>
+          <li>Fix handling the <code>SetBelowLabel</code> dbus signal</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.3.21" date="2025-04-13">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.3.21</url>
         <description>
