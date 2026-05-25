@@ -239,7 +239,7 @@ impl Tray for TrayIcon {
     }
 }
 
-pub fn start_tray_service() {
+pub fn start_tray_service() -> anyhow::Result<()> {
     // mpris::PlayerFinder would create a new DBus connection which has 4 matches attached,
     // but in TrayService, the messages matching could never be handled.
     // This would make messages stalling within dbus broker, and might finally make dbus-broker
@@ -262,6 +262,8 @@ pub fn start_tray_service() {
         let service = TrayIcon::new(req_tx, resp_rx);
         let _ = service.disable_dbus_name(true).spawn().await;
     });
+
+    Ok(())
 }
 
 fn ui_action() -> &'static Sender<UIAction> {

@@ -96,13 +96,7 @@ pub fn try_sync_track(window: &crate::app::Window) -> Result<(), PlayerStatus> {
         let track_meta = player
             .get_metadata()
             .map_err(|_| PlayerStatus::Unsupported("cannot get metadata of the track playing"))?;
-        let meta = match TrackMeta::try_from(track_meta) {
-            Ok(meta) => meta,
-            // TODO:
-            // Rust 1.82 stablized `min_exhaustive_patterns`
-            // we could remove this branch after MSRV bumped to Rust 1.82
-            Err(_) => unreachable!(),
-        };
+        let meta = TrackMeta::from(track_meta);
 
         Ok(meta)
     })?;

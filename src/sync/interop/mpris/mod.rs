@@ -1,5 +1,4 @@
 use std::cell::RefCell;
-use std::convert::Infallible;
 
 mod sync_task;
 use sync_task::{reconnect_player, try_sync_track};
@@ -73,10 +72,8 @@ fn find_players() -> Vec<Player> {
     })
 }
 
-impl TryFrom<Metadata> for TrackMeta {
-    type Error = Infallible;
-
-    fn try_from(meta: Metadata) -> Result<Self, Self::Error> {
+impl From<Metadata> for TrackMeta {
+    fn from(meta: Metadata) -> Self {
         let track_id = meta.track_id();
         let title = meta.title().map(str::to_string);
         let album = meta.album_name().map(ToOwned::to_owned);
@@ -85,12 +82,12 @@ impl TryFrom<Metadata> for TrackMeta {
             .map(|v| v.iter().map(ToString::to_string).collect());
         let length = meta.length();
 
-        Ok(Self {
+        Self {
             unique_song_id: track_id.map(|id| id.to_string()),
             title,
             album,
             artists,
             length,
-        })
+        }
     }
 }

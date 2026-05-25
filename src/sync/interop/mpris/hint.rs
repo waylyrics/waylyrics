@@ -21,7 +21,7 @@ pub fn hint_from_player() -> Option<LyricHint> {
             ("ElectronNCM" | "Qcm", _) | (_, "musicfox" | "NeteaseCloudMusicGtk4") => meta
                 .get("mpris:trackid")
                 .and_then(mpris::MetadataValue::as_str)
-                .and_then(|s| s.split('/').last())
+                .and_then(|s| s.split('/').next_back())
                 .map(str::to_owned)
                 .map(|song_id| LyricHint::SongId {
                     song_id,
