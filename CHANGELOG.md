@@ -1,8 +1,165 @@
-# Changelog
+## [0.3.22] - 2026-05-24
 
-All notable changes to this project will be documented in this file.
+### 🚀 Features
 
-## v0.3.21 - 2025-04-13
+- Optionally auto connect a player
+- Add GAction for manual label set
+- Listen to `SetAboveLabel` & `SetBelowLabel` signals
+- Gh-346, support custom config path
+- Skip auto-search for new track
+- Support LyricX-like style
+
+### 🐛 Bug Fixes
+
+- *(windows)* Build script
+- Only clean labels on reconnection
+- Actually register win.set-label action
+- Panic on empty `lyric-search-source` in manual searching
+- *(ci)* Should run test on `Cargo.toml` update
+- Migrate windows code
+- New-style subscribe API requires to hold returned reference
+- SetBelowLabel was not handled correctly
+- Fill, center, left, right alignment
+- Follow breaking change from lotfy
+- Alignment of multi-line text in single label
+- Get correct MPRIS player name part
+
+### 💼 Other
+
+- *(deps)* Bump lofty from 0.22.3 to 0.22.4
+- *(deps)* Bump toml from 0.8.20 to 0.8.22
+- *(deps)* Bump anyhow from 1.0.97 to 1.0.98
+- *(deps)* Bump windows_exe_info from 0.5.1 to 0.5.2
+- *(deps)* Bump dependabot/fetch-metadata from 2.3.0 to 2.4.0
+- *(deps)* Bump ahash from 0.8.11 to 0.8.12
+- *(deps)* Bump tokio from 1.44.2 to 1.45.1
+- *(deps)* Bump glib-macros from 0.20.7 to 0.20.10
+- *(deps)* Bump reqwest from 0.12.15 to 0.12.18
+- *(deps)* Bump glib-macros from 0.20.10 to 0.20.12
+- *(deps)* Bump md5 from 0.7.0 to 0.8.0
+- *(deps)* Bump toml from 0.8.22 to 0.8.23
+- *(deps)* Bump rust_decimal from 1.37.1 to 1.37.2
+- *(deps)* Bump windows from 0.61.1 to 0.61.3
+- *(deps)* Bump reqwest from 0.12.18 to 0.12.22
+- *(deps)* Bump tokio from 1.45.1 to 1.46.1
+- *(deps)* Bump mimalloc from 0.1.46 to 0.1.47
+- *(deps)* Bump async-channel from 2.3.1 to 2.4.0
+- *(deps)* Bump tokio from 1.46.1 to 1.47.0
+- *(deps)* Bump glib-macros from 0.20.12 to 0.21.0
+- *(deps)* Bump strum from 0.27.1 to 0.27.2
+- *(deps)* Bump the toml group with 2 updates
+- *(deps)* Bump serde_json from 1.0.140 to 1.0.142 in the serde group
+- *(deps)* Bump tracing-subscriber from 0.3.19 to 0.3.20
+- *(deps)* Bump actions/checkout from 4 to 5
+- *(deps)* Bump mimalloc from 0.1.47 to 0.1.48
+- *(deps)* Bump documented from 0.9.1 to 0.9.2
+- *(deps)* Bump url from 2.5.4 to 2.5.7
+- *(deps)* Bump serde_json from 1.0.142 to 1.0.143 in the serde group
+- *(deps)* Bump the toml group with 2 updates
+- *(deps)* Bump gdk4-win32 from 0.9.5 to 0.10.1
+- *(deps)* Bump windows from 0.61.3 to 0.62.1
+- *(deps)* Bump the serde group with 2 updates
+- *(deps)* Bump rust_decimal_macros from 1.37.1 to 1.38.0
+- *(deps)* Bump the toml group with 2 updates
+- *(deps)* Bump actions/upload-artifact from 4 to 5
+- *(deps)* Bump dbus from 0.9.7 to 0.9.9
+- *(deps)* Bump thiserror from 2.0.12 to 2.0.17
+- *(deps)* Bump tokio from 1.47.0 to 1.48.0
+- *(deps)* Bump rust_decimal_macros from 1.38.0 to 1.39.0
+- *(deps)* Bump the toml group with 2 updates
+- *(deps)* Bump rfd from 0.15.3 to 0.15.4
+- *(deps)* Bump async-channel from 2.4.0 to 2.5.0
+- *(deps)* Bump reqwest from 0.12.22 to 0.12.24
+- *(deps)* Bump actions/checkout from 5 to 6
+- *(deps)* Bump tracing from 0.1.41 to 0.1.43
+- *(deps)* Bump anyhow from 1.0.98 to 1.0.100
+- Bump dependencies
+- Translate the new configuration tip
+- Ai translation for italiano
+- Add italiano translation by @albanobattistella
+- *(deps)* Bump serde_json from 1.0.145 to 1.0.148 in the serde group
+- *(deps)* Bump tracing from 0.1.43 to 0.1.44
+- *(deps)* Bump ksni from 0.3.2 to 0.3.3
+- *(deps)* Bump actions/upload-artifact from 5 to 6
+- *(deps)* Bump reqwest from 0.12.25 to 0.13.1
+- *(deps)* Bump rsa from 0.9.9 to 0.9.10
+- Enable `json` feature of `reqwest`
+- Bump dependencies
+- Replace once_cell with std::sync::LazyLock
+- *(deps)* Bump rfd from 0.17.1 to 0.17.2
+- *(deps)* Bump thiserror from 2.0.17 to 2.0.18
+- *(deps)* Bump rust_decimal_macros from 1.39.0 to 1.40.0
+- *(deps)* Bump rust_decimal from 1.39.0 to 1.40.0
+- *(deps)* Bump bytes from 1.11.0 to 1.11.1
+- Detailed logs for signals debugging
+- *(deps)* Bump time from 0.3.44 to 0.3.47
+- *(deps)* Bump dependabot/fetch-metadata from 2.4.0 to 2.5.0
+- *(deps)* Bump anyhow from 1.0.100 to 1.0.102
+- *(deps)* Bump regex from 1.12.2 to 1.12.3
+- *(deps)* Bump reqwest from 0.13.1 to 0.13.2
+- *(deps)* Bump glib-macros from 0.21.5 to 0.22.2
+- *(deps)* Bump strum from 0.27.2 to 0.28.0
+- *(deps)* Bump actions/upload-artifact from 6 to 7
+- *(deps)* Bump gdk4-win32 from 0.10.3 to 0.11.0
+- *(deps)* Bump lofty from 0.22.4 to 0.23.2
+- Must sync gdk-win32 version with gtk4-rs
+- *(deps)* Bump quinn-proto from 0.11.13 to 0.11.14
+- *(deps)* Bump rustls-webpki from 0.103.8 to 0.103.10
+- *(deps)* Bump lofty from 0.23.2 to 0.23.3
+- *(deps)* Bump tracing-subscriber from 0.3.22 to 0.3.23
+- *(deps)* Bump rust_decimal from 1.40.0 to 1.41.0 (#404)
+- *(deps)* Bump tokio from 1.49.0 to 1.50.0 (#403)
+- *(deps)* Bump dependabot/fetch-metadata from 2.5.0 to 3.0.0
+- *(deps)* Bump rand from 0.8.5 to 0.8.6
+- *(deps)* Bump rustls-webpki from 0.103.10 to 0.103.13
+- *(deps)* Bump openssl from 0.10.75 to 0.10.78
+- *(deps)* Bump reqwest from 0.13.2 to 0.13.3
+- *(deps)* Bump mimalloc from 0.1.48 to 0.1.50
+- *(deps)* Bump glib-macros from 0.22.2 to 0.22.6
+- *(deps)* Bump ksni from 0.3.3 to 0.3.4
+- *(deps)* Bump dbus from 0.9.10 to 0.9.11
+- *(deps)* Bump tokio from 1.50.0 to 1.52.1
+- *(deps)* Bump mpris from 2.0.1 to 2.1.0
+- *(deps)* Bump dependabot/fetch-metadata from 3.0.0 to 3.1.0
+- *(deps)* Bump lofty from 0.23.3 to 0.24.0
+- *(deps)* Bump openssl from 0.10.78 to 0.10.79
+
+### 📚 Documentation
+
+- Listen1 released with fix
+- Note on readme translation
+- *(readme)* Fix broken hyperlink
+
+### 🎨 Styling
+
+- [ci skip] rename arg to args
+- Prefer .cloned() [ci skip]
+- Reorder imports
+- Force format style to `imports_granularity = "Module"`
+- Fix DeepSource lint
+
+### ⚙️ Miscellaneous Tasks
+
+- Remove unused imports
+- Update metainfo for flathub
+- Automatically merge CI passed dependency bump
+- *(dependabot)* Group toml* dependencies
+- Fix release date of 0.3.21
+- Migration to gtk4 0.10
+- Only run test & docs CI when needed
+- Fix auto merge CI
+- Use the latest release action
+- Skip online tests in CI
+- Fix typo
+- Migrate to latest ksni::TrayIcon api style
+- Don't trigger CI twice time for PR
+- Fix typo, translate comments, fix lints (#402)
+
+### ◀️ Revert
+
+- 8c55c88 new-style signal handler
+- "revert: 8c55c88 new-style signal handler"
+## [0.3.21] - 2025-04-13
 
 ### 🚀 Features
 
@@ -49,6 +206,7 @@ All notable changes to this project will be documented in this file.
 - *(readme)* Add introduction [ci skip]
 - *(readme)* Note on project status
 - *(readme)* HotLyric, alternative on windows [ci skip]
+- Update changelog [ci skip]
 
 ### ⚡ Performance
 
@@ -65,7 +223,6 @@ All notable changes to this project will be documented in this file.
 - Dedup code
 - Add script to export dup deps [ci skip]
 - Bump version to v0.3.21
-
 ## [0.3.20] - 2024-12-07
 
 ### 🐛 Bug Fixes
@@ -88,7 +245,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.3.20
-
 ## [0.3.19] - 2024-12-03
 
 ### 🚀 Features
@@ -123,7 +279,6 @@ All notable changes to this project will be documented in this file.
 - Update lock file
 - *(clippy)* Fix clippy warnings
 - Release v0.3.19
-
 ## [0.3.18] - 2024-11-10
 
 ### 🚀 Features
@@ -166,7 +321,6 @@ All notable changes to this project will be documented in this file.
 - Apply clippy fix
 - Bump version to 0.3.18
 - Fix details URL in metainfo
-
 ## [0.3.17] - 2024-10-06
 
 ### 🐛 Bug Fixes
@@ -183,7 +337,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.3.17
-
 ## [0.3.16] - 2024-09-28
 
 ### 🚀 Features
@@ -219,7 +372,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.3.16
-
 ## [0.3.15] - 2024-09-17
 
 ### 🐛 Bug Fixes
@@ -234,7 +386,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.3.15
-
 ## [0.3.14] - 2024-09-17
 
 ### 🚀 Features
@@ -283,7 +434,6 @@ All notable changes to this project will be documented in this file.
 - Disable unused warn
 - *(dep)* Bump dependencies
 - Release v0.3.14
-
 ## [0.3.13] - 2024-06-27
 
 ### 🐛 Bug Fixes
@@ -299,7 +449,6 @@ All notable changes to this project will be documented in this file.
 
 - Bump dependencies
 - Release v0.3.13
-
 ## [0.3.12] - 2024-06-20
 
 ### 🐛 Bug Fixes
@@ -315,7 +464,6 @@ All notable changes to this project will be documented in this file.
 
 - *(log)* Add log for textdomain to use
 - Release v0.3.12
-
 ## [0.3.11] - 2024-06-06
 
 ### 💼 Other
@@ -333,7 +481,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.3.11
-
 ## [0.3.10] - 2024-05-30
 
 ### 🐛 Bug Fixes
@@ -343,7 +490,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.3.10
-
 ## [0.3.9] - 2024-05-26
 
 ### 🐛 Bug Fixes
@@ -363,7 +509,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.3.9
-
 ## [0.3.8] - 2024-04-29
 
 ### 🚀 Features
@@ -382,7 +527,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.3.8
-
 ## [0.3.7] - 2024-04-29
 
 ### 🚀 Features
@@ -392,7 +536,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.3.7
-
 ## [0.3.6] - 2024-04-29
 
 ### 🚀 Features
@@ -427,7 +570,6 @@ All notable changes to this project will be documented in this file.
 
 - Add archlinuxcn in installation guide
 - Release v0.3.6
-
 ## [0.3.5] - 2024-04-25
 
 ### 🚀 Features
@@ -442,13 +584,11 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.3.5
-
 ## [0.3.4] - 2024-04-25
 
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.3.4
-
 ## [0.3.3] - 2024-04-25
 
 ### ⚙️ Miscellaneous Tasks
@@ -459,7 +599,6 @@ All notable changes to this project will be documented in this file.
 - *(metainfo)* Fix warnings
 - *(metainfo)* Add screenshot of search window
 - *(metainfo)* Use v0.3.3 tag
-
 ## [0.3.2] - 2024-04-25
 
 ### 🐛 Bug Fixes
@@ -477,7 +616,6 @@ All notable changes to this project will be documented in this file.
 - Use for loop to refactor entries appending in imp.vbox
 - Use for loop to refactor items appending in ui_section & play_section
 - Release v0.3.2
-
 ## [0.3.1] - 2024-04-24
 
 ### 🚀 Features
@@ -494,7 +632,6 @@ All notable changes to this project will be documented in this file.
 - Fix test.yml
 - Remove microsoft-prod.list
 - Fix documents deploy CI
-
 ## [0.3.0] - 2024-04-24
 
 ### 🐛 Bug Fixes
@@ -524,7 +661,6 @@ All notable changes to this project will be documented in this file.
 ### ◀️ Revert
 
 - "Translate display modes"
-
 ## [0.2.21] - 2024-04-23
 
 ### 🐛 Bug Fixes
@@ -539,7 +675,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.2.21
-
 ## [0.2.20] - 2024-04-21
 
 ### 💼 Other
@@ -553,7 +688,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.2.20
-
 ## [0.2.19] - 2024-04-17
 
 ### 🚀 Features
@@ -584,7 +718,6 @@ All notable changes to this project will be documented in this file.
 
 - Bump dependencies
 - Release v0.2.19
-
 ## [0.2.18] - 2024-04-14
 
 ### 🚀 Features
@@ -606,7 +739,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.2.18
-
 ## [0.2.17] - 2024-04-09
 
 ### 🚀 Features
@@ -629,7 +761,6 @@ All notable changes to this project will be documented in this file.
 
 - Switch to upstream `tray-icon`
 - Release v0.2.17
-
 ## [0.2.16] - 2024-04-08
 
 ### 🚀 Features
@@ -654,7 +785,6 @@ All notable changes to this project will be documented in this file.
 
 - *(test)* Cleanup unused imports
 - Release v0.2.16
-
 ## [0.2.15] - 2024-04-03
 
 ### 🚀 Features
@@ -675,7 +805,6 @@ All notable changes to this project will be documented in this file.
 
 - Reset pkgrel after a pkgver bump
 - Release v0.2.15
-
 ## [0.2.14] - 2024-04-03
 
 ### 🚀 Features
@@ -722,7 +851,6 @@ All notable changes to this project will be documented in this file.
 ### ◀️ Revert
 
 - Vendored -> openssl
-
 ## [0.2.13] - 2024-03-23
 
 ### 🚀 Features
@@ -742,7 +870,6 @@ All notable changes to this project will be documented in this file.
 ### ◀️ Revert
 
 - "Update README.md"
-
 ## [Setup] - 2024-03-01
 
 ### 🚀 Features
@@ -772,7 +899,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Fix missing bracket
-
 ## [0.2.12] - 2024-02-25
 
 ### 🚀 Features
@@ -790,7 +916,6 @@ All notable changes to this project will be documented in this file.
 
 - Remove CSS stylelintrc
 - Release v0.2.12
-
 ## [0.2.11] - 2024-02-23
 
 ### 🐛 Bug Fixes
@@ -824,7 +949,6 @@ All notable changes to this project will be documented in this file.
 - Disable changelog on tag due to shitty failure [ci skip]
 - Bump dependencies
 - Release v0.2.11
-
 ## [0.2.10] - 2024-02-21
 
 ### 🚀 Features
@@ -855,7 +979,6 @@ All notable changes to this project will be documented in this file.
 ### ◀️ Revert
 
 - "feat: (optional) select labels by translation/origin"
-
 ## [0.2.9] - 2024-02-21
 
 ### 🚀 Features
@@ -880,7 +1003,6 @@ All notable changes to this project will be documented in this file.
 - Remove invalid github template
 - Clean up theme comments
 - Release v0.2.9
-
 ## [0.2.8] - 2024-02-20
 
 ### 🚀 Features
@@ -926,7 +1048,6 @@ All notable changes to this project will be documented in this file.
 - Do not flood commit logs
 - Remove unnessacary use of Arc<dyn LyricProvider>
 - Release v0.2.8
-
 ## [0.2.7] - 2024-02-19
 
 ### 🚀 Features
@@ -944,7 +1065,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.2.7
-
 ## [0.2.6] - 2024-02-18
 
 ### 🚀 Features
@@ -969,7 +1089,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.2.6
-
 ## [0.2.5] - 2024-02-18
 
 ### 🚀 Features
@@ -995,7 +1114,6 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Release v0.2.5
-
 ## [0.2.4] - 2024-02-17
 
 ### 🚀 Features
@@ -1044,7 +1162,6 @@ All notable changes to this project will be documented in this file.
 
 - *(dep)* Migrate to gtk4-rs 0.8.0
 - Release 0.2.4
-
 ## [0.2.3] - 2024-02-13
 
 ### 🚀 Features
@@ -1081,7 +1198,6 @@ All notable changes to this project will be documented in this file.
 - Remove unreachable `title.unwrap_or()` call
 - Migrate to dtolnay/rust-toolchain
 - Release 0.2.3
-
 ## [0.2.2] - 2024-02-10
 
 ### 🐛 Bug Fixes
@@ -1096,7 +1212,6 @@ All notable changes to this project will be documented in this file.
 
 - Test qqmusic provider initializing
 - Release `v0.2.2`
-
 ## [0.2.1] - 2024-02-08
 
 ### 💼 Other
@@ -1130,7 +1245,6 @@ All notable changes to this project will be documented in this file.
 - Remove unused import
 - Run real test in CI
 - Release 0.2.1
-
 ## [0.2.0] - 2024-02-08
 
 ### 🚀 Features
@@ -1328,5 +1442,3 @@ All notable changes to this project will be documented in this file.
 - *(doc)* Update doc for youtube-music [ci skip]
 - *(doc)* Add `musicfox`, a TUI based music player [ci skip]
 - Release 0.2.0
-
-<!-- generated by git-cliff -->
