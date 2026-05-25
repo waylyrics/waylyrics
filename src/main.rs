@@ -163,6 +163,7 @@ fn main() -> Result<glib::ExitCode> {
                             };
                             _ = sender.send_blocking(UIAction::SetBelowLabel(text.to_string()));
                         }
+                        "LoadLyricCache" => {}
                         _ => warn!("unknown signal: {signal_name}"),
                     }
                 },
