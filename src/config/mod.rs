@@ -106,6 +106,8 @@ pub struct Config {
     ///
     /// see https://wayland.app/protocols/wlr-layer-shell-unstable-v1
     ///
+    /// By default, waylyrics will be at `overlay` layer with `on_demand`
+    ///
     /// This requires LD_PRELOAD=/usr/lib/libgtk4-layer-shell.so
     #[cfg(feature = "layer-shell")]
     pub layer_shell: bool,

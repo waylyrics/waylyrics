@@ -34,7 +34,7 @@ pub fn build_main_window(
 
     #[cfg(feature = "layer-shell")]
     if layer_shell {
-        use gtk4_layer_shell::{KeyboardMode, LayerShell};
+        use gtk4_layer_shell::{KeyboardMode, Layer, LayerShell};
 
         LayerShell::init_layer_shell(&window);
         LayerShell::auto_exclusive_zone_enable(&window);
@@ -42,6 +42,7 @@ pub fn build_main_window(
         // https://wayland.app/protocols/wlr-layer-shell-unstable-v1#compositor-support
         // and https://wayland.app/protocols/wlr-layer-shell-unstable-v1#zwlr_layer_surface_v1:enum:keyboard_interactivity
         LayerShell::set_keyboard_mode(&window, KeyboardMode::OnDemand);
+        LayerShell::set_layer(&window, Layer::Overlay);
     }
 
     window.set_size_request(500, WINDOW_MIN_HEIGHT);
