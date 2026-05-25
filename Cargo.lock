@@ -4620,7 +4620,7 @@ dependencies = [
 
 [[package]]
 name = "waylyrics"
-version = "0.3.22"
+version = "0.4.0"
 dependencies = [
  "ahash 0.8.12",
  "anyhow",

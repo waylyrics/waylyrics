@@ -1,3 +1,24 @@
+## [0.4.0] - 2026-05-25
+
+### 🚀 Features
+
+- Support `wlr-layer-shell-v1` protocol
+- Also set `overlay` layer
+- Set anchor of the lyric window
+
+### 🐛 Bug Fixes
+
+- *(CI)* Determine tags creation by `github.ref`
+- *(CI)* Include tags in push triggers
+
+### ⚙️ Miscellaneous Tasks
+
+- Apply clippy lints
+- Ignore the `LoadLyricCache` signal
+
+### ◀️ Revert
+
+- "fix(CI): determine tags creation by `github.ref`"
 ## [0.3.22] - 2026-05-25
 
 ### 🚀 Features
@@ -46,6 +67,8 @@
 - Listen1 released with fix
 - Note on readme translation
 - *(readme)* Fix broken hyperlink
+- *(changelog)* Update changelog for v0.3.22
+- Flathub metainfo for 0.3.22
 
 ### 🎨 Styling
 
@@ -71,7 +94,7 @@
 - Migrate to latest ksni::TrayIcon api style
 - Don't trigger CI twice time for PR
 - Fix typo, translate comments, fix lints (#402)
-- Update changelog for v0.3.22
+- Bump version to 0.3.22
 
 ### ◀️ Revert
 
