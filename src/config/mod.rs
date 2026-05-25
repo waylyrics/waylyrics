@@ -112,6 +112,14 @@ pub struct Config {
     #[cfg(feature = "layer-shell")]
     pub layer_shell: bool,
 
+    /// anchor position of the main window.
+    ///
+    /// allowed values:
+    /// center, top, bottom, left, right,
+    /// top-left, top-right, bottom-left, bottom-right
+    #[cfg(feature = "layer-shell")]
+    pub layer_shell_anchor: LayerShellAnchor,
+
     /// player with these name will be ignored
     pub player_name_blacklist: Vec<String>,
 
@@ -188,6 +196,8 @@ impl Default for Config {
             show_tray_icon: true,
             #[cfg(feature = "layer-shell")]
             layer_shell: true,
+            #[cfg(feature = "layer-shell")]
+            layer_shell_anchor: LayerShellAnchor::default(),
             player_name_blacklist: vec!["firefox".into()],
             player_identity_blacklist: vec![],
             extract_translated_lyric: true,
@@ -234,3 +244,8 @@ fn default_filter_regexies() -> Vec<String> {
 
 mod merge;
 pub use merge::append_comments;
+
+#[cfg(feature = "layer-shell")]
+mod layer_shell;
+#[cfg(feature = "layer-shell")]
+pub use layer_shell::LayerShellAnchor;

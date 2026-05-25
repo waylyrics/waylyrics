@@ -204,6 +204,8 @@ fn build_ui(app: &Application) -> Result<()> {
         show_tray_icon,
         #[cfg(feature = "layer-shell")]
         layer_shell,
+        #[cfg(feature = "layer-shell")]
+        layer_shell_anchor,
         player_name_blacklist,
         player_identity_blacklist,
         enable_local_lyric,
@@ -256,6 +258,8 @@ fn build_ui(app: &Application) -> Result<()> {
         show_lyric_on_pause,
         #[cfg(feature = "layer-shell")]
         layer_shell,
+        #[cfg(feature = "layer-shell")]
+        layer_shell_anchor,
     );
 
     register_sync_task(
