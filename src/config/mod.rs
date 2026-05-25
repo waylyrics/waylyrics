@@ -102,6 +102,14 @@ pub struct Config {
     #[cfg(feature = "tray-icon")]
     pub show_tray_icon: bool,
 
+    /// whether to make main window a layer shell surface
+    ///
+    /// see https://wayland.app/protocols/wlr-layer-shell-unstable-v1
+    ///
+    /// This requires LD_PRELOAD=/usr/lib/libgtk4-layer-shell.so
+    #[cfg(feature = "layer-shell")]
+    pub layer_shell: bool,
+
     /// player with these name will be ignored
     pub player_name_blacklist: Vec<String>,
 
@@ -176,6 +184,8 @@ impl Default for Config {
             show_lyric_on_pause: true,
             #[cfg(feature = "tray-icon")]
             show_tray_icon: true,
+            #[cfg(feature = "layer-shell")]
+            layer_shell: true,
             player_name_blacklist: vec!["firefox".into()],
             player_identity_blacklist: vec![],
             extract_translated_lyric: true,

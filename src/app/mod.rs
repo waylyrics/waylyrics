@@ -22,6 +22,7 @@ pub fn build_main_window(
     length_toleration_ms: u128,
     show_default_text_on_idle: bool,
     show_lyric_on_pause: bool,
+    #[cfg(feature = "layer-shell")] layer_shell: bool,
 ) -> Window {
     let window = Window::new(
         app,
@@ -30,6 +31,18 @@ pub fn build_main_window(
         show_default_text_on_idle,
         show_lyric_on_pause,
     );
+
+    #[cfg(feature = "layer-shell")]
+    if layer_shell {
+        use gtk4_layer_shell::{KeyboardMode, LayerShell};
+
+        LayerShell::init_layer_shell(&window);
+        LayerShell::auto_exclusive_zone_enable(&window);
+        // wlr-layer-shell-unstable-v1 version 4 needed, see
+        // https://wayland.app/protocols/wlr-layer-shell-unstable-v1#compositor-support
+        // and https://wayland.app/protocols/wlr-layer-shell-unstable-v1#zwlr_layer_surface_v1:enum:keyboard_interactivity
+        LayerShell::set_keyboard_mode(&window, KeyboardMode::OnDemand);
+    }
 
     window.set_size_request(500, WINDOW_MIN_HEIGHT);
     window.set_title(Some(DEFAULT_TEXT));

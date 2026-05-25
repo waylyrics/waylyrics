@@ -201,6 +201,8 @@ fn build_ui(app: &Application) -> Result<()> {
         show_lyric_on_pause,
         #[cfg(feature = "tray-icon")]
         show_tray_icon,
+        #[cfg(feature = "layer-shell")]
+        layer_shell,
         player_name_blacklist,
         player_identity_blacklist,
         enable_local_lyric,
@@ -251,6 +253,8 @@ fn build_ui(app: &Application) -> Result<()> {
         length_toleration_ms,
         show_default_text_on_idle,
         show_lyric_on_pause,
+        #[cfg(feature = "layer-shell")]
+        layer_shell,
     );
 
     register_sync_task(
