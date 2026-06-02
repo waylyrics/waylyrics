@@ -81,7 +81,7 @@ tokio = { version = "1.52", features = [
     "rt",
     "rt-multi-thread",
 ] }
-reqwest = { version = "0.13.3", features = ["json"] }
+reqwest = { version = "0.13.4", features = ["json"] }
 
 # event
 async-channel = { version = "2.5.0" }
