@@ -181,6 +181,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 [desktop_lyric]: https://github.com/Moeweb647252/desktop_lyric
 [lyrica]: https://github.com/chiyuki0325/lyrica
 [lyric-for-musicfox]: https://github.com/SmileYik/lyric-for-musicfox
+[layrics]: https://github.com/sitiyou/layrics
 
 ### Linux
 
@@ -195,6 +196,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 | [lyricsSeeker]                | Python+QML    | Plasma        |                    | WIP |
 | [desktop_lyric]               | egui          | Plasma        | MPRIS              |     |
 | [lyrica]                      | Rust+QML      | Plasma        | MPRIS              |     |
+| [layrics]                     | C++/Python | Wayland | MPRIS         | requires wlr-layer-shell |
 
 [^0]: https://github.com/kangxiaoju/waybar-netease-music-lyrics/blob/f84810fe1628ca38fa36d88506152d88cf0e77e4/song.sh#L41-L59
 
