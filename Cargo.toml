@@ -8,13 +8,21 @@ license-file = "LICENSE"
 rust-version = "1.80.0"
 
 [profile.release]
-lto = "thin"
-panic = "abort"
+# reduce binary size & optimize performance
+lto = true
 codegen-units = 1
+# reduce binary size at the cost of libunwind
+panic = "abort"
+# optimize for smaller size
 opt-level = "s"
+# full debuginfo too bloated to package
+debug = "limited"
+strip = "symbols"
+# .dSYM symlink on macOS, .dwp on Linux, .pdb on Windows
+split-debuginfo = "packed"
 
 [profile.dev]
-panic = "abort"
+panic = "unwind"
 
 [profile.test]
 debug = false
