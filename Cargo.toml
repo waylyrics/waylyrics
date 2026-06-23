@@ -11,7 +11,7 @@ rust-version = "1.80.0"
 # reduce binary size & optimize performance
 lto = true
 codegen-units = 1
-# reduce binary size at the cost of libunwind
+# reduce binary size at the cost of abort
 panic = "abort"
 # optimize for smaller size
 opt-level = "s"
