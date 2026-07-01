@@ -21,7 +21,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Setup Rust Toolchain
         uses: dtolnay/rust-toolchain@stable
       - name: Install deps
@@ -89,7 +89,7 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
       - name: 'Checkout'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: 'Clone AUR repository'
         run: git clone "ssh://aur@aur.archlinux.org/waylyrics.git"
       - name: 'Generate pkgver'
