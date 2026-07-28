@@ -57,8 +57,10 @@ pub(super) fn set_click_pass_through(window: &window::Window, enabled: bool) {
 
     if enabled {
         if !window.is_decorated() {
+            // https://github.com/lianchengwu/wmplayer-lyric/blob/158d66e1800ce535414f2758c5f8290ea3e87f2d/osdlyric/osd_lyrics_lib.c#L943-L959
+            // Empty input region will imply that we don't handle any mouse event.
             surface.set_input_region(Some(&Region::create_rectangle(&RectangleInt::new(
-                0, 0, 0, 0,
+                0, 0, 1, 1,
             ))));
         } else {
             let headerbar = &window.imp().headerbar;
