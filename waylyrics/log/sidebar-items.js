@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"macro":["debug","error","info","trace","warn"]};
+window.SIDEBAR_ITEMS = {"macro":[["debug",1],["error",1],["info",1],["trace",1],["warn",1]]};
