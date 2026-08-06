@@ -60,8 +60,8 @@ fn set_and_update(dark: bool) {
             theme_path.set_file_name(new_name);
         }
 
-        if let Ok(style) = std::fs::read_to_string(&theme_path) {
-            crate::app::utils::merge_css(&style);
+        if theme_path.exists() {
+            crate::app::utils::merge_css(theme_path);
         } else {
             log::warn!("Filename {:?} not found.", theme_path);
         }

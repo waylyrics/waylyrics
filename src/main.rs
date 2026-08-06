@@ -240,8 +240,7 @@ fn build_ui(app: &Application) -> Result<()> {
     };
 
     log::debug!("theme path: {:?}", theme_path);
-    let css_style = fs::read_to_string(&theme_path)?;
-    app::utils::merge_css(&css_style);
+    app::utils::merge_css(&theme_path);
     THEME_PATH.set(theme_path);
 
     #[cfg(not(windows))]

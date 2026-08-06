@@ -38,9 +38,7 @@ pub fn register_reload_theme(app: &Application, wind: &Window, trigger: &str) {
     let action = SimpleAction::new("reload-theme", None);
     action.connect_activate(move |_, _| {
         crate::THEME_PATH.with_borrow(|theme_path| {
-            if let Ok(style) = std::fs::read_to_string(theme_path) {
-                crate::app::utils::merge_css(&style);
-            }
+            crate::app::utils::merge_css(theme_path);
         });
     });
     app.add_action(&action);

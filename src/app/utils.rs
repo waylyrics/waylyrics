@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use crate::EXCLUDED_REGEXES;
 
 use gtk::prelude::*;
@@ -88,7 +90,7 @@ pub(super) fn set_click_pass_through(window: &window::Window, enabled: bool) {
 /// We set priority as `STYLE_PROVIDER_PRIORITY + 1` to override user theme
 ///
 /// [GTK+ doc]: https://docs.gtk.org/gtk4/type_func.StyleContext.add_provider_for_display.html#parameters
-pub fn merge_css(css: &str) {
+pub fn merge_css(css: &Path) {
     use gtk::gdk::Display as GdkDisplay;
     use gtk::CssProvider;
     use std::cell::RefCell;
@@ -97,7 +99,7 @@ pub fn merge_css(css: &str) {
         static LATEST_PROVIDER: RefCell<Option<CssProvider>> = const { RefCell::new(None) };
     }
     let css_provider = CssProvider::new();
-    css_provider.load_from_data(css);
+    css_provider.load_from_path(css);
     let display = GdkDisplay::default().expect("Could not connect to a display.");
     LATEST_PROVIDER.with_borrow_mut(|provider| {
         if let Some(provider) = provider.take() {
