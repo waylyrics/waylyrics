@@ -60,8 +60,8 @@
 <a href=#60 id=60 data-nosnippet>60</a>            theme_path.set_file_name(new_name);
 <a href=#61 id=61 data-nosnippet>61</a>        }
 <a href=#62 id=62 data-nosnippet>62</a>
-<a href=#63 id=63 data-nosnippet>63</a>        <span class="kw">if let </span><span class="prelude-val">Ok</span>(style) = std::fs::read_to_string(<span class="kw-2">&amp;</span>theme_path) {
-<a href=#64 id=64 data-nosnippet>64</a>            <span class="kw">crate</span>::app::utils::merge_css(<span class="kw-2">&amp;</span>style);
+<a href=#63 id=63 data-nosnippet>63</a>        <span class="kw">if </span>theme_path.exists() {
+<a href=#64 id=64 data-nosnippet>64</a>            <span class="kw">crate</span>::app::utils::merge_css(theme_path);
 <a href=#65 id=65 data-nosnippet>65</a>        } <span class="kw">else </span>{
 <a href=#66 id=66 data-nosnippet>66</a>            <span class="macro">log::warn!</span>(<span class="string">"Filename {:?} not found."</span>, theme_path);
 <a href=#67 id=67 data-nosnippet>67</a>        }
