@@ -177,8 +177,6 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 ## 替代品
 
 [waybar-netease-music-lyrics]: https://github.com/kangxiaoju/waybar-netease-music-lyrics
-[Sunamu]: https://github.com/NyaomiDEV/Sunamu
-[lyricsSeeker]: https://github.com/BruceZhang1993/LyricsSeeker
 [caraoke-plasmoid]: https://github.com/Copay/caraoke-plasmoid
 [desktop-lyric]: https://github.com/tuberry/desktop-lyric
 [可道歌词]: https://www.autolyric.com/
@@ -197,7 +195,6 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 | ----------------------------- | ------------- | ------------- | ---------- | ------------------------- |
 | [lyric-for-musicfox]          | Qt/C++        | *             | musicfox   |                           |
 | [waybar-netease-music-lyrics] | bash          | wlroots-based | NCM[^0]    |                           |
-| [Sunamu]                      | Electron/TS   | X/Xwayland    | MPRIS      |                           |
 | [desktop-lyric]               | JavaScript    | GNOME         | MPRIS      |                           |
 | [caraoke-plasmoid]            | QML           | Plasma        | MPRIS      |                           |
 | [osdlyrics]                   | GTK2/C+Python | X/Xwayland    | MPRIS      |                           |
