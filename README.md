@@ -201,7 +201,6 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 | [desktop-lyric]               | JavaScript    | GNOME         | MPRIS      |                           |
 | [caraoke-plasmoid]            | QML           | Plasma        | MPRIS      |                           |
 | [osdlyrics]                   | GTK2/C+Python | X/Xwayland    | MPRIS      |                           |
-| [lyricsSeeker]                | Python+QML    | Plasma        |            | WIP                       |
 | [desktop_lyric]               | egui          | Plasma        | MPRIS      |                           |
 | [lyrica]                      | Rust+QML      | Plasma        | MPRIS      |                           |
 | [layrics]                     | C++/Python    | Wayland       | MPRIS      | 需支持wlr-layer-shell协议 |
