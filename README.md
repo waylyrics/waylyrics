@@ -188,21 +188,25 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 [lyrica]: https://github.com/chiyuki0325/lyrica
 [lyric-for-musicfox]: https://github.com/SmileYik/lyric-for-musicfox
 [layrics]: https://github.com/sitiyou/layrics
+[kotonoha]: https://github.com/locez/kotonoha
+[FloatLyrics]: https://github.com/ChouChiu/FloatLyrics
 
 ### Linux
 
-| 名称                          | 技术栈        | 桌面支持      | 播放器支持 | 备注 |
-| ----------------------------- | ------------- | ------------- | ---------- | ---- |
-| [lyric-for-musicfox]          | Qt/C++        | *             | musicfox   |      |
-| [waybar-netease-music-lyrics] | bash          | wlroots-based | NCM[^0]    |      |
-| [Sunamu]                      | Electron/TS   | X/Xwayland    | MPRIS      |      |
-| [desktop-lyric]               | JavaScript    | GNOME         | MPRIS      |      |
-| [caraoke-plasmoid]            | QML           | Plasma        | MPRIS      |      |
-| [osdlyrics]                   | GTK2/C+Python | X/Xwayland    | MPRIS      |      |
-| [lyricsSeeker]                | Python+QML    | Plasma        |            | WIP  |
-| [desktop_lyric]               | egui          | Plasma        | MPRIS      |      |
-| [lyrica]                      | Rust+QML      | Plasma        | MPRIS      |      |
-| [layrics]                     | C++/Python | Wayland | MPRIS   | 需要桌面支持wlr-layer-shell协议 |
+| 名称                          | 技术栈        | 桌面支持      | 播放器支持 | 备注                      |
+| ----------------------------- | ------------- | ------------- | ---------- | ------------------------- |
+| [lyric-for-musicfox]          | Qt/C++        | *             | musicfox   |                           |
+| [waybar-netease-music-lyrics] | bash          | wlroots-based | NCM[^0]    |                           |
+| [Sunamu]                      | Electron/TS   | X/Xwayland    | MPRIS      |                           |
+| [desktop-lyric]               | JavaScript    | GNOME         | MPRIS      |                           |
+| [caraoke-plasmoid]            | QML           | Plasma        | MPRIS      |                           |
+| [osdlyrics]                   | GTK2/C+Python | X/Xwayland    | MPRIS      |                           |
+| [lyricsSeeker]                | Python+QML    | Plasma        |            | WIP                       |
+| [desktop_lyric]               | egui          | Plasma        | MPRIS      |                           |
+| [lyrica]                      | Rust+QML      | Plasma        | MPRIS      |                           |
+| [layrics]                     | C++/Python    | Wayland       | MPRIS      | 需支持wlr-layer-shell协议 |
+| [kotonoha]                    | PyQt6         | Wayland       | MPRIS      | 需支持wlr-layer-shell协议 |
+| [FloatLyrics]                 | GTK4/Rust     | Wayland       | Spotify    | 需支持wlr-layer-shell协议 |
 
 [^0]: https://github.com/kangxiaoju/waybar-netease-music-lyrics/blob/f84810fe1628ca38fa36d88506152d88cf0e77e4/song.sh#L41-L59
 
