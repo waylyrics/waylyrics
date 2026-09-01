@@ -5,7 +5,7 @@ use std::sync::{LazyLock, OnceLock};
 use dashmap::DashMap;
 use lofty::file::TaggedFileExt;
 use lofty::read_from_path;
-use lofty::tag::ItemKey;
+use lofty::tag::{ItemKey, Tag, TagItem};
 
 use crate::log::{debug, error, warn};
 use crate::lyric_providers::{Lyric, LyricOwned, LyricProvider};
