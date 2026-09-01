@@ -1,0 +1,5 @@
+[git]
+exclude_paths = [
+    "CHANGELOG.md",
+    "Cargo.lock",
+]
