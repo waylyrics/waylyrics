@@ -2513,9 +2513,9 @@ checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
 
 [[package]]
 name = "opencc-rust"
-version = "2.0.0"
+version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "873924f09c355b222e38660d6031737402c3cf826d6220ba5a66fd0c0b2a27d2"
+checksum = "91fc675339811630f4f2b68169c61d0830540ee3640dea6bf5e8a9538bd224ee"
 dependencies = [
  "enum-ordinalize",
  "libc",
