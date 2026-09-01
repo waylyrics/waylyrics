@@ -188,6 +188,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 [layrics]: https://github.com/sitiyou/layrics
 [kotonoha]: https://github.com/locez/kotonoha
 [FloatLyrics]: https://github.com/ChouChiu/FloatLyrics
+[chorus]: https://github.com/f1nniboy/chorus
 
 ### Linux
 
@@ -202,6 +203,7 @@ https://github.com/waylyrics/waylyrics/blob/d2132b42b135e0de09640de6a5a0b4797871
 | [lyrica]                      | Rust+QML      | Plasma        | MPRIS      |                           |
 | [layrics]                     | C++/Python    | Wayland       | MPRIS      | 需支持wlr-layer-shell协议 |
 | [kotonoha]                    | PyQt6         | Wayland       | MPRIS      | 需支持wlr-layer-shell协议 |
+| [chorus]                      | GTK4/Go       | Wayland       | MPRIS      |                           |
 | [FloatLyrics]                 | GTK4/Rust     | Wayland       | Spotify    | 需支持wlr-layer-shell协议 |
 
 [^0]: https://github.com/kangxiaoju/waybar-netease-music-lyrics/blob/f84810fe1628ca38fa36d88506152d88cf0e77e4/song.sh#L41-L59
