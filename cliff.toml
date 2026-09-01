@@ -1,5 +1,2 @@
 [git]
-exclude_paths = [
-    "CHANGELOG.md",
-    "Cargo.lock",
-]
+exclude_paths = ["CHANGELOG.md", "Cargo.lock", "Cargo.toml"]

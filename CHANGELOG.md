@@ -1,3 +1,31 @@
+## [0.4.1] - 2026-09-01
+
+### 🚀 Features
+
+- Support `@import` in CSS themes
+
+### 🐛 Bug Fixes
+
+- `label:hover` on Wayland without GTK+ CSD
+- *(lyric)* Add fallback support for ID3v2 unsynchronised lyrics
+- Add Tag and TagItem imports
+
+### 💼 Other
+
+- *(deps)* Bump actions/checkout from 6 to 7
+
+### 📚 Documentation
+
+- Add layrics to alternatives
+- *(readme)* Add kotonoha and FloatLyrics to Linux player support list
+- *(readme)* Remove LyricSeeker due to unmaintained
+- *(readme)* Remove `Sunamu` since repo deleted, no fork found
+- Configure `git-cliff` to exclude Cargo.lock and CHANGELOG
+
+### ⚙️ Miscellaneous Tasks
+
+- Fix opening and ending tag mismatches in metainfo
+- Fix date in flatpak metainfo
 ## [0.4.0] - 2026-05-25
 
 ### 🚀 Features
@@ -10,11 +38,13 @@
 
 - *(CI)* Determine tags creation by `github.ref`
 - *(CI)* Include tags in push triggers
+- *(docs)* Add details URL for 0.4.0
 
 ### ⚙️ Miscellaneous Tasks
 
 - Apply clippy lints
 - Ignore the `LoadLyricCache` signal
+- Bump version to 0.4.0
 
 ### ◀️ Revert
 
@@ -23,6 +53,7 @@
 
 ### 🚀 Features
 
+- 添加对从音乐文件元数据读取歌词的支持
 - Optionally auto connect a player
 - Add GAction for manual label set
 - Listen to `SetAboveLabel` & `SetBelowLabel` signals
@@ -32,6 +63,9 @@
 
 ### 🐛 Bug Fixes
 
+- *(CI)* Remove outdated test of qqmusic api initialization [ci skip]
+- 手动刷新歌词时清空歌词标签缓存
+- .一个错误
 - *(windows)* Build script
 - Only clean labels on reconnection
 - Actually register win.set-label action
@@ -47,6 +81,9 @@
 
 ### 💼 Other
 
+- Migrate to ksni 0.3
+- Switch to better tray-icon implementation for windows [ci skip]
+- *(deps)* Bump dark-light to 2.0.0
 - *(deps)* Bump dependabot/fetch-metadata from 2.3.0 to 2.4.0
 - *(deps)* Bump actions/checkout from 4 to 5
 - *(deps)* Bump actions/upload-artifact from 4 to 5
@@ -64,14 +101,24 @@
 
 ### 📚 Documentation
 
+- *(readme)* Replace text with logos
+- *(readme)* Add preview images [ci skip]
+- *(readme)* Add alternative `lyric-for-musixfox` [ci skip]
+- *(readme)* Add introduction [ci skip]
+- *(readme)* Note on project status
+- *(readme)* HotLyric, alternative on windows [ci skip]
 - Listen1 released with fix
 - Note on readme translation
 - *(readme)* Fix broken hyperlink
-- *(changelog)* Update changelog for v0.3.22
 - Flathub metainfo for 0.3.22
+
+### ⚡ Performance
+
+- DashMap 作为歌词标签存在性缓存
 
 ### 🎨 Styling
 
+- :lipstick: cargo fmt
 - [ci skip] rename arg to args
 - Prefer .cloned() [ci skip]
 - Reorder imports
@@ -80,6 +127,10 @@
 
 ### ⚙️ Miscellaneous Tasks
 
+- Add .deepsource.toml
+- Fix deepsource lints
+- Dedup code
+- Add script to export dup deps [ci skip]
 - Remove unused imports
 - Update metainfo for flathub
 - Automatically merge CI passed dependency bump
@@ -100,48 +151,6 @@
 
 - 8c55c88 new-style signal handler
 - "revert: 8c55c88 new-style signal handler"
-## [0.3.21] - 2025-04-13
-
-### 🚀 Features
-
-- 添加对从音乐文件元数据读取歌词的支持
-
-### 🐛 Bug Fixes
-
-- *(CI)* Remove outdated test of qqmusic api initialization [ci skip]
-- 手动刷新歌词时清空歌词标签缓存
-- .一个错误
-
-### 💼 Other
-
-- Migrate to ksni 0.3
-- Switch to better tray-icon implementation for windows [ci skip]
-- *(deps)* Bump dark-light to 2.0.0
-
-### 📚 Documentation
-
-- *(readme)* Replace text with logos
-- *(readme)* Add preview images [ci skip]
-- *(readme)* Add alternative `lyric-for-musixfox` [ci skip]
-- *(readme)* Add introduction [ci skip]
-- *(readme)* Note on project status
-- *(readme)* HotLyric, alternative on windows [ci skip]
-- Update changelog [ci skip]
-
-### ⚡ Performance
-
-- DashMap 作为歌词标签存在性缓存
-
-### 🎨 Styling
-
-- :lipstick: cargo fmt
-
-### ⚙️ Miscellaneous Tasks
-
-- Add .deepsource.toml
-- Fix deepsource lints
-- Dedup code
-- Add script to export dup deps [ci skip]
 ## [0.3.20] - 2024-12-07
 
 ### 🐛 Bug Fixes
@@ -485,47 +494,6 @@
 
 ### 🚀 Features
 
-- Set search-window ColumnView row padding in themes
-
-### 📚 Documentation
-
-- *(changelog)* Update changelog
-
-### ⚙️ Miscellaneous Tasks
-
-- Release v0.3.1
-- Fix test.yml
-- Remove microsoft-prod.list
-- Fix documents deploy CI
-## [0.3.0] - 2024-04-24
-
-### 🐛 Bug Fixes
-
-- *(i18n)* En_US translation
-- Set titlebar before set decorated
-- *(ci)* New schema path
-
-### 💼 Other
-
-- Mpris position delay
-- Set time diff log level to TRACE so we will not flood debug log
-
-### 🚜 Refactor
-
-- Pass WeakRef<Window> to register_sync_task
-
-### 📚 Documentation
-
-- *(install)* Update packaging script
-- *(changelog)* Update changelog
-
-### ◀️ Revert
-
-- "Translate display modes"
-## [0.2.21] - 2024-04-23
-
-### 🚀 Features
-
 - Fix secondary lyric will not end
 - Blacklist players by name/identity
 - Initial support for Windows SMTC
@@ -535,6 +503,7 @@
 - Hide lyric on pause
 - Convert zh-hans/zh-hant in fuzzy match with opencc
 - Use song_search_detailed in search box to apply aliases
+- Set search-window ColumnView row padding in themes
 
 ### 🐛 Bug Fixes
 
@@ -550,6 +519,9 @@
 - Underscore not showing in display mode menu
 - *(i18n)* Load i18n on windows
 - Stop lyric update when show_lyric_on_pause not set on pause
+- *(i18n)* En_US translation
+- Set titlebar before set decorated
+- *(ci)* New schema path
 
 ### 💼 Other
 
@@ -566,6 +538,8 @@
 - Make fuzzy-match weight more than length based match
 - Apply alias for artist name on `netease`
 - Enable i18n for msvc build
+- Mpris position delay
+- Set time diff log level to TRACE so we will not flood debug log
 
 ### 🚜 Refactor
 
@@ -574,24 +548,18 @@
 - Rename `list_player_names` to `list_players`
 - Define OS-specified helpers in a trait
 - Cleanup old code
+- Pass WeakRef<Window> to register_sync_task
 
 ### 📚 Documentation
 
-- *(changelog)* Update changelog
 - *(readme)* Musixfox-go released the required patch [ci skip]
 - *(readme)* AutoLyric `C/C++`
 - *(install)* Build on windows
 - *(readme)* Intro windows user directories
-- *(changelog)* Update changelog
 - *(readme)* The only compatible player on windows
-- *(changelog)* Update changelog
 - *(readme)* Update missing translation
-- *(changelog)* Update changelog
-- *(changelog)* Update changelog
 - *(build)* Gettext-rs on windows cannot builds out-of-box with MSVC
-- *(changelog)* Update changelog
-- *(changelog)* Update changelog
-- *(changelog)* Update changelog
+- *(install)* Update packaging script
 
 ### ⚙️ Miscellaneous Tasks
 
@@ -601,10 +569,15 @@
 - *(test)* Cleanup unused imports
 - Switch to upstream `tray-icon`
 - Bump dependencies
+- Release v0.3.1
+- Fix test.yml
+- Remove microsoft-prod.list
+- Fix documents deploy CI
 
 ### ◀️ Revert
 
 - "Update README.md"
+- "Translate display modes"
 ## [Setup] - 2024-03-01
 
 ### 🚀 Features
@@ -631,7 +604,6 @@
 - *(build)* Update packaging docs
 - *(build)* Fix install command for schema [ci skip]
 - *(readme)* Go-musicfox merged fix-position [ci skip]
-- *(changelog)* Update changelog
 - *(readme)* List recommended players in chart [ci skip]
 - *(readme)* Complain some bad support [ci skip]
 - *(readme)* Intro listen1 [ci skip]
@@ -728,19 +700,9 @@
 - *(readme)* Move chat banners to center block [ci skip]
 - *(readme)* Waybar supports all wlroots-based compositors
 - *(config)* Lyric-align accepts CamelCase value
-- *(changelog)* Update changelog
-- *(changelog)* Update changelog
 - *(readme)* Update readme
-- *(changelog)* Update changelog
-- *(changelog)* Update changelog
-- *(changelog)* Update changelog
 - *(build)* Add gettext to dependencies
-- *(changelog)* Update changelog
-- *(changelog)* Update changelog
-- *(changelog)* Update changelog
-- *(changelog)* Update changelog
 - *(readme)* Remove dead `flutter-netease-music`
-- *(changelog)* Update changelog
 
 ### ⚡ Performance
 

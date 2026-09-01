@@ -38,6 +38,16 @@
   </screenshots>
 
   <releases>
+    <release version="0.4.1" date="2026-09-01">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.4.1</url>
+      <description>
+        <ul>
+          <li>Support <code>@import</code> in user themes</li>
+          <li>Fix ID3v2 USLT tag fallback support</li>
+          <li>Fix <code>label:hover</code> events on Wayland</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.4.0" date="2026-05-25">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.4.0</url>
       <description>
