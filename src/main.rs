@@ -32,7 +32,7 @@ use waylyrics::sync::lyric::fetch::tricks::EXTRACT_TRANSLATED_LYRIC;
 use waylyrics::utils::{self, acquire_instance_name, gettext, init_dirs, CUSTOM_CONFIG_PATH};
 use waylyrics::{
     EXCLUDED_REGEXES, GTK_DBUS_CONNECTION, LYRIC_PROVIDERS, MAIN_WINDOW, PLAYER_IDENTITY_BLACKLIST,
-    PLAYER_NAME_BLACKLIST, THEME_PATH,
+    PLAYER_NAME_BLACKLIST, RESPECT_EMPTY_LINE_AS_GAP, THEME_PATH,
 };
 
 use waylyrics::sync::*;
@@ -213,9 +213,11 @@ fn build_ui(app: &Application) -> Result<()> {
         qqmusic,
         color_scheme,
         theme_dark_switch,
+        respect_empty_line_as_gap,
     } = config;
 
     LYRIC_SEARCH_SKIP.store(skip_auto_search, Ordering::Release);
+    RESPECT_EMPTY_LINE_AS_GAP.store(respect_empty_line_as_gap, Ordering::Release);
 
     #[cfg(feature = "tray-icon")]
     if show_tray_icon {
