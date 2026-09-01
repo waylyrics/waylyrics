@@ -89,6 +89,25 @@ pub fn get_lrc_path(mut music_path: PathBuf) -> Option<PathBuf> {
 // Static cache for lyric tag existence checks
 pub static LYRIC_TAG_CACHE: LazyLock<DashMap<PathBuf, bool>> = LazyLock::new(DashMap::new);
 
+/// Attempts to retrieve a lyrics item from a tag, with fallback logic.
+///
+/// First tries `ItemKey::Lyrics` (common in Vorbis, FLAC, etc.), and if not found,
+/// falls back to `ItemKey::UnsyncLyrics` because ID3v2 does **not** support `Lyrics`
+/// and stores unsynchronized lyrics under `UnsyncLyrics`.
+///
+/// For ID3v2 synchronized lyrics (binary frame), this function will not return them,
+/// as they are not accessible via the generic `ItemKey` API.
+fn get_lyric_item(tag: &Tag) -> Option<&TagItem> {
+    tag.get(ItemKey::Lyrics)
+        .or_else(|| tag.get(ItemKey::UnsyncLyrics))
+}
+
+/// Retrieves the lyrics as a string, using the same fallback logic as `get_lyric_item`.
+fn get_lyric_string(tag: &Tag) -> Option<&str> {
+    tag.get_string(ItemKey::Lyrics)
+        .or_else(|| tag.get_string(ItemKey::UnsyncLyrics))
+}
+
 pub fn lyric_tag_exists(music_path: &Path) -> bool {
     // Check the cache first
     if let Some(result) = LYRIC_TAG_CACHE.get(music_path) {
@@ -100,7 +119,7 @@ pub fn lyric_tag_exists(music_path: &Path) -> bool {
         .ok()
         .as_ref()
         .and_then(|tagged_file| tagged_file.primary_tag())
-        .and_then(|tag| tag.get(ItemKey::Lyrics))
+        .and_then(get_lyric_item)
         .is_some();
     // Store result in cache
     LYRIC_TAG_CACHE.insert(music_path.to_owned(), result);
@@ -112,7 +131,7 @@ pub fn get_lrc_from_music_metadata(music_path: &Path) -> Option<(LyricOwned, Lyr
         .ok()
         .as_ref()
         .and_then(|tagged_file| tagged_file.primary_tag())
-        .and_then(|tag| tag.get_string(ItemKey::Lyrics))
+        .and_then(get_lyric_string)
         .and_then(parse_local_lyric)
 }
 
