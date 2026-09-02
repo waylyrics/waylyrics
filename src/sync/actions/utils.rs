@@ -38,6 +38,8 @@ pub async fn export_lyric(window: &Window, is_original: bool) {
     use gtk::glib::Priority;
     use gtk::{FileDialog, FileFilter};
 
+use crate::tokio_spawn;
+
     info!("spawned export-lyric: original={is_original}");
 
     let meta = TRACK_PLAYING_STATE.with_borrow(|meta| meta.metainfo.clone());
@@ -53,7 +55,7 @@ pub async fn export_lyric(window: &Window, is_original: bool) {
     let LyricOwned::LineTimestamp(lines) = current_lyrics else {
         let error_msg = gettext("lyric not exising!");
         error!(error_msg);
-        show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
+        show_dialog(Some(window), &error_msg, gtk::MessageType::Error);
         return;
     };
 
@@ -88,38 +90,26 @@ pub async fn export_lyric(window: &Window, is_original: bool) {
     let filter = FileFilter::new();
     filter.add_mime_type("text/plain");
     filter.add_suffix("lrc");
+    filter.set_name(Some("Simple LRC"));
     filters.append(&filter);
-    let Ok(lrc_file) = FileDialog::builder()
+    let Some(mut lrc_file) = FileDialog::builder()
         .title(gettext("Export a lyrics file"))
         .filters(&filters)
+        .default_filter(&filter)
         .build()
         .save_future(Some(window))
-        .await
+        .await.ok().and_then(|f| f.path())
     else {
         info!("user cancelled selection");
         return;
     };
+    lrc_file.set_extension("lrc");
 
-    match lrc_file
-        .create_readwrite_future(FileCreateFlags::REPLACE_DESTINATION, Priority::DEFAULT)
-        .await
-    {
-        Ok(stream) => {
-            use gtk::gio::prelude::{IOStreamExt, OutputStreamExt, OutputStreamExtManual};
-
-            let outstream = stream.output_stream();
-            outstream
-                .write_all_future(output.into_bytes(), Priority::DEFAULT)
-                .await;
-            outstream.flush_future(Priority::DEFAULT).await;
-            outstream.close_future(Priority::DEFAULT).await;
-        }
-        Err(e) => {
-            let prompt = gettext("failed to export: ");
-            let error_msg = format!("{prompt}{e}");
-            error!(error_msg);
-            show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
-        }
+    if let Ok(Err(e)) = tokio_spawn!(tokio::fs::write(lrc_file, output)).await {
+        let prompt = gettext("failed to export: ");
+        let error_msg = format!("{prompt}{e}");
+        error!(error_msg);
+        show_dialog(Some(window), &error_msg, gtk::MessageType::Error);
     }
 }
 
@@ -131,6 +121,7 @@ pub async fn import_lyric(window: &Window, is_original: bool) {
 
     use crate::lyric_providers::utils::lrc_iter;
     use crate::lyric_providers::Lyric;
+use crate::tokio_spawn;
 
     info!("spawned import-lyric: original={is_original}");
 
@@ -138,55 +129,30 @@ pub async fn import_lyric(window: &Window, is_original: bool) {
     let filter = FileFilter::new();
     filter.add_mime_type("text/plain");
     filter.add_suffix("lrc");
+    filter.set_name(Some("Simple LRC"));
     filters.append(&filter);
-    let Ok(lrc_file) = FileDialog::builder()
+    let Some(lrc_file) = FileDialog::builder()
         .title(gettext("Select a lyrics file"))
         .filters(&filters)
+        .default_filter(&filter)
         .build()
-        .save_future(Some(window))
-        .await
+        .open_future(Some(window))
+        .await.ok().and_then(|f| f.path())
     else {
         info!("user cancelled selection");
         return;
     };
 
-    let lrc_io = match lrc_file.open_readwrite_future(Priority::DEFAULT).await {
-        Ok(lrc_io) => lrc_io,
-        Err(e) => {
+    let lrc = match tokio_spawn!(tokio::fs::read_to_string(lrc_file)).await {
+        Ok(Ok(bytes)) => bytes,
+        Ok(Err(e)) => {
             let prompt = gettext("failed to read LRC in UTF-8: ");
             let error_msg = format!("{prompt}{e}");
             error!(error_msg);
-            show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
+            show_dialog(Some(window), &error_msg, gtk::MessageType::Error);
             return;
         }
-    };
-
-    let inputstream = lrc_io.input_stream();
-    let lrc = {
-        match inputstream
-            .read_all_future(Vec::new(), Priority::DEFAULT)
-            .await
-        {
-            Ok((_, _, Some(e))) | Err((_, e)) => {
-                let prompt = gettext("failed to read LRC in UTF-8: ");
-                let error_msg = format!("{prompt}{e}");
-                error!(error_msg);
-                show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
-                return;
-            }
-            Ok((bytes, _, _)) => {
-                if let Ok(lrc) = String::from_utf8(bytes) {
-                    inputstream.close_future(Priority::DEFAULT).await;
-                    lrc.to_string()
-                } else {
-                    let prompt = gettext("failed to read LRC in UTF-8: ");
-                    let error_msg = format!("{prompt}invalid encoding");
-                    error!(error_msg);
-                    show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
-                    return;
-                }
-            }
-        }
+        Err(e) => panic!("tokio join error"),
     };
     let lyric = match lrc_iter(lrc.lines()) {
         Ok(r) => r,
@@ -194,7 +160,7 @@ pub async fn import_lyric(window: &Window, is_original: bool) {
             let prompt = gettext("input LRC in unsupported format: ");
             let error_msg = format!("{prompt}{e}");
             error!(error_msg);
-            show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
+            show_dialog(Some(window), &error_msg, gtk::MessageType::Error);
             return;
         }
     };
