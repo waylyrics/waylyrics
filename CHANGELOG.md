@@ -1,3 +1,17 @@
+## [0.4.3] - 2026-09-02
+
+### 🐛 Bug Fixes
+
+- Action-event is now always enabled
+
+### 💼 Other
+
+- Drop DT_NEEDED to libwayland-client.so
+
+### ⚙️ Miscellaneous Tasks
+
+- Update aur pkgbuild in runner directly (#460)
+- Emove AUR PKGBUILD update steps
 ## [0.4.2] - 2026-09-02
 
 ### 🚀 Features
@@ -16,6 +30,10 @@
 ### ⚡ Performance
 
 - Avoid atomic sync for `LYRIC_SEARCH_SKIP`
+
+### ⚙️ Miscellaneous Tasks
+
+- Bump version to 0.4.2
 ## [0.4.1] - 2026-09-01
 
 ### 🚀 Features

@@ -38,6 +38,14 @@
   </screenshots>
 
   <releases>
+    <release version="0.4.3" date="2026-09-02">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.4.3</url>
+      <description>
+        <ul>
+          <li><code>layer-shell</code> no longer requires the <code>LD_PRELOAD</code> hack</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.4.2" date="2026-09-02">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.4.2</url>
       <description>
