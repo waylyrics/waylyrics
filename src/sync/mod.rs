@@ -54,7 +54,6 @@ pub use actions::{
     register_remove_lyric, register_search_lyric,
 };
 
-#[cfg(feature = "action-event")]
 pub use actions::{init_play_action_channel, PlayAction, PLAY_ACTION};
 
 pub use interop::{register_sync_task, PlayerId};

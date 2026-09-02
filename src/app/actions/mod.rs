@@ -1,7 +1,5 @@
-#[cfg(feature = "action-event")]
 mod event;
 
-#[cfg(feature = "action-event")]
 pub use event::{init_ui_action_channel, UIAction, UI_ACTION};
 
 use crate::app::utils::set_click_pass_through;

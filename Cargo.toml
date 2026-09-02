@@ -126,12 +126,12 @@ multi-monitor = ["dep:hex-simd"]
 
 mimalloc = ["dep:mimalloc"]
 vendored = ["dbus/vendored"]
-action-event = []
 offline-test = []
 layer-shell = ["dep:gtk4-layer-shell"]
 
 # reserved for backward compatiblity
 opencc = []
+action-event = []
 
 [target.'cfg(unix)'.dependencies]
 # MPRIS integration

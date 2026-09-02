@@ -200,7 +200,5 @@ pub fn register_connect(app: &Application) {
     app.add_action(&connect);
 }
 
-#[cfg(feature = "action-event")]
 mod event;
-#[cfg(feature = "action-event")]
 pub use event::{init_play_action_channel, PlayAction, PLAY_ACTION};

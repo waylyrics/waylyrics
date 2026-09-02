@@ -37,7 +37,6 @@ use waylyrics::{
 use waylyrics::sync::*;
 use waylyrics::{glib_spawn, log};
 
-#[cfg(feature = "action-event")]
 use waylyrics::app::actions::init_ui_action_channel;
 #[cfg(feature = "tray-icon")]
 use waylyrics::tray_icon::start_tray_service;
@@ -269,9 +268,7 @@ fn build_ui(app: &Application) -> Result<()> {
     register_lyric_display(ObjectExt::downgrade(&wind), lyric_update_interval);
     register_actions(app, &wind, triggers);
 
-    #[cfg(feature = "action-event")]
     init_play_action_channel(ObjectExt::downgrade(app));
-    #[cfg(feature = "action-event")]
     init_ui_action_channel(ObjectExt::downgrade(app), ObjectExt::downgrade(&wind));
 
     if enable_filter_regex {
