@@ -92,17 +92,60 @@ jobs:
         uses: actions/checkout@v7
       - name: 'Clone AUR repository'
         run: git clone "ssh://aur@aur.archlinux.org/waylyrics.git"
-      - name: 'Generate pkgver'
-        id: pkgver
-        uses: ./.github/actions/update-pkgbuild-action
-        with:
-          tag: ${{ github.ref_name }}
-          dir: waylyrics
+      - name: 'Get current status'
+        id: current
+        run: |
+          source waylyrics/PKGBUILD
+          echo "main_sha256=${sha256sums[0]}" >> "$GITHUB_OUTPUT"
+          echo "pkgver=$pkgver" >> "$GITHUB_OUTPUT"
+      - name: 'Get target status'
+        id: target
+        # /usr/share/makepkg/source/git.sh
+        env:
+          GIT_CONFIG_GLOBAL: /dev/null
+          GIT_CONFIG_SYSTEM: /dev/null
+        run: |
+          echo -n "main_sha256=" >> "$GITHUB_OUTPUT"
+          git -c core.abbrev=no archive --format tar '${{ github.ref_name }}' | sha256sum | cut -d " " -f 1 >> "$GITHUB_OUTPUT"
+          echo -n "pkgver=" >> "$GITHUB_OUTPUT"
+          echo '${{ github.ref_name }}' | sed 's/v//' >> "$GITHUB_OUTPUT"
+      - name: 'Update pkgver'
+        run: |
+          current_pkgver='${{ steps.current.outputs.pkgver }}'
+          current_sha256='${{ steps.current.outputs.main_sha256 }}'
+          target_pkgver='${{ steps.target.outputs.pkgver }}'
+          target_sha256='${{ steps.target.outputs.main_sha256 }}'
+          sed -i waylyrics/PKGBUILD \
+            -e "s/$current_pkgver/$target_pkgver/" \
+            -e "s/$current_sha256/$target_sha256/"
       - name: 'Show diff'
-        run: git -C waylyrics diff
+        id: diff
+        run: |
+          if git -C waylyrics --no-pager diff --exit-code PKGBUILD
+          then
+            echo "PKGBUILD is not updated."
+            echo updated=false >> "$GITHUB_OUTPUT"
+          else
+            echo "PKGBUILD is updated."
+            echo updated=true >> "$GITHUB_OUTPUT"
+          fi
+      - name: 'Install makepkg'
+        if: steps.diff.outputs.updated == 'true'
+        run: |
+          sudo apt-get update -y
+          sudo apt-get upgrade -y
+          sudo apt-get install makepkg -y
+      - name: 'Update .SRCINFO'
+        if: steps.diff.outputs.updated == 'true'
+        run: makepkg -D waylyrics --printsrcinfo > waylyrics/.SRCINFO
+      - name: 'Print diff'
+        if: steps.diff.outputs.updated == 'true'
+        run: git -C waylyrics --no-pager diff
       - name: 'Commit'
+        if: steps.diff.outputs.updated == 'true'
         run: |
           git -C waylyrics add .
           git -C waylyrics commit -m "Bump version to ${{ steps.pkgver.outputs.pkgver }}"
       - name: 'Push'
+        if: steps.diff.outputs.updated == 'true'
         run: git -C waylyrics push origin master
