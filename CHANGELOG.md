@@ -1,3 +1,8 @@
+## [0.4.5] - 2026-09-02
+
+### 🐛 Bug Fixes
+
+- Modifying extension name may invalidate the permission to write
 ## [0.4.4] - 2026-09-02
 
 ### 🐛 Bug Fixes
@@ -8,6 +13,7 @@
 ### 💼 Other
 
 - Explictly detect the `wlr_layer_shell` support
+- Bump version to 0.4.4
 ## [0.4.3] - 2026-09-02
 
 ### 🐛 Bug Fixes

@@ -38,6 +38,14 @@
   </screenshots>
 
   <releases>
+    <release version="0.4.5" date="2026-09-03">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.4.5</url>
+      <description>
+        <ul>
+          <li>Fix export LRC when .lrc extension was missing</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.4.4" date="2026-09-03">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.4.4</url>
       <description>
