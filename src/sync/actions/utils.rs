@@ -33,6 +33,11 @@ pub fn make_lrc_line(text: impl Display, start_time: Duration) -> String {
 
 #[cfg(feature = "export-lyric")]
 pub async fn export_lyric(window: &Window, is_original: bool) {
+    use gtk::gio::prelude::FileExt;
+    use gtk::gio::FileCreateFlags;
+    use gtk::glib::Priority;
+    use gtk::{FileDialog, FileFilter};
+
     info!("spawned export-lyric: original={is_original}");
 
     let meta = TRACK_PLAYING_STATE.with_borrow(|meta| meta.metainfo.clone());
@@ -79,49 +84,108 @@ pub async fn export_lyric(window: &Window, is_original: bool) {
         output += "\n";
     }
 
-    let Some(lrc_file) = rfd::AsyncFileDialog::new()
-        .set_title(gettext("Export a lyrics file"))
-        .add_filter("Simple LRC", &["lrc"])
-        .save_file()
+    let filters = gtk::gio::ListStore::new::<FileFilter>();
+    let filter = FileFilter::new();
+    filter.add_mime_type("text/plain");
+    filter.add_suffix("lrc");
+    filters.append(&filter);
+    let Ok(lrc_file) = FileDialog::builder()
+        .title(gettext("Export a lyrics file"))
+        .filters(&filters)
+        .build()
+        .save_future(Some(window))
         .await
     else {
-        info!("user canceled selection");
+        info!("user cancelled selection");
         return;
     };
 
-    if let Err(e) = lrc_file.write(output.as_bytes()).await {
-        let prompt = gettext("failed to export: ");
-        let error_msg = format!("{prompt}{e}");
-        error!(error_msg);
-        show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
+    match lrc_file
+        .create_readwrite_future(FileCreateFlags::REPLACE_DESTINATION, Priority::DEFAULT)
+        .await
+    {
+        Ok(stream) => {
+            use gtk::gio::prelude::{IOStreamExt, OutputStreamExt, OutputStreamExtManual};
+
+            let outstream = stream.output_stream();
+            outstream
+                .write_all_future(output.into_bytes(), Priority::DEFAULT)
+                .await;
+            outstream.flush_future(Priority::DEFAULT).await;
+            outstream.close_future(Priority::DEFAULT).await;
+        }
+        Err(e) => {
+            let prompt = gettext("failed to export: ");
+            let error_msg = format!("{prompt}{e}");
+            error!(error_msg);
+            show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
+        }
     }
 }
 
 #[cfg(feature = "import-lyric")]
 pub async fn import_lyric(window: &Window, is_original: bool) {
+    use gtk::gio::prelude::{FileExt, IOStreamExt, InputStreamExt, InputStreamExtManual};
+    use gtk::glib::Priority;
+    use gtk::{FileDialog, FileFilter};
+
     use crate::lyric_providers::utils::lrc_iter;
     use crate::lyric_providers::Lyric;
 
     info!("spawned import-lyric: original={is_original}");
 
-    let lrc_file = rfd::AsyncFileDialog::new()
-        .set_title(gettext("Select a lyrics file"))
-        .add_filter("Simple LRC", &["lrc"])
-        .pick_file()
-        .await;
-
-    let Some(lrc_file) = lrc_file else {
-        info!("user canceled selection");
+    let filters = gtk::gio::ListStore::new::<FileFilter>();
+    let filter = FileFilter::new();
+    filter.add_mime_type("text/plain");
+    filter.add_suffix("lrc");
+    filters.append(&filter);
+    let Ok(lrc_file) = FileDialog::builder()
+        .title(gettext("Select a lyrics file"))
+        .filters(&filters)
+        .build()
+        .save_future(Some(window))
+        .await
+    else {
+        info!("user cancelled selection");
         return;
     };
-    let lrc = match String::from_utf8(lrc_file.read().await) {
-        Ok(lrc) => lrc,
+
+    let lrc_io = match lrc_file.open_readwrite_future(Priority::DEFAULT).await {
+        Ok(lrc_io) => lrc_io,
         Err(e) => {
             let prompt = gettext("failed to read LRC in UTF-8: ");
             let error_msg = format!("{prompt}{e}");
             error!(error_msg);
             show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
             return;
+        }
+    };
+
+    let inputstream = lrc_io.input_stream();
+    let lrc = {
+        match inputstream
+            .read_all_future(Vec::new(), Priority::DEFAULT)
+            .await
+        {
+            Ok((_, _, Some(e))) | Err((_, e)) => {
+                let prompt = gettext("failed to read LRC in UTF-8: ");
+                let error_msg = format!("{prompt}{e}");
+                error!(error_msg);
+                show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
+                return;
+            }
+            Ok((bytes, _, _)) => {
+                if let Ok(lrc) = String::from_utf8(bytes) {
+                    inputstream.close_future(Priority::DEFAULT).await;
+                    lrc.to_string()
+                } else {
+                    let prompt = gettext("failed to read LRC in UTF-8: ");
+                    let error_msg = format!("{prompt}invalid encoding");
+                    error!(error_msg);
+                    show_dialog(gtk::Window::NONE, &error_msg, gtk::MessageType::Error);
+                    return;
+                }
+            }
         }
     };
     let lyric = match lrc_iter(lrc.lines()) {

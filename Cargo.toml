@@ -73,7 +73,6 @@ directories = "6.0.0"
 strum = { version = "0.28.0", default-features = false, features = ["derive"] }
 sorensen = "0.2.0"
 ahash = "0.8.12"
-rfd = { version = "0.17.2", optional = true }
 hex-simd = { version = "0.8.0", optional = true, default-features = false }
 
 # error handling
@@ -119,10 +118,12 @@ default = [
 tray-icon = ["action-event", "dep:ksni", "dep:tray-item"]
 i18n = ["dep:gettext-rs"]
 journald = ["dep:tracing-journald"]
-import-lyric = ["dep:rfd"]
-export-lyric = ["dep:rfd"]
 i18n-local-lyric = ["dep:sys-locale"]
 multi-monitor = ["dep:hex-simd"]
+
+# requires gtk4::FileDialog
+import-lyric = ["gtk/v4_10"]
+export-lyric = ["gtk/v4_10"]
 
 mimalloc = ["dep:mimalloc"]
 vendored = ["dbus/vendored"]
