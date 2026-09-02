@@ -65,9 +65,9 @@ fn main() -> Result<glib::ExitCode> {
         )
         .with(fmt::Layer::new());
 
-    #[cfg(feature = "journald")]
+    #[cfg(all(feature = "journald", target_os = "linux"))]
     registry.with(tracing_journald::layer()?).init();
-    #[cfg(not(feature = "journald"))]
+    #[cfg(not(all(feature = "journald", target_os = "linux")))]
     registry.init();
 
     std::panic::set_hook(Box::new(tracing_panic::panic_hook));
