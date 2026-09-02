@@ -134,7 +134,7 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo apt-get upgrade -y
-          sudo apt-get install pacman-package-manager -y
+          sudo apt-get install makepkg -y
       - name: 'Update .SRCINFO'
         if: steps.diff.outputs.updated == 'true'
         run: makepkg -D waylyrics --printsrcinfo > waylyrics/.SRCINFO
