@@ -146,6 +146,14 @@ pub struct Config {
 
     /// Whether to use <name>-dark.css when system is in dark mode
     pub theme_dark_switch: bool,
+
+    /// Whether to treat empty lyric lines as gaps
+    ///
+    /// When enabled, if the original lyric line is empty (i.e., a gap), the corresponding
+    /// translated lyric line will not be displayed. This prevents the translated lyric
+    /// from showing the previous line while the original lyric is displaying a blank gap,
+    /// ensuring that both lyrics maintain a consistent visual rhythm.
+    pub respect_empty_line_as_gap: bool,
 }
 
 /// check [GTK+'s official document](https://docs.gtk.org/gtk4/ctor.ShortcutTrigger.parse_string.html) for trigger format
@@ -205,6 +213,7 @@ impl Default for Config {
             qqmusic: QQMusicConfig::default(),
             color_scheme: ColorScheme::default(),
             theme_dark_switch: false,
+            respect_empty_line_as_gap: false,
         }
     }
 }

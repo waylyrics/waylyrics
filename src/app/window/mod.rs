@@ -23,6 +23,7 @@ impl Window {
         length_toleration_ms: u128,
         show_default_text_on_idle: bool,
         show_lyric_on_pause: bool,
+        respect_empty_line_as_gap: bool,
         skip_auto_search: bool,
     ) -> Self {
         let window: Self = Object::builder().property("application", app).build();
@@ -34,6 +35,7 @@ impl Window {
         imp.length_toleration_ms.set(length_toleration_ms);
         imp.show_default_text_on_idle.set(show_default_text_on_idle);
         imp.show_lyric_on_pause.set(show_lyric_on_pause);
+        imp.respect_empty_line_as_gap.set(respect_empty_line_as_gap);
         imp.skip_auto_search.set(skip_auto_search);
 
         window
