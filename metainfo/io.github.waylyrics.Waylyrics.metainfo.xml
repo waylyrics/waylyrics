@@ -38,6 +38,14 @@
   </screenshots>
 
   <releases>
+    <release version="0.4.4" date="2026-09-03">
+    <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.4.4</url>
+      <description>
+        <ul>
+          <li>Fix import and export lyrics manually</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.4.3" date="2026-09-02">
     <url type="details">https://github.com/waylyrics/waylyrics/releases/tag/v0.4.3</url>
       <description>

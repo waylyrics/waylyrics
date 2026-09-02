@@ -1,3 +1,13 @@
+## [0.4.4] - 2026-09-02
+
+### 🐛 Bug Fixes
+
+- Journald is not existing on Windows
+- Export lyrics, import lyrics
+
+### 💼 Other
+
+- Explictly detect the `wlr_layer_shell` support
 ## [0.4.3] - 2026-09-02
 
 ### 🐛 Bug Fixes
@@ -12,6 +22,7 @@
 
 - Update aur pkgbuild in runner directly (#460)
 - Emove AUR PKGBUILD update steps
+- Bump version to 0.4.3
 ## [0.4.2] - 2026-09-02
 
 ### 🚀 Features
