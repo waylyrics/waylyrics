@@ -52,9 +52,9 @@ fn main() -> Result<glib::ExitCode> {
         eprintln!("textdomain: {textdomain:#?}");
 
         #[cfg(target_os = "windows")]
-        let result = textdomain.push("../share").init();
+        let result = unsafe { textdomain.push("../share").init() };
         #[cfg(not(target_os = "windows"))]
-        let result = textdomain.init();
+        let result = unsafe { textdomain.init() };
 
         result
     };
