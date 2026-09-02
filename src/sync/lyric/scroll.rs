@@ -1,4 +1,3 @@
-use std::sync::atomic::Ordering;
 use std::time::Duration;
 
 use gtk::glib::{self, ControlFlow, Priority, WeakRef};
@@ -6,8 +5,8 @@ use gtk::subclass::prelude::ObjectSubclassIsExt;
 
 use crate::app::{self, get_label};
 use crate::config::LyricDisplayMode;
+use crate::log::*;
 use crate::lyric_providers::{LyricLineOwned, LyricOwned};
-use crate::{log::*, RESPECT_EMPTY_LINE_AS_GAP};
 
 use crate::sync::{LyricState, TrackState, LYRIC, TRACK_PLAYING_STATE};
 use crate::utils::reset_lyric_labels;
@@ -40,12 +39,17 @@ fn set_lyric_with_mode(
     translation: Option<&LyricLineOwned>,
     origin: Option<&LyricLineOwned>,
 ) {
-    let respect_gap = RESPECT_EMPTY_LINE_AS_GAP.load(Ordering::Acquire);
-    let translation = if respect_gap && origin.is_some_and(|it| it.text.trim().is_empty()) {
-        None
-    } else {
-        translation
+    let translation = {
+        let respect_gap = window.imp().respect_empty_line_as_gap.get();
+        let origin_is_empty = origin.is_some_and(|it| it.text.trim().is_empty());
+
+        if respect_gap && origin_is_empty {
+            None
+        } else {
+            translation
+        }
     };
+
     match window.imp().lyric_display_mode.get() {
         LyricDisplayMode::ShowBoth => {
             set_lyric(window, translation.or(origin), "above");

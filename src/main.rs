@@ -32,7 +32,7 @@ use waylyrics::sync::lyric::fetch::tricks::EXTRACT_TRANSLATED_LYRIC;
 use waylyrics::utils::{self, acquire_instance_name, gettext, init_dirs, CUSTOM_CONFIG_PATH};
 use waylyrics::{
     EXCLUDED_REGEXES, GTK_DBUS_CONNECTION, LYRIC_PROVIDERS, MAIN_WINDOW, PLAYER_IDENTITY_BLACKLIST,
-    PLAYER_NAME_BLACKLIST, RESPECT_EMPTY_LINE_AS_GAP, THEME_PATH,
+    PLAYER_NAME_BLACKLIST, THEME_PATH,
 };
 
 use waylyrics::sync::*;
@@ -217,7 +217,6 @@ fn build_ui(app: &Application) -> Result<()> {
     } = config;
 
     LYRIC_SEARCH_SKIP.store(skip_auto_search, Ordering::Release);
-    RESPECT_EMPTY_LINE_AS_GAP.store(respect_empty_line_as_gap, Ordering::Release);
 
     #[cfg(feature = "tray-icon")]
     if show_tray_icon {
@@ -257,6 +256,7 @@ fn build_ui(app: &Application) -> Result<()> {
         length_toleration_ms,
         show_default_text_on_idle,
         show_lyric_on_pause,
+        respect_empty_line_as_gap,
         #[cfg(feature = "layer-shell")]
         layer_shell,
         #[cfg(feature = "layer-shell")]
