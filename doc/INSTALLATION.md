@@ -14,9 +14,6 @@
   - [使用 stable 工具链](#使用-stable-工具链)
   - [使用 nightly 工具链](#使用-nightly-工具链)
   - [本地安装](#本地安装)
-    - [编译Schema](#编译schema)
-    - [本地化文件](#本地化文件)
-    - [Desktop 文件](#desktop-文件)
   - [打包](#打包)
 
 可以在 [Actions](https://github.com/waylyrics/waylyrics/actions/workflows/smoketest.yml) 下载发布
@@ -87,8 +84,6 @@ cargo libgraphene-devel gtk4-devel openssl-devel dbus-1-devel mimalloc-devel pan
 请查阅 [gtk book](https://gtk-rs.org/gtk4-rs/stable/latest/book/installation_windows.html#install-gtk-4) 安装 gtk4
 
 如果要使用 MSVC 请启用 `--no-default-features` ，gettext-rs 不支持 Windows MSVC 编译
-
-对于 `opencc` ，则需要你复制他们的预构建发布至 `%systemdrive%\gtk-build\gtk\x64\release` 。
 
 # 编译
 

@@ -98,12 +98,12 @@ async-channel = { version = "2.5.0" }
 gettext-rs = { version = "0.8.0", features = [
     "gettext-system",
 ], optional = true }
-opencc-rust = { version = "2.0", optional = true }
 sys-locale = { version = "0.3.2", optional = true }
 tracing-panic = "0.1.2"
 lofty = "0.25.1"
 dashmap = "6.2.1"
 memchr = "2.8.1"
+zhconv = "0.4.1"
 
 [features]
 default = [
@@ -119,7 +119,6 @@ default = [
 tray-icon = ["action-event", "dep:ksni", "dep:tray-item"]
 i18n = ["dep:gettext-rs"]
 journald = ["dep:tracing-journald"]
-opencc = ["dep:opencc-rust"]
 import-lyric = ["dep:rfd"]
 export-lyric = ["dep:rfd"]
 i18n-local-lyric = ["dep:sys-locale"]
@@ -130,6 +129,9 @@ vendored = ["dbus/vendored"]
 action-event = []
 offline-test = []
 layer-shell = ["dep:gtk4-layer-shell"]
+
+# reserved for backward compatiblity
+opencc = []
 
 [target.'cfg(unix)'.dependencies]
 # MPRIS integration
