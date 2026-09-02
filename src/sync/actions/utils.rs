@@ -96,6 +96,7 @@ use crate::tokio_spawn;
         .title(gettext("Export a lyrics file"))
         .filters(&filters)
         .default_filter(&filter)
+        .initial_name("lyrics.lrc")
         .build()
         .save_future(Some(window))
         .await.ok().and_then(|f| f.path())
@@ -103,7 +104,6 @@ use crate::tokio_spawn;
         info!("user cancelled selection");
         return;
     };
-    lrc_file.set_extension("lrc");
 
     if let Ok(Err(e)) = tokio_spawn!(tokio::fs::write(lrc_file, output)).await {
         let prompt = gettext("failed to export: ");
