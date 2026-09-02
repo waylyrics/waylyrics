@@ -22,6 +22,7 @@ pub fn build_main_window(
     length_toleration_ms: u128,
     show_default_text_on_idle: bool,
     show_lyric_on_pause: bool,
+    skip_auto_search: bool,
     #[cfg(feature = "layer-shell")] layer_shell: bool,
     #[cfg(feature = "layer-shell")] layer_shell_anchor: crate::config::LayerShellAnchor,
 ) -> Window {
@@ -31,6 +32,7 @@ pub fn build_main_window(
         length_toleration_ms,
         show_default_text_on_idle,
         show_lyric_on_pause,
+        skip_auto_search,
     );
 
     #[cfg(feature = "layer-shell")]

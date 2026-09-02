@@ -1,7 +1,6 @@
 use std::fs;
 use std::ops::ControlFlow;
 use std::path::PathBuf;
-use std::sync::atomic::Ordering;
 
 use gtk::gio::{DBusSignalFlags, DBusSignalRef};
 use gtk::glib::{OptionArg, OptionFlags};
@@ -36,7 +35,7 @@ use waylyrics::{
 };
 
 use waylyrics::sync::*;
-use waylyrics::{glib_spawn, log, LYRIC_SEARCH_SKIP};
+use waylyrics::{glib_spawn, log};
 
 #[cfg(feature = "action-event")]
 use waylyrics::app::actions::init_ui_action_channel;
@@ -215,8 +214,6 @@ fn build_ui(app: &Application) -> Result<()> {
         theme_dark_switch,
     } = config;
 
-    LYRIC_SEARCH_SKIP.store(skip_auto_search, Ordering::Release);
-
     #[cfg(feature = "tray-icon")]
     if show_tray_icon {
         let result = start_tray_service();
@@ -255,6 +252,7 @@ fn build_ui(app: &Application) -> Result<()> {
         length_toleration_ms,
         show_default_text_on_idle,
         show_lyric_on_pause,
+        skip_auto_search,
         #[cfg(feature = "layer-shell")]
         layer_shell,
         #[cfg(feature = "layer-shell")]
