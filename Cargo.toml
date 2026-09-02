@@ -95,13 +95,13 @@ reqwest = { version = "0.13.4", features = ["json"] }
 async-channel = { version = "2.5.0" }
 
 # i18n
-gettext-rs = { version = "0.7.2", features = [
+gettext-rs = { version = "0.8.0", features = [
     "gettext-system",
 ], optional = true }
 opencc-rust = { version = "2.0", optional = true }
 sys-locale = { version = "0.3.2", optional = true }
 tracing-panic = "0.1.2"
-lofty = "0.24.0"
+lofty = "0.25.1"
 dashmap = "6.2.1"
 memchr = "2.8.1"
 

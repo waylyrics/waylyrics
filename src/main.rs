@@ -1,7 +1,6 @@
 use std::fs;
 use std::ops::ControlFlow;
 use std::path::PathBuf;
-use std::sync::atomic::Ordering;
 
 use gtk::gio::{DBusSignalFlags, DBusSignalRef};
 use gtk::glib::{OptionArg, OptionFlags};
@@ -36,7 +35,7 @@ use waylyrics::{
 };
 
 use waylyrics::sync::*;
-use waylyrics::{glib_spawn, log, LYRIC_SEARCH_SKIP};
+use waylyrics::{glib_spawn, log};
 
 #[cfg(feature = "action-event")]
 use waylyrics::app::actions::init_ui_action_channel;
@@ -52,9 +51,9 @@ fn main() -> Result<glib::ExitCode> {
         eprintln!("textdomain: {textdomain:#?}");
 
         #[cfg(target_os = "windows")]
-        let result = textdomain.push("../share").init();
+        let result = unsafe { textdomain.push("../share").init() };
         #[cfg(not(target_os = "windows"))]
-        let result = textdomain.init();
+        let result = unsafe { textdomain.init() };
 
         result
     };
@@ -216,8 +215,6 @@ fn build_ui(app: &Application) -> Result<()> {
         respect_empty_line_as_gap,
     } = config;
 
-    LYRIC_SEARCH_SKIP.store(skip_auto_search, Ordering::Release);
-
     #[cfg(feature = "tray-icon")]
     if show_tray_icon {
         let result = start_tray_service();
@@ -257,6 +254,7 @@ fn build_ui(app: &Application) -> Result<()> {
         show_default_text_on_idle,
         show_lyric_on_pause,
         respect_empty_line_as_gap,
+        skip_auto_search,
         #[cfg(feature = "layer-shell")]
         layer_shell,
         #[cfg(feature = "layer-shell")]

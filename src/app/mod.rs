@@ -23,6 +23,7 @@ pub fn build_main_window(
     show_default_text_on_idle: bool,
     show_lyric_on_pause: bool,
     respect_empty_line_as_gap: bool,
+    skip_auto_search: bool,
     #[cfg(feature = "layer-shell")] layer_shell: bool,
     #[cfg(feature = "layer-shell")] layer_shell_anchor: crate::config::LayerShellAnchor,
 ) -> Window {
@@ -33,6 +34,7 @@ pub fn build_main_window(
         show_default_text_on_idle,
         show_lyric_on_pause,
         respect_empty_line_as_gap,
+        skip_auto_search,
     );
 
     #[cfg(feature = "layer-shell")]
