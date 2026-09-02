@@ -96,14 +96,14 @@
 <a href=#96 id=96 data-nosnippet>96</a>        .title(gettext(<span class="string">"Export a lyrics file"</span>))
 <a href=#97 id=97 data-nosnippet>97</a>        .filters(<span class="kw-2">&amp;</span>filters)
 <a href=#98 id=98 data-nosnippet>98</a>        .default_filter(<span class="kw-2">&amp;</span>filter)
-<a href=#99 id=99 data-nosnippet>99</a>        .build()
-<a href=#100 id=100 data-nosnippet>100</a>        .save_future(<span class="prelude-val">Some</span>(window))
-<a href=#101 id=101 data-nosnippet>101</a>        .<span class="kw">await</span>.ok().and_then(|f| f.path())
-<a href=#102 id=102 data-nosnippet>102</a>    <span class="kw">else </span>{
-<a href=#103 id=103 data-nosnippet>103</a>        <span class="macro">info!</span>(<span class="string">"user cancelled selection"</span>);
-<a href=#104 id=104 data-nosnippet>104</a>        <span class="kw">return</span>;
-<a href=#105 id=105 data-nosnippet>105</a>    };
-<a href=#106 id=106 data-nosnippet>106</a>    lrc_file.set_extension(<span class="string">"lrc"</span>);
+<a href=#99 id=99 data-nosnippet>99</a>        .initial_name(<span class="string">"lyrics.lrc"</span>)
+<a href=#100 id=100 data-nosnippet>100</a>        .build()
+<a href=#101 id=101 data-nosnippet>101</a>        .save_future(<span class="prelude-val">Some</span>(window))
+<a href=#102 id=102 data-nosnippet>102</a>        .<span class="kw">await</span>.ok().and_then(|f| f.path())
+<a href=#103 id=103 data-nosnippet>103</a>    <span class="kw">else </span>{
+<a href=#104 id=104 data-nosnippet>104</a>        <span class="macro">info!</span>(<span class="string">"user cancelled selection"</span>);
+<a href=#105 id=105 data-nosnippet>105</a>        <span class="kw">return</span>;
+<a href=#106 id=106 data-nosnippet>106</a>    };
 <a href=#107 id=107 data-nosnippet>107</a>
 <a href=#108 id=108 data-nosnippet>108</a>    <span class="kw">if let </span><span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>(e)) = <span class="macro">tokio_spawn!</span>(tokio::fs::write(lrc_file, output)).<span class="kw">await </span>{
 <a href=#109 id=109 data-nosnippet>109</a>        <span class="kw">let </span>prompt = gettext(<span class="string">"failed to export: "</span>);
