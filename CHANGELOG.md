@@ -1,3 +1,21 @@
+## [0.4.2] - 2026-09-02
+
+### 🚀 Features
+
+- *(lyric)* 增加配置开关，用于在原文空白间隙时隐藏翻译 (#459)
+
+### 💼 Other
+
+- Migrate gettext to 0.8.0
+- Drop dependency on OpenCC
+
+### 📚 Documentation
+
+- Introduce chorus, a libadwaita app following GNOME HIG
+
+### ⚡ Performance
+
+- Avoid atomic sync for `LYRIC_SEARCH_SKIP`
 ## [0.4.1] - 2026-09-01
 
 ### 🚀 Features
@@ -26,6 +44,7 @@
 
 - Fix opening and ending tag mismatches in metainfo
 - Fix date in flatpak metainfo
+- Bump version to 0.4.1
 ## [0.4.0] - 2026-05-25
 
 ### 🚀 Features
