@@ -39,14 +39,18 @@ pub fn build_main_window(
 
     #[cfg(feature = "layer-shell")]
     if layer_shell {
-        use gtk4_layer_shell::{KeyboardMode, Layer, LayerShell};
+        use gtk4_layer_shell::{KeyboardMode, Layer, LayerShell, is_supported};
 
-        LayerShell::init_layer_shell(&window);
-        // wlr-layer-shell-unstable-v1 version 4 needed, see
-        // https://wayland.app/protocols/wlr-layer-shell-unstable-v1#compositor-support
-        // and https://wayland.app/protocols/wlr-layer-shell-unstable-v1#zwlr_layer_surface_v1:enum:keyboard_interactivity
-        LayerShell::set_keyboard_mode(&window, KeyboardMode::OnDemand);
-        LayerShell::set_layer(&window, Layer::Overlay);
+        if is_supported() {
+            LayerShell::init_layer_shell(&window);
+            // wlr-layer-shell-unstable-v1 version 4 needed, see
+            // https://wayland.app/protocols/wlr-layer-shell-unstable-v1#compositor-support
+            // and https://wayland.app/protocols/wlr-layer-shell-unstable-v1#zwlr_layer_surface_v1:enum:keyboard_interactivity
+            LayerShell::set_keyboard_mode(&window, KeyboardMode::OnDemand);
+            LayerShell::set_layer(&window, Layer::Overlay);
+        } else {
+            tracing::warn!("layer-shell was enabled but unsupported by the compositor!");
+        }
 
         layer_shell_anchor.setup(&window);
     }

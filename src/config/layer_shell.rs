@@ -1,5 +1,4 @@
-use gtk4_layer_shell::Edge::{self};
-use gtk4_layer_shell::LayerShell;
+use gtk4_layer_shell::{Edge, LayerShell};
 use serde::{Deserialize, Serialize};
 use strum::{EnumIter, EnumString};
 
