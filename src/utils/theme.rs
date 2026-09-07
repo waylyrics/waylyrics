@@ -1,5 +1,5 @@
 use futures_lite::StreamExt;
-use tracing::info;
+use tracing::{error, info};
 
 use crate::config::ColorScheme;
 use crate::{glib_spawn, log, THEME_PATH};
@@ -13,7 +13,10 @@ pub fn auto_theme_change(color_scheme: ColorScheme, theme_switch: bool) {
         ColorScheme::Light => settings.set_gtk_application_prefer_dark_theme(false),
         ColorScheme::Dark => settings.set_gtk_application_prefer_dark_theme(true),
         ColorScheme::Auto => {
-            let theme = dark_light::sync::detect();
+            let Ok(theme) = dark_light::detect() else {
+                error!("Failed to detect dark mode!");
+                return;
+            };
             info!("detected theme: {theme:?}");
             if theme == dark_light::Mode::Dark {
                 settings.set_gtk_application_prefer_dark_theme(true);
@@ -26,7 +29,10 @@ pub fn auto_theme_change(color_scheme: ColorScheme, theme_switch: bool) {
 
             // Listen to changes...
             glib_spawn!(async move {
-                let mut stream = dark_light::subscribe().await;
+                let Ok(mut stream) = dark_light::stream() else {
+                    error!("Failed to listen dark-mode events!");
+                    return;
+                };
                 while let Some(mode) = stream.next().await {
                     set_by_mode(mode, theme_switch, &settings);
                 }

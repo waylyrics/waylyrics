@@ -240,7 +240,6 @@ fn build_ui(app: &Application) -> Result<()> {
     app::utils::merge_css(&theme_path);
     THEME_PATH.set(theme_path);
 
-    #[cfg(not(windows))]
     utils::auto_theme_change(color_scheme, theme_dark_switch);
 
     let enable_filter_regex = enable_filter_regex && !filter_regexies.is_empty();
