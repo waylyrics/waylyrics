@@ -47,12 +47,7 @@ pub async fn fetch_lyric(track_meta: &TrackMeta, window: &app::Window) -> Result
         .get()
         .expect("lyric providers should be initialized");
 
-    let artists = Arc::new(
-        artists
-            .as_ref()
-            .cloned()
-            .unwrap_or_else(std::vec::Vec::new),
-    );
+    let artists = Arc::new(artists.as_ref().cloned().unwrap_or_else(std::vec::Vec::new));
 
     let length_toleration_ms = window.imp().length_toleration_ms.get();
 

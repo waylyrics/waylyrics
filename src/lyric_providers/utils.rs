@@ -1,5 +1,6 @@
 use lrc_nom::{parse_single, LrcParseError};
-use std::{borrow::Cow, time::Duration};
+use std::borrow::Cow;
+use std::time::Duration;
 
 use crate::lyric_providers::strip_extended_timestamps;
 

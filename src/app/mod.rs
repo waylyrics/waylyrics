@@ -39,7 +39,7 @@ pub fn build_main_window(
 
     #[cfg(feature = "layer-shell")]
     if layer_shell {
-        use gtk4_layer_shell::{KeyboardMode, Layer, LayerShell, is_supported};
+        use gtk4_layer_shell::{is_supported, KeyboardMode, Layer, LayerShell};
 
         if is_supported() {
             LayerShell::init_layer_shell(&window);

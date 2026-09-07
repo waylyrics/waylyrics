@@ -38,7 +38,7 @@ pub async fn export_lyric(window: &Window, is_original: bool) {
     use gtk::glib::Priority;
     use gtk::{FileDialog, FileFilter};
 
-use crate::tokio_spawn;
+    use crate::tokio_spawn;
 
     info!("spawned export-lyric: original={is_original}");
 
@@ -99,7 +99,9 @@ use crate::tokio_spawn;
         .initial_name("lyrics.lrc")
         .build()
         .save_future(Some(window))
-        .await.ok().and_then(|f| f.path())
+        .await
+        .ok()
+        .and_then(|f| f.path())
     else {
         info!("user cancelled selection");
         return;
@@ -121,7 +123,7 @@ pub async fn import_lyric(window: &Window, is_original: bool) {
 
     use crate::lyric_providers::utils::lrc_iter;
     use crate::lyric_providers::Lyric;
-use crate::tokio_spawn;
+    use crate::tokio_spawn;
 
     info!("spawned import-lyric: original={is_original}");
 
@@ -137,7 +139,9 @@ use crate::tokio_spawn;
         .default_filter(&filter)
         .build()
         .open_future(Some(window))
-        .await.ok().and_then(|f| f.path())
+        .await
+        .ok()
+        .and_then(|f| f.path())
     else {
         info!("user cancelled selection");
         return;
