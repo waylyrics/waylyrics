@@ -1,3 +1,4 @@
+mod fuzzy_match;
 mod is_likely_songid;
 mod lrclib_lyric;
 mod lyric_construct;

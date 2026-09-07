@@ -83,12 +83,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "assert_float_eq"
-version = "1.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dd9777fd8234cccd34019d9e26d70c8247f9baf24c8fdc0b56c548cf943af2ed"
-
-[[package]]
 name = "async-broadcast"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3574,16 +3568,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "sorensen"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f480a5525538a706e6cb343127173f9b2fc402dea20cfdbbe6e91df018baedb8"
-dependencies = [
- "assert_float_eq",
- "hashbrown 0.12.3",
-]
-
-[[package]]
 name = "spin"
 version = "0.9.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4446,7 +4430,6 @@ dependencies = [
  "rust_decimal_macros",
  "serde",
  "serde_json",
- "sorensen",
  "strum 0.28.0",
  "sys-locale",
  "thiserror 2.0.20",
@@ -5215,18 +5198,18 @@ dependencies = [
 
 [[package]]
 name = "zstd-safe"
-version = "7.2.4"
+version = "7.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8f49c4d5f0abb602a93fb8736af2a4f4dd9512e36f7f570d66e65ff867ed3b9d"
+checksum = "64d80649ab6db9d9f6f9c80a40becd948eda4714a0a5ac8c4d157a32231c7882"
 dependencies = [
  "zstd-sys",
 ]
 
 [[package]]
 name = "zstd-sys"
-version = "2.0.16+zstd.1.5.7"
+version = "2.1.0+zstd.1.5.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "91e19ebc2adc8f83e43039e79776e3fda8ca919132d68a1fed6a5faca2683748"
+checksum = "0ef0a8027ec3ee71300ab3bcbcd0393f434aa72b91ca6d635a39941deae8eea0"
 dependencies = [
  "cc",
  "pkg-config",

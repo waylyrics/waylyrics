@@ -7,7 +7,7 @@ use crate::lyric_providers::LyricOwned;
 
 mod interop;
 pub mod lyric;
-mod utils;
+pub(crate) mod utils;
 
 pub use interop::{OsImp, OS};
 pub use lyric::scroll::register_lyric_display;

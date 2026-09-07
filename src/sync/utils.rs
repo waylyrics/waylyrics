@@ -1,9 +1,8 @@
 use std::path::PathBuf;
 use std::time::Duration;
 
-use ahash::HashMap;
+use ahash::{HashMap, HashSet};
 use gtk::subclass::prelude::*;
-use sorensen::distance;
 
 use crate::app;
 use crate::log::*;
@@ -44,7 +43,9 @@ pub fn match_likely_lyric<'a>(
             }
 
             fn t2s(s: impl AsRef<str>) -> Vec<char> {
-                zhconv::zhconv(s.as_ref(), zhconv::Variant::ZhHans).chars().collect()
+                zhconv::zhconv(s.as_ref(), zhconv::Variant::ZhHans)
+                    .chars()
+                    .collect()
             }
 
             let o_title = t2s(title);
@@ -61,9 +62,7 @@ pub fn match_likely_lyric<'a>(
                          ..
                      }| {
                         let r_title = t2s(_title);
-                        let r_album = _album
-                            .as_ref()
-                            .map(t2s);
+                        let r_album = _album.as_ref().map(t2s);
                         let r_singer = t2s(_singer);
 
                         let likelihood = fuzzy_match_song(
@@ -144,4 +143,13 @@ pub fn filter_original_lyric(
         .cloned()
         .collect::<Vec<_>>();
     tlyric_lines
+}
+
+pub fn distance<T: std::hash::Hash + Eq>(x: &[T], y: &[T]) -> f64 {
+    let x_windows: HashSet<_> = x.windows(2).collect();
+    let y_windows: HashSet<_> = y.windows(2).collect();
+
+    let intersection = x_windows.intersection(&y_windows).count();
+
+    2.0 * intersection as f64 / (x_windows.len() + y_windows.len()) as f64
 }
