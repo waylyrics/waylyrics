@@ -1,8 +1,22 @@
+## [0.4.6] - 2026-09-07
+
+### 💼 Other
+
+- Windows no longer needs no-default-features
+- Fix MIT license incompatiblity
+
+### 🎨 Styling
+
+- Reformat code
 ## [0.4.5] - 2026-09-02
 
 ### 🐛 Bug Fixes
 
 - Modifying extension name may invalidate the permission to write
+
+### ⚙️ Miscellaneous Tasks
+
+- Bump version to 0.4.5
 ## [0.4.4] - 2026-09-02
 
 ### 🐛 Bug Fixes
