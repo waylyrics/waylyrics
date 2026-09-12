@@ -154,16 +154,11 @@ pub(super) fn set_skip_taskbar(window: &window::Window, skip: bool) {
         return;
     }
 
-    // Wayland: xdg-shell has no "keep me out of the taskbar" request, the
-    // compositor decides on its own. Only a layer shell surface is exempt,
-    // and that has to be asked for explicitly through `layer_shell`, because
-    // a layer surface can no longer be moved or resized by the user.
+    // Wayland: xdg-shell has no "keep me out of the taskbar" request, so the
+    // compositor decides on its own; only a layer shell surface is exempt.
+    // See the `skip_taskbar` field in `config` for the available workarounds.
     tracing::warn!(
-        "skip-taskbar is enabled, but Wayland gives a client no way to ask for \
-         this. Either set `layer-shell = true` (needs the `layer-shell` feature \
-         and `LD_PRELOAD=/usr/lib/libgtk4-layer-shell.so`; note that a layer \
-         surface can no longer be dragged or resized), or hide the taskbar \
-         entry with a window rule in your compositor."
+        "skip-taskbar is not supported on Wayland, `layer-shell` can be used as a workaround"
     );
 }
 
