@@ -53,12 +53,7 @@ fn main() -> Result<glib::ExitCode> {
         let result = unsafe { textdomain.push("../share").init() };
         #[cfg(not(target_os = "windows"))]
         let result = unsafe {
-            // `init()` searches `XDG_DATA_DIRS`, which per the XDG basedir
-            // spec does not include `XDG_DATA_HOME`. `doc/INSTALLATION.md`
-            // tells users to install the catalogs into
-            // `~/.local/share/locale`, so prepend the data dir itself
-            // (`init()` appends `locale/` on its own; user data outranks
-            // system data), otherwise a local install stays English.
+            // prepend $XDG_DATA_HOME, which `init()` does not search
             match directories::BaseDirs::new() {
                 Some(base_dirs) => textdomain.prepend(base_dirs.data_dir()).init(),
                 None => textdomain.init(),
