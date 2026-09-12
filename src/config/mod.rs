@@ -109,8 +109,10 @@ pub struct Config {
     ///
     /// - Windows: adds `WS_EX_TOOLWINDOW`
     /// - X11: sets `_NET_WM_STATE_SKIP_TASKBAR`
-    /// - Wayland: xdg-shell has no such request, so a layer shell surface
-    ///   is required (see `layer_shell`)
+    /// - Wayland: xdg-shell has no such request. Either make the window a
+    ///   layer shell surface (see `layer_shell`; note that a layer surface
+    ///   can no longer be dragged or resized), or hide the taskbar entry
+    ///   with a window rule in your compositor.
     pub skip_taskbar: bool,
 
     /// whether to make main window a layer shell surface

@@ -40,7 +40,7 @@ pub fn build_main_window(
     );
 
     #[cfg(feature = "layer-shell")]
-    if layer_shell || skip_taskbar {
+    if layer_shell {
         use gtk4_layer_shell::{is_supported, KeyboardMode, Layer, LayerShell};
 
         if is_supported() {
@@ -50,7 +50,7 @@ pub fn build_main_window(
             // and https://wayland.app/protocols/wlr-layer-shell-unstable-v1#zwlr_layer_surface_v1:enum:keyboard_interactivity
             LayerShell::set_keyboard_mode(&window, KeyboardMode::OnDemand);
             LayerShell::set_layer(&window, Layer::Overlay);
-        } else if layer_shell {
+        } else {
             tracing::warn!("layer-shell was enabled but unsupported by the compositor!");
         }
 
