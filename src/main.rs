@@ -200,6 +200,7 @@ fn build_ui(app: &Application) -> Result<()> {
         show_lyric_on_pause,
         #[cfg(feature = "tray-icon")]
         show_tray_icon,
+        skip_taskbar,
         #[cfg(feature = "layer-shell")]
         layer_shell,
         #[cfg(feature = "layer-shell")]
@@ -253,6 +254,7 @@ fn build_ui(app: &Application) -> Result<()> {
         show_lyric_on_pause,
         respect_empty_line_as_gap,
         skip_auto_search,
+        skip_taskbar,
         #[cfg(feature = "layer-shell")]
         layer_shell,
         #[cfg(feature = "layer-shell")]

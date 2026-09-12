@@ -102,6 +102,17 @@ pub struct Config {
     #[cfg(feature = "tray-icon")]
     pub show_tray_icon: bool,
 
+    /// whether to keep the main window out of the taskbar
+    ///
+    /// useful together with `show_tray_icon`, so that only the tray
+    /// icon remains visible.
+    ///
+    /// - Windows: adds `WS_EX_TOOLWINDOW`
+    /// - X11: sets `_NET_WM_STATE_SKIP_TASKBAR`
+    /// - Wayland: xdg-shell has no such request, so a layer shell surface
+    ///   is required (see `layer_shell`)
+    pub skip_taskbar: bool,
+
     /// whether to make main window a layer shell surface
     ///
     /// see https://wayland.app/protocols/wlr-layer-shell-unstable-v1
@@ -202,6 +213,7 @@ impl Default for Config {
             show_lyric_on_pause: true,
             #[cfg(feature = "tray-icon")]
             show_tray_icon: true,
+            skip_taskbar: false,
             #[cfg(feature = "layer-shell")]
             layer_shell: true,
             #[cfg(feature = "layer-shell")]

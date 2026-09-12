@@ -7,6 +7,7 @@ use gtk::{Application, Label};
 pub use window::Window;
 
 use crate::app::utils::set_click_pass_through;
+use crate::app::utils::set_skip_taskbar;
 use crate::{config, DEFAULT_TEXT};
 
 const WINDOW_MIN_HEIGHT: i32 = 120;
@@ -24,6 +25,7 @@ pub fn build_main_window(
     show_lyric_on_pause: bool,
     respect_empty_line_as_gap: bool,
     skip_auto_search: bool,
+    skip_taskbar: bool,
     #[cfg(feature = "layer-shell")] layer_shell: bool,
     #[cfg(feature = "layer-shell")] layer_shell_anchor: crate::config::LayerShellAnchor,
 ) -> Window {
@@ -38,7 +40,7 @@ pub fn build_main_window(
     );
 
     #[cfg(feature = "layer-shell")]
-    if layer_shell {
+    if layer_shell || skip_taskbar {
         use gtk4_layer_shell::{is_supported, KeyboardMode, Layer, LayerShell};
 
         if is_supported() {
@@ -48,7 +50,7 @@ pub fn build_main_window(
             // and https://wayland.app/protocols/wlr-layer-shell-unstable-v1#zwlr_layer_surface_v1:enum:keyboard_interactivity
             LayerShell::set_keyboard_mode(&window, KeyboardMode::OnDemand);
             LayerShell::set_layer(&window, Layer::Overlay);
-        } else {
+        } else if layer_shell {
             tracing::warn!("layer-shell was enabled but unsupported by the compositor!");
         }
 
@@ -58,6 +60,15 @@ pub fn build_main_window(
     window.set_size_request(500, WINDOW_MIN_HEIGHT);
     window.set_title(Some(DEFAULT_TEXT));
     window.set_icon_name(Some(crate::APP_ID_FIXED));
+
+    if skip_taskbar {
+        // the hint needs a `GdkSurface` to exist, and it has to be applied
+        // before the window is mapped, otherwise the window manager has
+        // already registered its taskbar entry
+        gtk::prelude::WidgetExt::realize(&window);
+        set_skip_taskbar(&window, true);
+    }
+
     window.present();
 
     let above_label = Label::builder()
