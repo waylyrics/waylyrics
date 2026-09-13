@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["has_filtered_word","merge_css","set_click_pass_through","setup_label"]};
+window.SIDEBAR_ITEMS = {"fn":["has_filtered_word","merge_css","set_click_pass_through","set_skip_taskbar","setup_label"]};
