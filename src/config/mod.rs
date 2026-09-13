@@ -102,13 +102,22 @@ pub struct Config {
     #[cfg(feature = "tray-icon")]
     pub show_tray_icon: bool,
 
+    /// whether to keep the main window out of the taskbar
+    ///
+    /// useful together with `show_tray_icon`, so that only the tray
+    /// icon remains visible.
+    ///
+    /// has no effect on Wayland
+    pub skip_taskbar: bool,
+
     /// whether to make main window a layer shell surface
     ///
     /// see https://wayland.app/protocols/wlr-layer-shell-unstable-v1
     ///
     /// By default, waylyrics will be at `overlay` layer with `on_demand`
     ///
-    /// This requires LD_PRELOAD=/usr/lib/libgtk4-layer-shell.so
+    /// the window is then placed by the compositor, so it can no longer be
+    /// dragged or resized
     #[cfg(feature = "layer-shell")]
     pub layer_shell: bool,
 
@@ -202,6 +211,7 @@ impl Default for Config {
             show_lyric_on_pause: true,
             #[cfg(feature = "tray-icon")]
             show_tray_icon: true,
+            skip_taskbar: false,
             #[cfg(feature = "layer-shell")]
             layer_shell: true,
             #[cfg(feature = "layer-shell")]

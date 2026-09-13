@@ -7,6 +7,7 @@ use gtk::{Application, Label};
 pub use window::Window;
 
 use crate::app::utils::set_click_pass_through;
+use crate::app::utils::set_skip_taskbar;
 use crate::{config, DEFAULT_TEXT};
 
 const WINDOW_MIN_HEIGHT: i32 = 120;
@@ -24,6 +25,7 @@ pub fn build_main_window(
     show_lyric_on_pause: bool,
     respect_empty_line_as_gap: bool,
     skip_auto_search: bool,
+    skip_taskbar: bool,
     #[cfg(feature = "layer-shell")] layer_shell: bool,
     #[cfg(feature = "layer-shell")] layer_shell_anchor: crate::config::LayerShellAnchor,
 ) -> Window {
@@ -58,6 +60,15 @@ pub fn build_main_window(
     window.set_size_request(500, WINDOW_MIN_HEIGHT);
     window.set_title(Some(DEFAULT_TEXT));
     window.set_icon_name(Some(crate::APP_ID_FIXED));
+
+    if skip_taskbar {
+        // the hint needs a `GdkSurface` to exist, and it has to be applied
+        // before the window is mapped, otherwise the window manager has
+        // already registered its taskbar entry
+        gtk::prelude::WidgetExt::realize(&window);
+        set_skip_taskbar(&window, true);
+    }
+
     window.present();
 
     let above_label = Label::builder()

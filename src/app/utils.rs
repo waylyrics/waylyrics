@@ -85,6 +85,83 @@ pub(super) fn set_click_pass_through(window: &window::Window, enabled: bool) {
     }
 }
 
+/// Keep the main window out of the taskbar.
+///
+/// The hint has to be applied after the widget is realized (so a
+/// `GdkSurface` exists) but before the window is presented, otherwise the
+/// window manager has already added its taskbar entry.
+#[cfg(target_os = "windows")]
+pub(super) fn set_skip_taskbar(window: &window::Window, skip: bool) {
+    use std::ffi::c_void;
+
+    fn set_window_skip_taskbar(hwnd: *mut c_void, skip: bool) {
+        use windows::Win32::Foundation::HWND;
+        use windows::Win32::UI::WindowsAndMessaging::{
+            GetWindowLongPtrW, SetWindowLongPtrW, GWL_EXSTYLE,
+        };
+        let hwnd = HWND(hwnd as _);
+
+        // a window carrying `WS_EX_TOOLWINDOW` and no `WS_EX_APPWINDOW`
+        // is left out of the taskbar
+        const WS_EX_TOOLWINDOW: isize = 0x0000_0080;
+        const WS_EX_APPWINDOW: isize = 0x0004_0000;
+        unsafe {
+            let ex_style = GetWindowLongPtrW(hwnd, GWL_EXSTYLE);
+            let new_style = if skip {
+                (ex_style | WS_EX_TOOLWINDOW) & !WS_EX_APPWINDOW
+            } else {
+                ex_style & !WS_EX_TOOLWINDOW
+            };
+            if new_style != ex_style {
+                SetWindowLongPtrW(hwnd, GWL_EXSTYLE, new_style);
+            }
+        }
+    }
+
+    let Some(surface) = window.surface().and_downcast::<gdk4_win32::Win32Surface>() else {
+        return;
+    };
+
+    let handle = surface.handle().0;
+
+    set_window_skip_taskbar(handle, skip);
+}
+
+/// macOS has neither the EWMH hint nor the win32 extended style.
+#[cfg(target_os = "macos")]
+pub(super) fn set_skip_taskbar(_window: &window::Window, _skip: bool) {}
+
+#[cfg(all(unix, not(target_os = "macos")))]
+pub(super) fn set_skip_taskbar(window: &window::Window, skip: bool) {
+    if !skip {
+        return;
+    }
+
+    let Some(surface) = window.surface() else {
+        tracing::warn!("skip-taskbar: the window has no surface yet");
+        return;
+    };
+
+    if let Some(surface) = surface.downcast_ref::<gdk4_x11::X11Surface>() {
+        // deprecated since GTK 4.18, but still the only way to ask an X11
+        // window manager to keep the window out of the taskbar
+        #[allow(deprecated)]
+        {
+            surface.set_skip_taskbar_hint(true);
+            surface.set_skip_pager_hint(true);
+        }
+        tracing::info!("skip-taskbar: _NET_WM_STATE_SKIP_TASKBAR was set (X11)");
+        return;
+    }
+
+    // Wayland: xdg-shell has no "keep me out of the taskbar" request, so the
+    // compositor decides on its own; only a layer shell surface is exempt.
+    // See the `skip_taskbar` field in `config` for the available workarounds.
+    tracing::warn!(
+        "skip-taskbar is not supported on Wayland, `layer-shell` can be used as a workaround"
+    );
+}
+
 /// set css style for waylyrics
 /// As said in [GTK+ doc], gtk constructs style from the lower priority ones to the upper ones,
 /// We set priority as `STYLE_PROVIDER_PRIORITY + 1` to override user theme
