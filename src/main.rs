@@ -52,7 +52,13 @@ fn main() -> Result<glib::ExitCode> {
         #[cfg(target_os = "windows")]
         let result = unsafe { textdomain.push("../share").init() };
         #[cfg(not(target_os = "windows"))]
-        let result = unsafe { textdomain.init() };
+        let result = unsafe {
+            // prepend $XDG_DATA_HOME, which `init()` does not search
+            match directories::BaseDirs::new() {
+                Some(base_dirs) => textdomain.prepend(base_dirs.data_dir()).init(),
+                None => textdomain.init(),
+            }
+        };
 
         result
     };
