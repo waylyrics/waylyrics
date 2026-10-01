@@ -3,6 +3,9 @@ on: pull_request
 permissions:
   contents: write
   pull-requests: write
+concurrency:
+  group: dependabot-auto-merge
+  cancel-in-progress: false
 jobs:
   dependabot:
     runs-on: ubuntu-latest
