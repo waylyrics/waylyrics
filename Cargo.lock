@@ -4667,9 +4667,9 @@ checksum = "b9d782e804c2f632e395708e99a94275910eb9100b2114651e04744e9b125006"
 
 [[package]]
 name = "windows_exe_info"
-version = "0.5.2"
+version = "0.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3a7c2cd292e8e58e012eaf18f18f6b64ef74e0b90677b4f9e1f15bfca24056c7"
+checksum = "d8c8a16743955c4629c947eed5841d8569dae69daf7c85a956f40cdc53f43e8f"
 dependencies = [
  "camino",
  "embed-resource",
