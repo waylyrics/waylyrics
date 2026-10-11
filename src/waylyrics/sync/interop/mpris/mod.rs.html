@@ -59,36 +59,40 @@
 <a href=#59 id=59 data-nosnippet>59</a>
 <a href=#60 id=60 data-nosnippet>60</a><span class="macro">thread_local!</span> {
 <a href=#61 id=61 data-nosnippet>61</a>    <span class="kw">static </span>PLAYER: RefCell&lt;<span class="prelude-ty">Option</span>&lt;Player&gt;&gt; = <span class="kw">const </span>{ RefCell::new(<span class="prelude-val">None</span>) };
-<a href=#62 id=62 data-nosnippet>62</a>    <span class="kw">static </span>PLAYER_FINDER: RefCell&lt;PlayerFinder&gt; = RefCell::new(PlayerFinder::new().unwrap());
-<a href=#63 id=63 data-nosnippet>63</a>}
-<a href=#64 id=64 data-nosnippet>64</a>
-<a href=#65 id=65 data-nosnippet>65</a><span class="kw">fn </span>find_players() -&gt; Vec&lt;Player&gt; {
-<a href=#66 id=66 data-nosnippet>66</a>    PLAYER_FINDER.with_borrow(|player_finder| <span class="kw">match </span>player_finder.iter_players() {
-<a href=#67 id=67 data-nosnippet>67</a>        <span class="prelude-val">Ok</span>(players) =&gt; players.filter_map(Result::ok).collect(),
-<a href=#68 id=68 data-nosnippet>68</a>        <span class="prelude-val">Err</span>(e) =&gt; {
-<a href=#69 id=69 data-nosnippet>69</a>            <span class="macro">error!</span>(<span class="string">"cannot find players!: {e}"</span>);
-<a href=#70 id=70 data-nosnippet>70</a>            <span class="macro">vec!</span>[]
-<a href=#71 id=71 data-nosnippet>71</a>        }
-<a href=#72 id=72 data-nosnippet>72</a>    })
-<a href=#73 id=73 data-nosnippet>73</a>}
-<a href=#74 id=74 data-nosnippet>74</a>
-<a href=#75 id=75 data-nosnippet>75</a><span class="kw">impl </span>From&lt;Metadata&gt; <span class="kw">for </span>TrackMeta {
-<a href=#76 id=76 data-nosnippet>76</a>    <span class="kw">fn </span>from(meta: Metadata) -&gt; <span class="self">Self </span>{
-<a href=#77 id=77 data-nosnippet>77</a>        <span class="kw">let </span>track_id = meta.track_id();
-<a href=#78 id=78 data-nosnippet>78</a>        <span class="kw">let </span>title = meta.title().map(str::to_string);
-<a href=#79 id=79 data-nosnippet>79</a>        <span class="kw">let </span>album = meta.album_name().map(ToOwned::to_owned);
-<a href=#80 id=80 data-nosnippet>80</a>        <span class="kw">let </span>artists: <span class="prelude-ty">Option</span>&lt;Vec&lt;<span class="kw">_</span>&gt;&gt; = meta
-<a href=#81 id=81 data-nosnippet>81</a>            .artists()
-<a href=#82 id=82 data-nosnippet>82</a>            .map(|v| v.iter().map(ToString::to_string).collect());
-<a href=#83 id=83 data-nosnippet>83</a>        <span class="kw">let </span>length = meta.length();
-<a href=#84 id=84 data-nosnippet>84</a>
-<a href=#85 id=85 data-nosnippet>85</a>        <span class="self">Self </span>{
-<a href=#86 id=86 data-nosnippet>86</a>            unique_song_id: track_id.map(|id| id.to_string()),
-<a href=#87 id=87 data-nosnippet>87</a>            title,
-<a href=#88 id=88 data-nosnippet>88</a>            album,
-<a href=#89 id=89 data-nosnippet>89</a>            artists,
-<a href=#90 id=90 data-nosnippet>90</a>            length,
-<a href=#91 id=91 data-nosnippet>91</a>        }
-<a href=#92 id=92 data-nosnippet>92</a>    }
-<a href=#93 id=93 data-nosnippet>93</a>}
+<a href=#62 id=62 data-nosnippet>62</a>    <span class="kw">static </span>PLAYER_FINDER: RefCell&lt;PlayerFinder&gt; = RefCell::new({
+<a href=#63 id=63 data-nosnippet>63</a>        <span class="kw">let </span><span class="kw-2">mut </span>finder = PlayerFinder::new().unwrap();
+<a href=#64 id=64 data-nosnippet>64</a>        finder.set_player_timeout_ms(<span class="number">6_000</span>);
+<a href=#65 id=65 data-nosnippet>65</a>        finder
+<a href=#66 id=66 data-nosnippet>66</a>    });
+<a href=#67 id=67 data-nosnippet>67</a>}
+<a href=#68 id=68 data-nosnippet>68</a>
+<a href=#69 id=69 data-nosnippet>69</a><span class="kw">fn </span>find_players() -&gt; Vec&lt;Player&gt; {
+<a href=#70 id=70 data-nosnippet>70</a>    PLAYER_FINDER.with_borrow(|player_finder| <span class="kw">match </span>player_finder.iter_players() {
+<a href=#71 id=71 data-nosnippet>71</a>        <span class="prelude-val">Ok</span>(players) =&gt; players.filter_map(Result::ok).collect(),
+<a href=#72 id=72 data-nosnippet>72</a>        <span class="prelude-val">Err</span>(e) =&gt; {
+<a href=#73 id=73 data-nosnippet>73</a>            <span class="macro">error!</span>(<span class="string">"cannot find players!: {e}"</span>);
+<a href=#74 id=74 data-nosnippet>74</a>            <span class="macro">vec!</span>[]
+<a href=#75 id=75 data-nosnippet>75</a>        }
+<a href=#76 id=76 data-nosnippet>76</a>    })
+<a href=#77 id=77 data-nosnippet>77</a>}
+<a href=#78 id=78 data-nosnippet>78</a>
+<a href=#79 id=79 data-nosnippet>79</a><span class="kw">impl </span>From&lt;Metadata&gt; <span class="kw">for </span>TrackMeta {
+<a href=#80 id=80 data-nosnippet>80</a>    <span class="kw">fn </span>from(meta: Metadata) -&gt; <span class="self">Self </span>{
+<a href=#81 id=81 data-nosnippet>81</a>        <span class="kw">let </span>track_id = meta.track_id();
+<a href=#82 id=82 data-nosnippet>82</a>        <span class="kw">let </span>title = meta.title().map(str::to_string);
+<a href=#83 id=83 data-nosnippet>83</a>        <span class="kw">let </span>album = meta.album_name().map(ToOwned::to_owned);
+<a href=#84 id=84 data-nosnippet>84</a>        <span class="kw">let </span>artists: <span class="prelude-ty">Option</span>&lt;Vec&lt;<span class="kw">_</span>&gt;&gt; = meta
+<a href=#85 id=85 data-nosnippet>85</a>            .artists()
+<a href=#86 id=86 data-nosnippet>86</a>            .map(|v| v.iter().map(ToString::to_string).collect());
+<a href=#87 id=87 data-nosnippet>87</a>        <span class="kw">let </span>length = meta.length();
+<a href=#88 id=88 data-nosnippet>88</a>
+<a href=#89 id=89 data-nosnippet>89</a>        <span class="self">Self </span>{
+<a href=#90 id=90 data-nosnippet>90</a>            unique_song_id: track_id.map(|id| id.to_string()),
+<a href=#91 id=91 data-nosnippet>91</a>            title,
+<a href=#92 id=92 data-nosnippet>92</a>            album,
+<a href=#93 id=93 data-nosnippet>93</a>            artists,
+<a href=#94 id=94 data-nosnippet>94</a>            length,
+<a href=#95 id=95 data-nosnippet>95</a>        }
+<a href=#96 id=96 data-nosnippet>96</a>    }
+<a href=#97 id=97 data-nosnippet>97</a>}
 </code></pre></div></section></main></body></html>
