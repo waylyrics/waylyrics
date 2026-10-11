@@ -59,7 +59,11 @@ impl super::OsImp for MPRIS {
 
 thread_local! {
     static PLAYER: RefCell<Option<Player>> = const { RefCell::new(None) };
-    static PLAYER_FINDER: RefCell<PlayerFinder> = RefCell::new(PlayerFinder::new().unwrap());
+    static PLAYER_FINDER: RefCell<PlayerFinder> = RefCell::new({
+        let mut finder = PlayerFinder::new().unwrap();
+        finder.set_player_timeout_ms(6_000);
+        finder
+    });
 }
 
 fn find_players() -> Vec<Player> {
