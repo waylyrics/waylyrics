@@ -23,14 +23,15 @@
 <a href=#23 id=23 data-nosnippet>23</a>        <span class="kw">return </span><span class="prelude-val">Some</span>(active);
 <a href=#24 id=24 data-nosnippet>24</a>    }
 <a href=#25 id=25 data-nosnippet>25</a>
-<a href=#26 id=26 data-nosnippet>26</a>    <span class="kw">let </span>players = player_finder.find_all().ok()<span class="question-mark">?</span>;
-<a href=#27 id=27 data-nosnippet>27</a>    players
-<a href=#28 id=28 data-nosnippet>28</a>        .into_iter()
-<a href=#29 id=29 data-nosnippet>29</a>        .filter(|p| {
-<a href=#30 id=30 data-nosnippet>30</a>            p.track_progress(<span class="number">0</span>)
-<a href=#31 id=31 data-nosnippet>31</a>                .is_ok_and(|<span class="kw-2">mut </span>t| t.tick().progress.playback_status() == PlaybackStatus::Playing)
-<a href=#32 id=32 data-nosnippet>32</a>        })
-<a href=#33 id=33 data-nosnippet>33</a>        .filter(|p| !identity_blacklisted(p))
-<a href=#34 id=34 data-nosnippet>34</a>        .find(|p| !name_blacklisted(p))
-<a href=#35 id=35 data-nosnippet>35</a>}
+<a href=#26 id=26 data-nosnippet>26</a>    player_finder
+<a href=#27 id=27 data-nosnippet>27</a>        .iter_players()
+<a href=#28 id=28 data-nosnippet>28</a>        .ok()<span class="question-mark">?
+<a href=#29 id=29 data-nosnippet>29</a>        </span>.filter_map(Result::ok)
+<a href=#30 id=30 data-nosnippet>30</a>        .filter(|p| {
+<a href=#31 id=31 data-nosnippet>31</a>            p.track_progress(<span class="number">0</span>)
+<a href=#32 id=32 data-nosnippet>32</a>                .is_ok_and(|<span class="kw-2">mut </span>t| t.tick().progress.playback_status() == PlaybackStatus::Playing)
+<a href=#33 id=33 data-nosnippet>33</a>        })
+<a href=#34 id=34 data-nosnippet>34</a>        .filter(|p| !identity_blacklisted(p))
+<a href=#35 id=35 data-nosnippet>35</a>        .find(|p| !name_blacklisted(p))
+<a href=#36 id=36 data-nosnippet>36</a>}
 </code></pre></div></section></main></body></html>

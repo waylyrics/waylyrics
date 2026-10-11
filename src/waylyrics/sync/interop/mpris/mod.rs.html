@@ -63,8 +63,8 @@
 <a href=#63 id=63 data-nosnippet>63</a>}
 <a href=#64 id=64 data-nosnippet>64</a>
 <a href=#65 id=65 data-nosnippet>65</a><span class="kw">fn </span>find_players() -&gt; Vec&lt;Player&gt; {
-<a href=#66 id=66 data-nosnippet>66</a>    PLAYER_FINDER.with_borrow(|player_finder| <span class="kw">match </span>player_finder.find_all() {
-<a href=#67 id=67 data-nosnippet>67</a>        <span class="prelude-val">Ok</span>(players) =&gt; players,
+<a href=#66 id=66 data-nosnippet>66</a>    PLAYER_FINDER.with_borrow(|player_finder| <span class="kw">match </span>player_finder.iter_players() {
+<a href=#67 id=67 data-nosnippet>67</a>        <span class="prelude-val">Ok</span>(players) =&gt; players.filter_map(Result::ok).collect(),
 <a href=#68 id=68 data-nosnippet>68</a>        <span class="prelude-val">Err</span>(e) =&gt; {
 <a href=#69 id=69 data-nosnippet>69</a>            <span class="macro">error!</span>(<span class="string">"cannot find players!: {e}"</span>);
 <a href=#70 id=70 data-nosnippet>70</a>            <span class="macro">vec!</span>[]
