@@ -1,8 +1,8 @@
 [package]
 name = "waylyrics"
-version = "0.4.6"
+version = "0.4.7"
 edition = "2021"
-description = "Simple On Screen lyrics Display for linux/unix"
+description = "Desktop Lyrics for Linux and Windows"
 authors = ["mokurin000"]
 license-file = "LICENSE"
 rust-version = "1.80.0"
