@@ -63,8 +63,8 @@ thread_local! {
 }
 
 fn find_players() -> Vec<Player> {
-    PLAYER_FINDER.with_borrow(|player_finder| match player_finder.find_all() {
-        Ok(players) => players,
+    PLAYER_FINDER.with_borrow(|player_finder| match player_finder.iter_players() {
+        Ok(players) => players.filter_map(Result::ok).collect(),
         Err(e) => {
             error!("cannot find players!: {e}");
             vec![]

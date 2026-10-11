@@ -23,9 +23,10 @@ pub fn find_next_player(player_finder: &PlayerFinder) -> Option<Player> {
         return Some(active);
     }
 
-    let players = player_finder.find_all().ok()?;
-    players
-        .into_iter()
+    player_finder
+        .iter_players()
+        .ok()?
+        .filter_map(Result::ok)
         .filter(|p| {
             p.track_progress(0)
                 .is_ok_and(|mut t| t.tick().progress.playback_status() == PlaybackStatus::Playing)
