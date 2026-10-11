@@ -67,7 +67,7 @@ fn find_players() -> Vec<Player> {
         Ok(players) => players,
         Err(e) => {
             error!("cannot find players!: {e}");
-            panic!("please check your d-bus connection!")
+            vec![]
         }
     })
 }
