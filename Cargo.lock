@@ -4855,9 +4855,9 @@ dependencies = [
 
 [[package]]
 name = "zhconv"
-version = "0.4.1"
+version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "efb55e02815ab07bf8c9d608359c5cc42951e0e70f82cbaf4bb25746fb3aeaff"
+checksum = "fbb4f247ec21be13451293e760f6246e57300ce80208231ab3e0a437a5d96b27"
 dependencies = [
  "console_error_panic_hook",
  "daachorse",
