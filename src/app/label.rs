@@ -218,27 +218,23 @@ mod imp {
                 return (p, p, -1, -1);
             }
 
-            match orientation {
-                gtk::Orientation::Vertical => {
-                    // min: one glyph; natural: everything in one column
-                    let min = self.natural_length("国") + t + b;
-                    let nat = self.natural_length(&text) + t + b;
-                    (min, nat.max(min), -1, -1)
-                }
-                _ => {
-                    let column_len = if for_size > 0 {
-                        for_size - t - b
-                    } else {
-                        self.natural_length(&text)
-                    };
-                    let w = self
-                        .layout_for(&text, column_len)
-                        .map(|l| l.group_width)
-                        .unwrap_or(0)
-                        + l
-                        + r;
-                    (w, w, -1, -1)
-                }
+            if orientation == gtk::Orientation::Vertical {
+                // min: one glyph; natural: everything in one column
+                let min = self.natural_length("国") + t + b;
+                let nat = self.natural_length(&text) + t + b;
+                (min, nat.max(min), -1, -1)
+            } else {
+                let column_len = if for_size > 0 {
+                    for_size - t - b
+                } else {
+                    self.natural_length(&text)
+                };
+                let w = self
+                    .layout_for(&text, column_len)
+                    .map_or(0, |l| l.group_width)
+                    + l
+                    + r;
+                (w, w, -1, -1)
             }
         }
 
