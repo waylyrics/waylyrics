@@ -92,7 +92,18 @@ pub fn register_set_lyric_align(wind: &Window) {
                 error!("unknown lyric alignment: {align}");
                 return;
             };
+
+            let previous = wind.imp().lyric_align.get();
             set_lyric_align(&wind, align);
+
+            // keep the window narrow-and-tall for vertical lyrics
+            if previous.is_vertical() != align.is_vertical() {
+                let (width, height) = wind.default_size();
+                if width > 0 && height > 0 {
+                    wind.set_default_size(height, width);
+                    wind.present();
+                }
+            }
         }
     ));
     wind.add_action(&action);

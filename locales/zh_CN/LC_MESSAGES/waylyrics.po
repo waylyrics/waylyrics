@@ -214,3 +214,11 @@ msgstr "向右对齐"
 #: ../src/app/window/imp.rs:189 ../src/tray_icon/unix/mod.rs:77
 msgid "Fill"
 msgstr "填充对齐"
+
+#: ../src/app/window/imp.rs:189 ../src/tray_icon/unix/mod.rs:77
+msgid "Vertical LTR"
+msgstr "竖排左右"
+
+#: ../src/app/window/imp.rs:189 ../src/tray_icon/unix/mod.rs:77
+msgid "Vertical RTL"
+msgstr "竖排右左"

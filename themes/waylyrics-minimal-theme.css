@@ -50,3 +50,21 @@ label#below {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+box#lyrics-box.vertical-lyrics {
+  padding: 12px 14px;
+  background: rgba(20, 20, 24, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22);
+}
+
+label#above.vertical,
+label#below.vertical {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+

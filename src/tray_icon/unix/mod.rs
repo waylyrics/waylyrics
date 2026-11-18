@@ -74,7 +74,7 @@ impl Tray for TrayIcon {
                 icon_name: "format-justify-left".into(),
                 submenu: Align::iter()
                     .map(|lyric_align| {
-                        let label = gettext(lyric_align.to_string());
+                        let label = gettext(lyric_align.display_name());
                         StandardItem {
                             label,
                             activate: Box::new(move |_| {

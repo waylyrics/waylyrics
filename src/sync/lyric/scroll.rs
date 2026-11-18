@@ -50,6 +50,26 @@ fn set_lyric_with_mode(
         }
     };
 
+    if window.imp().lyric_align.get().is_vertical() {
+        // In vertical mode `above` is the original lyric anchored to the
+        // window edge, `below` is the translation placed inward.
+        match window.imp().lyric_display_mode.get() {
+            LyricDisplayMode::ShowBoth | LyricDisplayMode::ShowBothRev => {
+                set_lyric(window, origin, "above");
+                set_lyric(window, translation, "below");
+            }
+            LyricDisplayMode::Origin => {
+                set_lyric(window, origin, "above");
+                set_lyric(window, None, "below");
+            }
+            LyricDisplayMode::PreferTranslation => {
+                set_lyric(window, translation.or(origin), "above");
+                set_lyric(window, None, "below");
+            }
+        }
+        return;
+    }
+
     match window.imp().lyric_display_mode.get() {
         LyricDisplayMode::ShowBoth => {
             set_lyric(window, translation.or(origin), "above");

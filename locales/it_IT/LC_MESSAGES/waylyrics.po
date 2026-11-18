@@ -213,3 +213,11 @@ msgstr "Fine"
 #: ../src/app/window/imp.rs:189 ../src/tray_icon/unix/mod.rs:77
 msgid "Fill"
 msgstr "Riempire"
+
+#: ../src/app/window/imp.rs:189 ../src/tray_icon/unix/mod.rs:77
+msgid "Vertical LTR"
+msgstr "Verticale LTR"
+
+#: ../src/app/window/imp.rs:189 ../src/tray_icon/unix/mod.rs:77
+msgid "Vertical RTL"
+msgstr "Verticale RTL"

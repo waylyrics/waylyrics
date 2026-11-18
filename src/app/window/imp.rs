@@ -40,6 +40,7 @@ pub struct Window {
     pub player_menu: gio::Menu,
     pub display_mode_menu: gio::Menu,
     pub align_mode_menu: gio::Menu,
+    pub lyric_widgets: OnceLock<crate::app::LyricWidgets>,
     #[cfg(feature = "import-lyric")]
     pub import_lyric_menu: gio::Menu,
     #[cfg(feature = "export-lyric")]
@@ -188,7 +189,7 @@ impl ObjectImpl for Window {
 
         for lyric_align in <Align as strum::IntoEnumIterator>::iter() {
             let lyric_align_str = lyric_align.to_string();
-            let item = MenuItem::new(Some(&gettext(&lyric_align_str)), None);
+            let item = MenuItem::new(Some(&gettext(lyric_align.display_name())), None);
             item.set_action_and_target_value(
                 Some("win.set-lyric-align"),
                 Some(&lyric_align_str.to_variant()),
