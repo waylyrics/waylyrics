@@ -36,6 +36,7 @@ impl VerticalLabel {
         *imp.text.borrow_mut() = text.to_owned();
         imp.cache.borrow_mut().take();
         self.queue_resize();
+        self.queue_draw();
     }
 
     pub fn text(&self) -> String {
@@ -75,17 +76,77 @@ pub(crate) fn column_offset(index: usize, count: usize, step: i32, rtl: bool) ->
 /// One shaped column. `layout` is horizontal in its own space and gets
 /// rotated by 90° when drawn.
 #[derive(Clone)]
-struct Column {
-    layout: pango::Layout,
+pub(crate) struct Column {
+    pub(crate) layout: pango::Layout,
+    #[cfg(test)]
+    pub(crate) text: String,
 }
 
 #[derive(Clone)]
-struct VerticalLayout {
-    columns: Vec<Column>,
-    column_width: i32,
-    gap: i32,
-    group_width: i32,
-    group_height: i32,
+pub(crate) struct VerticalLayout {
+    pub(crate) columns: Vec<Column>,
+    pub(crate) column_width: i32,
+    pub(crate) gap: i32,
+    pub(crate) group_width: i32,
+    pub(crate) group_height: i32,
+}
+
+pub(crate) fn setup_vertical_context(ctx: &pango::Context) {
+    ctx.set_base_gravity(pango::Gravity::East);
+    ctx.set_gravity_hint(pango::GravityHint::Natural);
+}
+
+pub(crate) fn compute_vertical_layout(
+    ctx: &pango::Context,
+    text: &str,
+    column_len: i32,
+) -> Option<VerticalLayout> {
+    if text.trim().is_empty() {
+        return None;
+    }
+
+    let column_len = column_len.max(1);
+    let master = pango::Layout::new(ctx);
+    master.set_text(text);
+    master.set_wrap(pango::WrapMode::WordChar);
+    master.set_width(column_len * pango::SCALE);
+
+    let mut columns = Vec::new();
+    let mut column_width = 1;
+    let mut group_height = 0;
+    for line in master.lines_readonly() {
+        let start = line.start_index() as usize;
+        let end = start + line.length() as usize;
+        let Some(part) = text.get(start..end) else {
+            continue;
+        };
+        let part = part.trim();
+        if part.is_empty() {
+            continue;
+        }
+        let layout = pango::Layout::new(ctx);
+        layout.set_text(part);
+        let (_, logical) = layout.pixel_extents();
+        column_width = column_width.max(logical.height());
+        group_height = group_height.max(logical.width());
+        columns.push(Column {
+            layout,
+            #[cfg(test)]
+            text: part.to_owned(),
+        });
+    }
+    if columns.is_empty() {
+        return None;
+    }
+
+    let gap = (column_width as f64 * 0.25).round() as i32;
+    Some(VerticalLayout {
+        group_width: group_width(columns.len(), column_width, gap),
+        columns,
+        column_width,
+        gap,
+        group_height,
+    })
 }
 
 type CacheKey = (String, i32, String, i32);
@@ -111,21 +172,16 @@ mod imp {
         /// `GravityHint::Natural` keeps CJK upright while letting Latin run sideways.
         fn vertical_context(&self) -> pango::Context {
             let ctx = self.obj().create_pango_context();
-            ctx.set_base_gravity(pango::Gravity::East);
-            ctx.set_gravity_hint(pango::GravityHint::Natural);
+            setup_vertical_context(&ctx);
             ctx
-        }
-
-        fn new_layout(&self, ctx: &pango::Context, text: &str) -> pango::Layout {
-            let layout = pango::Layout::new(ctx);
-            layout.set_text(text);
-            layout
         }
 
         /// Length of the text as a single, unwrapped column.
         fn natural_length(&self, text: &str) -> i32 {
             let ctx = self.vertical_context();
-            self.new_layout(&ctx, text).pixel_extents().1.width()
+            let layout = pango::Layout::new(&ctx);
+            layout.set_text(text);
+            layout.pixel_extents().1.width()
         }
 
         fn font_key(&self) -> String {
@@ -154,39 +210,7 @@ mod imp {
             }
 
             let ctx = self.vertical_context();
-            let master = self.new_layout(&ctx, text);
-            master.set_wrap(pango::WrapMode::WordChar);
-            master.set_width(column_len * pango::SCALE);
-
-            let mut columns = Vec::new();
-            let mut column_width = 1;
-            let mut group_height = 0;
-            for line in master.lines_readonly() {
-                let start = line.start_index() as usize;
-                let end = start + line.length() as usize;
-                let Some(part) = text.get(start..end) else { continue };
-                let part = part.trim();
-                if part.is_empty() {
-                    continue;
-                }
-                let layout = self.new_layout(&ctx, part);
-                let (_, logical) = layout.pixel_extents();
-                column_width = column_width.max(logical.height());
-                group_height = group_height.max(logical.width());
-                columns.push(Column { layout });
-            }
-            if columns.is_empty() {
-                return None;
-            }
-
-            let gap = (column_width as f64 * 0.25).round() as i32;
-            let layout = VerticalLayout {
-                group_width: group_width(columns.len(), column_width, gap),
-                columns,
-                column_width,
-                gap,
-                group_height,
-            };
+            let layout = compute_vertical_layout(&ctx, text, column_len)?;
             *self.cache.borrow_mut() = Some((key, layout.clone()));
             Some(layout)
         }

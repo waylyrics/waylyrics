@@ -1,4 +1,4 @@
-use std::cell::Cell;
+use std::cell::{Cell, OnceCell};
 use std::time::SystemTime;
 
 use crate::utils::gettext;
@@ -9,7 +9,6 @@ use gtk::glib::Propagation;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib, ApplicationWindow, PopoverMenu};
-use std::sync::OnceLock;
 
 use crate::app::utils::set_click_pass_through;
 use crate::config::{Align, LyricDisplayMode};
@@ -17,7 +16,7 @@ use crate::sync::{OsImp, OS};
 
 #[derive(Default)]
 pub struct Window {
-    pub settings: OnceLock<Settings>,
+    pub settings: OnceCell<Settings>,
 
     pub clickthrough: Cell<bool>,
     pub cache_lyrics: Cell<bool>,
@@ -40,7 +39,7 @@ pub struct Window {
     pub player_menu: gio::Menu,
     pub display_mode_menu: gio::Menu,
     pub align_mode_menu: gio::Menu,
-    pub lyric_widgets: OnceLock<crate::app::LyricWidgets>,
+    pub lyric_widgets: OnceCell<crate::app::LyricWidgets>,
     #[cfg(feature = "import-lyric")]
     pub import_lyric_menu: gio::Menu,
     #[cfg(feature = "export-lyric")]

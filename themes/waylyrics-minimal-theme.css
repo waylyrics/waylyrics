@@ -58,6 +58,13 @@ box#lyrics-box.vertical-lyrics {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22);
 }
 
+box#lyrics-box.vertical-lyrics.empty {
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
 label#above.vertical,
 label#below.vertical {
   padding: 0;

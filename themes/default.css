@@ -40,6 +40,11 @@ box#lyrics-box.vertical-lyrics {
   border-radius: 10px;
 }
 
+box#lyrics-box.vertical-lyrics.empty {
+  padding: 0;
+  background-color: transparent;
+}
+
 label#above.vertical,
 label#below.vertical {
   padding: 0;

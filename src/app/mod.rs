@@ -21,7 +21,9 @@ pub mod utils;
 mod label;
 pub use label::VerticalLabel;
 #[cfg(test)]
-pub(crate) use label::{column_offset, group_offset, group_width};
+pub(crate) use label::{
+    column_offset, compute_vertical_layout, group_offset, group_width, setup_vertical_context,
+};
 
 #[derive(Debug)]
 pub struct LyricWidgets {
@@ -33,7 +35,7 @@ pub struct LyricWidgets {
 
 const WINDOW_MIN_WIDTH: i32 = 500;
 const VERTICAL_MIN_WIDTH: i32 = 120;
-const VERTICAL_MIN_HEIGHT: i32 = 500;
+const VERTICAL_MIN_HEIGHT: i32 = 240;
 
 pub fn window_min_size(align: config::Align) -> (i32, i32) {
     if align.is_vertical() {
@@ -167,6 +169,29 @@ pub fn build_main_window(
     window
 }
 
+fn sync_vertical_box_empty(label: &VerticalLabel) {
+    let Some(parent) = label.parent().and_downcast::<gtk::Box>() else {
+        return;
+    };
+    if !parent.has_css_class("vertical-lyrics") {
+        return;
+    }
+    let mut has_visible = false;
+    let mut child = parent.first_child();
+    while let Some(widget) = child {
+        if widget.is_visible() {
+            has_visible = true;
+            break;
+        }
+        child = widget.next_sibling();
+    }
+    if has_visible {
+        parent.remove_css_class("empty");
+    } else {
+        parent.add_css_class("empty");
+    }
+}
+
 fn mirror_label(source: &Label, target: &VerticalLabel) {
     target.set_text(&source.label());
     target.set_visible(source.is_visible());
@@ -177,12 +202,16 @@ fn mirror_label(source: &Label, target: &VerticalLabel) {
         move |source| {
             target.set_text(&source.label());
             target.set_visible(source.is_visible());
+            sync_vertical_box_empty(&target);
         }
     ));
     source.connect_visible_notify(clone!(
         #[weak]
         target,
-        move |source| target.set_visible(source.is_visible())
+        move |source| {
+            target.set_visible(source.is_visible());
+            sync_vertical_box_empty(&target);
+        }
     ));
 }
 
@@ -233,8 +262,6 @@ pub fn set_lyric_align(window: &Window, align: config::Align) -> Option<()> {
             label.set_hexpand(false);
         }
 
-        // `above` holds the original lyric (near the window edge),
-        // `below` holds the translation (inward).
         vertical_above.set_text(&above.label());
         vertical_above.set_visible(above.is_visible());
         vertical_below.set_text(&below.label());
@@ -247,8 +274,14 @@ pub fn set_lyric_align(window: &Window, align: config::Align) -> Option<()> {
             vbox.append(vertical_above);
             vbox.append(vertical_below);
         }
+        if vertical_above.is_visible() || vertical_below.is_visible() {
+            vbox.remove_css_class("empty");
+        } else {
+            vbox.add_css_class("empty");
+        }
     } else {
         vbox.remove_css_class("vertical-lyrics");
+        vbox.remove_css_class("empty");
         vbox.set_orientation(gtk::Orientation::Vertical);
         vbox.set_halign(align.into());
         vbox.set_valign(gtk::Align::Center);
