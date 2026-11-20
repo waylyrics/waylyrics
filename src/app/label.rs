@@ -177,7 +177,7 @@ fn vertical_metrics_working(vertical_ctx: &pango::Context) -> bool {
 }
 
 fn column_has_collapsed_cjk(text: &str, logical_width: i32, logical_height: i32) -> bool {
-    let cjk_count = text.chars().filter(|&ch| is_upright_cjk(ch)).count();
+    let cjk_count = text.matches(is_upright_cjk).count();
     cjk_count >= 2 && logical_width < (cjk_count as i32) * (logical_height / 2).max(1)
 }
 
@@ -202,7 +202,7 @@ pub(crate) fn compute_fallback_vertical_layout(
     }
 
     let mut tokens = Vec::new();
-    let mut sideways = String::new();
+    let mut sideways = String::with_capacity(text.len());
     let flush_sideways = |buf: &mut String, out: &mut Vec<Token>| {
         if !buf.is_empty() {
             out.push(Token::Sideways(std::mem::take(buf)));
@@ -225,7 +225,7 @@ pub(crate) fn compute_fallback_vertical_layout(
     let mut columns: Vec<Column> = Vec::new();
     let mut current_pieces: Vec<Piece> = Vec::new();
     #[cfg(test)]
-    let mut current_text = String::new();
+    let mut current_text = String::with_capacity(text.len());
     let mut cur_y = 0;
     let mut column_width = 1;
     let mut group_height = 0;
