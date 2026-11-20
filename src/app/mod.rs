@@ -22,7 +22,8 @@ mod label;
 pub use label::VerticalLabel;
 #[cfg(test)]
 pub(crate) use label::{
-    column_offset, compute_vertical_layout, group_offset, group_width, setup_vertical_context,
+    column_offset, compute_fallback_vertical_layout, compute_vertical_layout, group_offset,
+    group_width, setup_vertical_context,
 };
 
 #[derive(Debug)]
