@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["WINDOW_MIN_HEIGHT"],"fn":["build_main_window","get_label","get_labels","set_lyric_align"],"mod":["actions","dialog","search_window","utils","window"],"struct":["Window"]};
+window.SIDEBAR_ITEMS = {"constant":["VERTICAL_MIN_HEIGHT","VERTICAL_MIN_WIDTH","WINDOW_MIN_HEIGHT","WINDOW_MIN_WIDTH"],"fn":["build_main_window","get_label","mirror_label","set_lyric_align","sync_vertical_box_empty","window_min_size"],"mod":["actions","dialog","label","search_window","utils","window"],"struct":["LyricWidgets","VerticalLabel","Window"]};

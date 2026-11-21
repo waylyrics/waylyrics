@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["column_has_collapsed_cjk","column_offset","compute_fallback_vertical_layout","compute_vertical_layout","group_offset","group_width","is_rotatable_cjk_punct","is_upright_cjk","setup_vertical_context","vertical_metrics_working"],"mod":["imp"],"struct":["Column","Piece","VerticalLabel","VerticalLayout"],"type":["CacheKey"]};
