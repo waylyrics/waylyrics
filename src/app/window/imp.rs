@@ -1,4 +1,4 @@
-use std::cell::Cell;
+use std::cell::{Cell, OnceCell};
 use std::time::SystemTime;
 
 use crate::utils::gettext;
@@ -9,7 +9,6 @@ use gtk::glib::Propagation;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib, ApplicationWindow, PopoverMenu};
-use std::sync::OnceLock;
 
 use crate::app::utils::set_click_pass_through;
 use crate::config::{Align, LyricDisplayMode};
@@ -17,7 +16,7 @@ use crate::sync::{OsImp, OS};
 
 #[derive(Default)]
 pub struct Window {
-    pub settings: OnceLock<Settings>,
+    pub settings: OnceCell<Settings>,
 
     pub clickthrough: Cell<bool>,
     pub cache_lyrics: Cell<bool>,
@@ -40,6 +39,7 @@ pub struct Window {
     pub player_menu: gio::Menu,
     pub display_mode_menu: gio::Menu,
     pub align_mode_menu: gio::Menu,
+    pub lyric_widgets: OnceCell<crate::app::LyricWidgets>,
     #[cfg(feature = "import-lyric")]
     pub import_lyric_menu: gio::Menu,
     #[cfg(feature = "export-lyric")]
@@ -188,7 +188,7 @@ impl ObjectImpl for Window {
 
         for lyric_align in <Align as strum::IntoEnumIterator>::iter() {
             let lyric_align_str = lyric_align.to_string();
-            let item = MenuItem::new(Some(&gettext(&lyric_align_str)), None);
+            let item = MenuItem::new(Some(&gettext(lyric_align.display_name())), None);
             item.set_action_and_target_value(
                 Some("win.set-lyric-align"),
                 Some(&lyric_align_str.to_variant()),

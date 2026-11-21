@@ -1,9 +1,11 @@
 pub mod search_window;
 mod window;
 
+use gtk::glib;
 use gtk::prelude::*;
 use gtk::subclass::prelude::ObjectSubclassIsExt;
 use gtk::{Application, Label};
+use glib_macros::clone;
 pub use window::Window;
 
 use crate::app::utils::set_click_pass_through;
@@ -15,6 +17,34 @@ const WINDOW_MIN_HEIGHT: i32 = 120;
 pub mod actions;
 pub mod dialog;
 pub mod utils;
+
+mod label;
+pub use label::VerticalLabel;
+#[cfg(test)]
+pub(crate) use label::{
+    column_offset, compute_fallback_vertical_layout, compute_vertical_layout, group_offset,
+    group_width, setup_vertical_context,
+};
+
+#[derive(Debug)]
+pub struct LyricWidgets {
+    pub above: Label,
+    pub below: Label,
+    pub vertical_above: VerticalLabel,
+    pub vertical_below: VerticalLabel,
+}
+
+const WINDOW_MIN_WIDTH: i32 = 500;
+const VERTICAL_MIN_WIDTH: i32 = 120;
+const VERTICAL_MIN_HEIGHT: i32 = 240;
+
+pub fn window_min_size(align: config::Align) -> (i32, i32) {
+    if align.is_vertical() {
+        (VERTICAL_MIN_WIDTH, VERTICAL_MIN_HEIGHT)
+    } else {
+        (WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT)
+    }
+}
 
 pub fn build_main_window(
     app: &Application,
@@ -57,7 +87,8 @@ pub fn build_main_window(
         layer_shell_anchor.setup(&window);
     }
 
-    window.set_size_request(500, WINDOW_MIN_HEIGHT);
+    let (min_width, min_height) = window_min_size(window.imp().lyric_align.get());
+    window.set_size_request(min_width, min_height);
     window.set_title(Some(DEFAULT_TEXT));
     window.set_icon_name(Some(crate::APP_ID_FIXED));
 
@@ -89,6 +120,27 @@ pub fn build_main_window(
         utils::setup_label(label, enable_filter_regex);
     }
 
+    let vertical_above = VerticalLabel::new("above");
+    let vertical_below = VerticalLabel::new("below");
+    for label in [&vertical_above, &vertical_below] {
+        label.set_visible(false);
+        label.set_vexpand(true);
+        label.set_hexpand(false);
+    }
+    mirror_label(&above_label, &vertical_above);
+    mirror_label(&below_label, &vertical_below);
+
+    window
+        .imp()
+        .lyric_widgets
+        .set(LyricWidgets {
+            above: above_label.clone(),
+            below: below_label.clone(),
+            vertical_above,
+            vertical_below,
+        })
+        .expect("lyric widgets must only be initialized once");
+
     let verical_box = gtk::Box::builder()
         .name("lyrics-box")
         .baseline_position(gtk::BaselinePosition::Center)
@@ -118,33 +170,154 @@ pub fn build_main_window(
     window
 }
 
+fn sync_vertical_box_empty(label: &VerticalLabel) {
+    let Some(parent) = label.parent().and_downcast::<gtk::Box>() else {
+        return;
+    };
+    if !parent.has_css_class("vertical-lyrics") {
+        return;
+    }
+    let mut has_visible = false;
+    let mut child = parent.first_child();
+    while let Some(widget) = child {
+        if widget.is_visible() {
+            has_visible = true;
+            break;
+        }
+        child = widget.next_sibling();
+    }
+    if has_visible {
+        parent.remove_css_class("empty");
+    } else {
+        parent.add_css_class("empty");
+    }
+}
+
+fn mirror_label(source: &Label, target: &VerticalLabel) {
+    target.set_text(&source.label());
+    target.set_visible(source.is_visible());
+
+    source.connect_label_notify(clone!(
+        #[weak]
+        target,
+        move |source| {
+            target.set_text(&source.label());
+            target.set_visible(source.is_visible());
+            sync_vertical_box_empty(&target);
+        }
+    ));
+    source.connect_visible_notify(clone!(
+        #[weak]
+        target,
+        move |source| {
+            target.set_visible(source.is_visible());
+            sync_vertical_box_empty(&target);
+        }
+    ));
+}
+
 pub fn set_lyric_align(window: &Window, align: config::Align) -> Option<()> {
     let vbox: gtk::Box = window.child()?.downcast().ok()?;
-    vbox.set_halign(align.into());
+    let LyricWidgets {
+        above,
+        below,
+        vertical_above,
+        vertical_below,
+    } = window.imp().lyric_widgets.get()?;
 
-    let labels = get_labels(&vbox)?;
-    for label in labels {
-        label.set_halign(align.into());
-        label.set_justify(align.into());
+    crate::log::debug!(
+        "set_lyric_align: {align:?}, default={:?}, current={}x{}",
+        window.default_size(),
+        window.width(),
+        window.height()
+    );
+
+    for widget in [
+        above.clone().upcast::<gtk::Widget>(),
+        below.clone().upcast::<gtk::Widget>(),
+        vertical_above.clone().upcast::<gtk::Widget>(),
+        vertical_below.clone().upcast::<gtk::Widget>(),
+    ] {
+        if widget.parent().is_some() {
+            widget.unparent();
+        }
     }
 
+    if align.is_vertical() {
+        let rtl = align.is_rtl();
+
+        vbox.set_orientation(gtk::Orientation::Horizontal);
+        vbox.add_css_class("vertical-lyrics");
+        vbox.set_halign(if rtl {
+            gtk::Align::End
+        } else {
+            gtk::Align::Start
+        });
+        vbox.set_valign(gtk::Align::Center);
+        vbox.set_spacing(4);
+
+        for label in [vertical_above, vertical_below] {
+            label.set_rtl(rtl);
+            label.set_vexpand(false);
+            label.set_valign(gtk::Align::Center);
+            label.set_hexpand(false);
+        }
+
+        vertical_above.set_text(&above.label());
+        vertical_above.set_visible(above.is_visible());
+        vertical_below.set_text(&below.label());
+        vertical_below.set_visible(below.is_visible());
+
+        if rtl {
+            vbox.append(vertical_below);
+            vbox.append(vertical_above);
+        } else {
+            vbox.append(vertical_above);
+            vbox.append(vertical_below);
+        }
+        if vertical_above.is_visible() || vertical_below.is_visible() {
+            vbox.remove_css_class("empty");
+        } else {
+            vbox.add_css_class("empty");
+        }
+    } else {
+        vbox.remove_css_class("vertical-lyrics");
+        vbox.remove_css_class("empty");
+        vbox.set_orientation(gtk::Orientation::Vertical);
+        vbox.set_halign(align.into());
+        vbox.set_valign(gtk::Align::Center);
+        vbox.set_spacing(0);
+
+        for label in [above, below] {
+            label.set_halign(align.into());
+            label.set_justify(align.into());
+            label.set_vexpand(true);
+            label.set_hexpand(false);
+        }
+
+        vbox.append(above);
+        vbox.append(below);
+        vertical_above.set_visible(false);
+        vertical_below.set_visible(false);
+    }
+
+    let (min_width, min_height) = window_min_size(align);
+    window.set_size_request(min_width, min_height);
+
     window.imp().lyric_align.set(align);
+    window.queue_resize();
     Some(())
 }
 
-fn get_labels(vbox: &gtk::Box) -> Option<[Label; 2]> {
-    let above_label: Label = vbox.first_child()?.downcast().ok()?;
-    let below_label: Label = vbox.last_child()?.downcast().ok()?;
-    Some([above_label, below_label])
-}
-
 pub fn get_label(window: &Window, position: &str) -> Label {
-    let Some(vbox) = window.child().and_then(|c| c.downcast::<gtk::Box>().ok()) else {
-        panic!("initialization failed!")
-    };
-    get_labels(&vbox)
-        .expect("cannot find labels")
-        .into_iter()
-        .find(|label| label.widget_name() == position)
-        .unwrap()
+    let widgets = window
+        .imp()
+        .lyric_widgets
+        .get()
+        .expect("lyric widgets must be initialized");
+    match position {
+        "above" => widgets.above.clone(),
+        "below" => widgets.below.clone(),
+        _ => panic!("unknown lyric position: {position}"),
+    }
 }

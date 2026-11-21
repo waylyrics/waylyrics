@@ -33,3 +33,22 @@ label#below {
   margin: 5px 0;
   font-size: 24px;
 }
+
+box#lyrics-box.vertical-lyrics {
+  padding: 10px 12px;
+  background-color: hsla(0, 0%, 0%, 0.3);
+  border-radius: 10px;
+}
+
+box#lyrics-box.vertical-lyrics.empty {
+  padding: 0;
+  background-color: transparent;
+}
+
+label#above.vertical,
+label#below.vertical {
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  border-radius: 0;
+}

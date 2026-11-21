@@ -34,3 +34,23 @@ label#below {
   margin: 5px 0;
   font-size: 24px;
 }
+
+box#lyrics-box.vertical-lyrics {
+  padding: 10px 12px;
+  background: linear-gradient(135deg, hsla(197, 94%, 67%, 0.8),
+      hsla(348, 79%, 81%, 0.8));
+  border-radius: 10px;
+}
+
+box#lyrics-box.vertical-lyrics.empty {
+  padding: 0;
+  background: transparent;
+}
+
+label#above.vertical,
+label#below.vertical {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border-radius: 0;
+}

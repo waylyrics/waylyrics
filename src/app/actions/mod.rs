@@ -92,7 +92,26 @@ pub fn register_set_lyric_align(wind: &Window) {
                 error!("unknown lyric alignment: {align}");
                 return;
             };
+
+            let previous = wind.imp().lyric_align.get();
             set_lyric_align(&wind, align);
+
+            // keep the window narrow-and-tall for vertical lyrics
+            if previous.is_vertical() != align.is_vertical() {
+                let (w, h) = (wind.width(), wind.height());
+                let (width, height) = if w > 0 && h > 0 {
+                    (w, h)
+                } else {
+                    wind.default_size()
+                };
+                if width > 0 && height > 0 {
+                    let (min_w, min_h) = crate::app::window_min_size(align);
+                    let new_w = height.clamp(min_w, 800);
+                    let new_h = width.clamp(min_h, 800);
+                    wind.set_default_size(new_w, new_h);
+                    wind.queue_resize();
+                }
+            }
         }
     ));
     wind.add_action(&action);

@@ -16,7 +16,7 @@ pub enum ColorScheme {
     Light,
 }
 
-#[derive(Clone, Copy, Default, EnumIter, strum::Display, EnumString)]
+#[derive(Clone, Copy, Default, PartialEq, Eq, Debug, EnumIter, strum::Display, EnumString)]
 pub enum Align {
     /// left align
     Start,
@@ -25,6 +25,34 @@ pub enum Align {
     #[default]
     Center,
     Fill,
+    /// vertical writing, columns flow left to right
+    #[strum(serialize = "vertical-ltr")]
+    VerticalLtr,
+    /// vertical writing, columns flow right to left (Japanese subtitles)
+    #[strum(serialize = "vertical-rtl")]
+    VerticalRtl,
+}
+
+impl Align {
+    pub fn is_vertical(self) -> bool {
+        matches!(self, Self::VerticalLtr | Self::VerticalRtl)
+    }
+
+    pub fn is_rtl(self) -> bool {
+        matches!(self, Self::VerticalRtl)
+    }
+
+    /// msgid used by menus; storage/parsing still uses [`strum::Display`]
+    pub fn display_name(self) -> &'static str {
+        match self {
+            Self::Start => "Start",
+            Self::End => "End",
+            Self::Center => "Center",
+            Self::Fill => "Fill",
+            Self::VerticalLtr => "Vertical LTR",
+            Self::VerticalRtl => "Vertical RTL",
+        }
+    }
 }
 
 #[derive(Clone, Copy, Default, EnumIter, strum::Display, EnumString)]
@@ -234,7 +262,7 @@ impl From<Align> for gtk::Align {
             Align::Start => Self::Start,
             Align::End => Self::End,
             Align::Center => Self::Center,
-            Align::Fill => Self::Fill,
+            Align::Fill | Align::VerticalLtr | Align::VerticalRtl => Self::Fill,
         }
     }
 }
@@ -245,7 +273,7 @@ impl From<Align> for gtk::Justification {
             Align::Start => gtk::Justification::Left,
             Align::Center => gtk::Justification::Center,
             Align::End => gtk::Justification::Right,
-            Align::Fill => gtk::Justification::Fill,
+            Align::Fill | Align::VerticalLtr | Align::VerticalRtl => gtk::Justification::Fill,
         }
     }
 }

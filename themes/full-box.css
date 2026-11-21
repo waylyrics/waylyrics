@@ -37,3 +37,18 @@ label#above {
 label#below {
   font-size: 24px;
 }
+
+box#lyrics-box.vertical-lyrics {
+  padding: 12px;
+}
+
+box#lyrics-box.vertical-lyrics.empty {
+  padding: 0;
+  background-color: transparent;
+}
+
+label#above.vertical,
+label#below.vertical {
+  padding: 0;
+  margin: 0;
+}

@@ -17,7 +17,7 @@ function custom_finder(){
         fi
     done
 
-    for id in ${ids[@]}
+    for id in "${ids[@]}"
     do
         echo "$pos"
         echo msgid "\"${id}\""
@@ -48,5 +48,5 @@ custom_finder 'display_mode' \
   >> ${outfile}
 
 custom_finder 'lyric_align' \
-  Center Start End Fill \
+  Center Start End Fill "Vertical LTR" "Vertical RTL" \
   >> ${outfile}
